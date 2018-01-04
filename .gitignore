@@ -1,6 +1,5 @@
 # Target folder
 target/
-.vscode/
 
 # Compiled class file
 *.class
