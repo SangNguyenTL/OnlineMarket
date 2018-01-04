@@ -1,8 +1,6 @@
 package onlinemarket.configuration;
 
 
-import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -14,73 +12,91 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
-import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.filter.CharacterEncodingFilter;
+
+import onlinemarket.component.CustomAuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-
 	
 	private String [] publicUrls = new String [] {
             "/api/**"
     };
 	
 	@Autowired
+	CustomAuthenticationSuccessHandler successHandler;
+	
+	@Autowired
 	@Qualifier("customUserDetailsService")
 	UserDetailsService userDetailsService;
 
-    
-   @Autowired
-   DataSource dataSource;
-   
+	@Autowired
+	PersistentTokenRepository tokenRepository;
+
 	@Autowired
 	public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 	}
-	
-    @Bean
-    public SimpleUrlAuthenticationFailureHandler myFailureHandler(){
-        return new SimpleUrlAuthenticationFailureHandler();
-    }
-    
-    @Bean
-    public MySavedRequestAwareAuthenticationSuccessHandler mySuccessHandler(){
-        return new MySavedRequestAwareAuthenticationSuccessHandler();
-    }
-    
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() throws Exception {
-      return new BCryptPasswordEncoder();
-    }
+
+	@Bean
+	public SimpleUrlAuthenticationFailureHandler myFailureHandler() {
+		return new SimpleUrlAuthenticationFailureHandler();
+	}
+
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder() throws Exception {
+		return new BCryptPasswordEncoder();
+	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-      
-		http.authorizeRequests()
-		.antMatchers("/", "/home").permitAll().antMatchers("/admin/**").access("hasRole('ADMIN')")
-		.antMatchers("/api/uploadImage").authenticated()
-		.antMatchers("/user/**").authenticated()
-		.and()
-			.formLogin().loginPage("/login").usernameParameter("sso_id").passwordParameter("password")
-		.and()
-			.rememberMe().rememberMeParameter("remember-me").tokenRepository(persistentTokenRepository()).tokenValiditySeconds(86400)
-		.and()
-			.csrf().ignoringAntMatchers(publicUrls)
-		.and()
-			.exceptionHandling().accessDeniedPage("/error")
-		.and()
-			.logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-			.logoutSuccessUrl("/login?logout").deleteCookies("JSESSIONID")
-			.invalidateHttpSession(true) ;
+
+		CharacterEncodingFilter filter = new CharacterEncodingFilter();
+        filter.setEncoding("UTF-8");
+        filter.setForceEncoding(true);
+        
+        http
+        .addFilterBefore(filter,CsrfFilter.class)
+        .authorizeRequests()
+				.antMatchers("/admin/**").hasRole("ADMIN")
+				.antMatchers("/api/uploadImage").authenticated()
+				.anyRequest().permitAll()
+		        .and()
+			.logout()
+				.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+				.logoutSuccessUrl("/login?logout")
+				.and()
+			.formLogin()
+				.loginPage("/login")
+				.usernameParameter("email")
+				.successHandler(successHandler)
+				.and()
+			.rememberMe()
+				.key("uniqueAndSecret")
+				.rememberMeParameter("remember-me")
+				.tokenRepository(tokenRepository)
+				.tokenValiditySeconds(60 * 60 * 24 * 2)
+				.and()
+			.exceptionHandling()
+				.accessDeniedPage("/error")
+				.and()
+			.csrf()
+		        .csrfTokenRepository(new CookieCsrfTokenRepository())
+		        .ignoringAntMatchers(publicUrls);
 	}
 
-    @Bean
-    public PersistentTokenRepository persistentTokenRepository() {
-        JdbcTokenRepositoryImpl tokenRepositoryImpl = new JdbcTokenRepositoryImpl();
-        tokenRepositoryImpl.setDataSource(dataSource);
-        return tokenRepositoryImpl;
-    }
-	
+
+	@Bean
+	public PersistentTokenBasedRememberMeServices getPersistentTokenBasedRememberMeServices() {
+		PersistentTokenBasedRememberMeServices tokenBasedservice = new PersistentTokenBasedRememberMeServices(
+				"remember-me", userDetailsService, tokenRepository);
+		return tokenBasedservice;
+	}
+
 }

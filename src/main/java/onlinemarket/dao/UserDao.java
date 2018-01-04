@@ -2,8 +2,8 @@ package onlinemarket.dao;
 
 import onlinemarket.model.User;
 
-public interface UserDao {
-    User findById(int id);
-    
-    User findBySSO(String sso);
+public interface UserDao extends InterfaceDao<Integer, User>{
+	
+	public User getByEmail(String email);
+	
 }

@@ -18,26 +18,46 @@
       <div class="row">
         <!--Middle Part Start-->
         <div id="content" class="col-sm-9">
-          <h1 class="title">Account Login</h1>
+          <h1 class="title">Đăng nhập</h1>
+          	<div class="alert alert-success" role="alert" th:if="${param.success} != null">
+				<strong>Chúc mừng!</strong> Bạn đã đăng ký tài khoản thành công, hiện bạn đã có thể đăng nhập.
+			</div>
+			<div class="alert alert-success" role="alert" th:if="${param.logout} != null">
+					<strong>Chúc mừng!</strong> Bạn đã đăng xuất thành công.
+			</div>
+			<div class="alert alert-warning" th:if="${param.error} != null">
+				<strong>Thật tiếc!</strong> Email hoặc mật khẩu không hợp lệ!
+			</div>
           <div class="row">
             <div class="col-sm-6">
-              <h2 class="subtitle">New Customer</h2>
-              <p><strong>Register Account</strong></p>
-              <p>By creating an account you will be able to shop faster, be up to date on an order's status, and keep track of the orders you have previously made.</p>
-              <a href="register.html" class="btn btn-primary">Continue</a> </div>
+              <h2 class="subtitle">Bạn là một khách hàng mới?</h2>
+              <p><strong>Đăng ký tài khoản</strong></p>
+              <p>Bằng cách tạo một tài khoản, bạn sẽ có thể mua hàng nhanh chóng, biết được tình trạng các hóa đơn cũng như dễ dàng nắm bắt lịch sử giao dịch của tài khoản.</p>
+              <a th:href="@{/register}" class="btn btn-primary">Đăng ký ngay</a> </div>
             <div class="col-sm-6">
-              <h2 class="subtitle">Returning Customer</h2>
-              <p><strong>I am a returning customer</strong></p>
-                <div class="form-group">
-                  <label class="control-label" for="input-email">E-Mail Address</label>
-                  <input type="text" name="email" value="" placeholder="E-Mail Address" id="input-email" class="form-control" />
-                </div>
-                <div class="form-group">
-                  <label class="control-label" for="input-password">Password</label>
-                  <input type="password" name="password" value="" placeholder="Password" id="input-password" class="form-control" />
-                  <br />
-                  <a href="#">Forgotten Password</a></div>
-                <input type="submit" value="Login" class="btn btn-primary" />
+              <h2 class="subtitle">Tiến hành đăng nhập</h2>
+              <p><strong>Tôi là khách hàng của Smart Market</strong></p>
+              
+
+              	<form th:action="@{/login}" method="post">
+	                <div class="form-group">
+	                  <label class="control-label" for="input-email">E-mail</label>
+	                  <input type="text" name="email" value="" placeholder="Địa chỉ E-mail" id="input-email" class="form-control" />
+	                </div>
+	                <div class="form-group">
+	                  <label class="control-label" for="input-password">Mật khẩu</label>
+	                  <input type="password" name="password" value="" placeholder="Mật khẩu" id="input-password" class="form-control" />
+	                  <br />
+	                  <p>
+					      <label>
+					        <input name="remember-me" type="checkbox">
+					        Duy trì đăng nhập
+					      </label>
+	                  </p>
+	                  <a href="#">Quên mật khẩu</a>
+                    </div>
+	                <input type="submit" value="Đăng nhập" class="btn btn-primary" />
+                </form>
             </div>
           </div>
         </div>

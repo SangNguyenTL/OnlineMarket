@@ -1,10 +1,12 @@
 package onlinemarket.service;
 
+import onlinemarket.model.Address;
 import onlinemarket.model.User;
 
-public interface UserService {
+public interface UserService extends InterfaceService<Integer, User>{
 	
-	User findById(int id);
+	public User getByEmail(String email);
+	
+	public void register(User user, Address address);
 
-	User findBySso(String sso);
 }

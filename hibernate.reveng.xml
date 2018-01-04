@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd" >
+
+<hibernate-reverse-engineering>
+<type-mapping>
+	<sql-type jdbc-type="NVARCHAR" hibernate-type="string"></sql-type>
+</type-mapping>
+<table-filter match-name="tb_address" match-catalog="SmartMarket"
+		match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_address_order"
+		match-catalog="SmartMarket" match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_attribute" match-catalog="SmartMarket"
+		match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_attribute_group"
+		match-catalog="SmartMarket" match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_brand" match-catalog="SmartMarket"
+		match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_cart" match-catalog="SmartMarket"
+		match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_comment" match-catalog="SmartMarket"
+		match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_comment_post"
+		match-catalog="SmartMarket" match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_comment_product"
+		match-catalog="SmartMarket" match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_configuration"
+		match-catalog="SmartMarket" match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_event" match-catalog="SmartMarket"
+		match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_event_brand"
+		match-catalog="SmartMarket" match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_event_category"
+		match-catalog="SmartMarket" match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_event_order"
+		match-catalog="SmartMarket" match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_event_product"
+		match-catalog="SmartMarket" match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_image" match-catalog="SmartMarket"
+		match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_menu" match-catalog="SmartMarket"
+		match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_menu_group" match-catalog="SmartMarket"
+		match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_notification"
+		match-catalog="SmartMarket" match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_order" match-catalog="SmartMarket"
+		match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_order_detail"
+		match-catalog="SmartMarket" match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_persistent_logins"
+		match-catalog="SmartMarket" match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_post" match-catalog="SmartMarket"
+		match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_post_category"
+		match-catalog="SmartMarket" match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_product" match-catalog="SmartMarket"
+		match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_product_attribute"
+		match-catalog="SmartMarket" match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_product_category"
+		match-catalog="SmartMarket" match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_product_views"
+		match-catalog="SmartMarket" match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_province" match-catalog="SmartMarket"
+		match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_rating" match-catalog="SmartMarket"
+		match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_role" match-catalog="SmartMarket"
+		match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_statistic_product_views"
+		match-catalog="SmartMarket" match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_statistic_rating"
+		match-catalog="SmartMarket" match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_user" match-catalog="SmartMarket"
+		match-schema="dbo">
+	</table-filter>
+	<table-filter match-name="tb_user_role" match-catalog="SmartMarket"
+		match-schema="dbo">
+	</table-filter>
+	<table catalog="SmartMarket" schema="dbo" name="tb_address"
+		class="Address">
+		<column name="_id"></column>
+		<column name="address"></column>
+		<column name="user_id"></column>
+		<column name="first_name"></column>
+		<column name="phone_number"></column>
+		<column name="province_id"></column>
+		<column name="city"></column>
+		<column name="last_name"></column>
+	</table>
+	<table catalog="SmartMarket" schema="dbo" name="tb_attribute"
+		class="Attribute">
+		<column name="_id"></column>
+		<column name="attribute_group_id"></column>
+		<column name="name"></column>
+		<column name="description"></column>
+	</table>
+	<table catalog="SmartMarket" schema="dbo" name="tb_attribute_group"
+		class="AttributeGroup">
+		<column name="_id"></column>
+		<column name="description"></column>
+		<column name="name"></column>
+		<column name="product_category_id"></column>
+	</table>
+	<table catalog="SmartMarket" schema="dbo" name="tb_brand"
+		class="Brand">
+		<column name="_id"></column>
+		<column name="name"></column>
+		<column name="image_path"></column>
+		<column name="create_date"></column>
+		<column name="slug"></column>
+		<column name="description"></column>
+		<column name="update_date"></column>
+	</table>
+	<table catalog="SmartMarket" schema="dbo" name="tb_comment"
+		class="Comment">
+		<column name="_id"></column>
+		<column name="status"></column>
+		<column name="user_id"></column>
+		<column name="create_date"></column>
+		<column name="content"></column>
+		<column name="update_date"></column>
+		<column name="parent_id"></column>
+	</table>
+	<table catalog="SmartMarket" schema="dbo" name="tb_configuration"
+		class="Configuration">
+		<column name="_id"></column>
+		<column name="key"></column>
+		<column name="value"></column>
+	</table>
+	<table catalog="SmartMarket" schema="dbo" name="tb_event"
+		class="Event">
+		<column name="_id"></column>
+		<column name="content"></column>
+		<column name="date_from"></column>
+		<column name="create_date"></column>
+		<column name="update_date"></column>
+		<column name="date_to"></column>
+		<column name="min_price"></column>
+		<column name="code"></column>
+		<column name="percent_value"></column>
+		<column name="max_price"></column>
+		<column name="status"></column>
+		<column name="value"></column>
+		<column name="name"></column>
+		<column name="publisher_id"></column>
+	</table>
+	<table catalog="SmartMarket" schema="dbo" name="tb_image"
+		class="Image">
+		<column name="_id"></column>
+		<column name="description"></column>
+		<column name="name"></column>
+		<column name="uploader_id"></column>
+		<column name="path"></column>
+		<column name="data_type"></column>
+		<column name="upload_date"></column>
+	</table>
+	<table catalog="SmartMarket" schema="dbo" name="tb_menu"
+		class="Menu">
+		<column name="_id"></column>
+		<column name="name"></column>
+		<column name="path"></column>
+		<column name="description"></column>
+		<column name="group_menu_id"></column>
+		<column name="order"></column>
+		<column name="parent_id"></column>
+		<column name="icon"></column>
+	</table>
+	<table catalog="SmartMarket" schema="dbo" name="tb_menu_group"
+		class="MenuGroup">
+		<column name="_id"></column>
+		<column name="name"></column>
+		<column name="description"></column>
+		<column name="slug"></column>
+	</table>
+	<table catalog="SmartMarket" schema="dbo" name="tb_notification"
+		class="Notification">
+		<column name="_id"></column>
+		<column name="user_id"></column>
+		<column name="content"></column>
+		<column name="status"></column>
+		<column name="create_date"></column>
+	</table>
+	<table catalog="SmartMarket" schema="dbo" name="tb_order"
+		class="Order">
+		<column name="_id"></column>
+		<column name="total_product"></column>
+		<column name="total_paid"></column>
+		<column name="total_paid_real"></column>
+		<column name="invoice_date"></column>
+		<column name="status"></column>
+		<column name="update_date"></column>
+		<column name="create_date"></column>
+		<column name="user_id"></column>
+		<column name="total_shipping"></column>
+	</table>
+	<table catalog="SmartMarket" schema="dbo" name="tb_order_detail"
+		class="OrderDetail">
+		<column name="_id"></column>
+		<column name="order_id"></column>
+		<column name="product_quantity"></column>
+		<column name="product_weight"></column>
+		<column name="product_name"></column>
+		<column name="product_price"></column>
+		<column name="product_id"></column>
+	</table>
+	<table catalog="SmartMarket" schema="dbo"
+		name="tb_persistent_logins" class="PeristentLogins">
+		<column name="series"></column>
+		<column name="token"></column>
+		<column name="last_used"></column>
+		<column name="username"></column>
+	</table>
+	<table catalog="SmartMarket" schema="dbo" name="tb_post"
+		class="Post">
+		<column name="_id"></column>
+		<column name="create_date"></column>
+		<column name="post_type"></column>
+		<column name="content"></column>
+		<column name="feature_image"></column>
+		<column name="title"></column>
+		<column name="post_category_id"></column>
+		<column name="publisher_id"></column>
+		<column name="update_date"></column>
+		<column name="status"></column>
+	</table>
+	<table catalog="SmartMarket" schema="dbo" name="tb_post_category"
+		class="PostCategory">
+		<column name="_id"></column>
+		<column name="slug"></column>
+		<column name="description"></column>
+		<column name="update_date"></column>
+		<column name="create_date"></column>
+		<column name="name"></column>
+	</table>
+	<table catalog="SmartMarket" schema="dbo" name="tb_product"
+		class="Product">
+		<column name="_id"></column>
+		<column name="price"></column>
+		<column name="description"></column>
+		<column name="quantity"></column>
+		<column name="category_id"></column>
+		<column name="brand_id"></column>
+		<column name="create_date"></column>
+		<column name="publisher_id"></column>
+		<column name="feature_image"></column>
+		<column name="update_date"></column>
+		<column name="slug"></column>
+		<column name="state"></column>
+		<column name="name"></column>
+	</table>
+	<table catalog="SmartMarket" schema="dbo"
+		name="tb_product_attribute" class="ProductAttribute">
+		<column name="_id"></column>
+		<column name="product_id"></column>
+		<column name="value"></column>
+		<column name="attribute_id"></column>
+	</table>
+	<table catalog="SmartMarket" schema="dbo" name="tb_product_category"
+		class="ProductCategory">
+		<column name="_id"></column>
+		<column name="create_date"></column>
+		<column name="description"></column>
+		<column name="name"></column>
+		<column name="update_date"></column>
+		<column name="slug"></column>
+	</table>
+	<table catalog="SmartMarket" schema="dbo" name="tb_product_views"
+		class="ProductViews">
+		<column name="_id"></column>
+		<column name="count"></column>
+		<column name="datetime"></column>
+		<column name="product_id"></column>
+	</table>
+	<table catalog="SmartMarket" schema="dbo" name="tb_province"
+		class="Province">
+		<column name="_id"></column>
+		<column name="shipping_fee"></column>
+		<column name="name"></column>
+	</table>
+	<table catalog="SmartMarket" schema="dbo" name="tb_rating"
+		class="Rating">
+		<column name="_id"></column>
+		<column name="create_rate_date"></column>
+		<column name="rate_date"></column>
+		<column name="content"></column>
+		<column name="user_id"></column>
+		<column name="score"></column>
+		<column name="product_id"></column>
+	</table>
+	<table catalog="SmartMarket" schema="dbo" name="tb_role"
+		class="Role">
+		<column name="_id"></column>
+		<column name="name"></column>
+	</table>
+	<table catalog="SmartMarket" schema="dbo"
+		name="tb_statistic_product_views" class="ProductViewsStatistc">
+		<column name="_id"></column>
+		<column name="month"></column>
+		<column name="year"></column>
+		<column name="total"></column>
+		<column name="week"></column>
+		<column name="product_id"></column>
+	</table>
+	<table catalog="SmartMarket" schema="dbo" name="tb_statistic_rating"
+		class="RatingStatistic">
+		<column name="_id"></column>
+		<column name="product_id"></column>
+		<column name="total_score"></column>
+		<column name="average_score"></column>
+		<column name="user_count"></column>
+	</table>
+	<table catalog="SmartMarket" schema="dbo" name="tb_user"
+		class="User">
+		<column name="_id"></column>
+		<column name="last_name"></column>
+		<column name="state"></column>
+		<column name="first_name"></column>
+		<column name="update_date"></column>
+		<column name="gender"></column>
+		<column name="email"></column>
+		<column name="birthday"></column>
+		<column name="avatar"></column>
+		<column name="password"></column>
+		<column name="create_date"></column>
+	</table>
+	<table catalog="SmartMarket" schema="dbo" name="tb_cart" class="Cart">
+		<column name="product_id"></column>
+		<column name="user_id"></column>
+		<column name="quantity"></column>
+	</table>
+</hibernate-reverse-engineering>

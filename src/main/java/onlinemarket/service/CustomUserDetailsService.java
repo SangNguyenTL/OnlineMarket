@@ -23,15 +23,13 @@ public class CustomUserDetailsService implements UserDetailsService{
     private UserService userService;
      
     @Transactional(readOnly=true)
-    public UserDetails loadUserByUsername(String ssoId)
+    public UserDetails loadUserByUsername(String email)
             throws UsernameNotFoundException {
-        User user = userService.findBySso(ssoId);
-        System.out.println("User : "+user);
+        User user = userService.getByEmail(email);
         if(user==null){
-            System.out.println("User not found");
-            throw new UsernameNotFoundException("Username not found");
+            throw new UsernameNotFoundException("Email chưa được đăng ký.");
         }
-            return new org.springframework.security.core.userdetails.User(user.getSsoId(), user.getPassword(), 
+            return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), 
                  user.getState().equals("Active"), true, true, true, getGrantedAuthorities(user));
     }
  
@@ -40,10 +38,8 @@ public class CustomUserDetailsService implements UserDetailsService{
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
          
         for(Role userRole : user.getRoles()){
-            System.out.println("UserProfile : "+userRole);
-            authorities.add(new SimpleGrantedAuthority("ROLE_"+userRole.getType()));
+            authorities.add(new SimpleGrantedAuthority("ROLE_"+userRole.getName()));
         }
-        System.out.print("authorities :"+authorities);
         return authorities;
     }
      

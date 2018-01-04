@@ -6,16 +6,16 @@ public enum Gender {
 	MALE(1,"Nam"),
 	FEMALE(2,"Nữ");
 	
-	private Gender(final int code, final String text) {
+	private Gender(final Integer code, final String text) {
 		this.code = code;
 		this.text = text;
 	}
 	
-	private int code;
+	private Integer code;
 	
 	private String text;
 
-	public int getCode() {
+	public Integer getCode() {
 		return code;
 	}
 
@@ -25,7 +25,6 @@ public enum Gender {
 	
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
-		return this.text;
+		return String.valueOf(this.code);
 	}
 }

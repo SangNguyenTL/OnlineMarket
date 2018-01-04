@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+          <nav class="scroll nav-light" th:fragment="nav">
+            
+              <ul class="nav" ui-nav>
+                <li class="nav-header hidden-folded">
+                  <small class="text-muted">Main</small>
+                </li>
+                <li>
+                  <a href="dashboard.0.html" >
+                    <span class="nav-icon">
+                      <i class="material-icons">&#xe3fc;
+                        <span th:attr="ui-include='\''+ @{/assets/backend/assets/images/i_0.svg} +'\''"></span>
+                      </i>
+                    </span>
+                    <span class="nav-text">Danh mục</span>
+                  </a>
+               </li>
+                <li th:class="${mediaPage} ? 'active'">
+                  <a th:href="@{/admin/media}" >
+                    <span class="nav-icon">
+                      <i class="material-icons">&#xe8f0;
+                        <span th:attr="ui-include='\''+ @{/assets/backend/assets/images/i_2.svg} +'\''"></span>
+                      </i>
+                    </span>
+                    <span class="nav-text">Đa phương tiện</span>
+                  </a>
+               </li>
+               <li th:class="${configPage} ? 'active'" >
+                  <a>
+                  	<span class="nav-caret">
+                      <i class="fa fa-caret-down"></i>
+                    </span>
+                    <span class="nav-icon">
+                      <i class="material-icons">&#xe429;
+                        <span th:attr="ui-include='\''+ @{/assets/backend/assets/images/i_4.svg} +'\''"></span>
+                      </i>
+                    </span>
+                    <span class="nav-text">Thiết đặt</span>
+                  </a>
+                  <ul class="nav-sub nav-mega">
+					<li th:class="${path} == 'general' ? 'active'"><a th:href="@{/admin/config}"><span class="nav-text">Thiết lập cơ bản</span></a></li>
+					<li th:class="${path} == 'logo' ? 'active'"><a th:href="@{/admin/config/logo}"><span class="nav-text">Biểu tượng - logo</span></a></li>
+					<li th:class="${path} == 'socialble' ? 'active'"><a th:href="@{/admin/config/social}"><span class="nav-text">Mạng xã hội</span></a></li>
+					<li th:class="${path} == 'upload' ? 'active'"><a th:href="@{/admin/config/upload}"><span class="nav-text">Upload Ảnh</span></a></li>
+					<li th:class="${path} == 'email' ? 'active'"><a th:href="@{/admin/config/emailsystem}"><span class="nav-text">Hệ thống email</span></a></li>
+					<li th:class="${path} == 'contact' ? 'active'"><a th:href="@{/admin/config/contact}"><span class="nav-text">Liên hệ</span></a></li>
+				</ul>
+               </li>
+              </ul>
+              
+          </nav>
+</body>
+</html>

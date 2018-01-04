@@ -16,9 +16,12 @@
 		<org.hibernate.validator-version>5.1.3.Final</org.hibernate.validator-version>
 		<org.thymeleaf-version>3.0.9.RELEASE</org.thymeleaf-version>
 		<org.thymeleaf-extras-springsecurity4-version>3.0.2.RELEASE</org.thymeleaf-extras-springsecurity4-version>
-		<org.aspectj-version>1.6.10</org.aspectj-version>
-		<org.slf4j-version>1.6.6</org.slf4j-version>
+		<commons-fileupload.version>1.3.2</commons-fileupload.version>
+		<commons-io.version>2.4</commons-io.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jackson.version>2.4.0</jackson.version>
+		<jaxb-api.version>2.2.11</jaxb-api.version>
+		<slf4j.version>1.6.6</slf4j.version>
 		<war.pakage.name>OnlineMarket</war.pakage.name>
 	</properties>
 	<dependencies>
@@ -40,6 +43,25 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${org.springframework-version}</version>
 		</dependency>
+
+		<!-- All Mail related stuff + Much more -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+		<!-- JavaMail -->
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>javax.mail-api</artifactId>
+			<version>1.5.5</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.7</version>
+		</dependency>
+
 		<!-- Spring Hibernate -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -118,6 +140,34 @@
 			<version>${org.thymeleaf-extras-springsecurity4-version}</version>
 		</dependency>
 
+		<!-- Joda-Time -->
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>2.3</version>
+		</dependency>
+
+		<!-- To map JodaTime with database type -->
+		<dependency>
+			<groupId>org.jadira.usertype</groupId>
+			<artifactId>usertype.core</artifactId>
+			<version>3.0.0.CR1</version>
+		</dependency>
+
+		<!-- Jackson -->
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>${jaxb-api.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+
 		<!-- Servlet -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
@@ -125,74 +175,31 @@
 			<version>${javax.servlet-version}</version>
 		</dependency>
 
-		<!-- AspectJ -->
+		<!-- common -->
 		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjrt</artifactId>
-			<version>${org.aspectj-version}</version>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>${commons-fileupload.version}</version>
 		</dependency>
 
-		<!-- Logging -->
+		<!-- Apache Commons IO -->
+		<!-- http://mvnrepository.com/artifact/commons-io/commons-io -->
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>${org.slf4j-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
-			<version>${org.slf4j-version}</version>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>${org.slf4j-version}</version>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.15</version>
-			<exclusions>
-				<exclusion>
-					<groupId>javax.mail</groupId>
-					<artifactId>mail</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>javax.jms</groupId>
-					<artifactId>jms</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.sun.jdmk</groupId>
-					<artifactId>jmxtools</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.sun.jmx</groupId>
-					<artifactId>jmxri</artifactId>
-				</exclusion>
-			</exclusions>
-			<scope>runtime</scope>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${commons-io.version}</version>
 		</dependency>
 
-		<!-- @Inject -->
-		<dependency>
-			<groupId>javax.inject</groupId>
-			<artifactId>javax.inject</artifactId>
-			<version>1</version>
-		</dependency>
-
-		<!-- Test -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.7</version>
-			<scope>test</scope>
-		</dependency>
 		<dependency>
 			<groupId>nz.net.ultraq.thymeleaf</groupId>
 			<artifactId>thymeleaf-layout-dialect</artifactId>
 			<version>2.2.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
 		</dependency>
 	</dependencies>
 	<build>
@@ -231,14 +238,6 @@
 					<warSourceDirectory>src/main/webapp</warSourceDirectory>
 					<warName>${war.pakage.name}</warName>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.2.1</version>
-				<configuration>
-					<mainClass>org.test.int1.Main</mainClass>
 				</configuration>
 			</plugin>
 		</plugins>

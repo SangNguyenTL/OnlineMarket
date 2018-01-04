@@ -9,14 +9,17 @@ import onlinemarket.model.User;
 @Repository("userDao")
 public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
 
-    public User findById(int id) {
-        return getByKey(id);
-    }
- 
-    public User findBySSO(String sso) {
-        Criteria crit = createEntityCriteria();
-        crit.add(Restrictions.eq("ssoId", sso));
-        return (User) crit.uniqueResult();
-    }
+	@Override
+	public User getByEmail(String email) {
+		try {
+			Criteria criteria = createEntityCriteria();
+			criteria.add(Restrictions.eq("email", email));
+			return (User) criteria.uniqueResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
 
 }
