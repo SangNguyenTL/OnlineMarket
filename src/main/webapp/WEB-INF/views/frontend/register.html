@@ -24,23 +24,21 @@
 			<div class="row">
 				<!--Middle Part Start-->
 				<div class="col-sm-9" id="content">
-					<h1 class="title">Đăng ký tài khoản</h1>
+					<h1 class="title">Register Account</h1>
 					<p>
-						Nếu bạn đã có một tài khoản tại trang mua sắm này, xin hãy đăng
-						nhập tại <a th:href="@{/login}">Trang đăng nhập</a>.
+						If you already have an account with us, please login at the Login Page. <a th:href="@{/login}">Login Page</a>.
 					</p>
 					<div class="alert alert-warning" role="alert"
-						th:if="${nest.agree} != null and ${nest.agree} != '1'">Xin bạn đồng ý với các chính
-						sách của chúng tôi trước khi tiếp tục</div>
+						th:if="${nest.agree} != null and ${nest.agree} != '1'">Please agree to our policies before continue</div>
 					<form class="form-horizontal" th:object="${nest}" method="POST" th:action="@{/register}">
 						<fieldset id="account">
-							<legend>Thông tin cá nhân của bạn</legend>
+							<legend>Your Personal Details</legend>
 							<div class="form-group required"
 								th:classappend="${#fields.hasErrors('*{user.firstName}')} ? 'has-error'">
-								<label for="input-firstname" class="col-sm-2 control-label">Tên</label>
+								<label for="input-firstname" class="col-sm-2 control-label">First Name</label>
 								<div class="col-sm-10">
 									<input type="text" class="form-control"
-										placeholder="Tên của bạn" th:field="*{user.firstName}">
+										placeholder="First Name" th:field="*{user.firstName}">
 									<span class="help-block"
 										th:if="${#fields.hasErrors('*{user.firstName}')}"
 										th:errors="*{user.firstName}"></span>
@@ -48,10 +46,10 @@
 							</div>
 							<div class="form-group required"
 								th:classappend="${#fields.hasErrors('*{user.lastName}')} ? 'has-error'">
-								<label for="input-lastname" class="col-sm-2 control-label">Họ</label>
+								<label for="input-lastname" class="col-sm-2 control-label">Last Name</label>
 								<div class="col-sm-10">
 									<input type="text" class="form-control"
-										placeholder="Họ của bạn" th:field="*{user.lastName}">
+										placeholder="Last Name" th:field="*{user.lastName}">
 									<span class="help-block"
 										th:if="${#fields.hasErrors('*{user.lastName}')}"
 										th:errors="*{user.lastName}"></span>
@@ -69,11 +67,10 @@
 							</div>
 							<div class="form-group required"
 								th:classappend="${#fields.hasErrors('*{address.phoneNumber}')} ? 'has-error'">
-								<label for="input-telephone" class="col-sm-2 control-label">Số
-									điện thoại</label>
+								<label for="input-telephone" class="col-sm-2 control-label">Telephone</label>
 								<div class="col-sm-10">
 									<input type="tel" class="form-control"
-										placeholder="Số điện thoại" th:field="*{address.phoneNumber}">
+										placeholder="Telephone" th:field="*{address.phoneNumber}">
 									<span class="help-block"
 										th:if="${#fields.hasErrors('*{address.phoneNumber}')}"
 										th:errors="*{address.phoneNumber}"></span>
@@ -81,8 +78,7 @@
 							</div>
 							<div class="form-group required"
 								th:classappend="${#fields.hasErrors('*{user.birthday}')} ? 'has-error'">
-								<label for="input-birthday" class="col-sm-2 control-label">Ngày
-									sinh</label>
+								<label for="input-birthday" class="col-sm-2 control-label">Birthday</label>
 								<div class="col-sm-10">
 									<div class="input-group date" id="birtdayPicker">
 										<input type='text' class="form-control"
@@ -98,8 +94,7 @@
 							</div>
 							<div class="form-group required"
 								th:classappend="${#fields.hasErrors('*{user.gender}')} ? 'has-error'">
-								<label for="input-gender" class="col-sm-2 control-label">Giới
-									tính</label>
+								<label for="input-gender" class="col-sm-2 control-label">Gender</label>
 								<div class="col-sm-10">
 									<div class="radio"
 										th:each="gender : ${T(onlinemarket.model.Gender).values()}">
@@ -114,13 +109,12 @@
 							</div>
 						</fieldset>
 						<fieldset id="address">
-							<legend>Địa chỉ của bạn</legend>
+							<legend>Your Address</legend>
 							<div class="form-group required"
 								th:classappend="${#fields.hasErrors('*{address.address}')} ? 'has-error'">
-								<label for="input-address" class="col-sm-2 control-label">Địa
-									chỉ</label>
+								<label for="input-address" class="col-sm-2 control-label">Address</label>
 								<div class="col-sm-10">
-									<input type="text" class="form-control" placeholder="Địa chỉ"
+									<input type="text" class="form-control" placeholder="Address"
 										th:field="*{address.address}"> <span
 										class="help-block"
 										th:if="${#fields.hasErrors('*{address.address}')}"
@@ -129,7 +123,7 @@
 							</div>
 							<div class="form-group required"
 								th:classappend="${#fields.hasErrors('*{address.city}')} ? 'has-error'">
-								<label for="input-city" class="col-sm-2 control-label">Quận/Huyện</label>
+								<label for="input-city" class="col-sm-2 control-label">City</label>
 								<div class="col-sm-10">
 									<input type="text" class="form-control" placeholder="City"
 										th:field="*{address.city}"> <span class="help-block"
@@ -139,14 +133,13 @@
 							</div>
 							<div class="form-group required"
 								th:classappend="${#fields.hasErrors('*{address.province}')} ? 'has-error'">
-								<label for="input-country" class="col-sm-2 control-label">Tỉnh/Thành
-									phố</label>
+								<label for="input-country" class="col-sm-2 control-label">Province</label>
 								<div class="col-sm-10">
 									<select class="form-control" th:name="*{address.province}">
-										<option th:value="null"> --- Chọn Tỉnh/Thành phố --- </option>
+										<option th:value="null"> --- Please choise --- </option>
 										<option th:each="province : ${provinceList}"
 											th:value="${province.id}" th:text="${province.name}"
-											th:selected="(${province.id} == *{address.province.id})" > --- Chọn Tỉnh/Thành phố --- </option>
+											th:selected="(${province.id} == *{address.province.id})" > --- Please choise --- </option>
 									</select> <span class="help-block"
 										th:if="${#fields.hasErrors('*{address.province}')}"
 										th:errors="*{address.province}"></span>
@@ -154,14 +147,13 @@
 							</div>
 						</fieldset>
 						<fieldset>
-							<legend>Thiết đặt mật khẩu</legend>
+							<legend>Your Password</legend>
 							<div class="form-group required"
 								th:classappend="${#fields.hasErrors('*{user.password}')} ? 'has-error'">
-								<label for="input-password" class="col-sm-2 control-label">Mật
-									khẩu</label>
+								<label for="input-password" class="col-sm-2 control-label">Password</label>
 								<div class="col-sm-10">
 									<input type="password" class="form-control"
-										placeholder="Mật khẩu" value="" th:field="*{user.password}">
+										placeholder="Password" value="" th:field="*{user.password}">
 									<span class="help-block"
 										th:if="${#fields.hasErrors('*{user.password}')}"
 										th:errors="*{user.password}"></span>
@@ -169,11 +161,10 @@
 							</div>
 							<div class="form-group required"
 								th:classappend="${#fields.hasErrors('*{confirmPassword}')} ? 'has-error'">
-								<label for="input-confirm" class="col-sm-2 control-label">Xác
-									nhận mật khẩu</label>
+								<label for="input-confirm" class="col-sm-2 control-label">Password Confirm</label>
 								<div class="col-sm-10">
 									<input type="password" class="form-control"
-										placeholder="Xác nhận mật khẩu"
+										placeholder="Password Confirm"
 										th:field="*{confirmPassword}"> <span
 										class="help-block"
 										th:if="${#fields.hasErrors('*{confirmPassword}')}"
@@ -183,10 +174,8 @@
 						</fieldset>
 						<div class="buttons">
 							<div class="pull-right">
-								<input type="checkbox" th:field="*{agree}" th:value="1"> &nbsp;Tôi đã xem và
-								đồng ý các <a class="agree" th:href="@{/privacy}"><b>Chính
-										xác</b></a> của [[${general.title}]] &nbsp; <input type="submit"
-									class="btn btn-primary" value="Tiếp tục">
+								<input type="checkbox" th:field="*{agree}" th:value="1"> &nbsp; I have read and agree to the <a class="agree" th:href="@{/privacy}"><b>Privacy Policy</b></a> <input type="submit"
+									class="btn btn-primary" value="Continue">
 							</div>
 						</div>
 					</form>

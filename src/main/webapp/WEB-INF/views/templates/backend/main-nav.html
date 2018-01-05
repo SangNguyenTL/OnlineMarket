@@ -18,7 +18,7 @@
                         <span th:attr="ui-include='\''+ @{/assets/backend/assets/images/i_0.svg} +'\''"></span>
                       </i>
                     </span>
-                    <span class="nav-text">Danh mục</span>
+                    <span class="nav-text">Menu</span>
                   </a>
                </li>
                 <li th:class="${mediaPage} ? 'active'">
@@ -28,7 +28,7 @@
                         <span th:attr="ui-include='\''+ @{/assets/backend/assets/images/i_2.svg} +'\''"></span>
                       </i>
                     </span>
-                    <span class="nav-text">Đa phương tiện</span>
+                    <span class="nav-text">Multimedia</span>
                   </a>
                </li>
                <li th:class="${configPage} ? 'active'" >
@@ -41,15 +41,15 @@
                         <span th:attr="ui-include='\''+ @{/assets/backend/assets/images/i_4.svg} +'\''"></span>
                       </i>
                     </span>
-                    <span class="nav-text">Thiết đặt</span>
+                    <span class="nav-text">Setting</span>
                   </a>
                   <ul class="nav-sub nav-mega">
-					<li th:class="${path} == 'general' ? 'active'"><a th:href="@{/admin/config}"><span class="nav-text">Thiết lập cơ bản</span></a></li>
-					<li th:class="${path} == 'logo' ? 'active'"><a th:href="@{/admin/config/logo}"><span class="nav-text">Biểu tượng - logo</span></a></li>
-					<li th:class="${path} == 'socialble' ? 'active'"><a th:href="@{/admin/config/social}"><span class="nav-text">Mạng xã hội</span></a></li>
-					<li th:class="${path} == 'upload' ? 'active'"><a th:href="@{/admin/config/upload}"><span class="nav-text">Upload Ảnh</span></a></li>
-					<li th:class="${path} == 'email' ? 'active'"><a th:href="@{/admin/config/emailsystem}"><span class="nav-text">Hệ thống email</span></a></li>
-					<li th:class="${path} == 'contact' ? 'active'"><a th:href="@{/admin/config/contact}"><span class="nav-text">Liên hệ</span></a></li>
+					<li th:class="${path} == 'general' ? 'active'"><a th:href="@{/admin/config}"><span class="nav-text">Basic Setup</span></a></li>
+					<li th:class="${path} == 'logo' ? 'active'"><a th:href="@{/admin/config/logo}"><span class="nav-text">Logo</span></a></li>
+					<li th:class="${path} == 'socialble' ? 'active'"><a th:href="@{/admin/config/social}"><span class="nav-text">Social Network</span></a></li>
+					<li th:class="${path} == 'upload' ? 'active'"><a th:href="@{/admin/config/upload}"><span class="nav-text">Upload Photo</span></a></li>
+					<li th:class="${path} == 'email' ? 'active'"><a th:href="@{/admin/config/emailsystem}"><span class="nav-text">Email System</span></a></li>
+					<li th:class="${path} == 'contact' ? 'active'"><a th:href="@{/admin/config/contact}"><span class="nav-text">Contact</span></a></li>
 				</ul>
                </li>
               </ul>

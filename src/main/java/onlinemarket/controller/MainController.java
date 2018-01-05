@@ -94,7 +94,7 @@ public class MainController {
 	public String loginPage(ModelMap model) {
 		
 		if (currentUser.getId() == null) {
-			model.put("pageTile", "Đăng nhập");
+			model.put("pageTile", "Login");
 			return "frontend/login";
 	    } else {
 	    	return "redirect:/";  

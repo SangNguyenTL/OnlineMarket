@@ -57,33 +57,35 @@
 	              <button class="btn-link dropdown-toggle" data-toggle="dropdown"> <span> [[${currentUser.firstName}]] <i class="fa fa-caret-down"></i></span></button>
 	              <ul class="dropdown-menu">
 	              	<li sec:authorize="hasRole('ROLE_ADMIN')">
-	                  <a class="nav-user-select" th:href="@{/admin}">Quản trị</a>
+	                  <a class="nav-user-select" th:href="@{/admin}">Administrator</a>
 	                </li>
 	                <li>
-	                  <a class="nav-user-select" th:href="@{/user}">Trang cá nhân</a>
+	                  <a class="nav-user-select" th:href="@{/user}">Personal Page
+</a>
 	                </li>
 	              	<li>
-	                  <a class="nav-user-select" th:href="@{/user/cart}">Giỏ hàng</a>
+	                  <a class="nav-user-select" th:href="@{/user/cart}">Cart
+</a>
 	                </li>
 	              	<li>
-	                  <a class="nav-user-select" th:href="@{/user/noitification}">Thông báo</a>
+	                  <a class="nav-user-select" th:href="@{/user/noitification}">Notification</a>
 	                </li>
 	              	<li>
-	                  <a class="nav-user-select" th:href="@{/user/order}">Hóa đơn</a>
+	                  <a class="nav-user-select" th:href="@{/user/order}">Order</a>
 	                </li>
 	              	<li class="divider" role="separator"></li>
 	                <li>
-	                  <a class="nav-user-select" th:href="@{/user/setting}">Cài đặt</a>
+	                  <a class="nav-user-select" th:href="@{/user/setting}">Setting</a>
 	                </li>
 	                <li>
-	                  <a class="nav-user-select" th:href="@{/logout}">Thoát</a>
+	                  <a class="nav-user-select" th:href="@{/logout}">Exit</a>
 	                </li>
 	              </ul>
          	 </div>
           	
             <ul th:unless="${currentUser.id}">
-              <li><a th:href="@{/login}">Đăng nhập</a></li>
-              <li><a th:href="@{/register}">Đăng ký</a></li>
+              <li><a th:href="@{/login}">Login</a></li>
+              <li><a th:href="@{/register}">Register</a></li>
             </ul>
           </div>
         </div>

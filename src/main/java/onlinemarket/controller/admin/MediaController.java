@@ -66,7 +66,7 @@ public class MediaController {
 	@RequestMapping(value = { "" }, method = RequestMethod.GET)
 	public String mainPage(ModelMap model) {
 		
-		model.put("pageTitle", "Đa phương tiện");
+		model.put("pageTitle", "Multimedia");
 		
 		return "backend/media";
 	}
