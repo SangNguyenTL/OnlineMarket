@@ -3,7 +3,9 @@ package onlinemarket.service;
 import java.io.IOException;
 import java.util.List;
 
+import onlinemarket.api.result.ResultImage;
 import onlinemarket.form.config.UploadForm;
+import onlinemarket.form.filter.ImageFilter;
 import onlinemarket.model.Image;
 import onlinemarket.model.User;
 import onlinemarket.service.exception.CreateFolderException;
@@ -13,4 +15,5 @@ public interface ImageService extends InterfaceService<Integer, Image>{
 	
 	List<Image> save(UploadForm form, User user) throws IllegalStateException, IOException, UploadTypeException, CreateFolderException;
 	
+	ResultImage filter(ImageFilter imageFilter);
 }

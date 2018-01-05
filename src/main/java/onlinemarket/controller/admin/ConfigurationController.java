@@ -76,7 +76,7 @@ public class ConfigurationController{
 	@RequestMapping(value = { "" }, method = RequestMethod.GET)
 	public String configPage(@ModelAttribute("general") GeneralConfig general,ModelMap model) {
 		model.put("path", "general");
-		model.put("subTitlePage", "Cơ bản");
+		model.put("subPageTitle", "Cơ bản");
 		model.put("generalConfig", general);
 		model.put("description", "Thiết đặt một số thuộc tính cơ bản của ứng dụng.");
 		return "backend/config";

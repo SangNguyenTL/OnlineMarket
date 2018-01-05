@@ -67,7 +67,6 @@ public class MediaController {
 	public String mainPage(ModelMap model) {
 		
 		model.put("pageTitle", "Đa phương tiện");
-		
 		return "backend/media";
 	}
 }

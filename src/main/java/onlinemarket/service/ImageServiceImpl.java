@@ -12,8 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import onlinemarket.api.result.ResultImage;
 import onlinemarket.dao.ImageDao;
 import onlinemarket.form.config.UploadForm;
+import onlinemarket.form.filter.ImageFilter;
 import onlinemarket.model.Image;
 import onlinemarket.model.User;
 import onlinemarket.service.exception.CreateFolderException;
@@ -86,6 +88,11 @@ public class ImageServiceImpl implements ImageService{
 			imageList.add(image);
 		}
 		return imageList;
+	}
+
+	@Override
+	public ResultImage filter(ImageFilter imageFilter) {
+		return imageDao.filter(imageFilter);
 	}
 
 }

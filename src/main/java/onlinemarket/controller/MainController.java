@@ -86,7 +86,7 @@ public class MainController {
 	@RequestMapping(value = { "/" }, method = RequestMethod.GET)
 	public String homePage(ModelMap model) {
 		
-		model.put("pageTile", "Trang chủ");
+		model.put("pageTitle", "Trang chủ");
 		return "frontend/index";
 	}
 
@@ -94,7 +94,7 @@ public class MainController {
 	public String loginPage(ModelMap model) {
 		
 		if (currentUser.getId() == null) {
-			model.put("pageTile", "Đăng nhập");
+			model.put("pageTitle", "Đăng nhập");
 			return "frontend/login";
 	    } else {
 	    	return "redirect:/";  
@@ -104,7 +104,7 @@ public class MainController {
 
 	@RequestMapping(value = { "/register" }, method = RequestMethod.GET)
 	public String registerPage(ModelMap model) {
-		model.put("pageTile", "Đăng ký");
+		model.put("pageTitle", "Đăng ký");
 		model.put("provinceList", provinceService.list());
 		model.put("nest", new UserAddressNest());
 		return "frontend/register";
@@ -119,16 +119,15 @@ public class MainController {
 		}
 		if(nest.getAgree() == null) nest.setAgree("2");
 		if(nest.getAddress().getProvince()==null) nest.getAddress().setProvince(new Province());
-		model.put("pageTile", "Đăng ký");
+		model.put("pageTitle", "Đăng ký");
 		model.put("provinceList", provinceService.list());
 		return "frontend/register";
-
+ 
 	}
 
     @RequestMapping(value="/error", method = RequestMethod.GET)
     @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
     public ModelAndView handleError401(HttpServletRequest request)   {
-    	
         ModelAndView errorPage = new ModelAndView("backend/error");
         int httpErrorCode = 401;
         errorPage.addObject("pageTitle", httpErrorCode+ " Error");

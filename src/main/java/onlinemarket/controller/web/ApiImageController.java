@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import onlinemarket.form.config.UploadForm;
+import onlinemarket.form.filter.ImageFilter;
 import onlinemarket.model.User;
 import onlinemarket.service.ImageService;
 import onlinemarket.service.UserService;
@@ -28,7 +29,7 @@ import onlinemarket.util.FileValidator;
 
 @RestController
 @RequestMapping("/api")
-public class ApiController {
+public class ApiImageController {
 
 	@Autowired
 	private UserService userService;
@@ -65,12 +66,12 @@ public class ApiController {
 		binder.setValidator(fileValidator);
 	}
 	
-	@RequestMapping(value = "/user", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> getUser(){
-		return ResponseEntity.ok(userService.getByKey(1));
+	@RequestMapping(value = "/image/load", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> getUser(@ModelAttribute("imageFilter") ImageFilter imageFilter){
+		return ResponseEntity.ok().body(imageService.filter(imageFilter));
 	}
 	
-	@RequestMapping(value = "/uploadImage",  method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/image/upload",  method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> upload(@ModelAttribute("uploadFrom") UploadForm uploadForm, BindingResult result){
 
 		List<String> listError = new ArrayList<>();

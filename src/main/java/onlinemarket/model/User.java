@@ -27,6 +27,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import onlinemarket.model.other.AdvancedValidation;
@@ -188,6 +189,7 @@ public class User implements java.io.Serializable {
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm a")
 	@Column(name = "create_date", nullable = false, length = 23)
 	public Date getCreateDate() {
 		return this.createDate;
@@ -198,6 +200,7 @@ public class User implements java.io.Serializable {
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm a")
 	@Column(name = "update_date", length = 23)
 	public Date getUpdateDate() {
 		return this.updateDate;
@@ -210,7 +213,7 @@ public class User implements java.io.Serializable {
 	@Column(name = "[state]", nullable = false, length = 10)
 	@Size(max=10)
 	@NotEmpty
-	@StringContain(acceptedValues= {"Active","Inactive","Deleted","Locked"},message="Trạng thái không hợp lệ")
+	@StringContain(acceptedValues= {"Active","Inactive","Deleted","Locked"},message="State is invalid")
 	public String getState() {
 		return this.state;
 	}
