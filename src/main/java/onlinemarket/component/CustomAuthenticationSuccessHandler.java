@@ -39,7 +39,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     	        	System.out.println("Response has already been committed. Unable to redirect to "
     	    	              + targetUrl);
     	            return;
-    	        }
+    	        }  
     	 
     	        redirectStrategy.sendRedirect(request, response, targetUrl);
     	    }

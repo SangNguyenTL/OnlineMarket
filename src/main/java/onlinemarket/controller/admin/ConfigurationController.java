@@ -49,7 +49,7 @@ public class ConfigurationController{
 		model.put("logo", configurationService.getLogo());
 		model.put("upload", configurationService.getUpload());
 		model.put("contact", configurationService.getContag());
-		model.put("pageTitle", "Thiết lập");
+		model.put("pageTitle", "Setting");
 		model.put("configPage", true);
 		model.put("social", configurationService.getSocial());
 	}
@@ -76,17 +76,21 @@ public class ConfigurationController{
 	@RequestMapping(value = { "" }, method = RequestMethod.GET)
 	public String configPage(@ModelAttribute("general") GeneralConfig general,ModelMap model) {
 		model.put("path", "general");
+<<<<<<< HEAD
 		model.put("subPageTitle", "Cơ bản");
+=======
+		model.put("subTitlePage", "general");
+>>>>>>> 895d4e44fdfe49dea5d4493fe067a9b2a5d96b1f
 		model.put("generalConfig", general);
-		model.put("description", "Thiết đặt một số thuộc tính cơ bản của ứng dụng.");
+		model.put("description", "Set some of the basic properties of the application.");
 		return "backend/config";
 	}
 	
 	@RequestMapping(value = { "" }, method = RequestMethod.POST)
 	public String submitConfigPage(@Valid @ModelAttribute("general") GeneralConfig generalConfig, BindingResult result, ModelMap model) {
 		model.put("path", "general");
-		model.put("subPageTitle", "Cơ bản");
-		model.put("description", "Thiết đặt một số thuộc tính cơ bản của ứng dụng.");
+		model.put("subPageTitle", "general");
+		model.put("description", "Set some of the basic properties of the application.");
 		if(!result.hasErrors()) {
 			configurationService.saveGeneralConfig(generalConfig);
 		}
@@ -96,8 +100,8 @@ public class ConfigurationController{
 	@RequestMapping(value = { "upload" }, method = RequestMethod.GET)
 	public String configUploadPage(@ModelAttribute("upload") UploadConfig upload, ModelMap model) {
 		model.put("path", "upload");
-		model.put("subPageTitle", "Truyền tải");
-		model.put("description", "Thiết đặt các giới hạn truyền tải.");
+		model.put("subPageTitle", "upload");
+		model.put("description", "Set upload limits.");
 		model.put("uploadConfig", upload);
 		return "backend/config";
 		
@@ -106,8 +110,8 @@ public class ConfigurationController{
 	@RequestMapping(value = { "upload" }, method = RequestMethod.POST)
 	public String submitUploadPage(@ModelAttribute("uploadConfig") UploadConfig upload, BindingResult result, ModelMap model) {
 		model.put("path", "upload");
-		model.put("subPageTitle", "Truyền tải");
-		model.put("description", "Thiết đặt các giới hạn truyền tải.");
+		model.put("subPageTitle", "Upload");
+		model.put("description", "Set upload limits.");
 		if(!result.hasErrors()) {
 			configurationService.saveUploadconfig(upload);
 		}
@@ -117,8 +121,8 @@ public class ConfigurationController{
 	@RequestMapping(value = { "logo" }, method = RequestMethod.GET)
 	public String configLogoPage(@ModelAttribute("logo") LogoConfig logo, ModelMap model) {
 		model.put("path", "logo");
-		model.put("subPageTitle", "Logo - Biểu tượng");
-		model.put("description", "Thiết đặt hình ảnh biểu tượng của ứng dụng cũng như thương hiệu cửa hàng.");
+		model.put("subPageTitle", "Logo");
+		model.put("description", "Set the icon of the app as well as the store brand.");
 		model.put("logoConfig", logo);
 		return "backend/config"; 
 	}
@@ -126,9 +130,9 @@ public class ConfigurationController{
 	@RequestMapping( value = {"contact"}, method = RequestMethod.GET)
 	public String configContactPage(@ModelAttribute("contact") ContactConfig contact, ModelMap model) {
 		model.put("path", "contact");
-		model.put("subPageTitle", "Liên hệ");
+		model.put("subPageTitle", "Contact");
 		model.put("contactConfig", contact);
-		model.put("description", "Thiết lập địa chỉ của cửa hàng giúp khách hàng nắm rõ nơi cửa hàng được đặt.");
+		model.put("description", "Setting up a store address helps customers understand where the store is located.");
 		return "backend/config";
 	}
 	
@@ -136,8 +140,8 @@ public class ConfigurationController{
 	public String submitContactPage(@ModelAttribute("contactConfig") ContactConfig contact,BindingResult result, ModelMap model) {
 		
 		model.put("path", "contact");
-		model.put("subPageTitle", "Liên hệ");
-		model.put("description", "Thiết lập địa chỉ của cửa hàng giúp khách hàng nắm rõ nơi cửa hàng được đặt.");
+		model.put("subPageTitle", "Contact");
+		model.put("description", "Setting up a store address helps customers understand where the store is located.");
 		if(!result.hasErrors()) {
 			configurationService.saveContactConfig(contact);
 		}
@@ -148,19 +152,19 @@ public class ConfigurationController{
 	public String configSocialPage(@ModelAttribute("social") SocialConfig social, ModelMap model) {
 		
 		model.put("path", "social");
-		model.put("subPageTitle", "Mạng xã hội");
-		model.put("description", "Thiết đặt các URL của trang mạng xã hội, hiển thị các ứng dụng của mạng xã hội.");
+		model.put("subPageTitle", "Social Network");
+		model.put("description", "Setting the URL of the page of social network, show the network networks of applications.");
 		model.put("socialConfig", social);
 		
 		return "backend/config";
-	}
+	}  
 	
 	@RequestMapping( value = {"social"}, method = RequestMethod.POST)
 	public String submitSocialPage(@ModelAttribute("socialConfig") SocialConfig social,BindingResult result, ModelMap model) {
 		
 		model.put("path", "social");
-		model.put("subPageTitle", "Mạng xã hội");
-		model.put("description", "Thiết đặt các URL của trang mạng xã hội, hiển thị các ứng dụng của mạng xã hội.");
+		model.put("subPageTitle", "Social Network");
+		model.put("description", "Set the URL of the social network page, which shows social networking applications.");
 		if(!result.hasErrors()) {
 			configurationService.saveSocialConfig(social);
 		}
@@ -171,8 +175,8 @@ public class ConfigurationController{
 	public String configEmailSystemPage(@ModelAttribute("email") EmailSystemConfig email, ModelMap model) {
 		
 		model.put("path", "emailsystem");
-		model.put("subPageTitle", "Hệ thống email");
-		model.put("description", "Thiết đặt các thông số để ứng dụng có thể gửi thông báo đến khách hàng.");
+		model.put("subPageTitle", "Email System");
+		model.put("description", "Set parameters so that the application can send the message to the client.");
 		model.put("emailSystemConfig", configurationService.getEmail());
 		
 		return "backend/config";
@@ -181,8 +185,8 @@ public class ConfigurationController{
 	@RequestMapping( value = {"emailsystem"}, method = RequestMethod.POST)
 	public String submitEmailSystemPage(@ModelAttribute("emailSystemConfig") EmailSystemConfig email, BindingResult result, ModelMap model) {
 		model.put("path", "emailsystem");
-		model.put("subPageTitle", "Hệ thống email");
-		model.put("description", "Thiết đặt các thông số để ứng dụng có thể gửi thông báo đến khách hàng.");
+		model.put("subPageTitle", "Email System");
+		model.put("description", "Set parameters so that the application can send the message to the client.");
 		if(!result.hasErrors()) {
 			configurationService.saveEmailSystemConfig(email);
 		}

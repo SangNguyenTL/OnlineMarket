@@ -6,28 +6,28 @@
 	<div class="box-body" th:fragment="general">
 		<form ui-jp="parsley" role="form" th:object="${generalConfig}" th:action="@{/admin/config}" method="POST">
 			<div class="form-group row">
-				<label class="col-sm-3 form-control-label">Tên ứng dụng</label>
+				<label class="col-sm-3 form-control-label">Application Name</label>
 				<div class="col-sm-9">
 					<input th:errorclass="parsley-error" class="form-control" type="text" th:field="*{title}" required data-parsley-length="[3, 50]" data-parsley-id="title"/>
 					<ul class="parsley-errors-list filled" id="parsley-id-title" th:if="${#fields.hasErrors('title')}"><li th:errors="*{title}"> </li></ul>
 				</div>
 			</div>
 			<div class="form-group row">
-				<label class="col-sm-3 form-control-label">Từ khóa</label>
+				<label class="col-sm-3 form-control-label">Key word</label>
 				<div class="col-sm-9">
 					<input th:errorclass="parsley-error" class="form-control" type="text" th:field="*{keyword}" required data-parsley-length="[3, 150]"/>
 					<ul class="parsley-errors-list filled" id="parsley-id-keyword" th:if="${#fields.hasErrors('keyword')}"><li th:errors="*{keyword}"> </li></ul>
 				</div>
 			</div>
 			<div class="form-group row">
-				<label class="col-sm-3 form-control-label">Mô tả</label>
+				<label class="col-sm-3 form-control-label">Description</label>
 				<div class="col-sm-9">
 					<textarea th:errorclass="parsley-error" class="form-control" th:field="*{description}" required data-parsley-length="[50, 250]"></textarea>
 					<ul class="parsley-errors-list filled" id="parsley-id-description" th:if="${#fields.hasErrors('description')}"><li th:errors="*{description}"> </li></ul>
 				</div>
 			</div>
 			<div class="dker p-a text-right">
-    			<button type="submit" class="btn info">Lưu</button>
+    			<button type="submit" class="btn info">Save</button>
 			</div>
 		</form>
 	</div>
@@ -35,21 +35,21 @@
 	<div class="box-body" th:fragment="upload">
 		<form ui-jp="parsley" role="form" th:object="${uploadConfig}" th:action="@{/admin/config/upload}" method="POST">
 			<div class="form-group row">
-				<label class="col-sm-3 form-control-label">Giới hạn kích thước tệp</label>
+				<label class="col-sm-3 form-control-label">File size limit</label>
 				<div class="col-sm-9">
 					<input th:errorclass="parsley-error" class="form-control" type="number" th:field="*{maxFileSize}" required data-parsley-range="[1, 20]" data-parsley-id="title"/>
 					<ul class="parsley-errors-list filled" id="parsley-id-maxFileSize" th:if="${#fields.hasErrors('maxFileSize')}"><li th:errors="*{maxFileSize}"> </li></ul>
 				</div>
 			</div>
 			<div class="form-group row">
-				<label class="col-sm-3 form-control-label">Giới hạn kích thước gói</label>
+				<label class="col-sm-3 form-control-label">Package size limit</label>
 				<div class="col-sm-9">
 					<input th:errorclass="parsley-error" class="form-control" type="number" th:field="*{maxSize}" required data-parsley-range="[1, 100]"/>
 					<ul class="parsley-errors-list filled" id="parsley-id-maxSize" th:if="${#fields.hasErrors('maxSize')}"><li th:errors="*{maxSize}"> </li></ul>
 				</div>
 			</div>
 			<div class="dker p-a text-right">
-    			<button type="submit" class="btn info">Lưu</button>
+    			<button type="submit" class="btn info">Save</button>
 			</div>
 		</form>
 	</div>
@@ -89,7 +89,7 @@
 				</div>
 			</div>
 			<div class="dker p-a text-right">
-				<button type="submit" class="btn info">Lưu</button>
+				<button type="submit" class="btn info">Save</button>
 			</div>
 		</form>
 	</div>
@@ -119,7 +119,7 @@
 				</div>
 			</div>
 			<div class="dker p-a text-right">
-				<button type="submit" class="btn info">Lưu</button>
+				<button type="submit" class="btn info">Save</button>
 			</div>
 		</form>
 	</div>
@@ -127,9 +127,9 @@
 	<div class="box-body" th:fragment="contact">
 		<form ui-jp="parsley" role="form" th:object="${contactConfig}" th:action="@{/admin/config/contact}" method="POST">
 			<div class="form-group row">
-				<label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Địa chỉ</label>
+				<label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Address</label>
 				<div class="col-sm-12 col-md-8 col-lg-9">
-					<input th:errorclass="parsley-error" class="form-control"  type="text" th:field="*{address}" placeholder="371/50/2 Trường Trinh, Q. Tân Bình, TP. Hồ Chính Minh" required data-parsley-id="address"  data-parsley-length="[10, 255]"/>
+					<input th:errorclass="parsley-error" class="form-control"  type="text" th:field="*{address}" placeholder="371/50/2 Truong Chinh, District Tan Binh, HCM" required data-parsley-id="address"  data-parsley-length="[10, 255]"/>
 					<ul class="parsley-errors-list filled" id="parsley-id-address" th:if="${#fields.hasErrors('address')}"><li th:errors="*{address}"></li></ul>
 				</div>
 			</div>
@@ -141,7 +141,7 @@
 				</div>
 			</div>
 			<div class="form-group row">
-				<label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Số điện thoại</label>
+				<label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Phone Number</label>
 				<div class="col-sm-12 col-md-8 col-lg-9">
 					<input th:errorclass="parsley-error" class="form-control"  type="text" th:field="*{phoneNumber}" required data-parsley-id="phoneNumber" placeholder="01643456554" data-parsley-type="digits"/>
 					<ul class="parsley-errors-list filled" id="parsley-id-phoneNUmber" th:if="${#fields.hasErrors('phoneNumber')}"><li th:errors="*{phoneNumber}"></li></ul>
@@ -154,7 +154,7 @@
 				th:attr="ui-options='{coordinate : {lat : '+ *{latitude} + ', lng : '+ *{longitude} +'},marker : {draggable : true},outId : {lat : \'latitude\',lng : \'longitude\'},search : \'address\'}'"></div>
 			</div>
 			<div class="dker p-a text-right">
-				<button type="submit" class="btn info">Lưu</button>
+				<button type="submit" class="btn info">Save</button>
 			</div>
 		</form>
 	</div>
@@ -170,28 +170,28 @@
 				</div>
 			</div>
 			<div class="form-group row">
-				<label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Mật khẩu</label>
+				<label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Password</label>
 				<div class="col-sm-12 col-md-8 col-lg-9">
 					<input th:errorclass="parsley-error" class="form-control"  type="password" th:field="*{password}" required data-parsley-id="password"/>
 					<ul class="parsley-errors-list filled" id="parsley-id-password" th:if="${#fields.hasErrors('password')}"><li th:errors="*{password}" maxlength="60"></li></ul>
 				</div>
 			</div>
 			<div class="form-group row">
-				<label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Địa chỉ máy chủ</label>
+				<label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Host</label>
 				<div class="col-sm-12 col-md-8 col-lg-9">
 					<input th:errorclass="parsley-error" class="form-control"  type="text" th:field="*{host}" placeholder="smtp.gmail.com" required data-parsley-id="host" data-parsley-length="[10, 150]" pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"/>
 					<ul class="parsley-errors-list filled" id="parsley-id-host" th:if="${#fields.hasErrors('host')}"><li th:errors="*{host}"></li></ul>
 				</div>
 			</div>
 			<div class="form-group row">
-				<label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Cổng</label>
+				<label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Port</label>
 				<div class="col-sm-12 col-md-8 col-lg-9">
 					<input th:errorclass="parsley-error" class="form-control"  type="number" th:field="*{port}" data-parsley-type="digits" placeholder="587" required data-parsley-id="port" min="0" max="65535"/>
 					<ul class="parsley-errors-list filled" id="parsley-id-port" th:if="${#fields.hasErrors('port')}"><li th:errors="*{port}"></li></ul>
 				</div>
 			</div>
 			<div class="dker p-a text-right">
-				<button type="submit" class="btn info">Lưu</button>
+				<button type="submit" class="btn info">Save</button>
 			</div>
 		</form>
 	</div>
