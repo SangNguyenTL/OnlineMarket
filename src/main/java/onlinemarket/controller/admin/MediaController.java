@@ -69,6 +69,9 @@ public class MediaController {
 <<<<<<< HEAD
 		model.put("pageTitle", "Đa phương tiện");
 =======
+		model.put("pageTitle", "Multimedia");
+		
+>>>>>>> 895d4e44fdfe49dea5d4493fe067a9b2a5d96b1f
 		return "backend/media";
 	}
 }

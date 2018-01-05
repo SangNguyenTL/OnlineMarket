@@ -97,6 +97,8 @@ public class MainController {
 <<<<<<< HEAD
 			model.put("pageTitle", "Đăng nhập");
 =======
+			model.put("pageTile", "Login");
+>>>>>>> 895d4e44fdfe49dea5d4493fe067a9b2a5d96b1f
 			return "frontend/login";
 	    } else {
 	    	return "redirect:/";  
