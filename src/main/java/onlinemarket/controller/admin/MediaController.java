@@ -39,7 +39,7 @@ public class MediaController {
 		model.put("logo", configurationService.getLogo());
 		model.put("upload", configurationService.getUpload());
 		model.put("contact", configurationService.getContag());
-		model.put("pageTitle", "Thiết lập");
+		model.put("pageTitle", "Setting");
 		model.put("mediaPage", true);
 		model.put("social", configurationService.getSocial());
 	}
@@ -65,13 +65,7 @@ public class MediaController {
 	
 	@RequestMapping(value = { "" }, method = RequestMethod.GET)
 	public String mainPage(ModelMap model) {
-		
-<<<<<<< HEAD
-		model.put("pageTitle", "Đa phương tiện");
-=======
 		model.put("pageTitle", "Multimedia");
-		
->>>>>>> 895d4e44fdfe49dea5d4493fe067a9b2a5d96b1f
 		return "backend/media";
 	}
 }

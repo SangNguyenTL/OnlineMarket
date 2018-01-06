@@ -7,25 +7,23 @@
 <body>
 
 	<div ui-view class="app-body" id="view" layout:fragment="container">
-<<<<<<< HEAD
-		<div ui-jp='galleryManager' class="padding" th:attr="ui-options='{actionUpload: \''+@{/api/image/upload}+'\', actionLoadImage: \''+@{/api/image/load}+'\'}'">
-			
-		</div>
+	
+		<div ui-jp='galleryManager' class="padding" th:attr="ui-options='{actionUpload: \''+@{/api/image/upload}+'\', actionLoadImage: \''+@{/api/image/load}+'\'}'"></div>
 <script id="template-download" type="text/x-tmpl" th:inline="text">
 // <![CDATA[
 {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-download fade">
         <td>
-            <span class="preview">
-                {% if (file.thumbnailUrl) { %}
-                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=file.thumbnailUrl%}"></a>
+            <span class="preview avatar">
+                {% if (file.path) { %}
+                    <a href="{%=PATH+file.path%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=PATH+file.path%}"></a>
                 {% } %}
             </span>
         </td>
         <td>
             <p class="name">
                 {% if (file.url) { %}
-                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" {%=file.thumbnailUrl?'data-gallery':''%}>{%=file.name%}</a>
+                    <a href="{%=PATH+file.path%}" title="{%=PATH+file.path%}" download="{%=PATH+file.path%}" {%=file.path?'data-gallery':''%}>{%=file.name%}</a>
                 {% } else { %}
                     <span>{%=file.name%}</span>
                 {% } %}

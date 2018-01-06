@@ -86,7 +86,7 @@ public class MainController {
 	@RequestMapping(value = { "/" }, method = RequestMethod.GET)
 	public String homePage(ModelMap model) {
 		
-		model.put("pageTitle", "Trang chủ");
+		model.put("pageTitle", "Home");
 		return "frontend/index";
 	}
 
@@ -94,11 +94,7 @@ public class MainController {
 	public String loginPage(ModelMap model) {
 		
 		if (currentUser.getId() == null) {
-<<<<<<< HEAD
-			model.put("pageTitle", "Đăng nhập");
-=======
 			model.put("pageTile", "Login");
->>>>>>> 895d4e44fdfe49dea5d4493fe067a9b2a5d96b1f
 			return "frontend/login";
 	    } else {
 	    	return "redirect:/";  
@@ -108,7 +104,7 @@ public class MainController {
 
 	@RequestMapping(value = { "/register" }, method = RequestMethod.GET)
 	public String registerPage(ModelMap model) {
-		model.put("pageTitle", "Đăng ký");
+		model.put("pageTitle", "Resiter");
 		model.put("provinceList", provinceService.list());
 		model.put("nest", new UserAddressNest());
 		return "frontend/register";
@@ -123,7 +119,7 @@ public class MainController {
 		}
 		if(nest.getAgree() == null) nest.setAgree("2");
 		if(nest.getAddress().getProvince()==null) nest.getAddress().setProvince(new Province());
-		model.put("pageTitle", "Đăng ký");
+		model.put("pageTitle", "Register");
 		model.put("provinceList", provinceService.list());
 		return "frontend/register";
  
@@ -135,7 +131,7 @@ public class MainController {
         ModelAndView errorPage = new ModelAndView("backend/error");
         int httpErrorCode = 401;
         errorPage.addObject("pageTitle", httpErrorCode+ " Error");
-        errorPage.addObject("errorMsg", "Bạn không có quyền truy cập vào đây!");
+        errorPage.addObject("errorMsg", "You do not have permission to access here!");
         errorPage.addObject("code", httpErrorCode);
         return errorPage;
         

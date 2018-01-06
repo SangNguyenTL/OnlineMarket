@@ -76,11 +76,7 @@ public class ConfigurationController{
 	@RequestMapping(value = { "" }, method = RequestMethod.GET)
 	public String configPage(@ModelAttribute("general") GeneralConfig general,ModelMap model) {
 		model.put("path", "general");
-<<<<<<< HEAD
-		model.put("subPageTitle", "Cơ bản");
-=======
-		model.put("subTitlePage", "general");
->>>>>>> 895d4e44fdfe49dea5d4493fe067a9b2a5d96b1f
+		model.put("subPageTitle", "General");
 		model.put("generalConfig", general);
 		model.put("description", "Set some of the basic properties of the application.");
 		return "backend/config";
@@ -100,7 +96,7 @@ public class ConfigurationController{
 	@RequestMapping(value = { "upload" }, method = RequestMethod.GET)
 	public String configUploadPage(@ModelAttribute("upload") UploadConfig upload, ModelMap model) {
 		model.put("path", "upload");
-		model.put("subPageTitle", "upload");
+		model.put("subPageTitle", "Upload");
 		model.put("description", "Set upload limits.");
 		model.put("uploadConfig", upload);
 		return "backend/config";

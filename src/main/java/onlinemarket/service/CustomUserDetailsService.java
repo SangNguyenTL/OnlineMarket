@@ -27,7 +27,7 @@ public class CustomUserDetailsService implements UserDetailsService{
             throws UsernameNotFoundException {
         User user = userService.getByEmail(email);
         if(user==null){
-            throw new UsernameNotFoundException("Email chưa được đăng ký.");
+            throw new UsernameNotFoundException("Email isn't registed.");
         }
             return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), 
                  user.getState().equals("Active"), true, true, true, getGrantedAuthorities(user));
