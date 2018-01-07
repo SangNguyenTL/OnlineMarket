@@ -19,6 +19,7 @@ import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
+import onlinemarket.component.CustomAccessDeniedHandler;
 import onlinemarket.component.CustomAuthenticationSuccessHandler;
 
 @Configuration
@@ -43,7 +44,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 	}
-
+	@Autowired
+	private CustomAccessDeniedHandler accessDeniedHandler;
+	
 	@Bean
 	public SimpleUrlAuthenticationFailureHandler myFailureHandler() {
 		return new SimpleUrlAuthenticationFailureHandler();
@@ -84,7 +87,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.tokenValiditySeconds(60 * 60 * 24 * 2)
 				.and()
 			.exceptionHandling()
-				.accessDeniedPage("/error")
+				.accessDeniedHandler(accessDeniedHandler)
 				.and()
 			.csrf()
 		        .csrfTokenRepository(new CookieCsrfTokenRepository())

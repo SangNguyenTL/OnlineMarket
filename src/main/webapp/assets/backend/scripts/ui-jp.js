@@ -1,24 +1,31 @@
 (function ($, MODULE_CONFIG) {
-  	"use strict";
-  
-	$.fn.uiJp = function(){
+	"use strict";
+  var promise = false,
+	  deferred = $.Deferred();
 
-		var lists  = this;
+  $.fn.uiJp = function(){
 
-        lists.each(function()
-        {
-        	var self = $(this);
-			var options = eval('[' + self.attr('ui-options') + ']');
-			if ($.isPlainObject(options[0])) {
-				options[0] = $.extend({}, options[0]);
-			}
+	  if(!promise)
+		  promise = deferred.promise();
 
-			uiLoad.load(MODULE_CONFIG[self.attr('ui-jp')]).then( function(){
-				self[self.attr('ui-jp')].apply(self, options);
-			});
-        });
+	  var lists  = this;
 
-        return lists;
-	}
+	  lists.each(function()
+	  {
+		  var self = $(this);
+		  var options = eval('[' + self.attr('ui-options') + ']');
+		  if ($.isPlainObject(options[0])) {
+			  options[0] = $.extend({}, options[0]);
+		  }
+
+		  promise = uiLoad.load(MODULE_CONFIG[self.attr('ui-jp')]).then( function(){
+			  self[self.attr('ui-jp')].apply(self, options);
+		  });
+	  });
+
+	  deferred.resolve();
+
+	  return promise;
+  }
 
 })(jQuery, MODULE_CONFIG);

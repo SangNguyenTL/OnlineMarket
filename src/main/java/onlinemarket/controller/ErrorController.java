@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -29,8 +30,23 @@ public class ErrorController {
         errorPage.addObject("general", configurationService.getGeneral());
 		errorPage.addObject("logo", configurationService.getLogo());
 		errorPage.addObject("titlePage", httpErrorCode+" Error");
-		errorPage.addObject("exception", ex);
-		errorPage.addObject("errorMsg", "Lỗi từ phía server");
+		errorPage.addObject("errorMsg", "Internal server error");
+        errorPage.addObject("code", httpErrorCode);
+        ex.printStackTrace();
+        return errorPage;
+    }
+	
+	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+	@ResponseStatus(value=HttpStatus.METHOD_NOT_ALLOWED)
+    public ModelAndView errorRequestMethodNotSupported(HttpServletRequest httpRequest, Exception ex) {
+
+        ModelAndView errorPage = new ModelAndView("backend/error");
+        
+        int httpErrorCode = 405; 
+        errorPage.addObject("general", configurationService.getGeneral());
+		errorPage.addObject("logo", configurationService.getLogo());
+		errorPage.addObject("titlePage", httpErrorCode+" Error");
+		errorPage.addObject("errorMsg", "Request method 'POST' not supported");
         errorPage.addObject("code", httpErrorCode);
         ex.printStackTrace();
         return errorPage;
@@ -47,7 +63,7 @@ public class ErrorController {
         errorPage.addObject("general", configurationService.getGeneral());
 		errorPage.addObject("logo", configurationService.getLogo());
 		errorPage.addObject("pageTitle", httpErrorCode+" Error");
-        errorPage.addObject("errorMsg", "Trang không tồn tại!");
+        errorPage.addObject("errorMsg", "Not found!");
         errorPage.addObject("code", httpErrorCode);
         return errorPage;
     }

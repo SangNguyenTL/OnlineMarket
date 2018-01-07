@@ -8,7 +8,7 @@
 
 	<div ui-view class="app-body" id="view" layout:fragment="container">
 	
-		<div ui-jp='galleryManager' class="padding" th:attr="ui-options='{actionUpload: \''+@{/api/image/upload}+'\', actionLoadImage: \''+@{/api/image/load}+'\'}'"></div>
+		<div ui-jp='galleryManager' class="padding" th:attr="ui-options='{actionUpload: \''+@{/api/image/upload}+'\', actionLoadImage: \''+@{/api/image/load}+'\', actionDelete: \''+@{/api/image/delete}+'\'}'"></div>
 <script id="template-download" type="text/x-tmpl" th:inline="text">
 // <![CDATA[
 {% for (var i=0, file; file=o.files[i]; i++) { %}
@@ -29,7 +29,7 @@
                 {% } %}
             </p>
             {% if (file.error) { %}
-                <div><span class="label label-danger">Error</span> {%=file.error%}</div>
+                <div><span class="label label-danger">Error</span> {%=file.message%}</div>
             {% } %}
         </td>
         <td>
@@ -45,7 +45,7 @@
             {% } else { %}
                 <button class="btn btn-warning cancel">
                     <i class="glyphicon glyphicon-ban-circle"></i>
-                    <span>Hủy</span>
+                    <span>Cancel</span>
                 </button>
             {% } %}
         </td>
@@ -72,13 +72,13 @@
             {% if (!i && !o.options.autoUpload) { %}
                 <button class="btn btn-primary start" disabled>
                     <i class="glyphicon glyphicon-upload"></i>
-                    <span>Tải lên</span>
+                    <span>Upload</span>
                 </button>
             {% } %}
             {% if (!i) { %}
                 <button class="btn btn-warning cancel">
                     <i class="glyphicon glyphicon-ban-circle"></i>
-                    <span>Hủy</span>
+                    <span>Cancel</span>
                 </button>
             {% } %}
         </td>

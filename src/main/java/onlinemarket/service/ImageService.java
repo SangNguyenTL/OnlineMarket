@@ -16,4 +16,6 @@ public interface ImageService extends InterfaceService<Integer, Image>{
 	List<Image> save(UploadForm form, User user) throws IllegalStateException, IOException, UploadTypeException, CreateFolderException;
 	
 	ResultImage filter(ImageFilter imageFilter);
+
+	void remove(Image image);
 }

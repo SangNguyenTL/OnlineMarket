@@ -1,8 +1,8 @@
 package onlinemarket.dao;
 
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -23,34 +23,52 @@ public class ImageDaoImpl extends AbstractDao<Integer, Image> implements ImageDa
 	public ResultImage filter(ImageFilter filter) {
 		ResultImage result = new ResultImage();
 		Criteria criteria = createEntityCriteria();
-		
-		if(StringUtils.isNotBlank(filter.getUploadType())) 
-			criteria.add(Restrictions.eq("dataType", filter.getUploadType()));
+		Date startDate, endDate;
+		if(filter.getUploadType() != null && filter.getUploadType().length > 0) 
+			criteria.add(Restrictions.in("dataType", filter.getUploadType()));
 		criteria.setProjection(Projections.rowCount());
-		if(filter.getDatetime() != null && filter.getDateType() != null) {
+		if(filter.getDatetime() != null && StringUtils.isNotBlank(filter.getDateType())) {
 		
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			Calendar c = Calendar.getInstance();
-			
-			
+			c.setTime(filter.getDatetime());
 			switch (filter.getDateType()) {
 			case "day":
-				criteria.add(Restrictions.like("upload_date", sdf.format(filter.getDatetime())));
+		        c.set(Calendar.HOUR, 0);
+		        c.set(Calendar.MINUTE, 0);
+		        c.set(Calendar.SECOND, 0);
+				startDate = c.getTime();
+				c.set(Calendar.HOUR, 23);
+		        c.set(Calendar.MINUTE, 59);
+		        c.set(Calendar.SECOND, 59);
+		        c.set(Calendar.MILLISECOND, 99);
+				endDate = c.getTime();
+				criteria.add(Restrictions.ge("uploadDate", startDate));
+				criteria.add(Restrictions.le("uploadDate", endDate));
 				break;
 			case "week":
-				c.setTime(filter.getDatetime());
 				c.set(Calendar.DAY_OF_WEEK, c.getFirstDayOfWeek());
-				String startDate = sdf.format(c.getTime());
+				startDate = c.getTime();
 				c.add(Calendar.DAY_OF_WEEK, 7);
-				String endDate = sdf.format(c.getTime());
-				criteria.add(Restrictions.ge("upload_date", startDate));
-				criteria.add(Restrictions.le("upload_date", endDate));
+				endDate = c.getTime();
+				criteria.add(Restrictions.ge("uploadDate", startDate));
+				criteria.add(Restrictions.le("uploadDate", endDate));
+				break;
 			case "month":
-				sdf.applyPattern("yyyy-MM");
-				criteria.add(Restrictions.like("upload_date", sdf.format(filter.getDatetime())));
+				c.set(Calendar.DAY_OF_MONTH, c.getActualMinimum(Calendar.DAY_OF_MONTH));
+				startDate = c.getTime();
+				c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
+				endDate = c.getTime();
+				criteria.add(Restrictions.ge("uploadDate", startDate));
+				criteria.add(Restrictions.le("uploadDate", endDate));
+				break;
 			case "year":
-				sdf.applyPattern("yyyy");
-				criteria.add(Restrictions.like("upload_date", sdf.format(filter.getDatetime())));
+				c.set(Calendar.DAY_OF_YEAR, c.getActualMinimum(Calendar.DAY_OF_YEAR));
+				startDate = c.getTime();
+				c.set(Calendar.DAY_OF_YEAR, c.getActualMaximum(Calendar.DAY_OF_YEAR));
+				endDate = c.getTime();
+				criteria.add(Restrictions.ge("uploadDate", startDate));
+				criteria.add(Restrictions.le("uploadDate", endDate));
+				break;
 			default:
 				break;
 			}
@@ -69,6 +87,5 @@ public class ImageDaoImpl extends AbstractDao<Integer, Image> implements ImageDa
 		result.setList(list);
 		return result;
 	}
-
 
 }

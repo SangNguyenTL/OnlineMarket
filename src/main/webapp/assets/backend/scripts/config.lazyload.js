@@ -85,5 +85,12 @@ var MODULE_CONFIG = {
 	galleryManager: [
 		PATH + 'assets/backend/libs/jquery/mustache/mustache.js',
 		PATH + 'assets/backend/libs/jquery/gallery/gallery.image.js',
+	],
+	twbsPagination: [
+		PATH + 'assets/backend/libs/jquery/twbs-pagination/jquery.twbsPagination.min.js'
+	],
+	clipboard: [
+		PATH + 'assets/backend/libs/js/clipboard/clipboard.min.js',
+		PATH + 'assets/backend/libs/js/clipboard/plugin.js'
 	]
 };

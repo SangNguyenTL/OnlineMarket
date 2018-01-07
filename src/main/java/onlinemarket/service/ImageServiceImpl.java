@@ -23,17 +23,17 @@ import onlinemarket.service.exception.UploadTypeException;
 
 @Service("imageService")
 @Transactional
-public class ImageServiceImpl implements ImageService{
+public class ImageServiceImpl implements ImageService {
 
 	@Autowired
 	ServletContext context;
-	
+
 	@Autowired
 	ImageDao imageDao;
-	
+
 	@Autowired
 	StorageService storageService;
-	
+
 	@Override
 	public void save(Image entity) {
 		imageDao.save(entity);
@@ -71,13 +71,14 @@ public class ImageServiceImpl implements ImageService{
 	}
 
 	@Override
-	public List<Image> save(UploadForm form, User user) throws IllegalStateException, IOException, UploadTypeException, CreateFolderException {
+	public List<Image> save(UploadForm form, User user)
+			throws IllegalStateException, IOException, UploadTypeException, CreateFolderException {
 		List<File> fileList = storageService.store(form);
 		File basePath = new File(context.getRealPath(""));
-		List<Image> imageList = new ArrayList<>(); 
+		List<Image> imageList = new ArrayList<>();
 		for (File file : fileList) {
 			Image image = new Image();
-			String name = file.getName().substring(file.getName().indexOf("-")+1);
+			String name = file.getName().substring(file.getName().indexOf("-") + 1);
 			image.setName(name);
 			String path = basePath.toURI().relativize(file.toURI()).getPath();
 			image.setPath(path);
@@ -93,6 +94,12 @@ public class ImageServiceImpl implements ImageService{
 	@Override
 	public ResultImage filter(ImageFilter imageFilter) {
 		return imageDao.filter(imageFilter);
+	}
+
+	@Override
+	public void remove(Image image) {
+		imageDao.delete(image);
+		storageService.delete(image.getPath());
 	}
 
 }

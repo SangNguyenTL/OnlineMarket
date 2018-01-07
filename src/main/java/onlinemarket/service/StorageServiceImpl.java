@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,22 +33,11 @@ public class StorageServiceImpl implements StorageService{
 		Date cDate = new Date();
 		String cYearMonth = new SimpleDateFormat("YYYY/MM").format(cDate);
 		long cTime = cDate.getTime();
-		String saveFolder = "";
-		switch (uploadType) {
-		case "site":
-			saveFolder = "site";
-			break;
-		case "product":
-			saveFolder = "product";
-			break;
-		case "post":
-			saveFolder = "post";
-			break;
-		default:
-			throw new UploadTypeException("Kiểu tải lên không hợp lệ");
-		}
+		String[] allowType = {"site", "product", "user", "event", "post"};
+		if(!ArrayUtils.contains(allowType, uploadType)) throw new UploadTypeException("Upload Type is isvalid");
+		String saveFolder = uploadType;
 		String drirectory = rootPath+saveFolder+"/"+cYearMonth;
-		if(!createFolder(drirectory)) throw new CreateFolderException("Không khởi tạo được thư mục.");
+		if(!createFolder(drirectory)) throw new CreateFolderException("Can not create directory.");
 		List<File> fileList = new ArrayList<File>();
 		for (MultipartFile multipartFile : files) {
 			String originalFilename = multipartFile.getOriginalFilename(),
@@ -61,7 +51,7 @@ public class StorageServiceImpl implements StorageService{
 
 	@Override
 	public void delete(String path) {
-		File file = new File(path);
+		File file = new File(context.getRealPath(path));
 		if(file.exists()) file.delete();
 	}
 	
