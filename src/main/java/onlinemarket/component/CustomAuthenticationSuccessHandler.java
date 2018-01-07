@@ -24,7 +24,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     public void onAuthenticationSuccess(HttpServletRequest request, 
       HttpServletResponse response, Authentication authentication)
       throws IOException {
-  
         handle(request, response, authentication);
         clearAuthenticationAttributes(request);
     }
@@ -32,7 +31,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     protected void handle(HttpServletRequest request, 
     	      HttpServletResponse response, Authentication authentication)
     	      throws IOException {
-    	  
+    	  		
     	        String targetUrl = determineTargetUrl(authentication);
     	 
     	        if (response.isCommitted()) {

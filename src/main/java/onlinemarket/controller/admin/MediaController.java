@@ -1,37 +1,19 @@
 package onlinemarket.controller.admin;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import onlinemarket.controller.MainController;
 import onlinemarket.model.User;
-import onlinemarket.service.UserService;
-import onlinemarket.service.config.ConfigurationService;
 
 @Controller
 @RequestMapping("/admin/media")
-public class MediaController {
-	
-	@Autowired
-	private ConfigurationService configurationService;
-	
-	@Autowired
-	private UserService userService;
-	
-	private User currentUser;
-
-	@InitBinder
-    public void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
-    }
+public class MediaController extends MainController{
 	
 	@ModelAttribute
 	public void populateMetaPage(ModelMap model) {

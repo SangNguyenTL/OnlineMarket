@@ -71,7 +71,6 @@ public class ApiImageController {
 
 	@RequestMapping(value = "/delete/{id:^\\d+}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> getUser(@PathVariable("id") Integer id) {
-
 		Image image = imageService.getByKey(id);
 		if (image == null)
 			return ResponseEntity.ok(new ResponseResult(true, "Image not found!"));

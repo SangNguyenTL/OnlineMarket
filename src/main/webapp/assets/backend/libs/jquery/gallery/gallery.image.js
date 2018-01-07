@@ -33,6 +33,10 @@
                 {
                     type: 'product',
                     name: 'Product'
+                },
+                {
+                    type: 'brand',
+                    name: 'Brand'
                 }
             ],
             actionUpload: false,
@@ -122,9 +126,9 @@
 
     GalleryManager.prototype.onDelete = function (e) {
         this.actionDeleteElement.off('click', this.onDelete);
-        if (!this.actionDelete) return;
+        if (!this.settings.actionDelete) return;
         var box = $(e.target).closest('.image-item');
-        $.post(this.actionDelete+'/'+ $(e.currentTarget).data('id'), {}, function (result) {
+        $.post(this.settings.actionDelete+'/'+ $(e.currentTarget).data('id'), {}, function (result) {
             if (!result.error) 
             box.remove();
             alert(result.message);
@@ -165,6 +169,7 @@
                 _this.totalPage = Math.ceil(result.totalRow / _this.settings.filter.pageSize);
                 _this.settings.filter.pageNumber = result.currentPage;
                 _this.containerImage.html('');
+                if(_this.totalPage == 1 && _this.settings.filter.pageNumber > 1 ) return;
                 $.each(result.list, function (i, value) {
                     value.path = window.location.origin + PATH + value.path;
                     render(value, templateHtml, _this.containerImage, true);
@@ -178,6 +183,7 @@
                         visiblePages: 6,
                         onPageClick: function (e, page) {
                             _this.settings.filter.pageNumber = page;
+                            if(!_this.pending)
                             _this.loadImage();
                         }
                     });
@@ -193,9 +199,20 @@
                     }
             },
             complete: function(){
+                if(_this.totalPage == 1 && _this.settings.filter.pageNumber > 1 ) {
+                    _this.settings.filter.pageNumber = 1;
+                    _this.pending = false;
+                    _this.loadImage();
+                    return;
+                }
                 _this.pending = false;
                 if(!_this.spinner.hasClass("hide")) _this.spinner.addClass("hide");
                 _this.listen();
+                var clipboard = new Clipboard('.clipboard-btn');
+                clipboard.on('success', function(e) {
+                    alert('Link was saved to clipboard!');
+                });
+                
             }
             
             

@@ -2,19 +2,16 @@ package onlinemarket.controller.admin;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import onlinemarket.controller.MainController;
 import onlinemarket.form.config.ContactConfig;
 import onlinemarket.form.config.EmailSystemConfig;
 import onlinemarket.form.config.GeneralConfig;
@@ -22,28 +19,14 @@ import onlinemarket.form.config.LogoConfig;
 import onlinemarket.form.config.SocialConfig;
 import onlinemarket.form.config.UploadConfig;
 import onlinemarket.model.User;
-import onlinemarket.service.UserService;
-import onlinemarket.service.config.ConfigurationService;
 
 
 @Controller
 @RequestMapping("/admin/config")
-public class ConfigurationController{
-	
-	@Autowired
-	private ConfigurationService configurationService;
-	
-	@Autowired
-	private UserService userService;
-	
-	private User currentUser;
-
-	@InitBinder
-    public void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
-    }
+public class ConfigurationController extends MainController{
 	
 	@ModelAttribute
+	@Override
 	public void populateMetaPage(ModelMap model) {
 		model.put("general", configurationService.getGeneral());
 		model.put("logo", configurationService.getLogo());

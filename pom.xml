@@ -204,6 +204,11 @@
 		    <version>${commons-lang3.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.github.slugify</groupId>
+			<artifactId>slugify</artifactId>
+			<version>2.2</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.slf4j</groupId>
