@@ -20,6 +20,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 			throws IOException, ServletException {
 		if(StringUtils.equals(request.getContentType(), MediaType.APPLICATION_JSON_VALUE))
 			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+		accessDeniedException.printStackTrace();
 		response.sendRedirect(request.getContextPath() + "/error");
 	}
 }

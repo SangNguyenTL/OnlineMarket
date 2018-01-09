@@ -6,4 +6,5 @@ public class AdvancedValidation {
 	
 	public interface CheckEmail{};
 	
+	public interface CheckSlug{};
 }

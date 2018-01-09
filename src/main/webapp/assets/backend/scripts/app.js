@@ -104,6 +104,28 @@
     init();
     setTheme();
     !function(){
+
+      $(document).on("click",".form-confirm button",function(e){
+        var form = $(e.target).closest(".form-confirm");
+        e.preventDefault();
+        bootbox.confirm({
+          message: "Are you ready to take this action?",
+          buttons: {
+              confirm: {
+                  label: 'Yes',
+                  className: 'btn-success btn btn-sm'
+              },
+              cancel: {
+                  label: 'No',
+                  className: 'btn-danger btn btn-sm'
+              }
+          },
+          callback: function (result) {
+            form.trigger("submit");
+          }
+        });
+      });
+
     	if(typeof $.notify != 'function') return;
     	window.alert = function(msg, type){
     		type = type || "success";

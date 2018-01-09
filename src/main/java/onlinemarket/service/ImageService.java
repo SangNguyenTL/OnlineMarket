@@ -3,11 +3,11 @@ package onlinemarket.service;
 import java.io.IOException;
 import java.util.List;
 
-import onlinemarket.api.result.ResultImage;
 import onlinemarket.form.config.UploadForm;
 import onlinemarket.form.filter.ImageFilter;
 import onlinemarket.model.Image;
 import onlinemarket.model.User;
+import onlinemarket.result.api.ResultImage;
 import onlinemarket.service.exception.CreateFolderException;
 import onlinemarket.service.exception.UploadTypeException;
 

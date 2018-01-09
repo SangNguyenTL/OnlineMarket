@@ -5,7 +5,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-          <nav class="scroll nav-light" th:fragment="nav">
+
+		<div th:fragment="nav">
+          <nav class="scroll nav-light">
             
               <ul class="nav" ui-nav>
                 <li class="nav-header hidden-folded">
@@ -21,7 +23,7 @@
                     <span class="nav-text">Menu</span>
                   </a>
                </li>
-               <li th:class="${productPage} ? 'active'" >
+               <li th:class="${brandPage} ? 'active'" >
                   <a>
                   	<span class="nav-caret">
                       <i class="fa fa-caret-down"></i>
@@ -31,10 +33,11 @@
                         <span th:attr="ui-include='\''+ @{/assets/backend/assets/images/i_1.svg} +'\''"></span>
                       </i>
                     </span>
-                    <span class="nav-text">Product</span>
+                    <span class="nav-text">Brand</span>
                   </a>
                   <ul class="nav-sub nav-mega">
-					<li th:class="${path} == 'brand' ? 'active'"><a th:href="@{/admin/product/brand}"><span class="nav-text">Brand</span></a></li>
+					<li th:class="${path} == 'brand' ? 'active'"><a th:href="@{/admin/brand}"><span class="nav-text">List</span></a></li>
+					<li th:class="${path} == 'brand-add' ? 'active'"><a th:href="@{/admin/brand/add}"><span class="nav-text">Add new</span></a></li>
 				</ul>
                </li>
                 <li th:class="${mediaPage} ? 'active'">
@@ -71,5 +74,6 @@
               </ul>
               
           </nav>
+          </div>
 </body>
 </html>

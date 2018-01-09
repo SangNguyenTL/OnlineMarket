@@ -140,12 +140,13 @@
         var element = $(e.currentTarget),
             box = element.find(".box");
         this.imageElement.off('click', this.selectImageElement);
-        if (box.hasClass('infor active')) {
-            box.removeClass("infor active");
-            return;
+        if (box.hasClass('info')) {
+            box.removeClass("info");
+            this.imageLink = "";
         } else {
-            this.containerImage.find(".infor.active").removeClass("infor acitve");
-            box.addClass("infor acitve");
+            this.containerImage.find(".info").removeClass("info");
+            box.addClass("info");
+            this.imageLink = box.data("path");
         }
         this.imageElement.on('click', this.selectImageElement);
     }
@@ -171,6 +172,7 @@
                 _this.containerImage.html('');
                 if(_this.totalPage == 1 && _this.settings.filter.pageNumber > 1 ) return;
                 $.each(result.list, function (i, value) {
+                    value.oldPath = value.path;
                     value.path = window.location.origin + PATH + value.path;
                     render(value, templateHtml, _this.containerImage, true);
                 });
@@ -193,7 +195,7 @@
                     _this.onDelete = _this.onDelete.bind(_this);
                     _this.actionDeleteElement.on('click', _this.onDelete);
 
-                    if (_this.modal) {
+                    if (_this.settings.modal) {
                         _this.selectImageElement = _this.selectImageElement.bind(_this);
                         _this.imageElement.on('click', _this.selectImageElement);
                     }
@@ -231,7 +233,7 @@
 
     GalleryManager.prototype.templateImage = [
         '<div class="col-sm-4 image-item" id="image-{{id}}">',
-        '<div class="box">',
+        '<div class="box" data-path="{{oldPath}}">',
         '<div class="box-header">',
         '<h3 class="text-truncate">{{name}}</h3>',
         '<small class="pull-left"><i class="fa-clock-o fa"></i> {{uploadDate}}</small><small class="pull-right"><i class="fa fa-user"></i> {{user.firstName}}</small>',
@@ -262,7 +264,7 @@
     GalleryManager.prototype.templateMain = [
         '<h5 class="_300 margin">{{title}}n</h5>',
         '<div class="row">',
-        '<div class="col-md-3 push-md-9">',
+        '<div class="col-md-4 push-md-8">',
         '<div class="box">',
         '<div class="box-header">Image Filter</div>',
         '<div class="box-body">',
@@ -308,7 +310,7 @@
         '</div>',
         '</div>',
         '</div>',
-        '<div class="col-md-9 pull-md-3">',
+        '<div class="col-md-8 pull-md-4">',
         '<div class="b-b b-b-dark m-b-1 p-x">',
         '<div class="row">',
         '<div class="p-y-md clearfix nav-active-primary">',

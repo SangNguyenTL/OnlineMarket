@@ -15,14 +15,14 @@
 			<div class="form-group row">
 				<label class="col-sm-3 form-control-label">Key word</label>
 				<div class="col-sm-9">
-					<input th:errorclass="parsley-error" class="form-control" type="text" th:field="*{keyword}" required data-parsley-length="[3, 150]"/>
+					<input th:errorclass="parsley-error" class="form-control" type="text" th:field="*{keyword}" required data-parsley-length="[3, 150]" data-parsley-id="keyword"/>
 					<ul class="parsley-errors-list filled" id="parsley-id-keyword" th:if="${#fields.hasErrors('keyword')}"><li th:errors="*{keyword}"> </li></ul>
 				</div>
 			</div>
 			<div class="form-group row">
 				<label class="col-sm-3 form-control-label">Description</label>
 				<div class="col-sm-9">
-					<textarea th:errorclass="parsley-error" class="form-control" th:field="*{description}" required data-parsley-length="[50, 250]"></textarea>
+					<textarea th:errorclass="parsley-error" class="form-control" th:field="*{description}" required data-parsley-length="[50, 250]"  data-parsley-id="description"></textarea>
 					<ul class="parsley-errors-list filled" id="parsley-id-description" th:if="${#fields.hasErrors('description')}"><li th:errors="*{description}"> </li></ul>
 				</div>
 			</div>
@@ -59,39 +59,50 @@
 			<div class="col-sm-12 col-md-6 form-group row">
 				<label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Favicon</label>
 				<div class="col-sm-12 col-md-8 col-lg-9">
-					<input ui-jp="dropify" type="file" id="favicon_upload" class="dropify"
-							th:attr="data-dropify-default-file=*{favicon}, data-dropify-max-file-size=${upload.maxFileSize} +'M'"
-							data-dropify-min-width="32" data-dropify-max-width="64" data-dropify-min-height="32"
-							data-dropify-max-height="64"
-							data-dropify-upload-type="site"
-							data-dropify-allowed-file-extensions="png bmp gif jpg" />
-					<div class="progress progress-striped active" id="favicon_upload_progress">
-						<div class="determinate progress-bar info" style="width: 0"></div>
-					</div>
-					<input type="hidden" th:field="*{favicon}" required data-parsley-id="favicon"/>
-					<ul class="parsley-errors-list filled" id="parsley-id-favicon" th:if="${#fields.hasErrors('favicon')}"><li th:errors="*{favicon}"></li></ul>
+					<div class="box p-a-xs">
+	                	<a href="#" data-toggle="modal" data-target="#modal-image-gallery" ui-toggle-class="zoom" ui-target="#animate" data-target-input="favicon">
+	                		<img th:if="*{favicon}" th:src="@{'/'+*{favicon}}" alt="..." class="img-thumbnail thumbnail">
+	                		<img th:unless="*{favicon}" th:src="@{/assets/images/defaultImage.jpg}" alt="..." class="img-thumbnail thumbnail">
+	               		</a>
+	              	</div>
+					<input th:errorclass="parsley-error" class="form-control hide" type="text" th:field="*{favicon}" required data-parsley-length="[3, 150]"/>
+					<ul class="parsley-errors-list filled" id="parsley-id-favicon" th:if="${#fields.hasErrors('favicon')}"><li th:errors="*{favicon}"> </li></ul>
 				</div>
 			</div>
 			<div class="col-sm-12 col-md-6 form-group row">
 				<label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Logo</label>
 				<div class="col-sm-12 col-md-8 col-lg-9">
-					<input ui-jp="dropify" type="file" id="logo_upload" class="dropify"
-							th:attr="data-dropify-default-file=*{logo}, data-dropify-max-file-size=${upload.maxFileSize} +'M'"
-							data-dropify-min-width="152" data-dropify-max-width="304" data-dropify-min-height="152"
-							data-dropify-max-height="304"
-							data-dropify-upload-type="site"
-							data-dropify-allowed-file-extensions="png bmp gif jpg" />
-					<div class="progress progress-striped active" id="logo_upload_progress">
-						<div class="determinate progress-bar info" style="width: 0"></div>
-					</div>
-					<input type="hidden" th:field="*{logo}" required data-parsley-id="logo"/>
-					<ul class="parsley-errors-list filled" id="parsley-id-logo" th:if="${#fields.hasErrors('logo')}"><li th:errors="*{logo}"></li></ul>
+					<div class="box p-a-xs">
+	                	<a href="#" data-toggle="modal" data-target="#modal-image-gallery" ui-toggle-class="zoom" ui-target="#animate" data-target-input="logo">
+	                		<img th:if="*{logo}" th:src="@{'/'+*{logo}}" alt="..." class="img-thumbnail thumbnail">
+	                		<img th:unless="*{logo}" th:src="@{/assets/images/defaultImage.jpg}" alt="..." class="img-thumbnail thumbnail">
+	               		</a>
+	              	</div>
+					<input th:errorclass="parsley-error" class="form-control hide" type="text" th:field="*{logo}" required data-parsley-length="[3, 150]"/>
+					<ul class="parsley-errors-list filled" id="parsley-id-logo" th:if="${#fields.hasErrors('logo')}"><li th:errors="*{logo}"> </li></ul>
 				</div>
 			</div>
 			<div class="dker p-a text-right">
 				<button type="submit" class="btn info">Save</button>
 			</div>
 		</form>
+		<div id="modal-image-gallery" class="modal fade animate" data-backdrop="true" aria-hidden="true">
+		  <div class="modal-dialog zoom modal-lg" id="animate" ui-class="zoom">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		      	<h5 class="modal-title">Pick Image</h5>
+		      </div>
+		      <div class="modal-body" ui-jp='galleryManager' th:attr="ui-options='{modal: true, actionUpload: \''+@{/api/image/upload}+'\', actionLoadImage: \''+@{/api/image/load}+'\', actionDelete: \''+@{/api/image/delete}+'\'}'">
+		       	
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn dark-white p-x-md" data-dismiss="modal">No</button>
+		        <button type="button" class="btn danger p-x-md" data-dismiss="modal" data-action="yes">Yes</button>
+		      </div>
+		    </div><!-- /.modal-content -->
+		  </div>
+		</div>
+		<div th:replace="templates/backend/media :: media" ></div>
 	</div>
 	
 	<div class="box-body" th:fragment="social">

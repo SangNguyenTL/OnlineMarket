@@ -1,4 +1,4 @@
-package onlinemarket.util;
+package onlinemarket.result;
 
 import java.util.List;
 

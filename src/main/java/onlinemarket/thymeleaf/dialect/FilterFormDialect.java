@@ -1,0 +1,28 @@
+package onlinemarket.thymeleaf.dialect;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import org.thymeleaf.dialect.AbstractProcessorDialect;
+import org.thymeleaf.processor.IProcessor;
+import org.thymeleaf.standard.StandardDialect;
+
+public class FilterFormDialect extends AbstractProcessorDialect{
+
+	private static final String DIALECT_NAME = "Filter Form Dialect";
+	
+	public FilterFormDialect() {
+		super(DIALECT_NAME, "filter", StandardDialect.PROCESSOR_PRECEDENCE);
+	}
+
+	@Override
+	public Set<IProcessor> getProcessors(String dialectPrefix) {
+		final Set<IProcessor> processors = new HashSet<IProcessor>();
+		processors.add(new PaginationElementTagProcessor(dialectPrefix));
+		processors.add(new CurrentPageAttributeTagProcessor(dialectPrefix));
+		processors.add(new TotalPageAttributeTagProcessor(dialectPrefix));
+		processors.add(new UriAttibuteTagProcessor(dialectPrefix));
+		processors.add(new OrderHeadElementProcessor(dialectPrefix));
+		return processors;
+	}
+}

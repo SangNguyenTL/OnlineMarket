@@ -78,13 +78,15 @@ public class ApiImageController {
 		return ResponseEntity.ok().body(new ResponseResult(false, "Image was removed!"));
 	}
 
-	@RequestMapping(value = "/load", produces = MediaType.APPLICATION_JSON_VALUE, method = { RequestMethod.POST,
+	@RequestMapping(value = "/load",
+			produces = MediaType.APPLICATION_JSON_VALUE, method = { RequestMethod.POST,
 			RequestMethod.GET })
 	public ResponseEntity<?> getUser(@ModelAttribute("imageFilter") ImageFilter imageFilter) throws Exception {
 		return ResponseEntity.ok().body(imageService.filter(imageFilter));
 	}
 
-	@RequestMapping(value = "/upload", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/upload",
+			method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> upload(@ModelAttribute("uploadFrom") UploadForm uploadForm, BindingResult result) {
 
 		List<String> listError = new ArrayList<>();

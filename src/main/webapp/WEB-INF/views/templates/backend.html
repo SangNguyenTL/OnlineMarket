@@ -30,12 +30,15 @@
   <!-- endbuild -->
   <link rel="stylesheet" th:href="@{/assets/backend/assets/styles/font.css}" type="text/css" />
   
-  <script type="text/javascript">
-	var PATH = "[[@{/}]]",
+  <script type="text/javascript" th:inline="javascript">
+  /*<![CDATA[*/
+	var PATH = [[@{/}]],
 	googleApiKey  = "AIzaSyDwgEWMLktEQnK7Cn8SBMDTV6jn1I1G3fc";
+
+  /*]]>*/
   </script>
 </head>
-<body>
+<body th:inline="text">
   <div class="app" id="app">
 
 <!-- ############ LAYOUT START-->
@@ -52,7 +55,7 @@
         </a>
         <!-- / brand -->
       </div>
-      <div flex class="hide-scroll" th:insert="templates/backend/main-nav :: nav">
+      <div flex class="hide-scroll" th:include="templates/backend/main-nav :: nav">
           
       </div>
       <div flex-no-shrink class="b-t">

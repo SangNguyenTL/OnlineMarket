@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{templates/frontend}">
+	layout:decorate="templates/frontend">
 
 <th:object layout:fragment="head">
 <link rel="stylesheet" type="text/css"
@@ -10,7 +10,7 @@
 
 <head>
 </head>
-<body>
+<body th:inline="text">
 
 	<div id="container" layout:fragment="container">
 		<div class="container">

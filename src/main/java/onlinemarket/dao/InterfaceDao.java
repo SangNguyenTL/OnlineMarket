@@ -3,6 +3,9 @@ package onlinemarket.dao;
 import java.io.Serializable;
 import java.util.List;
 
+import onlinemarket.form.filter.FilterForm;
+import onlinemarket.result.ResultObject;
+
 
 interface InterfaceDao<PK extends Serializable,T> {
 	
@@ -23,4 +26,8 @@ interface InterfaceDao<PK extends Serializable,T> {
 	Serializable save(T entity);
 	
 	void update(T entity);
+	
+	long count();
+	
+	public ResultObject<T> list(FilterForm filterForm);
 }

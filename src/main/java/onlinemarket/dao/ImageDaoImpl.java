@@ -7,13 +7,14 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import onlinemarket.api.result.ResultImage;
 import onlinemarket.form.filter.ImageFilter;
 import onlinemarket.model.Image;
+import onlinemarket.result.api.ResultImage;
 
 @Repository("imageDao")
 public class ImageDaoImpl extends AbstractDao<Integer, Image> implements ImageDao{
@@ -24,9 +25,9 @@ public class ImageDaoImpl extends AbstractDao<Integer, Image> implements ImageDa
 		ResultImage result = new ResultImage();
 		Criteria criteria = createEntityCriteria();
 		Date startDate, endDate;
+		criteria.setProjection(Projections.rowCount());
 		if(filter.getUploadType() != null && filter.getUploadType().length > 0) 
 			criteria.add(Restrictions.in("dataType", filter.getUploadType()));
-		criteria.setProjection(Projections.rowCount());
 		if(filter.getDatetime() != null && StringUtils.isNotBlank(filter.getDateType())) {
 		
 			Calendar c = Calendar.getInstance();
@@ -83,6 +84,7 @@ public class ImageDaoImpl extends AbstractDao<Integer, Image> implements ImageDa
 			criteria.setFirstResult((filter.getPageNumber()- 1) * filter.getPageSize()).setMaxResults(filter.getPageSize());
 		criteria.setProjection(null);
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		criteria.addOrder(Order.desc("uploadDate"));
 		List<Image> list = criteria.list();
 		result.setList(list);
 		return result;

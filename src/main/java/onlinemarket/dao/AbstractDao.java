@@ -5,11 +5,17 @@ import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import onlinemarket.form.filter.FilterForm;
+import onlinemarket.result.ResultObject;
 
 public abstract class AbstractDao<PK extends Serializable, T> {
     
@@ -61,6 +67,12 @@ public abstract class AbstractDao<PK extends Serializable, T> {
 		return (List<T>) criteria.list();
     }
     
+	public long count(){
+		Criteria criteria = createEntityCriteria();
+		criteria.setProjection(Projections.rowCount());
+		return (long) criteria.uniqueResult();
+    }
+    
     @SuppressWarnings("unchecked")
 	public List<T> listByInList(String key, List<String> listValue){
 		Criteria criteria = createEntityCriteria();
@@ -76,5 +88,41 @@ public abstract class AbstractDao<PK extends Serializable, T> {
 	public List<T> list(Integer offset, Integer maxResults) {
 		return (List<T>) createEntityCriteria().setFirstResult(offset != null ? offset : 0)
 				.setMaxResults(maxResults != null ? maxResults : 10).list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public ResultObject<T> list(FilterForm filterForm){
+		
+		Criteria criteria = createEntityCriteria();
+		ResultObject<T> result = new ResultObject<>();
+		
+		if(StringUtils.isNotBlank(filterForm.getOrderBy()) && StringUtils.isNotBlank(filterForm.getOrder())) {
+			if(filterForm.getOrder().equals("asc"))
+				criteria.addOrder(Order.asc(filterForm.getOrderBy()));
+			else
+				criteria.addOrder(Order.desc(filterForm.getOrderBy()));
+		}
+		
+		if(StringUtils.isNotBlank(filterForm.getSearch()) && StringUtils.isNotBlank(filterForm.getSearchBy())) {
+			criteria.add(Restrictions.like(filterForm.getSearchBy(), filterForm.getSearch()));
+		}
+		
+		criteria.setProjection(Projections.rowCount());
+		Long count = (Long) criteria.uniqueResult();
+		if(count != null ) {
+			int totalPages = (int) Math.ceil(count/filterForm.getSize());
+			result.setTotalPages(totalPages);
+		}else result.setTotalPages(0);
+		
+		if(filterForm.getSize() > 0 && filterForm.getCurrentPage() > 0) 
+			criteria.setFirstResult((filterForm.getCurrentPage()- 1) * filterForm.getSize()).setMaxResults(filterForm.getSize());
+		criteria.setProjection(null);
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		
+		result.setList(criteria.list());
+		
+		result.setCurrentPage(filterForm.getCurrentPage());
+		
+		return result;
 	}
 }

@@ -33,7 +33,9 @@ var MODULE_CONFIG = {
 	summernote : [ PATH + 'assets/backend/libs/jquery/summernote/dist/summernote.css',
 			PATH + 'assets/backend/libs/jquery/summernote/dist/summernote.js' ],
 	parsley : [ PATH + 'assets/backend/libs/jquery/parsleyjs/dist/parsley.css',
-			PATH + 'assets/backend/libs/jquery/parsleyjs/dist/parsley.min.js'],
+			PATH + 'assets/backend/libs/jquery/parsleyjs/dist/parsley.min.js',
+			PATH + 'assets/backend/libs/js/slug/slug.js',
+			PATH + 'assets/backend/scripts/plugins/parsley.js'],
 	select2 : [
 			PATH + 'assets/backend/libs/jquery/select2/dist/css/select2.min.css',
 			PATH

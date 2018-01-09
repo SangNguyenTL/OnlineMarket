@@ -33,7 +33,7 @@ public class StorageServiceImpl implements StorageService{
 		Date cDate = new Date();
 		String cYearMonth = new SimpleDateFormat("YYYY/MM").format(cDate);
 		long cTime = cDate.getTime();
-		String[] allowType = {"site", "product", "user", "event", "post"};
+		String[] allowType = {"site", "product", "user", "event", "post", "brand"};
 		if(!ArrayUtils.contains(allowType, uploadType)) throw new UploadTypeException("Upload Type is isvalid");
 		String saveFolder = uploadType;
 		String drirectory = rootPath+saveFolder+"/"+cYearMonth;
@@ -43,7 +43,7 @@ public class StorageServiceImpl implements StorageService{
 			String originalFilename = multipartFile.getOriginalFilename(),
 					newName = String.valueOf(cTime)+ "-" + originalFilename;
 			File destinationFile = new File(context.getRealPath(drirectory)+"/"+newName);
-			multipartFile.transferTo(destinationFile);
+
 			fileList.add(destinationFile);
 		}
 		return fileList;

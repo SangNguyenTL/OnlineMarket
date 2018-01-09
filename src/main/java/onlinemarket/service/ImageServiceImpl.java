@@ -12,12 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import onlinemarket.api.result.ResultImage;
 import onlinemarket.dao.ImageDao;
 import onlinemarket.form.config.UploadForm;
 import onlinemarket.form.filter.ImageFilter;
 import onlinemarket.model.Image;
 import onlinemarket.model.User;
+import onlinemarket.result.api.ResultImage;
 import onlinemarket.service.exception.CreateFolderException;
 import onlinemarket.service.exception.UploadTypeException;
 

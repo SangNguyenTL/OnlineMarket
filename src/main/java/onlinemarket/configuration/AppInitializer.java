@@ -33,6 +33,7 @@ public class AppInitializer implements WebApplicationInitializer {
         EnumSet<DispatcherType> dispatcherTypes = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD);
         configureCharacterEncodingFilter(servletContext, dispatcherTypes);
         servletContext.addListener(new ContextLoaderListener(rootContext));
+
     }
 
     private void configureDispatcherServlet(ServletContext servletContext, WebApplicationContext rootContext) {
@@ -42,6 +43,7 @@ public class AppInitializer implements WebApplicationInitializer {
         );
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping(DISPATCHER_SERVLET_MAPPING);
+        dispatcher.setInitParameter("throwExceptionIfNoHandlerFound", "true");
     }
 
     private void configureCharacterEncodingFilter(ServletContext servletContext, EnumSet<DispatcherType> dispatcherTypes) {

@@ -34,10 +34,11 @@ import onlinemarket.converter.ProvinceConverter;
 import onlinemarket.converter.RoleConverter;
 import onlinemarket.form.config.UploadConfig;
 import onlinemarket.service.config.ConfigurationService;
+import onlinemarket.thymeleaf.dialect.FilterFormDialect;
 
 @EnableWebMvc
 @Configuration
-@ComponentScan("onlinemarket")
+@ComponentScan(basePackages = {"onlinemarket"})
 public class AppConfig extends WebMvcConfigurerAdapter {
 
 	@Autowired
@@ -66,6 +67,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 		Set<IDialect> dialects = new LinkedHashSet<IDialect>();
 		dialects.add(new SpringSecurityDialect());
 		dialects.add(new LayoutDialect());
+		dialects.add(new FilterFormDialect());
 
 		SpringTemplateEngine templateEngine = new SpringTemplateEngine();
 		templateEngine.setTemplateResolver(templateResolver());
@@ -155,5 +157,4 @@ public class AppConfig extends WebMvcConfigurerAdapter {
         multipartResolver.setMaxInMemorySize((upConfig.getMaxSize()+5) * 1024 * 1024);
         return new CommonsMultipartResolver();
     }
-    
 }
