@@ -1,7 +1,7 @@
 (function ($) {
     "use strict";
 
-    var uniqueSlugElement = $('[data-parsley-type=uniqueslug]');
+    var uniqueSlugElement = $('[data-parsley-unique-slug');
     if(uniqueSlugElement.length > 0){
         var data = uniqueSlugElement.data();
         if(data.parsleyTarget){
@@ -38,18 +38,16 @@
 
 
     
-    window.Parsley.addValidator('uniqueslug', {
+    window.Parsley.addValidator('uniqueSlug', {
         validateString: function (value, requirement, instance) {
-            var element = instance.element, data = element.data(),
-            defaults = {
-                parsleyUrl: false,
+            
+            var elementId = instance.$element.closest("form").find("[name=id]"), id = elementId.val();
 
-            }, setting = $.extend(true, data);
-
-            xhr = $.ajax({
-                url: setting.parsleyUrl,
+            var xhr = $.ajax({
+                url: requirement,
                 data: {
-                    value : value
+                    value : value,
+                    id: id
                 },
                 dataType: 'json',
                 method: 'GET'
@@ -61,10 +59,17 @@
                 } else {
                     return $.Deferred().reject();
                 }
+            },function(data){
+                if(data.responseJSON.errors){
+                    $.each(data.responseJSON.errors, function(k, val){
+                        alert(val,"danger")
+                    })
+                }
+                return false;
             });
         },
         messages: {
-            en: 'Slug of item already exists!'
+            en: 'Slug of item is invalid, the slug may be already exists!'
         },
         priority: 32
     });

@@ -6,16 +6,13 @@ import java.net.URLEncoder;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.servlet.ServletContext;
-
-import org.springframework.context.ApplicationContext;
+import org.apache.commons.lang3.StringUtils;
 import org.thymeleaf.context.ITemplateContext;
 import org.thymeleaf.model.IModel;
 import org.thymeleaf.model.IModelFactory;
 import org.thymeleaf.model.IProcessableElementTag;
 import org.thymeleaf.processor.element.AbstractElementTagProcessor;
 import org.thymeleaf.processor.element.IElementTagStructureHandler;
-import org.thymeleaf.spring4.context.SpringContextUtils;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.unbescape.html.HtmlEscape;
 
@@ -32,10 +29,8 @@ public class PaginationElementTagProcessor extends AbstractElementTagProcessor{
     private Integer displayedPages;
     private String previous;
     private String next;
-	
-    private ServletContext servletContext;
     
-    private FilterForm filterForm;
+    private FilterForm object;
     
     private TreeMap<String, Object> attributes;
     
@@ -55,6 +50,7 @@ public class PaginationElementTagProcessor extends AbstractElementTagProcessor{
 		attributes.put("displayedPages", 7);
 		attributes.put("previous", "Previous");
 		attributes.put("next", "Next");
+		attributes.put("object", new FilterForm());
 	}
 
 	@Override
@@ -63,12 +59,6 @@ public class PaginationElementTagProcessor extends AbstractElementTagProcessor{
 			IProcessableElementTag tag,
 			IElementTagStructureHandler structureHandler) {
 		
-		final ApplicationContext appCtx = SpringContextUtils.getApplicationContext(context);
-		
-		servletContext = appCtx.getBean(ServletContext.class);
-		
-		processFilterForm();
-
 		processAttributes(tag);
         
         /*
@@ -82,39 +72,45 @@ public class PaginationElementTagProcessor extends AbstractElementTagProcessor{
 
         model.add(modelFactory.createOpenElementTag("ul", "class", "pagination pagination-sm m-a-0"));
         
-        if(currentPage < 2)
-        	constructLink(modelFactory, model, 1, previous, "disabled", true);
-        else
+        if(currentPage > 1 && totalPages > 2)
             constructLink(modelFactory, model, currentPage-1, previous, null, false);
         
         int step = (int) Math.floor(Float.valueOf(displayedPages / 2));
         
-        if(currentPage + displayedPages < totalPages && currentPage > step)
-	        for(int itr=-step; itr <= currentPage + displayedPages ; itr+=currentPage) {
-	        	if(itr == currentPage)
+        if(currentPage >= displayedPages) {
+    		for(int itr = currentPage - step; itr <= displayedPages + step; itr+=1) {
+    			if(itr == currentPage)
 	        		constructLink(modelFactory, model, itr, String.valueOf(itr), "active", false);
 	        	else
 	        		constructLink(modelFactory, model, itr, String.valueOf(itr), "", false);
-	        }
-        else if(totalPages < displayedPages)
-	        for(int itr=1; itr <= totalPages ; itr+=currentPage) {
-	        	if(itr == currentPage)
-	        		constructLink(modelFactory, model, itr, String.valueOf(itr), "active", false);
-	        	else
-	        		constructLink(modelFactory, model, itr, String.valueOf(itr), "", false);
-	        }
-        else
-	        for(int itr=1; itr <= currentPage + displayedPages ; itr+=currentPage) {
-	        	if(itr == currentPage)
-	        		constructLink(modelFactory, model, itr, String.valueOf(itr), "active", false);
-	        	else
-	        		constructLink(modelFactory, model, itr, String.valueOf(itr), "", false);
-	        }
+    		}
+        }else {
+        	if(totalPages <= displayedPages)
+	        	for(int itr = 1; itr <= totalPages; itr+=1) {
+	    			if(itr == currentPage)
+		        		constructLink(modelFactory, model, itr, String.valueOf(itr), "active", false);
+		        	else
+		        		constructLink(modelFactory, model, itr, String.valueOf(itr), "", false);
+	    		}
+        	else
+        		if(currentPage < step)
+        			for(int itr = 1; itr <= displayedPages; itr+=1) {
+    	    			if(itr == currentPage)
+    		        		constructLink(modelFactory, model, itr, String.valueOf(itr), "active", false);
+    		        	else
+    		        		constructLink(modelFactory, model, itr, String.valueOf(itr), "", false);
+    	    		}
+        		else
+        			for(int itr = 1; itr <= displayedPages; itr+=1) {
+    	    			if(itr == currentPage)
+    		        		constructLink(modelFactory, model, itr, String.valueOf(itr), "active", false);
+    		        	else
+    		        		constructLink(modelFactory, model, itr, String.valueOf(itr), "", false);
+    	    		}
+        }
         
-        if(currentPage+displayedPages>=totalPages)
-        	constructLink(modelFactory, model, currentPage+displayedPages, next, "disabled", true);
-        else if(displayedPages < totalPages)
-            constructLink(modelFactory, model, currentPage+displayedPages, next, null , false);
+        if(currentPage < totalPages)
+            constructLink(modelFactory, model, currentPage+1, next, null , false);
         
         model.add(modelFactory.createCloseElementTag("ul"));
         
@@ -133,15 +129,16 @@ public class PaginationElementTagProcessor extends AbstractElementTagProcessor{
     }
     
     private String buildQuery() {
-    	StringBuilder sb = new StringBuilder();
+    	StringBuilder sb = new StringBuilder();    	
 
-    	for(Field field : filterForm.getClass().getDeclaredFields()) {
+    	for(Field field : object.getClass().getDeclaredFields()) {
     		field.setAccessible(true);
     		try {
+    			if(StringUtils.equals(field.getName(), "currentPage")) continue;
     		
-    			Object value = field.get(filterForm);
+    			Object value = field.get(object);
     		
-	    		if(value==null) continue;
+    			if(!(value instanceof Integer) && StringUtils.isBlank((String) value)) continue;
 	    		
 	    		if(sb.length() > 0){
 	  	          sb.append('&');
@@ -155,52 +152,42 @@ public class PaginationElementTagProcessor extends AbstractElementTagProcessor{
     	if(sb.length() > 0) sb.reverse().append("?").reverse();
     	return sb.toString();
     }
-    
-    private void processFilterForm() {
-		filterForm = new FilterForm();
-		Object valueAttribute;
-		
-		for(Field field : filterForm.getClass().getDeclaredFields()) {
-			valueAttribute =  servletContext.getAttribute(field.getName());
-			if(valueAttribute == null) continue;
-			field.setAccessible(true);
-			if(field.getClass().equals(Integer.class)) {
-				valueAttribute = Integer.parseInt((String) valueAttribute);
-				try {
-					field.set(filterForm, valueAttribute);
-				} catch (IllegalArgumentException | IllegalAccessException e) {
-					continue;
-				}
-			}
-		}
-    }
 	
 	private void processAttributes(IProcessableElementTag tag) {
-        for ( Map.Entry<String, Object> entry : attributes.entrySet()) {
-        	String key = entry.getKey();
-        	Object str = tag.getAttributeValue(key);
-        	if(str == null) str = entry.getValue();
-        	Object value = entry.getValue();
-        	if(!value.equals(str))
-        	if(value instanceof Integer) {
-        		try {
-					int val = Integer.parseInt((String) str);
-					entry.setValue(val);
+		for (Map.Entry<String, Object> entry : attributes.entrySet()) {
+			String key = entry.getKey();
+			Object str = tag.getAttributeValue(key);
+			Object value = entry.getValue();
+			if (str == null)
+				str = entry.getValue();
+			if (value instanceof Integer) {
+				try {
+					if(str instanceof Integer) entry.setValue(str);
+					else {
+						int val = Integer.parseInt((String) str);
+						entry.setValue(val);
+					}
 				} catch (Exception e) {
 					continue;
 				}
-        	}else {
-    			entry.setValue(HtmlEscape.escapeHtml5(((String) str).trim()));
-        	}
-        	try {
+			} else if(value instanceof String ){
+				entry.setValue(HtmlEscape.escapeHtml5(((String) str).trim()));
+			}else if(value instanceof FilterForm){
+				entry.setValue(value);
+			}
+			try {
+				
 				Field field = this.getClass().getDeclaredField(key);
+				
 				field.setAccessible(true);
-				if(field.getClass().equals(Integer.class)) {
+				
+				if (field.getClass().equals(Integer.class)) {
 					int iNum = (int) entry.getValue();
 					field.set(this, iNum);
-				}else {
+				} else {
 					field.set(this, entry.getValue());
 				}
+				
 			} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
 				continue;
 			}

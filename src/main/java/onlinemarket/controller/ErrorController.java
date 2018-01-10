@@ -4,8 +4,11 @@ package onlinemarket.controller;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -14,8 +17,9 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import onlinemarket.service.config.ConfigurationService;
 
-@ControllerAdvice
-public class ErrorController {
+@ControllerAdvice(annotations = Controller.class)
+@Order(2)
+public class ErrorController{
 
 	@Autowired
 	private ConfigurationService configurationService;
@@ -46,12 +50,29 @@ public class ErrorController {
         errorPage.addObject("general", configurationService.getGeneral());
 		errorPage.addObject("logo", configurationService.getLogo());
 		errorPage.addObject("titlePage", httpErrorCode+" Error");
-		errorPage.addObject("errorMsg", "Request method 'POST' not supported");
+		errorPage.addObject("errorMsg", ex.getMessage());
         errorPage.addObject("code", httpErrorCode);
         ex.printStackTrace();
         return errorPage;
     }
-     
+ 
+	@ExceptionHandler(MissingServletRequestParameterException.class)
+	@ResponseStatus(value=HttpStatus.BAD_REQUEST)
+    public ModelAndView missingServletRequestParameterException(HttpServletRequest httpRequest, Exception ex) {
+
+        ModelAndView errorPage = new ModelAndView("backend/error");
+        
+        int httpErrorCode = 400; 
+        errorPage.addObject("general", configurationService.getGeneral());
+		errorPage.addObject("logo", configurationService.getLogo());
+		errorPage.addObject("titlePage", httpErrorCode+" Error");
+		errorPage.addObject("errorMsg", ex.getMessage());
+        errorPage.addObject("code", httpErrorCode);
+        ex.printStackTrace();
+        return errorPage;
+    }
+	
+	
 	@ExceptionHandler(NoHandlerFoundException.class)
 	@ResponseStatus(value=HttpStatus.NOT_FOUND)
     public ModelAndView errorPageNotFound(HttpServletRequest httpRequest) {

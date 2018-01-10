@@ -5808,25 +5808,26 @@ textarea.md-input {
 }
 
 .box-thumbnail{
-  height: 160px;
   text-align: center;
+  height: 160px;
+  width: 160px;
   line-height: 160px;
   overflow: hidden;
 }
 
 .box-thumbnail img{
-  width: auto;
-  height: auto
+  width: 100%;
+  height: auto;
 }
 
 #gallery-container .box-body{
-        width: 100%;
-        height: 270px;
-        line-height: 270px;
-        overflow: hidden;
+  width: 100%;
+  height: 270px;
+  line-height: 270px;
+  overflow: hidden;
 }
 
 #gallery-container .box-body img{
-       width: auto;
-       height: auto;
+    width: 100%;
+    height: auto;
 }

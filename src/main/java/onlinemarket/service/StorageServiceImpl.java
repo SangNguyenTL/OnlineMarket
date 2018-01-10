@@ -43,7 +43,7 @@ public class StorageServiceImpl implements StorageService{
 			String originalFilename = multipartFile.getOriginalFilename(),
 					newName = String.valueOf(cTime)+ "-" + originalFilename;
 			File destinationFile = new File(context.getRealPath(drirectory)+"/"+newName);
-
+			multipartFile.transferTo(destinationFile);
 			fileList.add(destinationFile);
 		}
 		return fileList;

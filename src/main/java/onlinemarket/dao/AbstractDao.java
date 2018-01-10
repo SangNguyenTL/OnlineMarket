@@ -96,13 +96,6 @@ public abstract class AbstractDao<PK extends Serializable, T> {
 		Criteria criteria = createEntityCriteria();
 		ResultObject<T> result = new ResultObject<>();
 		
-		if(StringUtils.isNotBlank(filterForm.getOrderBy()) && StringUtils.isNotBlank(filterForm.getOrder())) {
-			if(filterForm.getOrder().equals("asc"))
-				criteria.addOrder(Order.asc(filterForm.getOrderBy()));
-			else
-				criteria.addOrder(Order.desc(filterForm.getOrderBy()));
-		}
-		
 		if(StringUtils.isNotBlank(filterForm.getSearch()) && StringUtils.isNotBlank(filterForm.getSearchBy())) {
 			criteria.add(Restrictions.like(filterForm.getSearchBy(), filterForm.getSearch()));
 		}
@@ -110,7 +103,7 @@ public abstract class AbstractDao<PK extends Serializable, T> {
 		criteria.setProjection(Projections.rowCount());
 		Long count = (Long) criteria.uniqueResult();
 		if(count != null ) {
-			int totalPages = (int) Math.ceil(count/filterForm.getSize());
+			int totalPages = (int) Math.ceil((float) count/filterForm.getSize());
 			result.setTotalPages(totalPages);
 		}else result.setTotalPages(0);
 		
@@ -118,6 +111,13 @@ public abstract class AbstractDao<PK extends Serializable, T> {
 			criteria.setFirstResult((filterForm.getCurrentPage()- 1) * filterForm.getSize()).setMaxResults(filterForm.getSize());
 		criteria.setProjection(null);
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		
+		if(StringUtils.isNotBlank(filterForm.getOrderBy()) && StringUtils.isNotBlank(filterForm.getOrder())) {
+			if(filterForm.getOrder().equals("asc"))
+				criteria.addOrder(Order.asc(filterForm.getOrderBy()));
+			else
+				criteria.addOrder(Order.desc(filterForm.getOrderBy()));
+		}
 		
 		result.setList(criteria.list());
 		

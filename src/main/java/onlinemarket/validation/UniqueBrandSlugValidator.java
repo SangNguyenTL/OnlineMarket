@@ -3,6 +3,7 @@ package onlinemarket.validation;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
@@ -11,7 +12,7 @@ import onlinemarket.model.Brand;
 import onlinemarket.service.BrandService;
 
 @Component
-public class UniqueBrandSlugValidator implements ConstraintValidator<UniqueBrandSlug, String>{
+public class UniqueBrandSlugValidator implements ConstraintValidator<UniqueBrandSlug, Object>{
 
 	@Autowired
 	BrandService brandService;
@@ -22,9 +23,21 @@ public class UniqueBrandSlugValidator implements ConstraintValidator<UniqueBrand
 	}
 
 	@Override
-	public boolean isValid(String value, ConstraintValidatorContext context) {
-		Brand brand = brandService.getByDeclaration("slug", value);
-		return brand == null;
+	public boolean isValid(Object candidate, ConstraintValidatorContext context) {
+		
+		Brand brand = (Brand) candidate;
+		Brand brandMod = brandService.getByDeclaration("slug", brand.getSlug());
+		boolean isValid = false;
+		if(brandMod == null) isValid = true;
+		else if(StringUtils.equals(brand.getSlug(), brand.getBeforeSlug())) isValid = true;
+		else isValid = false;
+        if ( !isValid ) {
+        	context.disableDefaultConstraintViolation();
+        	context
+                    .buildConstraintViolationWithTemplate( "{onlinemarket.isUniqueBrandSlug}" )
+                    .addPropertyNode( "slug" ).addConstraintViolation();
+        }
+		return isValid;
 	}
 
 }

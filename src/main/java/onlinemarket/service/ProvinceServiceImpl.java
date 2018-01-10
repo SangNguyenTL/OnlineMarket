@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import onlinemarket.dao.ProvinceDao;
+import onlinemarket.form.filter.FilterForm;
 import onlinemarket.model.Province;
+import onlinemarket.result.ResultObject;
 
 @Service("provinceService")
 @Transactional
@@ -53,6 +55,11 @@ public class ProvinceServiceImpl implements ProvinceService{
 	public Province getByDeclaration(String key, String value) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public ResultObject<Province> list(FilterForm filterForm) {
+		return provinceDao.list(filterForm);
 	}
 
 }

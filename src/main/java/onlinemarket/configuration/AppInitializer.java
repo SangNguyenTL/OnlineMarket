@@ -37,13 +37,16 @@ public class AppInitializer implements WebApplicationInitializer {
     }
 
     private void configureDispatcherServlet(ServletContext servletContext, WebApplicationContext rootContext) {
-        ServletRegistration.Dynamic dispatcher = servletContext.addServlet(
+        
+    	DispatcherServlet dp =  new DispatcherServlet(rootContext);
+        dp.setThrowExceptionIfNoHandlerFound(true);
+    	
+    	ServletRegistration.Dynamic dispatcher = servletContext.addServlet(
                 DISPATCHER_SERVLET_NAME,
-                new DispatcherServlet(rootContext)
+                dp
         );
         dispatcher.setLoadOnStartup(1);
         dispatcher.addMapping(DISPATCHER_SERVLET_MAPPING);
-        dispatcher.setInitParameter("throwExceptionIfNoHandlerFound", "true");
     }
 
     private void configureCharacterEncodingFilter(ServletContext servletContext, EnumSet<DispatcherType> dispatcherTypes) {

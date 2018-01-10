@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -32,12 +33,14 @@ import onlinemarket.validation.UniqueBrandSlug;
  */
 @Entity
 @Table(name = "tb_brand", schema = "dbo", catalog = "SmartMarket")
+@UniqueBrandSlug(groups = {AdvancedValidation.CheckSlug.class})
 public class Brand implements java.io.Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private String name;
 	private String slug;
+	private String beforeSlug;
 	private String imagePath;
 	private String description;
 	private Date createDate = new Date();
@@ -91,7 +94,6 @@ public class Brand implements java.io.Serializable {
 
 	@Column(name = "slug", nullable = false, length = 64, unique = true)
 	@NotEmpty
-	@UniqueBrandSlug(groups = {AdvancedValidation.CheckSlug.class})
 	@Size(min = 3, max = 64)
 	public String getSlug() {
 		return this.slug;
@@ -101,6 +103,16 @@ public class Brand implements java.io.Serializable {
 		this.slug = slug;
 	}
 
+
+	@Transient
+	public String getBeforeSlug() {
+		return beforeSlug;
+	}
+
+	public void setBeforeSlug(String beforeSlug) {
+		this.beforeSlug = beforeSlug;
+	}
+	
 	@Column(name = "image_path")
 	@Size(max = 2048)
 	public String getImagePath() {
@@ -161,6 +173,37 @@ public class Brand implements java.io.Serializable {
 
 	public void setEvents(Set<Event> events) {
 		this.events = events;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((slug == null) ? 0 : slug.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Brand other = (Brand) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (slug == null) {
+			if (other.slug != null)
+				return false;
+		} else if (!slug.equals(other.slug))
+			return false;
+		return true;
 	}
 
 }

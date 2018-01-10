@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.thymeleaf.dialect.AbstractProcessorDialect;
 import org.thymeleaf.processor.IProcessor;
+import org.thymeleaf.spring4.processor.SpringObjectTagProcessor;
 import org.thymeleaf.standard.StandardDialect;
 
 public class FilterFormDialect extends AbstractProcessorDialect{
@@ -23,6 +24,7 @@ public class FilterFormDialect extends AbstractProcessorDialect{
 		processors.add(new TotalPageAttributeTagProcessor(dialectPrefix));
 		processors.add(new UriAttibuteTagProcessor(dialectPrefix));
 		processors.add(new OrderHeadElementProcessor(dialectPrefix));
+		processors.add(new SpringObjectTagProcessor(dialectPrefix));
 		return processors;
 	}
 }
