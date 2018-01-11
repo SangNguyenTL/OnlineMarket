@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="templates/backend">
+<head>
+</head>
+<body>
+
+	<div ui-view class="app-body" id="view" layout:fragment="container">
+		<div class="padding">
+
+			<h5 class="_300 margin" th:text="${pageTitle}"></h5>
+			<div class="alert alert-success" th:if="${success}">
+				<strong>Congratulation!</strong> Process completed.
+			</div>
+			<div class="row">
+				<div class="col-md-9">
+
+					<div class="box">
+						<div class="box-header">
+							<h2 th:text="${subPageTitle}"></h2>
+							<small th:text="${description}"></small>
+						</div>
+
+						<div class="box-divider m-a-0"></div>
+
+						<div class="box-body">
+
+							<form ui-jp="parsley" role="form" th:object="${event}"
+								th:action="@{${pathAction}}" method="POST">
+								<input th:if="${action} == 'update'" type="hidden"
+									th:field="*{id}" />
+								<div class="form-group row">
+									<label class="col-sm-2 form-control-label">Name</label>
+									<div class="col-sm-10">
+										<input th:errorclass="parsley-error" class="form-control"
+											type="text" th:field="*{name}" required
+											data-parsley-length="[3, 64]" data-parsley-id="name" />
+										<ul class="parsley-errors-list filled" id="parsley-id-name"
+											th:if="${#fields.hasErrors('name')}">
+											<li th:errors="*{name}"></li>
+										</ul>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label class="col-sm-2 form-control-label">Date From</label>
+									<div class="col-sm-4">
+										<input ui-jp="datetimepicker"
+											ui-options="{
+												format: 'DD-MM-YYYY',
+									            icons: {
+									              time: 'fa fa-clock-o',
+									              date: 'fa fa-calendar',
+									              up: 'fa fa-chevron-up',
+									              down: 'fa fa-chevron-down',
+									              previous: 'fa fa-chevron-left',
+									              next: 'fa fa-chevron-right',
+									              today: 'fa fa-screenshot',
+									              clear: 'fa fa-trash',
+									              close: 'fa fa-remove'
+									            }
+									          }"
+											th:errorclass="parsley-error" class="form-control"
+											type="text" th:field="*{dateFrom}" 
+											data-parsley-length="[3, 64]" data-parsley-id="name" />
+										<ul class="parsley-errors-list filled" id="parsley-id-name"
+											th:if="${#fields.hasErrors('dateFrom')}">
+											<li th:errors="*{dateFrom}"></li>
+										</ul>
+									</div>
+									<label class="col-sm-2 form-control-label">Date To</label>
+									<div class="col-sm-4">
+										<input ui-jp="datetimepicker"
+											ui-options="{
+												format: 'DD-MM-YYYY',
+									            icons: {
+									              time: 'fa fa-clock-o',
+									              date: 'fa fa-calendar',
+									              up: 'fa fa-chevron-up',
+									              down: 'fa fa-chevron-down',
+									              previous: 'fa fa-chevron-left',
+									              next: 'fa fa-chevron-right',
+									              today: 'fa fa-screenshot',
+									              clear: 'fa fa-trash',
+									              close: 'fa fa-remove'
+									            }
+									          }" th:errorclass="parsley-error" class="form-control"
+											type="text" th:field="*{dateTo}" 
+											data-parsley-length="[3, 64]" data-parsley-id="name" />
+										<ul class="parsley-errors-list filled" id="parsley-id-name"
+											th:if="${#fields.hasErrors('dateTo')}">
+											<li th:errors="*{dateTo}"></li>
+										</ul>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label class="col-sm-2 form-control-label">Percent
+										Discount</label>
+									<div class="col-sm-4">
+										<input th:errorclass="parsley-error" class="form-control"
+											type="text" th:field="*{percentValue}" required
+											data-parsley-length="[1, 99]" data-parsley-id="name" />
+										<ul class="parsley-errors-list filled" id="parsley-id-name"
+											th:if="${#fields.hasErrors('percentValue')}">
+											<li th:errors="*{percentValue}"></li>
+										</ul>
+									</div>
+									<label class="col-sm-2 form-control-label">Code</label>
+									<div class="col-sm-4">
+										<input th:errorclass="parsley-error" class="form-control"
+											type="text" th:field="*{code}" required
+											data-parsley-length="[1, 1000]" data-parsley-id="name" />
+										<ul class="parsley-errors-list filled" id="parsley-id-name"
+											th:if="${#fields.hasErrors('code')}">
+											<li th:errors="*{code}"></li>
+										</ul>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label class="col-sm-2 form-control-label">Max Value</label>
+									<div class="col-sm-4">
+										<input th:errorclass="parsley-error" class="form-control"
+											type="text" th:field="*{maxPrice}" required
+											data-parsley-length="[1, 100000]" data-parsley-id="name" />
+										<ul class="parsley-errors-list filled" id="parsley-id-name"
+											th:if="${#fields.hasErrors('maxPrice')}">
+											<li th:errors="*{maxPrice}"></li>
+										</ul>
+									</div>
+									<label class="col-sm-2 form-control-label">Min Value</label>
+									<div class="col-sm-4">
+										<input th:errorclass="parsley-error" class="form-control"
+											type="text" th:field="*{minPrice}" required
+											data-parsley-length="[1, 100000]" data-parsley-id="name" />
+										<ul class="parsley-errors-list filled" id="parsley-id-name"
+											th:if="${#fields.hasErrors('minPrice')}">
+											<li th:errors="*{minPrice}"></li>
+										</ul>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label class="col-sm-2 form-control-label">State</label>
+									<div class="col-sm-4">
+										<select th:field="*{status}">
+											<option value="">Please choice</option>
+											<option
+												th:each="state : ${T(onlinemarket.model.NumState).values()}"
+												th:value="${state.id}" th:text="${state.name}"></option>
+										</select>
+									</div>
+									<label class="col-sm-2 form-control-label">Value</label>
+									<div class="col-sm-4">
+										<input th:errorclass="parsley-error" class="form-control"
+											type="text" th:field="*{value}" 
+											data-parsley-length="[1, 100000]" data-parsley-id="name" />
+										<ul class="parsley-errors-list filled" id="parsley-id-name"
+											th:if="${#fields.hasErrors('value')}">
+											<li th:errors="*{value}"></li>
+										</ul>
+									</div>
+								</div>
+								<div class="form-group row">
+									<label class="col-sm-2 form-control-label">Content</label>
+									<div class="col-sm-10">
+										<textarea th:errorclass="parsley-error" class="form-control"
+											th:field="*{content}"
+											data-parsley-length="[50, 1000]" data-parsley-id="content"></textarea>
+										<ul class="parsley-errors-list filled"
+											id="parsley-id-description"
+											th:if="${#fields.hasErrors('content')}">
+											<li th:errors="*{content}"></li>
+										</ul>
+									</div>
+								</div>
+
+								<div class="dker p-a text-right">
+									<button type="submit" class="btn info">Save</button>
+								</div>
+							</form>
+
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</body>
+</html>
