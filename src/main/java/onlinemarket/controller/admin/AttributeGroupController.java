@@ -40,7 +40,6 @@ public class AttributeGroupController extends MainController{
 		
 		model.put("productCategoryPage", true);
 		model.put("filterForm", new FilterForm());
-		model.put("productCategory", null);
 		
 		return model;
 	}
@@ -50,14 +49,17 @@ public class AttributeGroupController extends MainController{
 			@ModelAttribute("filterForm") FilterForm filterForm,
 			ModelMap model, RedirectAttributes redirectAttributes){
 		
+		filterForm.setOrderBy("priority");
+		filterForm.setOrder("asc");
+		
 		ProductCategory productCategory = productCategoryService.getByKey(id);
 		if(productCategory == null) {
 			redirectAttributes.addFlashAttribute("error", "Product category not found.");
 			return "redirect:/admin/product-category";
 		}
 		
-		model.put("pageTitle", "Province Manager");
-		model.put("path", "province");
+		model.put("pageTitle", "Attribute group manager for"+ productCategory.getName());
+		model.put("path", "product-category");
 		model.put("result", attributeGroupService.listByProductCategory(productCategory, filterForm));
 		model.put("filterForm", filterForm);
 		
@@ -72,6 +74,8 @@ public class AttributeGroupController extends MainController{
 			ModelMap model, RedirectAttributes redirectAttributes){
 		
 		filterForm.setCurrentPage(page);
+		filterForm.setOrderBy("priority");
+		filterForm.setOrder("asc");
 		
 		ProductCategory productCategory = productCategoryService.getByKey(id);
 		if(productCategory == null) {
@@ -79,8 +83,8 @@ public class AttributeGroupController extends MainController{
 			return "redirect:/admin/product-category";
 		}
 		
-		model.put("pageTitle", "Province Manager");
-		model.put("path", "province");
+		model.put("pageTitle", "Attribute group manager for"+ productCategory.getName());
+		model.put("path", "product-category");
 		model.put("result", attributeGroupService.listByProductCategory(productCategory, filterForm));
 		model.put("filterForm", filterForm);
 		
@@ -97,7 +101,7 @@ public class AttributeGroupController extends MainController{
 			return "redirect:/admin/product-category";
 		}
 		
-		model.put("subPageTitle", "Add");
+		model.put("subPageTitle", "Add for"+ productCategory.getName());
 		model.put("description", "Add attribute group for product category");
 		model.put("pageTitle", "Add new attribute group");
 		model.put("provincePage", true);
@@ -129,7 +133,7 @@ public class AttributeGroupController extends MainController{
 			return "redirect:/admin/product-category/"+id+"/attribute-group";
 		}
 		
-		model.put("subPageTitle", "Add");
+		model.put("subPageTitle", "Add for"+ productCategory.getName());
 		model.put("description", "Add attribute group for product category");
 		model.put("pageTitle", "Add new attribute group");
 		model.put("provincePage", true);
@@ -160,7 +164,7 @@ public class AttributeGroupController extends MainController{
 			return "redirect:/admin/product-category/"+id+"/attribute-group";
 		}
 		
-		model.put("subPageTitle", "Update");
+		model.put("subPageTitle", "Update for"+ productCategory.getName());
 		model.put("description", "Update attribute group for product category");
 		model.put("pageTitle", "Update attribute group");
 		model.put("provincePage", true);
@@ -201,7 +205,7 @@ public class AttributeGroupController extends MainController{
 				return "redirect:/admin/product-category/"+id+"/attribute-group";
 			}
 			
-			model.put("subPageTitle", "Update");
+			model.put("subPageTitle", "Update for"+ productCategory.getName());
 			model.put("description", "Update attribute group for product category");
 			model.put("pageTitle", "Update attribute group");
 			model.put("provincePage", true);

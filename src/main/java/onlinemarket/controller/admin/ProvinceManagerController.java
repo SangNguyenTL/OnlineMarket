@@ -138,7 +138,7 @@ public class ProvinceManagerController extends MainController{
 			if (!result.hasErrors()) {
 				provinceService.update(province);
 				redirectAttributes.addFlashAttribute("success", "");
-				return "redirect:/admin/province/update/"+id;
+				return "redirect:/admin/province";
 			}
 			
 			model.put("pageTitle", "Update province");

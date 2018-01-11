@@ -7,8 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import onlinemarket.dao.AttributeDao;
+import onlinemarket.form.filter.FilterForm;
 import onlinemarket.model.Attribute;
 import onlinemarket.model.AttributeGroup;
+import onlinemarket.result.ResultObject;
 
 @Service("attributeService")
 @Transactional
@@ -55,6 +57,11 @@ public class AttributeServiceImpl implements AttributeService{
 	@Override
 	public Attribute getByAttributeGroup(AttributeGroup attributeGroup) {
 		return attributeDao.getByAttributeGroup(attributeGroup);
+	}
+
+	@Override
+	public ResultObject<Attribute> listByAttributeGroup(AttributeGroup attributeGroup, FilterForm filterForm) {
+		return attributeDao.listByAttributeGroup(attributeGroup, filterForm);
 	}
 
 }
