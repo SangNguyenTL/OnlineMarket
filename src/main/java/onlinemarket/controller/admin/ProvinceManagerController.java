@@ -39,6 +39,7 @@ public class ProvinceManagerController extends MainController{
 		
 		model.put("filterForm", new FilterForm());
 		model.put("provincePage", true);
+		model.put("pathAdd", "/admin/province/add");
 		return model;
 		
 	}
@@ -173,5 +174,8 @@ public class ProvinceManagerController extends MainController{
 		}
 		return "redirect:/admin/province";
 	}
-
+	
+	public String buildRelativePath(int id) {
+		return "/admin/product-category/"+id+"/attribute-group";
+	}
 }

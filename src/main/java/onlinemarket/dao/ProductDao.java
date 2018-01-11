@@ -12,4 +12,5 @@ public interface ProductDao extends InterfaceDao<Integer, Product>{
 	public Product getByProductCategory(ProductCategory productCategory);
 
 	public Product getByEvent(Event event);
+
 }

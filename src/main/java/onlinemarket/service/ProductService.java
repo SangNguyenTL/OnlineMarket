@@ -12,4 +12,5 @@ public interface ProductService extends InterfaceService<Integer, Product>{
 	public Product getByEvent(Event event);
 	
 	public Product getByProductCategory(ProductCategory productCategory);
+
 }

@@ -11,7 +11,7 @@
 <div class="padding">
   <div class="box">
     <div class="box-header">
-      <h2><a th:href="${relativePath}" th:text="${pageTitle}"></a></h2>
+       <h2><a th:href="${relativePath}" th:text="${pageTitle}"></a></h2>
     </div>
 	<div class="alert alert-success m-x-lg" th:if="${success} != null">
 		<strong>Congratulation!</strong> Process completed.
@@ -25,7 +25,7 @@
       <div class="col-sm-4">
       </div>
       <div class="col-sm-3">
-    	<form th:object="${filterForm}" th:action="@{${relativePath}}" method="get">
+    	<form th:object="${filterForm}" th:action="@{/admin/attribute-group}" method="get">
 	        <div class="input-group input-group-sm">
 	          <input class="form-control" placeholder="Search" type="text" th:field="*{search}">
 	          <span class="input-group-btn">
@@ -43,23 +43,23 @@
       	<table class="table table-hover b-t">
       		<thead>
       			<tr>
-      				<filter:th order="asc" orderBy="id" filter:uri="@{${relativePath}}" filter:currentPage="${page}" name="#">#</filter:th>
-      				<filter:th order="asc" orderBy="name" filter:uri="@{${relativePath}}" filter:currentPage="${page}" name="Name">Name</filter:th>
-      				<filter:th order="asc" orderBy="priority" filter:uri="@{${relativePath}}" filter:currentPage="${page}" name="Priority">Priority</filter:th>
+      				<filter:th order="asc" orderBy="id" filter:uri="@{'/admin/product-category/'+${id}+'/attribute-group/'+${attrGroupId}+'/attribute'}" filter:currentPage="${page}" name="#">#</filter:th>
+      				<filter:th order="asc" orderBy="name" filter:uri="@{'/admin/product-category/'+${id}+'/attribute-group/'+${attrGroupId}+'/attribute'}" filter:currentPage="${page}" name="Name">Name</filter:th>
+      				<filter:th order="asc" orderBy="type" filter:uri="@{'/admin/product-category/'+${id}+'/attribute-group/'+${attrGroupId}+'/attribute'}" filter:currentPage="${page}" name="Type">Type</filter:th>
+      				<filter:th order="asc" orderBy="priority" filter:uri="@{'/admin/product-category/'+${id}+'/attribute-group/'+${attrGroupId}+'/attribute'}" filter:currentPage="${page}" name="Priority">Priority</filter:th>
       				<th>Action</th>
       			</tr>
       		</thead>
       		<tbody th:object="${result}">
-      			<tr th:each="attributeGroup: *{list}">
-      				<td th:text="${attributeGroup.id}"></td>
-      				<td th:text="${attributeGroup.name}"></td>
-      				<td th:text="${attributeGroup.priority}"></td>
+      			<tr th:each="attribute: *{list}">
+      				<td th:text="${attribute.id}"></td>
+      				<td th:text="${attribute.name}"></td>
+      				<td th:text="${attribute.type}"></td>
+      				<td th:text="${attribute.priority}"></td>
       				<td>
-      					<form class="form-confirm" th:action="@{${relativePath}+'/delete'}" method="POST">
-	      					<a th:href="@{${relativePath}+'/'+${attributeGroup.id}+'/attribute'}" class="btn btn-outline b-info text-info btn-sm">View Attribute</a>
-	      					<a th:href="@{${relativePath}+'/'+${attributeGroup.id}+'/attribute/add'}" class="btn btn-outline b-primary text-primary btn-sm">Add Attribute</a>
-      						<a th:href="@{${relativePath}+'/update/'+${attributeGroup.id}}" class="btn btn-outline b-info text-success btn-sm">Update</a>
-      						<input type="hidden" th:name="id" th:value="${attributeGroup.id}">
+      					<form class="form-confirm" th:action="@{'/admin/product-category/'+${id}+'/attribute-group/'+${attrGroupId}+'/attribute/delete'}" method="POST">
+      					<a th:href="@{'/admin/product-category/'+${id}+'/attribute-group/'+${attrGroupId}+'/attribute/update/'+${attribute.id}}" class="btn btn-outline b-info text-success btn-sm">Update</a>
+      						<input type="hidden" th:name="id" th:value="${attribute.id}">
       						<button type="submit" class="btn btn-outline b-info text-danger btn-sm">Delete</button>
       					</form>
       				</td>
@@ -70,7 +70,7 @@
     <footer class="dker p-a">
     	<div class="row">
 	    	<div class="col-sm-4 hidden-xs">
-	    	<form th:object="${filterForm}" th:action="@{${relativePath}}" method="get">
+	    	<form th:object="${filterForm}" th:action="@{'/admin/product-category/'+${id}+'/attribute-group/'+${attrGroupId}+'/attribute'}" method="get">
 	    		<input type="hidden" th:field="*{search}" />
 	    		<input type="hidden" th:field="*{searchBy}" />
 	    		<input type="hidden" th:field="*{order}" />
@@ -86,7 +86,7 @@
              
 	        </div>
 	    	<div class="col-sm-4 pull-right text-right text-center-xs">                
-	          	<filter:pagination filter:currentPage="${page}" filter:totalPages="${result.totalPages}" filter:uri="@{${relativePath}}"></filter:pagination>
+	          	<filter:pagination filter:currentPage="${page}" filter:totalPages="${result.totalPages}" filter:uri="@{'/admin/product-category/'+${id}+'/attribute-group/'+${attrGroupId}+'/attribute'}"></filter:pagination>
 	        </div>
     	</div>
     </footer>

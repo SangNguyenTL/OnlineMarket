@@ -36,10 +36,16 @@ public class AttributeGroupController extends MainController{
 	ProductCategoryService productCategoryService;
 	
 	@ModelAttribute
-	public ModelMap populateAttribute(ModelMap model) {
+	public ModelMap populateAttribute(
+			@PathVariable("id") Integer id,
+			ModelMap model) {
 		
+		String relativePath = buildRelativePath(id);
 		model.put("productCategoryPage", true);
 		model.put("filterForm", new FilterForm());
+		model.put("path", "product-category");
+		model.put("relativePath", relativePath);
+		model.put("pathAdd", relativePath+"/add");
 		
 		return model;
 	}
@@ -58,8 +64,7 @@ public class AttributeGroupController extends MainController{
 			return "redirect:/admin/product-category";
 		}
 		
-		model.put("pageTitle", "Attribute group manager for"+ productCategory.getName());
-		model.put("path", "product-category");
+		model.put("pageTitle", "Attribute group manager for "+ productCategory.getName());
 		model.put("result", attributeGroupService.listByProductCategory(productCategory, filterForm));
 		model.put("filterForm", filterForm);
 		
@@ -83,8 +88,7 @@ public class AttributeGroupController extends MainController{
 			return "redirect:/admin/product-category";
 		}
 		
-		model.put("pageTitle", "Attribute group manager for"+ productCategory.getName());
-		model.put("path", "product-category");
+		model.put("pageTitle", "Attribute group manager for "+ productCategory.getName());
 		model.put("result", attributeGroupService.listByProductCategory(productCategory, filterForm));
 		model.put("filterForm", filterForm);
 		
@@ -101,13 +105,11 @@ public class AttributeGroupController extends MainController{
 			return "redirect:/admin/product-category";
 		}
 		
-		model.put("subPageTitle", "Add for"+ productCategory.getName());
+		model.put("subPageTitle", "Add for "+ productCategory.getName());
 		model.put("description", "Add attribute group for product category");
 		model.put("pageTitle", "Add new attribute group");
-		model.put("provincePage", true);
-		model.put("path", "product-category");
 		model.put("action", "add");
-		model.put("pathAction", "/admin/product-category/"+id+"/attribute-group/add");
+		model.put("pathAction", buildRelativePath(id)+"/add");
 		model.put("attributeGroup", new AttributeGroup());
 		
 		return "backend/attribute-group-add";
@@ -130,16 +132,16 @@ public class AttributeGroupController extends MainController{
 			attributeGroup.setProductCategory(productCategory);
 			redirectAttributes.addFlashAttribute("success", "");
 			attributeGroupService.save(attributeGroup);
-			return "redirect:/admin/product-category/"+id+"/attribute-group";
+			return "redirect:"+buildRelativePath(id);
 		}
 		
-		model.put("subPageTitle", "Add for"+ productCategory.getName());
+		model.put("subPageTitle", "Add for "+ productCategory.getName());
 		model.put("description", "Add attribute group for product category");
 		model.put("pageTitle", "Add new attribute group");
 		model.put("provincePage", true);
 		model.put("path", "product-category");
 		model.put("action", "add");
-		model.put("pathAction", "/admin/product-category/"+id+"/attribute-group/add");
+		model.put("pathAction", buildRelativePath(id)+"/add");
 		model.put("attributeGroup", attributeGroup);
 		
 		return "backend/attribute-group-add";
@@ -161,16 +163,14 @@ public class AttributeGroupController extends MainController{
 		AttributeGroup attributeGroup = attributeGroupService.getByKey(idAttr);
 		if (attributeGroup == null) {
 			redirectAttributes.addFlashAttribute("error", "Attribute group not found.");
-			return "redirect:/admin/product-category/"+id+"/attribute-group";
+			return "redirect:"+buildRelativePath(id);
 		}
 		
-		model.put("subPageTitle", "Update for"+ productCategory.getName());
+		model.put("subPageTitle", "Update for "+ productCategory.getName());
 		model.put("description", "Update attribute group for product category");
 		model.put("pageTitle", "Update attribute group");
-		model.put("provincePage", true);
-		model.put("path", "product-category");
 		model.put("action", "update");
-		model.put("pathAction", "/admin/product-category/"+id+"/attribute-group/update/"+idAttr);
+		model.put("pathAction", buildRelativePath(id)+"/update/"+idAttr);
 		model.put("attributeGroup", attributeGroup);
 		
 		return "backend/attribute-group-add";
@@ -196,22 +196,20 @@ public class AttributeGroupController extends MainController{
 			AttributeGroup attributeGroupCheck = attributeGroupService.getByKey(idAttr);
 			if (attributeGroupCheck == null) {
 				redirectAttributes.addFlashAttribute("error", "Attribute group not found.");
-				return "redirect:/admin/product-category/"+id+"/attribute-group";
+				return "redirect:"+buildRelativePath(id);
 			}
 			
 			if (!result.hasErrors()) {
 				attributeGroupService.update(attributeGroup);
 				redirectAttributes.addFlashAttribute("success", "");
-				return "redirect:/admin/product-category/"+id+"/attribute-group";
+				return "redirect:"+buildRelativePath(id);
 			}
 			
-			model.put("subPageTitle", "Update for"+ productCategory.getName());
+			model.put("subPageTitle", "Update for "+ productCategory.getName());
 			model.put("description", "Update attribute group for product category");
 			model.put("pageTitle", "Update attribute group");
-			model.put("provincePage", true);
-			model.put("path", "product-category");
 			model.put("action", "update");
-			model.put("pathAction", "/admin/product-category/"+id+"/attribute-group/update/"+idAttr);
+			model.put("pathAction", buildRelativePath(id)+"/update/"+idAttr);
 			model.put("attributeGroup", attributeGroup);
 			
 			return "backend/attribute-group-add";
@@ -224,22 +222,26 @@ public class AttributeGroupController extends MainController{
 			RedirectAttributes redirectAttributes) {
 			
 		if(id == null) {
-			redirectAttributes.addAttribute("error", "Program isn't get province id!");
+			redirectAttributes.addAttribute("error", "Program wasn't gotten attibute group id!");
 			return "redirect:/admin/province";
 		}
 		
 		AttributeGroup attributeGroup = attributeGroupService.getByKey(idAttr);
 		if (attributeGroup == null) {
-			redirectAttributes.addAttribute("error", "The attribur group isn't exist!");
+			redirectAttributes.addAttribute("error", "The attribute group isn't been exist!");
 		}else {
 			Attribute attribute = attributeService.getByAttributeGroup(attributeGroup);
 			if(attribute != null)
-				redirectAttributes.addAttribute("error", "The attribur group has already had attribute!");
+				redirectAttributes.addAttribute("error", "The attribute group has already been had attribute!");
 			else {
 				redirectAttributes.addFlashAttribute("success", "success");
 				attributeGroupService.delete(attributeGroup);
 			}
 		}
-		return "redirect:/admin/product-category/"+id+"/attribute-group/";
+		return "redirect:"+buildRelativePath(id);
+	}
+	
+	public String buildRelativePath(int id) {
+		return "/admin/product-category/"+id+"/attribute-group";
 	}
 }

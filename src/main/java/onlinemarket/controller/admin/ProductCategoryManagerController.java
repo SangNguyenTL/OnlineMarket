@@ -53,7 +53,7 @@ public class ProductCategoryManagerController extends MainController{
 		
 		model.put("productCategoryPage", true);
 		model.put("filterForm", new FilterForm());
-		
+		model.put("pathAdd", "/admin/product-category/add");
 		return model;
 	}
 	

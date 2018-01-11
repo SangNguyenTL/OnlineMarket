@@ -3,8 +3,7 @@ package onlinemarket.model;
 public enum NumState {
 	
     ACTIVE(0,"Active"),
-    INACTIVE(1, "In Active"),
-    DELETED(2,"Deleted");
+    INACTIVE(1, "Disable");
 	
 	private Integer id;
 	
@@ -31,6 +30,9 @@ public enum NumState {
 		this.name = name;
 	}
 	
+	@Override
+	public String toString() {
+		return String.valueOf(this.id);
+	}
 
-	
 }

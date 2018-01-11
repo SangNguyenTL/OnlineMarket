@@ -20,7 +20,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -118,6 +120,7 @@ public class Event implements java.io.Serializable {
 	}
 
 	@Column(name = "[name]", nullable = false)
+	@Size(min = 6, max = 255)
 	public String getName() {
 		return this.name;
 	}
@@ -127,6 +130,7 @@ public class Event implements java.io.Serializable {
 	}
 
 	@Column(name = "content")
+	@Size(max = 4000)
 	public String getContent() {
 		return this.content;
 	}
@@ -136,6 +140,7 @@ public class Event implements java.io.Serializable {
 	}
 
 	@Column(name = "[status]", nullable = false)
+	@Range(min = 0, max = 1)
 	public Integer getStatus() {
 		return this.status;
 	}
@@ -145,6 +150,7 @@ public class Event implements java.io.Serializable {
 	}
 
 	@Column(name = "percent_value")
+	@Range(min = 0, max = 100)
 	public Byte getPercentValue() {
 		return this.percentValue;
 	}
@@ -153,7 +159,8 @@ public class Event implements java.io.Serializable {
 		this.percentValue = percentValue;
 	}
 
-	@Column(name = "value", precision = 13, scale = 6)
+	@Column(name = "value", precision = 13)
+	@Range(max = 1000000000)
 	public BigDecimal getValue() {
 		return this.value;
 	}
@@ -163,6 +170,7 @@ public class Event implements java.io.Serializable {
 	}
 
 	@Column(name = "code", length = 32)
+	@Size(max = 32)
 	public String getCode() {
 		return this.code;
 	}
@@ -213,7 +221,8 @@ public class Event implements java.io.Serializable {
 		this.dateTo = dateTo;
 	}
 
-	@Column(name = "max_price", nullable = false, precision = 13, scale = 6)
+	@Column(name = "max_price", nullable = false, precision = 13)
+	@Range(max = 1000000000)
 	public BigDecimal getMaxPrice() {
 		return this.maxPrice;
 	}
@@ -222,7 +231,8 @@ public class Event implements java.io.Serializable {
 		this.maxPrice = maxPrice;
 	}
 
-	@Column(name = "min_price", nullable = false, precision = 13, scale = 6)
+	@Column(name = "min_price", nullable = false, precision = 13)
+	@Range(max = 1000000000)
 	public BigDecimal getMinPrice() {
 		return this.minPrice;
 	}

@@ -46,13 +46,12 @@ public class BrandManagerController extends MainController {
 	public void populateFilterForm(ModelMap model) {
 		model.put("filterForm", new FilterForm());
 		model.put("brandPage", true);
+		model.put("pathAdd", "/admin/brand/add");
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String mainPage(@ModelAttribute("filterForm") FilterForm filterForm, ModelMap model) {
-		
-		filterForm.setCurrentPage(1);
-		
+			
 		ResultObject<Brand> result = brandService.list(filterForm);
 		
 		model.put("result", result);

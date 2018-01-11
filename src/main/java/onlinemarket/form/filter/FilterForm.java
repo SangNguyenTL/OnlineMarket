@@ -8,7 +8,7 @@ public class FilterForm {
 	
 	private String order = "asc";
 	
-	private String orderBy = "";
+	private String orderBy = "id";
 	
 	private Integer size = 10;
 	

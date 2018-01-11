@@ -74,6 +74,7 @@ public class AttributeGroup implements java.io.Serializable {
 
 	@Column(name = "[name]", nullable = false)
 	@NotEmpty
+	@Size(max = 128)
 	public String getName() {
 		return this.name;
 	}

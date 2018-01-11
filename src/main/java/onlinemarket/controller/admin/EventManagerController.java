@@ -60,6 +60,7 @@ public class EventManagerController extends MainController {
 
 		model.put("filterForm", new FilterForm());
 		model.put("eventPage", true);
+		model.put("pathAdd", "/admin/event/add");
 		return model;
 
 	}

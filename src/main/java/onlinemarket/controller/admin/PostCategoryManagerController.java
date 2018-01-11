@@ -33,6 +33,7 @@ public class PostCategoryManagerController extends MainController{
 	public void populateFilterForm(ModelMap model) {
 		model.put("filterForm", new FilterForm());
 		model.put("postCategoryPage", true);
+		model.put("pathAdd", "/admin/post-category/add");
 	}
 	
 	@RequestMapping(value = "", method = RequestMethod.GET)

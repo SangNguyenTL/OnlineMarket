@@ -33,5 +33,4 @@ public class ProductDaoImpl extends AbstractDao<Integer, Product> implements Pro
 		criteria.add(Restrictions.eq("eventsAlias.id", event.getId()));
 		return (Product) criteria.uniqueResult();
 	}
-
 }

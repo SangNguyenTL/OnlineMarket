@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import onlinemarket.dao.PostCategoryDao;
 import onlinemarket.form.filter.FilterForm;
-import onlinemarket.model.Brand;
 import onlinemarket.model.PostCategory;
 import onlinemarket.result.ResultObject;
 
