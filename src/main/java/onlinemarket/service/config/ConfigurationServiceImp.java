@@ -7,12 +7,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import onlinemarket.dao.ConfigurationDao;
+import onlinemarket.dao.config.ApiConfigDao;
 import onlinemarket.dao.config.ContactConfigDao;
 import onlinemarket.dao.config.EmailSystemConfigDao;
 import onlinemarket.dao.config.GeneralConfigDao;
 import onlinemarket.dao.config.LogoConfigDao;
 import onlinemarket.dao.config.SocialConfigDao;
 import onlinemarket.dao.config.UploadConfigDao;
+import onlinemarket.form.config.ApiConfig;
 import onlinemarket.form.config.ContactConfig;
 import onlinemarket.form.config.EmailSystemConfig;
 import onlinemarket.form.config.GeneralConfig;
@@ -46,6 +48,9 @@ public class ConfigurationServiceImp implements ConfigurationService {
 	
 	@Autowired
 	private UploadConfigDao uploadConfigDao;
+	
+	@Autowired
+	private ApiConfigDao apiConfigDao;
 	
 	@Override
 	public Configuration getByKey(Integer id) {
@@ -119,6 +124,11 @@ public class ConfigurationServiceImp implements ConfigurationService {
 	}
 
 	@Override
+	public ApiConfig getApiConfig() {
+		return apiConfigDao.getConfiguration(new ApiConfig());
+	}
+	
+	@Override
 	public void saveGeneralConfig(GeneralConfig generalConfig) {
 		generalConfigDao.saveConfiguration(generalConfig);
 	}
@@ -146,5 +156,10 @@ public class ConfigurationServiceImp implements ConfigurationService {
 	@Override
 	public void saveUploadconfig(UploadConfig uploadConfig) {
 		uploadConfigDao.saveConfiguration(uploadConfig);
+	}
+	
+	@Override
+	public void saveApiConfig(ApiConfig apiConfig) {
+		apiConfigDao.saveConfiguration(apiConfig);
 	}
 }

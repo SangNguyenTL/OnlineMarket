@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import onlinemarket.controller.MainController;
+import onlinemarket.form.config.ApiConfig;
 import onlinemarket.form.config.ContactConfig;
 import onlinemarket.form.config.EmailSystemConfig;
 import onlinemarket.form.config.GeneralConfig;
@@ -32,9 +33,10 @@ public class ConfigurationController extends MainController{
 		model.put("logo", configurationService.getLogo());
 		model.put("upload", configurationService.getUpload());
 		model.put("contact", configurationService.getContag());
+		model.put("api", configurationService.getApiConfig());
+		model.put("social", configurationService.getSocial());
 		model.put("pageTitle", "Setting");
 		model.put("configPage", true);
-		model.put("social", configurationService.getSocial());
 	}
 	
 	@ModelAttribute("currentUser")
@@ -67,21 +69,26 @@ public class ConfigurationController extends MainController{
 	
 	@RequestMapping(value = { "" }, method = RequestMethod.POST)
 	public String submitConfigPage(@Valid @ModelAttribute("general") GeneralConfig generalConfig, BindingResult result, ModelMap model) {
+		
 		model.put("path", "general");
 		model.put("subPageTitle", "general");
 		model.put("description", "Set some of the basic properties of the application.");
 		if(!result.hasErrors()) {
 			configurationService.saveGeneralConfig(generalConfig);
+			return "redirect:/admin/config?success";
 		}
-		return "redirect:/admin/config?success";
+		
+		return "backend/config";
 	}
 	
 	@RequestMapping(value = { "upload" }, method = RequestMethod.GET)
 	public String configUploadPage(@ModelAttribute("upload") UploadConfig upload, ModelMap model) {
+		
 		model.put("path", "upload");
 		model.put("subPageTitle", "Upload");
 		model.put("description", "Set upload limits.");
 		model.put("uploadConfig", upload);
+		
 		return "backend/config";
 		
 	}
@@ -93,12 +100,30 @@ public class ConfigurationController extends MainController{
 		model.put("description", "Set upload limits.");
 		if(!result.hasErrors()) {
 			configurationService.saveUploadconfig(upload);
+			return "redirect:/admin/config/upload?success";
 		}
-		return "redirect:/admin/config/upload?success";
+		return "backend/config";
 	}
 	
 	@RequestMapping(value = { "logo" }, method = RequestMethod.GET)
-	public String configLogoPage(@ModelAttribute("logo") LogoConfig logo, ModelMap model) {
+	public String configLogoPage(@ModelAttribute("logo") @Valid LogoConfig logo, BindingResult result, ModelMap model) {
+		
+		if(!result.hasErrors()) {
+			configurationService.saveLogoConfig(logo);
+			return "redirect:/admin/config/logo?success";
+		}
+		
+		model.put("path", "logo");
+		model.put("subPageTitle", "Logo");
+		model.put("description", "Set the icon of the app as well as the store brand.");
+		model.put("logoConfig", logo);
+		
+		
+		return "backend/config"; 
+	}
+	
+	@RequestMapping(value = { "logo" }, method = RequestMethod.POST)
+	public String processLogoPage(@ModelAttribute("logo") LogoConfig logo, ModelMap model) {
 		model.put("path", "logo");
 		model.put("subPageTitle", "Logo");
 		model.put("description", "Set the icon of the app as well as the store brand.");
@@ -123,8 +148,10 @@ public class ConfigurationController extends MainController{
 		model.put("description", "Setting up a store address helps customers understand where the store is located.");
 		if(!result.hasErrors()) {
 			configurationService.saveContactConfig(contact);
+			return "redirect:/admin/config/contact?success";
 		}
-		return "redirect:/admin/config/contact?success";
+		
+		return "backend/config";
 	}
 	
 	@RequestMapping( value = {"social"}, method = RequestMethod.GET)
@@ -146,8 +173,10 @@ public class ConfigurationController extends MainController{
 		model.put("description", "Set the URL of the social network page, which shows social networking applications.");
 		if(!result.hasErrors()) {
 			configurationService.saveSocialConfig(social);
+			return "redirect:/admin/config/social?success";
 		}
-		return "redirect:/admin/config/social?success";
+		
+		return "backend/config";
 	}	
 	
 	@RequestMapping( value = {"emailsystem"}, method = RequestMethod.GET)
@@ -156,7 +185,7 @@ public class ConfigurationController extends MainController{
 		model.put("path", "emailsystem");
 		model.put("subPageTitle", "Email System");
 		model.put("description", "Set parameters so that the application can send the message to the client.");
-		model.put("emailSystemConfig", configurationService.getEmail());
+		model.put("emailSystemConfig", email);
 		
 		return "backend/config";
 	}
@@ -168,7 +197,31 @@ public class ConfigurationController extends MainController{
 		model.put("description", "Set parameters so that the application can send the message to the client.");
 		if(!result.hasErrors()) {
 			configurationService.saveEmailSystemConfig(email);
+			return "redirect:/admin/config/emailsystem?success";
 		}
-		return "redirect:/admin/config/emailsystem?success";
+		return "backend/config";
+	}
+
+	@RequestMapping( value = {"api"}, method = RequestMethod.GET)
+	public String configApiPage(@ModelAttribute("api") ApiConfig api, ModelMap model) {
+		
+		model.put("path", "api");
+		model.put("subPageTitle", "Api System");
+		model.put("description", "Set api systems for applications");
+		model.put("apiConfig", api);
+		
+		return "backend/config";
+	}
+	
+	@RequestMapping( value = {"api"}, method = RequestMethod.POST)
+	public String submitApiPage(@ModelAttribute("apiConfig") ApiConfig api, BindingResult result, ModelMap model) {
+		model.put("path", "api");
+		model.put("subPageTitle", "Api System");
+		model.put("description", "Set api systems for applications");
+		if(!result.hasErrors()) {
+			configurationService.saveApiConfig(api);
+			return "redirect:/admin/config/api?success";
+		}
+		return "backend/config";
 	}
 }

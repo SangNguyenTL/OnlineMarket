@@ -123,10 +123,12 @@ public class AttributeGroupController extends MainController{
 		}
 		
 		if (!result.hasErrors()) {
+			attributeGroup.setProductCategory(productCategory);
 			redirectAttributes.addAttribute("success", "");
 			attributeGroupService.save(attributeGroup);
-			return "redirect:/admin/brand";
+			return "redirect:/admin/product-category/"+id+"/attribute-group";
 		}
+		
 		model.put("subPageTitle", "Add");
 		model.put("description", "Add attribute group for product category");
 		model.put("pageTitle", "Add new attribute group");
@@ -230,7 +232,7 @@ public class AttributeGroupController extends MainController{
 			if(attribute != null)
 				redirectAttributes.addAttribute("error", "The attribur group has already had attribute!");
 			else {
-				redirectAttributes.addAttribute("success", "");
+				redirectAttributes.addAttribute("success", "success");
 				attributeGroupService.delete(attributeGroup);
 			}
 		}
