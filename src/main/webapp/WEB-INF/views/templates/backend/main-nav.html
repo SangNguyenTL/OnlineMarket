@@ -40,6 +40,25 @@
 					<li th:class="${path} == 'product-category-add' ? 'active'"><a th:href="@{/admin/product-category/add}"><span class="nav-text">Add new</span></a></li>
 				</ul>
                </li>
+               
+               <li th:class="${postCategoryPage} ? 'active'" >
+                  <a>
+                  	<span class="nav-caret">
+                      <i class="fa fa-caret-down"></i>
+                    </span>
+                    <span class="nav-icon">
+                      <i class="material-icons">&#xe5c3;
+                        <span th:attr="ui-include='\''+ @{/assets/backend/assets/images/i_1.svg} +'\''"></span>
+                      </i>
+                    </span>
+                    <span class="nav-text">Post Category</span>
+                  </a>
+                  <ul class="nav-sub nav-mega">
+					<li th:class="${path} == 'postCategory' ? 'active'"><a th:href="@{/admin/post-category}"><span class="nav-text">List</span></a></li>
+					<li th:class="${path} == 'postCategory-add' ? 'active'"><a th:href="@{/admin/post-category/add}"><span class="nav-text">Add new</span></a></li>
+				</ul>
+               </li>
+               
                <li th:class="${brandPage} ? 'active'" >
                   <a>
                   	<span class="nav-caret">

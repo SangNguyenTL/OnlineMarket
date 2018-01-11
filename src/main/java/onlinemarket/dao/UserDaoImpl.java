@@ -4,6 +4,7 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
+import onlinemarket.model.Event;
 import onlinemarket.model.User;
 
 @Repository("userDao")
@@ -20,6 +21,14 @@ public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
 			return null;
 		}
 		
+	}
+
+	@Override
+	public User getByEvent(Event event) {
+		Criteria criteria = createEntityCriteria();
+		criteria.createAlias("events", "eventsAlias");
+		criteria.add(Restrictions.eq("eventsAlias.id", event.getId()));
+		return (User) criteria.uniqueResult();
 	}
 
 }

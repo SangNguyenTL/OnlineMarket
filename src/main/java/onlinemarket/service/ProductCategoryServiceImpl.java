@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import onlinemarket.dao.ProductCategoryDao;
 import onlinemarket.form.filter.FilterForm;
+import onlinemarket.model.Event;
 import onlinemarket.model.ProductCategory;
 import onlinemarket.result.ResultObject;
 
@@ -56,6 +57,11 @@ public class ProductCategoryServiceImpl implements ProductCategoryService{
 	@Override
 	public ResultObject<ProductCategory> list(FilterForm filterForm) {
 		return productCategoryDao.list(filterForm);
+	}
+
+	@Override
+	public ProductCategory getByEvent(Event event) {
+		return productCategoryDao.getByEvent(event);
 	}
 
 }

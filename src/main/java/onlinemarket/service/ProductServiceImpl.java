@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import onlinemarket.dao.ProductDao;
 import onlinemarket.model.Brand;
+import onlinemarket.model.Event;
 import onlinemarket.model.Product;
 import onlinemarket.model.ProductCategory;
 
@@ -61,6 +62,11 @@ public class ProductServiceImpl implements ProductService{
 	@Override
 	public Product getByProductCategory(ProductCategory productCategory) {
 		return productDao.getByProductCategory(productCategory);
+	}
+
+	@Override
+	public Product getByEvent(Event event) {
+		return productDao.getByEvent(event);
 	}
 
 }

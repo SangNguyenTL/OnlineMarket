@@ -132,9 +132,9 @@ public class ProductCategoryManagerController extends MainController{
 		if (productCategory == null)
 			throw new NoHandlerFoundException(null, null, null);
 
-		model.put("pageTitle", "Update productCategory");
+		model.put("pageTitle", "Update Product Category");
 		model.put("subPageTitle", "Update");
-		model.put("description", "Update information of productCategory");
+		model.put("description", "Update information of Product Category");
 		model.put("path", "product-category-add");
 		model.put("action", "update");
 		model.put("pathAction", "/admin/product-category/update/"+id);

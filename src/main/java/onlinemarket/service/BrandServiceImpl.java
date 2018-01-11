@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import onlinemarket.dao.BrandDao;
 import onlinemarket.form.filter.FilterForm;
 import onlinemarket.model.Brand;
+import onlinemarket.model.Event;
 import onlinemarket.result.ResultObject;
 
 @Service("brandService")
@@ -77,6 +78,11 @@ public class BrandServiceImpl implements BrandService{
 	@Override
 	public ResultObject<Brand> list(FilterForm filterForm) {
 		return brandDao.list(filterForm);
+	}
+
+	@Override
+	public Brand getByEvent(Event event) {
+		return brandDao.getByEvent(event);
 	}
 
 }
