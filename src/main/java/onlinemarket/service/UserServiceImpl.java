@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import onlinemarket.dao.RoleDao;
 import onlinemarket.dao.UserDao;
 import onlinemarket.model.Address;
+import onlinemarket.model.Event;
 import onlinemarket.model.Role;
 import onlinemarket.model.State;
 import onlinemarket.model.User;
@@ -97,6 +98,11 @@ public class UserServiceImpl implements UserService{
 	public User getByDeclaration(String key, String value) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public User getByEvent(Event event) {
+		return userDao.getByEvent(event);
 	}
 
 }

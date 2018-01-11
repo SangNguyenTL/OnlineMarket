@@ -5,18 +5,17 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import onlinemarket.model.Event;
-import onlinemarket.model.ProductCategory;
+import onlinemarket.model.Order;
 
-@Repository("productCategoryDao")
-public class ProductCategoryDaoImpl extends AbstractDao<Integer, ProductCategory> implements ProductCategoryDao{
+@Repository("orderDao")
+public class OrderDaoImpl extends AbstractDao<Integer, Order> implements OrderDao{
 
 	@Override
-	public ProductCategory getByEvent(Event event) {
+	public Order getByEvent(Event event) {
 		Criteria criteria = createEntityCriteria();
 		criteria.createAlias("events", "eventsAlias");
 		criteria.add(Restrictions.eq("eventsAlias.id", event.getId()));
-		return (ProductCategory) criteria.uniqueResult();
+		return (Order) criteria.uniqueResult();
 	}
 
-	
 }
