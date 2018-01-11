@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import onlinemarket.dao.EventDao;
+import onlinemarket.form.filter.FilterForm;
 import onlinemarket.model.Brand;
 import onlinemarket.model.Event;
 import onlinemarket.model.ProductCategory;
+import onlinemarket.result.ResultObject;
 
 @Service("eventService")
 @Transactional
@@ -61,6 +63,11 @@ public class EventServiceImpl implements EventService{
 	@Override
 	public Event getByProductCategory(ProductCategory productCategoryCheck) {
 		return eventDao.getByProductCategory(productCategoryCheck);
+	}
+
+	@Override
+	public ResultObject<Event> list(FilterForm filterForm) {
+		return eventDao.list(filterForm);
 	}
 
 }

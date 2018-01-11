@@ -1,6 +1,7 @@
 package onlinemarket.service.config;
 
 
+import onlinemarket.form.config.ApiConfig;
 import onlinemarket.form.config.ContactConfig;
 import onlinemarket.form.config.EmailSystemConfig;
 import onlinemarket.form.config.GeneralConfig;
@@ -27,6 +28,8 @@ public interface ConfigurationService extends InterfaceService<Integer, Configur
 	
 	GeneralConfig getGeneral();
 	
+	ApiConfig getApiConfig();
+	
 	void saveGeneralConfig(GeneralConfig generalConfig);
 	
 	void saveContactConfig(ContactConfig contactConfig);
@@ -38,4 +41,6 @@ public interface ConfigurationService extends InterfaceService<Integer, Configur
 	void saveSocialConfig(SocialConfig socialConfig);
 	
 	void saveUploadconfig(UploadConfig uploadConfig);
+	
+	void saveApiConfig(ApiConfig apiConfig);
 }

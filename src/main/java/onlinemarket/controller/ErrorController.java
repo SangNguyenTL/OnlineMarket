@@ -3,6 +3,7 @@ package onlinemarket.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.hibernate.QueryException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -56,7 +57,7 @@ public class ErrorController{
         return errorPage;
     }
  
-	@ExceptionHandler(MissingServletRequestParameterException.class)
+	@ExceptionHandler(value = {MissingServletRequestParameterException.class, QueryException.class})
 	@ResponseStatus(value=HttpStatus.BAD_REQUEST)
     public ModelAndView missingServletRequestParameterException(HttpServletRequest httpRequest, Exception ex) {
 
