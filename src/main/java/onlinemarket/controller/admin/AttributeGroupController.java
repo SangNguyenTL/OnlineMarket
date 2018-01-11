@@ -124,7 +124,7 @@ public class AttributeGroupController extends MainController{
 		
 		if (!result.hasErrors()) {
 			attributeGroup.setProductCategory(productCategory);
-			redirectAttributes.addAttribute("success", "");
+			redirectAttributes.addFlashAttribute("success", "");
 			attributeGroupService.save(attributeGroup);
 			return "redirect:/admin/product-category/"+id+"/attribute-group";
 		}
@@ -232,7 +232,7 @@ public class AttributeGroupController extends MainController{
 			if(attribute != null)
 				redirectAttributes.addAttribute("error", "The attribur group has already had attribute!");
 			else {
-				redirectAttributes.addAttribute("success", "success");
+				redirectAttributes.addFlashAttribute("success", "success");
 				attributeGroupService.delete(attributeGroup);
 			}
 		}
