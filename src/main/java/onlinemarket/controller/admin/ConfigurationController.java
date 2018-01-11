@@ -77,7 +77,10 @@ public class ConfigurationController extends MainController{
 			configurationService.saveGeneralConfig(generalConfig);
 			return "redirect:/admin/config?success";
 		}
+<<<<<<< HEAD
 		
+=======
+>>>>>>> 695a1bcb56601d6c536c34ea23ee8713c80ae785
 		return "backend/config";
 	}
 	
