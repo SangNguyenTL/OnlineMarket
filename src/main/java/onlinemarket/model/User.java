@@ -67,7 +67,8 @@ public class User implements java.io.Serializable {
 	private Set<Post> posts = new HashSet<Post>(0);
 	private Set<Product> products = new HashSet<Product>(0);
 	private Set<Role> roles = new HashSet<Role>(0);
-
+	private Set<Event> events = new HashSet<Event>(0);
+	
 	public User() {
 	}
 
@@ -333,6 +334,16 @@ public class User implements java.io.Serializable {
 
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
+	}
+
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "publisher")
+	public Set<Event> getEvents() {
+		return events;
+	}
+
+	public void setEvents(Set<Event> events) {
+		this.events = events;
 	}
 
 }

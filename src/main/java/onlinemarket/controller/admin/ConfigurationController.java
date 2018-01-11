@@ -72,8 +72,9 @@ public class ConfigurationController extends MainController{
 		model.put("description", "Set some of the basic properties of the application.");
 		if(!result.hasErrors()) {
 			configurationService.saveGeneralConfig(generalConfig);
+			return "redirect:/admin/config?success";
 		}
-		return "redirect:/admin/config?success";
+		return "backend/config";
 	}
 	
 	@RequestMapping(value = { "upload" }, method = RequestMethod.GET)
