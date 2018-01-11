@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -108,8 +107,8 @@ public class Event implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "publisher_id", nullable = false, updatable = false, insertable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "publisher_id", nullable = false)
 	public User getPublisher() {
 		return publisher;
 	}

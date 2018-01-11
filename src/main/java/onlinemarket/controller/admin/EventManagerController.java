@@ -64,7 +64,6 @@ public class EventManagerController extends MainController{
 		if (!result.hasErrors()) {
 			event.setPublisher(currentUser);
 			event.setCreateDate(new Date());
-			event.setUpdateDate(new Date());
 			eventService.save(event);
 			redirectAttributes.addFlashAttribute("success", "");
 			return "redirect:/admin/event";
