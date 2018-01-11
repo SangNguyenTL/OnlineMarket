@@ -25,36 +25,32 @@ public class ProvinceServiceImpl implements ProvinceService{
 
 	@Override
 	public void save(Province entity) {
-		
+		provinceDao.save(entity);
 	}
 
 	@Override
 	public void update(Province entity) {
-		// TODO Auto-generated method stub
-		
+		provinceDao.update(entity);
 	}
 
 	@Override
 	public void delete(Province entity) {
-		// TODO Auto-generated method stub
-		
+		provinceDao.delete(entity);
 	}
 
 	@Override
-	public Province getByKey(Byte key) {
+	public Province getByKey(Integer key) {
 		return provinceDao.getByKey(key);
 	}
 
 	@Override
 	public List<Province> list(Integer offset, Integer maxResults) {
-		// TODO Auto-generated method stub
-		return null;
+		return provinceDao.list(offset, maxResults);
 	}
 
 	@Override
 	public Province getByDeclaration(String key, String value) {
-		// TODO Auto-generated method stub
-		return null;
+		return provinceDao.getByDeclaration(key, value);
 	}
 
 	@Override

@@ -35,7 +35,7 @@ public class OrderHeadElementProcessor extends AbstractElementTagProcessor {
 
 	private String uri;
 
-	private FilterForm object;
+	private FilterForm filterForm;
 
 	private TreeMap<String, Object> attributes;
 
@@ -53,13 +53,16 @@ public class OrderHeadElementProcessor extends AbstractElementTagProcessor {
 		attributes.put("currentPage", 1);
 		attributes.put("name", "");
 		attributes.put("uri", "");
-		attributes.put("object", new FilterForm());
 	}
 
 	
 	@Override
 	protected void doProcess(ITemplateContext context, IProcessableElementTag tag,
 			IElementTagStructureHandler structureHandler) {
+		
+		filterForm = (FilterForm) context.getVariable("filterForm");
+		
+		if(filterForm == null) filterForm = new FilterForm();
 		
 		processAttributes(tag);
 
@@ -85,9 +88,9 @@ public class OrderHeadElementProcessor extends AbstractElementTagProcessor {
 		Map<String, String> map = new HashMap<>();
 		map.put("href", uri + "/page/" + page + buildQuery());
 		String classArrow = "fa fa-arrow-up pull-right";
-		if (StringUtils.equals(object.getOrderBy(), orderBy)) {
-			map.put("class", "text-infor");
-			if (StringUtils.equalsIgnoreCase(object.getOrder(), "asc"))
+		if (StringUtils.equals(filterForm.getOrderBy(), orderBy)) {
+			map.put("class", "text-info");
+			if (StringUtils.equalsIgnoreCase(filterForm.getOrder(), "asc"))
 				classArrow = "fa fa-arrow-down pull-right";
 		}
 		model.add(modelFactory.createOpenElementTag("th"));
@@ -103,12 +106,12 @@ public class OrderHeadElementProcessor extends AbstractElementTagProcessor {
 	private String buildQuery() {
 		StringBuilder sb = new StringBuilder();
     	    	
-		for (Field field : object.getClass().getDeclaredFields()) {
+		for (Field field : filterForm.getClass().getDeclaredFields()) {
 			field.setAccessible(true);
 			try {
 				if(StringUtils.equals(field.getName(), "currentPage")) continue;
 				
-				Object value = field.get(object);
+				Object value = field.get(filterForm);
 
 				if (sb.length() > 0) {
 					sb.append('&');
@@ -120,7 +123,7 @@ public class OrderHeadElementProcessor extends AbstractElementTagProcessor {
 				
 				if(!(value instanceof Integer) && StringUtils.isBlank((String) value)) continue;
 				
-				if (StringUtils.equals(object.getOrderBy(), orderBy) && StringUtils.equals(field.getName(), "order")) {
+				if (StringUtils.equals(filterForm.getOrderBy(), orderBy) && StringUtils.equals(field.getName(), "order")) {
 					value = ((String) value).toLowerCase().equals("asc") ? "desc" : "asc";
 				}
 				
@@ -154,8 +157,6 @@ public class OrderHeadElementProcessor extends AbstractElementTagProcessor {
 				}
 			} else if(value instanceof String ){
 				entry.setValue(HtmlEscape.escapeHtml5(((String) str).trim()));
-			}else if(value instanceof FilterForm){
-				entry.setValue(value);
 			}
 			try {
 				

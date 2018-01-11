@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import onlinemarket.dao.AddressDao;
 import onlinemarket.model.Address;
+import onlinemarket.model.Province;
 import onlinemarket.model.User;
 
 @Service("addressService")
@@ -60,8 +61,12 @@ public class AddressServiceImpl implements AddressService {
 
 	@Override
 	public Address getByDeclaration(String key, String value) {
-		// TODO Auto-generated method stub
-		return null;
+		return addressDao.getByDeclaration(key, value);
+	}
+
+	@Override
+	public Address getByProvince(Province province) {
+		return addressDao.getByProvince(province);
 	}
 
 }

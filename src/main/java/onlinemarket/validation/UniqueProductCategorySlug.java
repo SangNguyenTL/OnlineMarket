@@ -12,8 +12,8 @@ import javax.validation.Constraint;
 @Documented
 @Retention(RUNTIME)
 @Target({ ElementType.TYPE })
-@Constraint(validatedBy = UniqueBrandSlugValidator.class)
-public @interface UniqueBrandSlug {
+@Constraint(validatedBy = UniqueProductCategorySlugValidator.class)
+public @interface UniqueProductCategorySlug {
 	
 	String message() default "{onlinemarket.validation.UniqueBrandSlug.message}";
 

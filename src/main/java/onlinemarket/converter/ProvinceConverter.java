@@ -16,7 +16,8 @@ public class ProvinceConverter implements Converter<Object, Province>{
 	@Override
 	public Province convert(Object source) {
 		try {
-			Byte id = Byte.parseByte((String)source);
+			if(source instanceof Province) return (Province) source;
+			Integer id = Integer.parseInt(String.valueOf(source));
 			return proviceService.getByKey(id);
 		} catch (NumberFormatException e) {
 			return null;

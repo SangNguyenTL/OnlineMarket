@@ -2,7 +2,6 @@ package onlinemarket.controller.admin;
 
 import java.util.Date;
 
-import javax.annotation.PostConstruct;
 import javax.validation.groups.Default;
 
 import org.apache.commons.lang3.StringUtils;
@@ -29,7 +28,6 @@ import onlinemarket.result.ResultObject;
 import onlinemarket.service.BrandService;
 import onlinemarket.service.EventService;
 import onlinemarket.service.ProductService;
-import onlinemarket.util.Slugify;
 
 @Controller
 @RequestMapping("/admin/brand")
@@ -44,16 +42,10 @@ public class BrandManagerController extends MainController {
 	@Autowired
 	EventService eventService;
 	
-	Slugify slg;
-	
-	@PostConstruct
-	public void init() {
-		this.slg = new Slugify().withTransliterator(true).withLowerCase(true);
-	}
-	
 	@ModelAttribute
 	public void populateFilterForm(ModelMap model) {
 		model.put("filterForm", new FilterForm());
+		model.put("brandPage", true);
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
@@ -65,7 +57,6 @@ public class BrandManagerController extends MainController {
 		
 		model.put("result", result);
 		model.put("pageTitle", "Brand Manager");
-		model.put("brandPage", true);
 		model.put("path", "brand");
 		model.put("filterForm", filterForm);
 		
@@ -109,21 +100,18 @@ public class BrandManagerController extends MainController {
 		model.put("result", result);
 		model.put("page", page);
 		model.put("pageTitle", "Brand Manager");
-		model.put("brandPage", true);
 		model.put("path", "brand");
 		model.put("filterForm", filterForm);
 		
 		return "backend/brand";
 	}
 
-	
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
 	public String addPage(ModelMap model) {
 		
 		model.put("subPageTitle", "Add");
 		model.put("description", "Add information of brand");
 		model.put("pageTitle", "Add new brand");
-		model.put("productPage", true);
 		model.put("path", "brand-add");
 		model.put("action", "add");
 		model.put("pathAction", "/admin/brand/add");
@@ -134,7 +122,7 @@ public class BrandManagerController extends MainController {
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public String processAddPage(@ModelAttribute("brand") @Validated(value = { Default.class,
-			AdvancedValidation.CheckSlug.class }) Brand brand, BindingResult result, ModelMap model) {
+			AdvancedValidation.CheckSlug.class }) Brand brand, BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
 		
 		String slug = brand.getSlug();
 		if (StringUtils.isNotBlank(slug)) {
@@ -142,13 +130,13 @@ public class BrandManagerController extends MainController {
 		}
 		
 		if (!result.hasErrors()) {
+			redirectAttributes.addAttribute("success", "");
 			brandService.save(brand);
 			return "redirect:/admin/brand";
 		}
 		model.put("subPageTitle", "Add");
 		model.put("description", "Add information of brand");
 		model.put("pageTitle", "Add new brand");
-		model.put("productPage", true);
 		model.put("path", "brand-add");
 		model.put("action", "add");
 		model.put("pathAction", "/admin/brand/add");
@@ -167,7 +155,6 @@ public class BrandManagerController extends MainController {
 		model.put("pageTitle", "Update brand");
 		model.put("subPageTitle", "Update");
 		model.put("description", "Update information of brand");
-		model.put("productPage", true);
 		model.put("path", "brand-add");
 		model.put("action", "update");
 		model.put("pathAction", "/admin/brand/update/"+id);
@@ -182,7 +169,7 @@ public class BrandManagerController extends MainController {
 			@ModelAttribute("brand") @Validated(value = { Default.class,
 					AdvancedValidation.CheckSlug.class }) Brand brand,
 			@PathVariable("id") Integer id,
-			BindingResult result, ModelMap model) throws NoHandlerFoundException {
+			BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) throws NoHandlerFoundException {
 		
 			Brand brandCheck = brandService.getByKey(id);
 			if (brandCheck == null)
@@ -196,13 +183,13 @@ public class BrandManagerController extends MainController {
 			if (!result.hasErrors()) {
 				brand.setUpdateDate(new Date());
 				brandService.update(brand);
-				return "redirect:/brand/update/"+id+"?success";
+				redirectAttributes.addAttribute("success", "");
+				return "redirect:/brand/update/"+id;
 			}
 			
 			model.put("pageTitle", "Update brand");
 			model.put("subPageTitle", "Update");
 			model.put("description", "Update information of brand");
-			model.put("productPage", true);
 			model.put("path", "brand-add");
 			model.put("action", "update");
 			model.put("pathAction", "/admin/brand/update/"+id);

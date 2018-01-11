@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import onlinemarket.dao.EventDao;
 import onlinemarket.model.Brand;
 import onlinemarket.model.Event;
+import onlinemarket.model.ProductCategory;
 
 @Service("eventService")
 @Transactional
@@ -55,6 +56,11 @@ public class EventServiceImpl implements EventService{
 	@Override
 	public Event getByBrand(Brand brand) {
 		return eventDao.getByBrand(brand);
+	}
+
+	@Override
+	public Event getByProductCategory(ProductCategory productCategoryCheck) {
+		return eventDao.getByProductCategory(productCategoryCheck);
 	}
 
 }

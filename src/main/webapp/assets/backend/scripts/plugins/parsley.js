@@ -5,7 +5,7 @@
     if(uniqueSlugElement.length > 0){
         var data = uniqueSlugElement.data();
         if(data.parsleyTarget){
-            var target = $("[data-parsley-id="+data.parsleyTarget+"]");
+            var target = $("[name="+data.parsleyTarget+"]");
             target.on("change",function (){
                 var value = slug($(this).val(), {lower: true});
                 uniqueSlugElement.val(value);

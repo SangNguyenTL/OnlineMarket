@@ -30,7 +30,8 @@ public class PaginationElementTagProcessor extends AbstractElementTagProcessor{
     private String previous;
     private String next;
     
-    private FilterForm object;
+    
+    private FilterForm filterForm;
     
     private TreeMap<String, Object> attributes;
     
@@ -50,7 +51,6 @@ public class PaginationElementTagProcessor extends AbstractElementTagProcessor{
 		attributes.put("displayedPages", 7);
 		attributes.put("previous", "Previous");
 		attributes.put("next", "Next");
-		attributes.put("object", new FilterForm());
 	}
 
 	@Override
@@ -58,6 +58,10 @@ public class PaginationElementTagProcessor extends AbstractElementTagProcessor{
 			ITemplateContext context,
 			IProcessableElementTag tag,
 			IElementTagStructureHandler structureHandler) {
+		
+		filterForm = (FilterForm) context.getVariable("filterForm");
+		
+		if(filterForm == null) filterForm = new FilterForm();
 		
 		processAttributes(tag);
         
@@ -131,12 +135,12 @@ public class PaginationElementTagProcessor extends AbstractElementTagProcessor{
     private String buildQuery() {
     	StringBuilder sb = new StringBuilder();    	
 
-    	for(Field field : object.getClass().getDeclaredFields()) {
+    	for(Field field : filterForm.getClass().getDeclaredFields()) {
     		field.setAccessible(true);
     		try {
     			if(StringUtils.equals(field.getName(), "currentPage")) continue;
     		
-    			Object value = field.get(object);
+    			Object value = field.get(filterForm);
     		
     			if(!(value instanceof Integer) && StringUtils.isBlank((String) value)) continue;
 	    		
@@ -172,8 +176,6 @@ public class PaginationElementTagProcessor extends AbstractElementTagProcessor{
 				}
 			} else if(value instanceof String ){
 				entry.setValue(HtmlEscape.escapeHtml5(((String) str).trim()));
-			}else if(value instanceof FilterForm){
-				entry.setValue(value);
 			}
 			try {
 				

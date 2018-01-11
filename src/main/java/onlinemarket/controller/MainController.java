@@ -1,5 +1,7 @@
 package onlinemarket.controller;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -8,12 +10,17 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 import onlinemarket.model.User;
 import onlinemarket.service.UserService;
 import onlinemarket.service.config.ConfigurationService;
+import onlinemarket.util.Slugify;
 
-public class MainController {
+public abstract class MainController {
+	
+	@Autowired
+    private RequestMappingHandlerAdapter requestMappingHandlerAdapter;
 	
 	@Autowired
 	protected ConfigurationService configurationService;
@@ -22,7 +29,9 @@ public class MainController {
 	protected UserService userService;
 	
 	protected User currentUser;
-
+	
+	protected Slugify slg;
+	
 	@ModelAttribute
 	public void populateMetaPage(ModelMap model) {
 		model.put("general", configurationService.getGeneral());
@@ -49,6 +58,12 @@ public class MainController {
         } 
         return currentUser;
 	}
+	
+    @PostConstruct
+    public void init() {
+       slg = new Slugify().withTransliterator(true).withLowerCase(true);
+       requestMappingHandlerAdapter.setIgnoreDefaultModelOnRedirect(true);
+    }
 	
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {

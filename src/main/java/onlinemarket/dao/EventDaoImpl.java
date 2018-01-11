@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import onlinemarket.model.Brand;
 import onlinemarket.model.Event;
+import onlinemarket.model.ProductCategory;
 
 @Repository("eventDao")
 public class EventDaoImpl extends AbstractDao<Integer, Event> implements EventDao {
@@ -15,6 +16,14 @@ public class EventDaoImpl extends AbstractDao<Integer, Event> implements EventDa
 		Criteria criteria = createEntityCriteria();
 		criteria.createAlias("brands", "brandsAlias");
 		criteria.add(Restrictions.eq("brandsAlias.id", brand.getId()));
+		return (Event) criteria.uniqueResult();
+	}
+
+	@Override
+	public Event getByProductCategory(ProductCategory productCategoryCheck) {
+		Criteria criteria = createEntityCriteria();
+		criteria.createAlias("productCategories", "productCategoriesAlias");
+		criteria.add(Restrictions.eq("productCategoriesAlias.id", productCategoryCheck.getId()));
 		return (Event) criteria.uniqueResult();
 	}
 	

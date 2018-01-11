@@ -13,7 +13,9 @@ import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
 
 /**
@@ -27,7 +29,7 @@ public class Province implements java.io.Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Byte id;
+	private Integer id;
 	private String name;
 	private long shippingFee;
 	private Set<Address> addresses = new HashSet<Address>(0);
@@ -50,15 +52,17 @@ public class Province implements java.io.Serializable {
 	@GeneratedValue(strategy = IDENTITY)
 
 	@Column(name = "_id", unique = true, nullable = false)
-	public Byte getId() {
+	public Integer getId() {
 		return this.id;
 	}
 
-	public void setId(Byte id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
 	@Column(name = "name", nullable = false)
+	@Size(min = 3, max = 32)
+	@NotEmpty
 	public String getName() {
 		return this.name;
 	}

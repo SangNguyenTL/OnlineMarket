@@ -13,10 +13,10 @@
     <div class="box-header">
       <h2 th:text="${pageTitle}"></h2>
     </div>
-	<div class="alert alert-success m-x-lg" th:if="${param.success} != null">
+	<div class="alert alert-success m-x-lg" th:if="${success} != null">
 		<strong>Congratulation!</strong> Process completed.
 	</div>
-	<div class="alert alert-danger m-x-lg" th:if="${param.error} != null">
+	<div class="alert alert-danger m-x-lg" th:if="${error} != null">
 		<strong>Obbs!</strong> [[${error}]].
 	</div>
 	<div class="row p-a">
@@ -29,10 +29,10 @@
 	        <div class="input-group input-group-sm">
 	          <input class="form-control" placeholder="Search" type="text" th:field="*{search}">
 	          <span class="input-group-btn">
-	            <button class="btn b-a white" type="button">Go!</button>
+	            <button class="btn b-a white" type="submit">Go!</button>
 	          </span>
 	        </div>
-    		<input type="hidden" th:field="*{searchBy}" th:value="name"/>
+    		<input type="hidden" th:field="*{searchBy}" th:value="*{searchBy} != '' ? *{searchBy} : 'name'"/>
     		<input type="hidden" th:field="*{size}" />
     		<input type="hidden" th:field="*{order}" />
     		<input type="hidden" th:field="*{orderBy}" />
@@ -43,9 +43,9 @@
       	<table class="table table-hover b-t">
       		<thead>
       			<tr>
-      				<filter:th filter:object="${filterForm}" order="asc" orderBy="id" filter:uri="@{/admin/brand}" filter:currentPage="${page}" name="#">#</filter:th>
+      				<filter:th order="asc" orderBy="id" filter:uri="@{/admin/brand}" filter:currentPage="${page}" name="#">#</filter:th>
       				<th>Avatar</th>
-      				<filter:th filter:object="${filterForm}" order="asc" orderBy="name" filter:uri="@{/admin/brand}" filter:currentPage="${page}" name="Name">Name</filter:th>
+      				<filter:th order="asc" orderBy="name" filter:uri="@{/admin/brand}" filter:currentPage="${page}" name="Name">Name</filter:th>
       				<th>Action</th>
       			</tr>
       		</thead>
@@ -84,7 +84,7 @@
 		            <option value="20" th:if="${result.totalPages * filterForm.size} > 10">20 rows</option>
 		            <option value="50" th:if="${result.totalPages * filterForm.size} > 50">50 rows</option>
           		</select>
-	          	<button class="btn btn-sm white">Apply</button>     
+	          	<button type="submit" class="btn btn-sm white">Apply</button>  
 	    	</form>
              
 	        </div>
