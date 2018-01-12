@@ -33,7 +33,7 @@
   <script type="text/javascript" th:inline="javascript">
   /*<![CDATA[*/
 	var PATH = [[@{/}]],
-	googleApiKey  = "AIzaSyDwgEWMLktEQnK7Cn8SBMDTV6jn1I1G3fc";
+	googleApiKey  = [[${api.apiGoogle}]];
 
   /*]]>*/
   </script>
@@ -135,7 +135,7 @@
               <!-- link and dropdown -->
               <ul class="nav navbar-nav">
                 <li class="nav-item dropdown">
-                  <a class="nav-link" href="@{${pathAdd}}">
+                  <a class="nav-link" th:href="@{${pathAdd}}">
                     <i class="fa fa-fw fa-plus text-muted"></i>
                     <span>New</span>
                   </a>

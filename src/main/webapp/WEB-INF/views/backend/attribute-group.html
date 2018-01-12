@@ -11,7 +11,7 @@
 <div class="padding">
   <div class="box">
     <div class="box-header">
-      <h2><a th:href="${relativePath}" th:text="${pageTitle}"></a></h2>
+       <h2><a th:href="@{${relativePath}}" th:text="${pageTitle}"></a></h2>
     </div>
 	<div class="alert alert-success m-x-lg" th:if="${success} != null">
 		<strong>Congratulation!</strong> Process completed.

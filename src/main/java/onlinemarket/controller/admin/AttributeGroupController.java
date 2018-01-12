@@ -106,7 +106,7 @@ public class AttributeGroupController extends MainController{
 		}
 		
 		model.put("subPageTitle", "Add for "+ productCategory.getName());
-		model.put("description", "Add attribute group for product category");
+		model.put("description", "Add attribute group for "+ productCategory.getName());
 		model.put("pageTitle", "Add new attribute group");
 		model.put("action", "add");
 		model.put("pathAction", buildRelativePath(id)+"/add");
@@ -136,7 +136,7 @@ public class AttributeGroupController extends MainController{
 		}
 		
 		model.put("subPageTitle", "Add for "+ productCategory.getName());
-		model.put("description", "Add attribute group for product category");
+		model.put("description", "Add attribute group for "+ productCategory.getName());
 		model.put("pageTitle", "Add new attribute group");
 		model.put("provincePage", true);
 		model.put("path", "product-category");
@@ -167,7 +167,7 @@ public class AttributeGroupController extends MainController{
 		}
 		
 		model.put("subPageTitle", "Update for "+ productCategory.getName());
-		model.put("description", "Update attribute group for product category");
+		model.put("description", "Update attribute group for"+ productCategory.getName());
 		model.put("pageTitle", "Update attribute group");
 		model.put("action", "update");
 		model.put("pathAction", buildRelativePath(id)+"/update/"+idAttr);
@@ -206,7 +206,7 @@ public class AttributeGroupController extends MainController{
 			}
 			
 			model.put("subPageTitle", "Update for "+ productCategory.getName());
-			model.put("description", "Update attribute group for product category");
+			model.put("description", "Update attribute group for"+ productCategory.getName());
 			model.put("pageTitle", "Update attribute group");
 			model.put("action", "update");
 			model.put("pathAction", buildRelativePath(id)+"/update/"+idAttr);

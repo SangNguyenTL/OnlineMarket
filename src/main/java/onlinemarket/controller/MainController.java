@@ -35,6 +35,7 @@ public abstract class MainController {
 	@ModelAttribute
 	public void populateMetaPage(ModelMap model) {
 		model.put("general", configurationService.getGeneral());
+		model.put("api", configurationService.getApiConfig());
 		model.put("social", configurationService.getSocial());
 		model.put("logo", configurationService.getLogo());
 		model.put("contact", configurationService.getContag());

@@ -38,7 +38,7 @@
 								<div class="form-group row">
 									<label class="col-sm-3 form-control-label">Priority</label>
 									<div class="col-sm-9">
-										<input th:errorclass="parsley-error" class="form-control" type="text" th:field="*{priority}" required data-parsley-length="[6, 128]" data-parsley-id="2"/>
+										<input th:errorclass="parsley-error" class="form-control" type="text" th:field="*{priority}" data-parsley-type="digits" required data-parsley-range="[0, 1000]" data-parsley-id="2"/>
 										<ul class="parsley-errors-list filled" id="parsley-id-2" th:if="${#fields.hasErrors('priority')}"><li th:errors="*{priority}"> </li></ul>
 									</div>
 								</div>

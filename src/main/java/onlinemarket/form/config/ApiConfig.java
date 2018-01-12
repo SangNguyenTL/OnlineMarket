@@ -5,14 +5,14 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotEmpty;
 
 public class ApiConfig {
-	
+
 	@NotEmpty
 	@Size(max = 100)
 	private String apiFacebook;
 
 	@NotEmpty
 	@Size(max = 100)
-	private String apiGoogle;
+	private String apiGoogle = "AIzaSyDwgEWMLktEQnK7Cn8SBMDTV6jn1I1G3fc";
 
 	public String getApiFacebook() {
 		return apiFacebook;
@@ -29,5 +29,5 @@ public class ApiConfig {
 	public void setApiGoogle(String apiGoogle) {
 		this.apiGoogle = apiGoogle;
 	}
-	
+
 }
