@@ -51,15 +51,19 @@ public class StorageServiceImpl implements StorageService{
 
 	@Override
 	public void delete(String path) {
-		File file = new File(context.getRealPath(path));
+		if(path == null) return;
+		path = context.getRealPath("")+path.replace("/", "\\");
+		File file = new File(path);
 		if(file.exists()) file.delete();
 	}
 	
 	public boolean createFolder(String path) {
-		File folder = new File(context.getRealPath(path));
+		if(path == null) return false;
+		path = context.getRealPath("")+path.replace("/", "\\");
+		File folder = new File(path);
 		boolean flag = true;
 		if(!folder.exists())
-			 flag = new File(context.getRealPath(path)).mkdirs();
+			 flag = new File(path).mkdirs();
 		return flag;
 	}
 }
