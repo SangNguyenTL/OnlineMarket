@@ -70,7 +70,7 @@ public class AttributeGroupDaoImpl extends AbstractDao<Integer, AttributeGroup> 
 		
 		Criteria criteria = createEntityCriteria();
 		criteria.add(Restrictions.eq("productCategory", productCategory));
-		criteria.setFetchMode("attributese", FetchMode.JOIN);
+		criteria.setFetchMode("attributes", FetchMode.JOIN);
 		return criteria.list();
 		
 	}

@@ -145,19 +145,23 @@
 								<div class="form-group row">
 									<label class="col-sm-2 form-control-label">State</label>
 									<div class="col-sm-4">
-										<select th:field="*{status}">
+										<select th:field="*{status}" class="form-control" data-parsley-id="4">
 											<option value="">Please choice</option>
 											<option
 												th:each="state : ${T(onlinemarket.model.NumState).values()}"
 												th:value="${state.id}" th:text="${state.name}"></option>
 										</select>
+										<ul class="parsley-errors-list filled" id="parsley-id-4"
+											th:if="${#fields.hasErrors('status')}">
+											<li th:errors="*{status}"></li>
+										</ul>
 									</div>
 									<label class="col-sm-2 form-control-label">Value</label>
 									<div class="col-sm-4">
 										<input th:errorclass="parsley-error" class="form-control"
 											type="text" th:field="*{value}" 
-											data-parsley-length="[1, 100000]" data-parsley-id="name" />
-										<ul class="parsley-errors-list filled" id="parsley-id-name"
+											data-parsley-length="[1, 100000]" data-parsley-id="5" />
+										<ul class="parsley-errors-list filled" id="parsley-id-5"
 											th:if="${#fields.hasErrors('value')}">
 											<li th:errors="*{value}"></li>
 										</ul>
@@ -168,9 +172,9 @@
 									<div class="col-sm-10">
 										<textarea th:errorclass="parsley-error" class="form-control"
 											th:field="*{content}"
-											data-parsley-length="[50, 1000]" data-parsley-id="content"></textarea>
+											data-parsley-length="[50, 1000]" data-parsley-id="6"></textarea>
 										<ul class="parsley-errors-list filled"
-											id="parsley-id-description"
+											id="parsley-id-6"
 											th:if="${#fields.hasErrors('content')}">
 											<li th:errors="*{content}"></li>
 										</ul>

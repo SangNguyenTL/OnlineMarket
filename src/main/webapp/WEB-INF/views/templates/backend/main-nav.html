@@ -54,9 +54,9 @@
                   </a>
                   <ul class="nav-sub nav-mega">
 					<li th:class="${path} == 'product' ? 'active'"><a th:href="@{/admin/product}"><span class="nav-text">List</span></a></li>
-					<li><span class="nav-text">Add new</span></li>
+					<li><a href="#"><i class="fa-bolt fa"></i> <span class="nav-text">Add new</span></a></li>
 					<li th:each="category : ${productCategoryList}"
-						th:class="${path} == ${category.slug}+'-add'">
+						th:class="${path} == ${category.slug}+'-add' ? 'active'">
 						<a th:href="@{'/admin/product-category/'+${category.id}+'/product/add'}"><span class="nav-text"  th:text="${category.name}"></span></a></li>
 				</ul>
                </li>

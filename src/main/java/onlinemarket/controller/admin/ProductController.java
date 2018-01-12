@@ -67,6 +67,7 @@ public class ProductController extends MainController{
 			return "redirect:/admin/product-category";
 		}
 		
+		model.put("attributeGroupList", attributeGroupService.listWithAttributeByProductCategory(productCategory));
 		model.put("pageTitle", "Product manager for "+ productCategory.getName());
 		model.put("result", productService.listByProductCategory(productCategory, filterForm));
 		model.put("filterForm", filterForm);
