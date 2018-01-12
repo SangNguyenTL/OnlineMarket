@@ -40,7 +40,7 @@ public class Product implements java.io.Serializable {
 	private String description;
 	private long price;
 	private int quantity;
-	private byte state;
+	private Byte state;
 	private Date createDate = new Date();
 	private Date updateDate;
 	private String featureImage;
@@ -57,7 +57,7 @@ public class Product implements java.io.Serializable {
 	}
 
 	public Product(Brand brand, ProductCategory productCategory, User user, String name, String slug, long price,
-			int quantity, byte state, Date createDate, String featureImage) {
+			int quantity, Byte state, Date createDate, String featureImage) {
 		this.brand = brand;
 		this.productCategory = productCategory;
 		this.user = user;
@@ -71,7 +71,7 @@ public class Product implements java.io.Serializable {
 	}
 
 	public Product(Brand brand, ProductCategory productCategory, User user, String name, String slug,
-			String description, long price, int quantity, byte state, Date createDate, Date updateDate,
+			String description, long price, int quantity, Byte state, Date createDate, Date updateDate,
 			String featureImage, Set<Rating> ratings, Set<RatingStatistic> ratingStatistics, Set<Event> events,
 			Set<ProductAttribute> productAttributes, Set<ProductViews> productViewses,
 			Set<ProductViewsStatistc> productViewsStatistcs, Set<Comment> comments, Set<Cart> carts) {
@@ -185,11 +185,11 @@ public class Product implements java.io.Serializable {
 	}
 
 	@Column(name = "state", nullable = false)
-	public byte getState() {
+	public Byte getState() {
 		return this.state;
 	}
 
-	public void setState(byte state) {
+	public void setState(Byte state) {
 		this.state = state;
 	}
 

@@ -28,7 +28,6 @@ public class AdminController extends MainController{
 	
 	@ModelAttribute
 	public ModelMap populateAttribute(
-			@PathVariable("id") Integer id,
 			ModelMap model) {
 		
 		model.put("productPage", true);
@@ -43,6 +42,7 @@ public class AdminController extends MainController{
 		
 		model.put("pageTitle", "Aministrator Page");
 		return "backend/index";
+		
 	}
 	
 	@RequestMapping(value = { "menu" }, method = RequestMethod.GET)
