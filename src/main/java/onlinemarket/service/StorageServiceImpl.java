@@ -51,7 +51,9 @@ public class StorageServiceImpl implements StorageService{
 
 	@Override
 	public void delete(String path) {
-		File file = new File(context.getRealPath(path));
+		path = context.getRealPath(path);
+		if(path == null) return;
+		File file = new File(path);
 		if(file.exists()) file.delete();
 	}
 	
