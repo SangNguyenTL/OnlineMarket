@@ -51,9 +51,9 @@ public class ProductCategoryManagerController extends MainController{
 	@ModelAttribute
 	public ModelMap populateAttribute(ModelMap model) {
 		
-		model.put("productCategoryPage", true);
 		model.put("filterForm", new FilterForm());
 		model.put("pathAdd", "/admin/product-category/add");
+		model.put("productCategoryPage", true);
 		return model;
 	}
 	
@@ -90,7 +90,6 @@ public class ProductCategoryManagerController extends MainController{
 		model.put("subPageTitle", "Add");
 		model.put("description", "Add information of productCategory");
 		model.put("pageTitle", "Add new productCategory");
-		model.put("productCategoryPage", true);
 		model.put("path", "product-category-add");
 		model.put("action", "add");
 		model.put("pathAction", "/admin/product-category/add");
@@ -146,9 +145,9 @@ public class ProductCategoryManagerController extends MainController{
 
 	@RequestMapping(value = "/update/{id:^\\d+}", method = RequestMethod.POST)
 	public String processUpdatePage(
+			@PathVariable("id") Integer id,
 			@ModelAttribute("productCategory") @Validated(value = { Default.class,
 					AdvancedValidation.CheckSlug.class }) ProductCategory productCategory,
-			@PathVariable("id") Integer id,
 			BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) throws NoHandlerFoundException {
 		
 			ProductCategory productCategoryCheck = productCategoryService.getByKey(id);
@@ -160,12 +159,11 @@ public class ProductCategoryManagerController extends MainController{
 				productCategory.setSlug(slg.slugify(slug));
 			}
 			
-			productCategory.setUpdateDate(new Date());
-			
 			if (!result.hasErrors()) {
+				productCategory.setUpdateDate(new Date());
 				productCategoryService.update(productCategory);
 				redirectAttributes.addFlashAttribute("success", "");
-				return "redirect:/productCategory/update/"+id;
+				return "redirect:/admin/productCategory/update/"+id;
 			}
 			
 			model.put("pageTitle", "Update product category");

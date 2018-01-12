@@ -14,10 +14,10 @@ import javax.validation.Constraint;
 @Target({ ElementType.TYPE })
 @Constraint(validatedBy = UniqueProductCategorySlugValidator.class)
 public @interface UniqueProductCategorySlug {
-	
+
 	String message() default "{onlinemarket.validation.UniqueBrandSlug.message}";
 
-    Class<?>[] groups() default {};
+	Class<?>[] groups() default {};
 
-    Class<?>[] payload() default {};
+	Class<?>[] payload() default {};
 }

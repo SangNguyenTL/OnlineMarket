@@ -28,7 +28,7 @@
 							
 							<form ui-jp="parsley" role="form" th:object="${productCategory}" th:action="@{${pathAction}}" method="POST">
 								<input th:if="${action} == 'update'" type="hidden" th:field="*{id}" />
-								<input th:if="${action} == 'update'" type="hidden" th:field="*{beforeSlug}" th:value="*{slug}" />
+								<input th:if="${action} == 'update'" type="hidden" id="beforeSlug" name="beforeSlug" th:value="*{slug}" />
 								<div class="form-group row">
 									<label class="col-sm-3 form-control-label">Name</label>
 									<div class="col-sm-9">

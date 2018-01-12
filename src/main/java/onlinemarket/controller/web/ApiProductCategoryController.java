@@ -28,10 +28,10 @@ public class ApiProductCategoryController {
 		boolean flag = true;
 		if (productCategory == null)
 			flag = false;
-		else if(id != null){
+		else if (id != null) {
 			ProductCategory oldProductCateogory = productCategoryService.getByKey(id);
-			if (oldProductCateogory != null && !oldProductCateogory.equals(productCategory))
-				flag = true;
+			if (oldProductCateogory != null && oldProductCateogory.equals(productCategory))
+				flag = false;
 		}
 		return ResponseEntity.ok(new ResponseResult(flag, null));
 	}

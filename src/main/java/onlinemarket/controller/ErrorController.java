@@ -24,7 +24,7 @@ public class ErrorController {
 	@Autowired
 	private ConfigurationService configurationService;
 
-	@ExceptionHandler(Exception.class)
+	@ExceptionHandler()
 	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
 	public ModelAndView renderErrorPage(HttpServletRequest httpRequest, Exception ex) {
 

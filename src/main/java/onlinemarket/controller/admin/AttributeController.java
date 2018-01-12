@@ -193,7 +193,7 @@ public class AttributeController extends MainController {
 		}
 
 		model.put("subPageTitle", "Update for " + attributeGroup.getName());
-		model.put("description", "Update attribute for"+ attributeGroup.getName());
+		model.put("description", "Update attribute for" + attributeGroup.getName());
 		model.put("pageTitle", "Update attribute group");
 		model.put("action", "update");
 		model.put("pathAction", buildRelativePath(id, attrGroupId) + "/update/" + attrId);
@@ -234,7 +234,7 @@ public class AttributeController extends MainController {
 		}
 
 		model.put("subPageTitle", "Update for " + attributeGroup.getName());
-		model.put("description", "Update attribute for"+ attributeGroup.getName());
+		model.put("description", "Update attribute for" + attributeGroup.getName());
 		model.put("pageTitle", "Update attribute group");
 		model.put("action", "update");
 		model.put("pathAction", buildRelativePath(id, attrGroupId) + "/update/" + attrId);
