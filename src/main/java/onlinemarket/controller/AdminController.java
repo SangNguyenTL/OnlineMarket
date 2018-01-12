@@ -34,7 +34,6 @@ public class AdminController extends MainController{
 		model.put("productPage", true);
 		model.put("filterForm", new FilterForm());
 		
-		
 		return model;
 	}
 	
