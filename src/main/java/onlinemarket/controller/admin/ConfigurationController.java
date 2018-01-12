@@ -26,15 +26,35 @@ import onlinemarket.model.User;
 @RequestMapping("/admin/config")
 public class ConfigurationController extends MainController{
 	
+	LogoConfig logo;
+	GeneralConfig general;
+	UploadConfig upload;
+	ContactConfig contact;
+	ApiConfig api;
+	SocialConfig social;
+	EmailSystemConfig email;
+	
 	@ModelAttribute
 	@Override
 	public void populateMetaPage(ModelMap model) {
-		model.put("general", configurationService.getGeneral());
-		model.put("logo", configurationService.getLogo());
-		model.put("upload", configurationService.getUpload());
-		model.put("contact", configurationService.getContag());
-		model.put("api", configurationService.getApiConfig());
-		model.put("social", configurationService.getSocial());
+		
+		logo = configurationService.getLogo();
+		model.put("logo", logo);
+		general = configurationService.getGeneral();
+		model.put("general", general);
+		upload = configurationService.getUpload();
+		model.put("upload", upload);
+		contact = configurationService.getContag();
+		model.put("contact", contact);
+		api = configurationService.getApiConfig();
+		model.put("api", api);
+		social = configurationService.getSocial();
+		model.put("social", social);
+		email = configurationService.getEmail();
+		model.put("email", email);
+		
+		
+		
 		model.put("pageTitle", "Setting");
 		model.put("configPage", true);
 	}
@@ -59,7 +79,7 @@ public class ConfigurationController extends MainController{
 	}
 	
 	@RequestMapping(value = { "" }, method = RequestMethod.GET)
-	public String configPage(@ModelAttribute("general") GeneralConfig general,ModelMap model) {
+	public String configPage(ModelMap model) {
 		model.put("path", "general");
 		model.put("subPageTitle", "General");
 		model.put("generalConfig", general);
@@ -82,7 +102,7 @@ public class ConfigurationController extends MainController{
 	}
 	
 	@RequestMapping(value = { "upload" }, method = RequestMethod.GET)
-	public String configUploadPage(@ModelAttribute("upload") UploadConfig upload, ModelMap model) {
+	public String configUploadPage(ModelMap model) {
 		
 		model.put("path", "upload");
 		model.put("subPageTitle", "Upload");
@@ -106,12 +126,7 @@ public class ConfigurationController extends MainController{
 	}
 	
 	@RequestMapping(value = { "logo" }, method = RequestMethod.GET)
-	public String configLogoPage(@ModelAttribute("logo") @Valid LogoConfig logo, BindingResult result, ModelMap model) {
-		
-		if(!result.hasErrors()) {
-			configurationService.saveLogoConfig(logo);
-			return "redirect:/admin/config/logo?success";
-		}
+	public String configLogoPage(ModelMap model) {
 		
 		model.put("path", "logo");
 		model.put("subPageTitle", "Logo");
@@ -123,7 +138,13 @@ public class ConfigurationController extends MainController{
 	}
 	
 	@RequestMapping(value = { "logo" }, method = RequestMethod.POST)
-	public String processLogoPage(@ModelAttribute("logo") LogoConfig logo, ModelMap model) {
+	public String processLogoPage(@ModelAttribute("logo") @Valid LogoConfig logo, BindingResult result, ModelMap model) {
+		
+		if(!result.hasErrors()) {
+			configurationService.saveLogoConfig(logo);
+			return "redirect:/admin/config/logo?success";
+		}
+		
 		model.put("path", "logo");
 		model.put("subPageTitle", "Logo");
 		model.put("description", "Set the icon of the app as well as the store brand.");
@@ -132,7 +153,7 @@ public class ConfigurationController extends MainController{
 	}
 	
 	@RequestMapping( value = {"contact"}, method = RequestMethod.GET)
-	public String configContactPage(@ModelAttribute("contact") ContactConfig contact, ModelMap model) {
+	public String configContactPage(ModelMap model) {
 		model.put("path", "contact");
 		model.put("subPageTitle", "Contact");
 		model.put("contactConfig", contact);
@@ -155,7 +176,7 @@ public class ConfigurationController extends MainController{
 	}
 	
 	@RequestMapping( value = {"social"}, method = RequestMethod.GET)
-	public String configSocialPage(@ModelAttribute("social") SocialConfig social, ModelMap model) {
+	public String configSocialPage(ModelMap model) {
 		
 		model.put("path", "social");
 		model.put("subPageTitle", "Social Network");
@@ -180,7 +201,7 @@ public class ConfigurationController extends MainController{
 	}	
 	
 	@RequestMapping( value = {"emailsystem"}, method = RequestMethod.GET)
-	public String configEmailSystemPage(@ModelAttribute("email") EmailSystemConfig email, ModelMap model) {
+	public String configEmailSystemPage(ModelMap model) {
 		
 		model.put("path", "emailsystem");
 		model.put("subPageTitle", "Email System");
@@ -203,7 +224,7 @@ public class ConfigurationController extends MainController{
 	}
 
 	@RequestMapping( value = {"api"}, method = RequestMethod.GET)
-	public String configApiPage(@ModelAttribute("api") ApiConfig api, ModelMap model) {
+	public String configApiPage(ModelMap model) {
 		
 		model.put("path", "api");
 		model.put("subPageTitle", "Api System");

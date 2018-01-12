@@ -10,12 +10,10 @@ public class LogoConfig {
 	
 	@NotEmpty
 	@Size(max=2048)
-	@URL
 	private String logo;
 	
 	@NotEmpty
 	@Size(max=2048)
-	@URL
 	private String favicon;
 
 	public String getLogo() {

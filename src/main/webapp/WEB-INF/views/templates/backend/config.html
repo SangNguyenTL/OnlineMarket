@@ -56,9 +56,9 @@
 						
 	<div class="box-body" th:fragment="logo">
 		<form ui-jp="parsley" role="form" th:object="${logoConfig}" th:action="@{/admin/config/logo}" method="POST">
-			<div class="col-sm-12 col-md-6 form-group row">
-				<label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Favicon</label>
-				<div class="col-sm-12 col-md-8 col-lg-9">
+			<div class="form-group row">
+				<label class="col-sm-3 form-control-label">Favicon</label>
+				<div class="col-sm-3">
 					<div class="box p-a-xs">
 	                	<a href="#" data-toggle="modal" data-target="#modal-image-gallery" ui-toggle-class="zoom" ui-target="#animate" data-target-input="favicon">
 	                		<img th:if="*{favicon}" th:src="@{'/'+*{favicon}}" alt="..." class="img-thumbnail thumbnail">
@@ -68,14 +68,12 @@
 					<input th:errorclass="parsley-error" class="form-control hide" type="text" th:field="*{favicon}" required data-parsley-length="[3, 150]"/>
 					<ul class="parsley-errors-list filled" id="parsley-id-favicon" th:if="${#fields.hasErrors('favicon')}"><li th:errors="*{favicon}"> </li></ul>
 				</div>
-			</div>
-			<div class="col-sm-12 col-md-6 form-group row">
-				<label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Logo</label>
-				<div class="col-sm-12 col-md-8 col-lg-9">
+				<label class="col-sm-3 form-control-label">Logo</label>
+				<div class="col-sm-3">
 					<div class="box p-a-xs">
 	                	<a href="#" data-toggle="modal" data-target="#modal-image-gallery" ui-toggle-class="zoom" ui-target="#animate" data-target-input="logo">
-	                		<img th:if="*{logo}" th:src="@{'/'+*{logo}}" alt="..." class="img-thumbnail thumbnail">
-	                		<img th:unless="*{logo}" th:src="@{/assets/images/defaultImage.jpg}" alt="..." class="img-thumbnail thumbnail">
+	                		<img th:if="*{logo}" th:src="@{'/'+*{logo}}" alt="..." class="img-thumbnail thumbnail"/>
+	                		<img th:unless="*{logo}" th:src="@{/assets/images/defaultImage.jpg}" alt="..." class="img-thumbnail thumbnail"/>
 	               		</a>
 	              	</div>
 					<input th:errorclass="parsley-error" class="form-control hide" type="text" th:field="*{logo}" required data-parsley-length="[3, 150]"/>
@@ -86,6 +84,7 @@
 				<button type="submit" class="btn info">Save</button>
 			</div>
 		</form>
+		
 		<div id="modal-image-gallery" class="modal fade animate" data-backdrop="true" aria-hidden="true">
 		  <div class="modal-dialog zoom modal-lg" id="animate" ui-class="zoom">
 		    <div class="modal-content">
