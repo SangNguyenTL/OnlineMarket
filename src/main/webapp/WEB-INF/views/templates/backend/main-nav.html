@@ -40,6 +40,26 @@
 					<li th:class="${path} == 'product-category-add' ? 'active'"><a th:href="@{/admin/product-category/add}"><span class="nav-text">Add new</span></a></li>
 				</ul>
                </li>
+               <li th:class="${productPage} ? 'active'" >
+                  <a>
+                  	<span class="nav-caret">
+                      <i class="fa fa-caret-down"></i>
+                    </span>
+                    <span class="nav-icon">
+                      <i class="material-icons">&#xe896;
+                        <span th:attr="ui-include='\''+ @{/assets/backend/assets/images/i_7.svg} +'\''"></span>
+                      </i>
+                    </span>
+                    <span class="nav-text">Product</span>
+                  </a>
+                  <ul class="nav-sub nav-mega">
+					<li th:class="${path} == 'product' ? 'active'"><a th:href="@{/admin/product}"><span class="nav-text">List</span></a></li>
+					<li><span class="nav-text">Add new</span></li>
+					<li th:each="category : ${productCategoryList}"
+						th:class="${path} == ${category.slug}+'-add'">
+						<a th:href="@{'/admin/product-category/'+${category.id}+'/product/add'}"><span class="nav-text"  th:text="${category.name}"></span></a></li>
+				</ul>
+               </li>
                
                <li th:class="${postCategoryPage} ? 'active'" >
                   <a>
@@ -47,8 +67,7 @@
                       <i class="fa fa-caret-down"></i>
                     </span>
                     <span class="nav-icon">
-                      <i class="material-icons">&#xe5c3;
-                        <span th:attr="ui-include='\''+ @{/assets/backend/assets/images/i_1.svg} +'\''"></span>
+                      <i class="material-icons">&#xe241;
                       </i>
                     </span>
                     <span class="nav-text">Post Category</span>

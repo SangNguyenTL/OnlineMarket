@@ -40,13 +40,31 @@ public class AttributeController extends MainController {
 	@Autowired
 	ProductAttributeService productAttributeService;
 
+	ProductCategory productCategory;
+	
+	AttributeGroup attributeGroup;
+	
+	String relativePath;
+	
+	String relativePathNonAttriId;
+	
+	FilterForm filterForm;
+	
 	@ModelAttribute
-	public ModelMap populateAttribute(@PathVariable("id") Integer id, @PathVariable("attrGroupId") Integer attrGroupId,
+	public ModelMap populateAttribute(@PathVariable("id") Integer id,
+			@PathVariable("attrGroupId") Integer attrGroupId,
 			ModelMap model) {
 
-		String relativePath = buildRelativePath(id, attrGroupId);
+		relativePathNonAttriId = buildRelativePath(id);
+		relativePath = buildRelativePath(id, attrGroupId);
+		productCategory = productCategoryService.getByKey(id);
+		attributeGroup = attributeGroupService.getByKey(attrGroupId);
+		filterForm = new FilterForm();
+		
 		model.put("productCategoryPage", true);
-		model.put("filterForm", new FilterForm());
+		model.put("filterForm", filterForm);
+		model.put("productCategory", productCategory);
+		model.put("attributeGroup", attributeGroup);
 		model.put("path", "product-category");
 		model.put("relativePath", relativePath);
 		model.put("pathAdd", relativePath + "/add");
@@ -55,23 +73,21 @@ public class AttributeController extends MainController {
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public String mainPage(@PathVariable("id") Integer id, @PathVariable("attrGroupId") Integer attrGroupId,
-			@ModelAttribute("filterForm") FilterForm filterForm, ModelMap model,
+	public String mainPage(
+			ModelMap model,
 			RedirectAttributes redirectAttributes) {
 
 		filterForm.setOrderBy("priority");
 		filterForm.setOrder("asc");
 
-		ProductCategory productCategory = productCategoryService.getByKey(id);
 		if (productCategory == null) {
 			redirectAttributes.addFlashAttribute("error", "Product category not found.");
 			return "redirect:/admin/product-category";
 		}
 
-		AttributeGroup attributeGroup = attributeGroupService.getByKey(attrGroupId);
 		if (attributeGroup == null) {
 			redirectAttributes.addFlashAttribute("error", "Attribute group not found.");
-			return "redirect:" + buildRelativePath(id);
+			return "redirect:" + relativePathNonAttriId;
 		}
 
 		model.put("pageTitle", "Attribute Manager for " + attributeGroup.getName());
@@ -82,24 +98,22 @@ public class AttributeController extends MainController {
 	}
 
 	@RequestMapping(value = "/page/{page:^\\d+}", method = RequestMethod.GET)
-	public String mainPagePagination(@PathVariable("id") Integer id, @PathVariable("attrGroupId") Integer attrGroupId,
-			@PathVariable("page") Integer page, @ModelAttribute("filterForm") FilterForm filterForm, ModelMap model,
+	public String mainPagePagination(
+			@PathVariable("page") Integer page, ModelMap model,
 			RedirectAttributes redirectAttributes) {
 
 		filterForm.setCurrentPage(page);
 		filterForm.setOrderBy("priority");
 		filterForm.setOrder("asc");
 
-		ProductCategory productCategory = productCategoryService.getByKey(id);
 		if (productCategory == null) {
 			redirectAttributes.addFlashAttribute("error", "Product category not found.");
 			return "redirect:/admin/product-category";
 		}
 
-		AttributeGroup attributeGroup = attributeGroupService.getByKey(attrGroupId);
 		if (attributeGroup == null) {
 			redirectAttributes.addFlashAttribute("error", "Attribute group not found.");
-			return "redirect:" + buildRelativePath(id);
+			return "redirect:" + relativePathNonAttriId;
 		}
 
 		model.put("pageTitle", "Attribute manager for " + attributeGroup.getName());
@@ -111,92 +125,85 @@ public class AttributeController extends MainController {
 	}
 
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
-	public String addPage(@PathVariable("id") Integer id, @PathVariable("attrGroupId") Integer attrGroupId,
-			ModelMap model, RedirectAttributes redirectAttributes) {
+	public String addPage(ModelMap model, RedirectAttributes redirectAttributes) {
 
-		ProductCategory productCategory = productCategoryService.getByKey(id);
 		if (productCategory == null) {
 			redirectAttributes.addFlashAttribute("error", "Product category not found.");
 			return "redirect:/admin/product-category";
 		}
 
-		AttributeGroup attributeGroup = attributeGroupService.getByKey(attrGroupId);
 		if (attributeGroup == null) {
 			redirectAttributes.addFlashAttribute("error", "Attribute group not found.");
-			return "redirect:" + buildRelativePath(id);
+			return "redirect:" + relativePathNonAttriId;
 		}
 
 		model.put("subPageTitle", "Add");
 		model.put("description", "Add attribute for " + attributeGroup.getName());
 		model.put("pageTitle", "Add new attribute");
 		model.put("action", "add");
-		model.put("pathAction", buildRelativePath(id, attrGroupId) + "/add");
+		model.put("pathAction", relativePath + "/add");
 		model.put("attribute", new Attribute());
 
 		return "backend/attribute-add";
 	}
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public String processAddPage(@PathVariable("id") Integer id, @PathVariable("attrGroupId") Integer attrGroupId,
+	public String processAddPage(
 			@ModelAttribute("attribute") @Valid Attribute attribute, BindingResult result, ModelMap model,
 			RedirectAttributes redirectAttributes) {
 
-		ProductCategory productCategory = productCategoryService.getByKey(id);
 		if (productCategory == null) {
 			redirectAttributes.addFlashAttribute("error", "Product category not found.");
 			return "redirect:/admin/product-category";
 		}
 
-		AttributeGroup attributeGroup = attributeGroupService.getByKey(attrGroupId);
 		if (attributeGroup == null) {
 			redirectAttributes.addFlashAttribute("error", "Attribute group not found.");
-			return "redirect:" + buildRelativePath(id);
+			return "redirect:" + relativePathNonAttriId;
 		}
 
 		if (!result.hasErrors()) {
 			attribute.setAttributeGroup(attributeGroup);
 			redirectAttributes.addFlashAttribute("success", "");
 			attributeService.save(attribute);
-			return "redirect:" + buildRelativePath(id, attrGroupId);
+			return "redirect:" + relativePath;
 		}
 
 		model.put("subPageTitle", "Add");
 		model.put("description", "Add attribute for " + attributeGroup.getName());
 		model.put("pageTitle", "Add new attribute");
 		model.put("action", "add");
-		model.put("pathAction", buildRelativePath(id, attrGroupId) + "/add");
+		model.put("pathAction", relativePath + "/add");
 		model.put("attribute", attribute);
 
 		return "backend/attribute-add";
 	}
 
 	@RequestMapping(value = "/update/{attrId:^\\d+}", method = RequestMethod.GET)
-	public String updatePage(@PathVariable("id") Integer id, @PathVariable("attrGroupId") int attrGroupId,
+	public String updatePage(
 			@PathVariable("attrId") int attrId, ModelMap model, RedirectAttributes redirectAttributes) {
 
-		ProductCategory productCategory = productCategoryService.getByKey(id);
 		if (productCategory == null) {
 			redirectAttributes.addFlashAttribute("error", "Product category not found.");
 			return "redirect:/admin/product-category";
 		}
 
-		AttributeGroup attributeGroup = attributeGroupService.getByKey(attrGroupId);
 		if (attributeGroup == null) {
 			redirectAttributes.addFlashAttribute("error", "Attribute group not found.");
-			return "redirect:" + buildRelativePath(id);
+			return "redirect:" + relativePathNonAttriId;
 		}
 
 		Attribute attribute = attributeService.getByKey(attrId);
 		if (attribute == null) {
 			redirectAttributes.addFlashAttribute("error", "Attribute not found.");
-			return "redirect:" + buildRelativePath(id, attrGroupId);
+			return "redirect:" + relativePath;
 		}
 
 		model.put("subPageTitle", "Update for " + attributeGroup.getName());
 		model.put("description", "Update attribute for" + attributeGroup.getName());
 		model.put("pageTitle", "Update attribute group");
 		model.put("action", "update");
-		model.put("pathAction", buildRelativePath(id, attrGroupId) + "/update/" + attrId);
+		model.put("pathAction", relativePath + "/update/" + attrId);
 		model.put("attribute", attribute);
 
 		return "backend/attribute-add";
@@ -204,40 +211,38 @@ public class AttributeController extends MainController {
 	}
 
 	@RequestMapping(value = "/update/{attrId:^\\d+}", method = RequestMethod.POST)
-	public String processUpdatePage(@PathVariable("id") Integer id, @PathVariable("attrGroupId") int attrGroupId,
+	public String processUpdatePage(
 			@PathVariable("attrId") int attrId, @Valid @ModelAttribute("attribute") Attribute attribute,
 			BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
 
-		ProductCategory productCategory = productCategoryService.getByKey(id);
 		if (productCategory == null) {
 			redirectAttributes.addFlashAttribute("error", "Product category not found.");
 			return "redirect:/admin/product-category";
 		}
 
-		AttributeGroup attributeGroup = attributeGroupService.getByKey(attrGroupId);
 		if (attributeGroup == null) {
 			redirectAttributes.addFlashAttribute("error", "Attribute group not found.");
-			return "redirect:/admin/product-category/" + id + "/attribute-group";
+			return "redirect:"+relativePathNonAttriId;
 		}
 
 		Attribute attributeCheck = attributeService.getByKey(attrId);
 		if (attributeCheck == null) {
 			redirectAttributes.addFlashAttribute("error", "Attribute not found.");
-			return "redirect:/admin/product-category/" + id + "/attribute-group/" + attrGroupId + "/attribute";
+			return "redirect:"+relativePath;
 		}
 
 		if (!result.hasErrors()) {
 			attribute.setAttributeGroup(attributeGroup);
 			attributeService.update(attribute);
 			redirectAttributes.addFlashAttribute("success", "");
-			return "redirect:/admin/product-category/" + id + "/attribute-group/" + attrGroupId + "/attribute";
+			return "redirect:"+relativePath;
 		}
 
 		model.put("subPageTitle", "Update for " + attributeGroup.getName());
 		model.put("description", "Update attribute for" + attributeGroup.getName());
 		model.put("pageTitle", "Update attribute group");
 		model.put("action", "update");
-		model.put("pathAction", buildRelativePath(id, attrGroupId) + "/update/" + attrId);
+		model.put("pathAction", relativePath + "/update/" + attrId);
 		model.put("attribute", attribute);
 
 		return "backend/attribute-add";
@@ -257,7 +262,7 @@ public class AttributeController extends MainController {
 			@PathVariable("attrGroupId") Integer attrGroupId,
 			@RequestParam(value = "id", required = true) Integer idAttr, RedirectAttributes redirectAttributes) {
 
-		if (id == null) {
+		if (attrGroupId == null) {
 			redirectAttributes.addAttribute("error", "Program wasn't gotten attibute id!");
 			return "redirect:/admin/province";
 		}
@@ -274,6 +279,6 @@ public class AttributeController extends MainController {
 				attributeService.delete(attribute);
 			}
 		}
-		return "redirect:" + buildRelativePath(id, attrGroupId);
+		return "redirect:" + relativePath;
 	}
 }

@@ -34,10 +34,12 @@ public class ProvinceManagerController extends MainController{
 	@Autowired
 	AddressService addressService;
 	
+	FilterForm filterForm;
+	
 	@ModelAttribute
 	public ModelMap populateAttribute(ModelMap model) {
-		
-		model.put("filterForm", new FilterForm());
+		filterForm = new FilterForm();
+		model.put("filterForm", filterForm);
 		model.put("provincePage", true);
 		model.put("pathAdd", "/admin/province/add");
 		return model;
@@ -45,7 +47,7 @@ public class ProvinceManagerController extends MainController{
 	}
 	
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public String mainPage(@ModelAttribute("filterForm") FilterForm filterForm, ModelMap model){
+	public String mainPage(ModelMap model){
 		
 		model.put("pageTitle", "Province Manager");
 		model.put("path", "province");
@@ -57,7 +59,7 @@ public class ProvinceManagerController extends MainController{
 	
 	@RequestMapping(value = "/page/{page:^\\d+}", method = RequestMethod.GET)
 	public String mainPagePagination(@PathVariable("page") Integer page,
-			@ModelAttribute("filterForm") FilterForm filterForm, ModelMap model){
+			ModelMap model){
 		
 		filterForm.setCurrentPage(page);
 		

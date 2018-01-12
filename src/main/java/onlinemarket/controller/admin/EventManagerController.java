@@ -3,13 +3,11 @@ package onlinemarket.controller.admin;
 import java.util.Date;
 
 import javax.validation.Valid;
-import javax.validation.groups.Default;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +24,6 @@ import onlinemarket.model.Order;
 import onlinemarket.model.Product;
 import onlinemarket.model.ProductCategory;
 import onlinemarket.model.User;
-import onlinemarket.model.other.AdvancedValidation;
 import onlinemarket.service.BrandService;
 import onlinemarket.service.EventService;
 import onlinemarket.service.OrderService;
@@ -54,11 +51,13 @@ public class EventManagerController extends MainController {
 
 	@Autowired
 	ProductCategoryService productCategoryService;
+	
+	FilterForm filterForm;
 
 	@ModelAttribute
 	public ModelMap populateAttribute(ModelMap model) {
-
-		model.put("filterForm", new FilterForm());
+		filterForm = new FilterForm();
+		model.put("filterForm", filterForm);
 		model.put("eventPage", true);
 		model.put("pathAdd", "/admin/event/add");
 		return model;
@@ -66,12 +65,26 @@ public class EventManagerController extends MainController {
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public String mainPage(@ModelAttribute("filterForm") FilterForm filterForm, ModelMap model) {
+	public String mainPage(ModelMap model) {
 
 		model.put("pageTitle", "Event Manager");
 		model.put("path", "event");
 		model.put("result", eventService.list(filterForm));
 		model.put("filterForm", filterForm);
+		return "backend/event";
+	}
+	
+	@RequestMapping(value = "/page/{page:^\\d+}", method = RequestMethod.GET)
+	public String mainPagePagination(@PathVariable("page") Integer page, ModelMap model) {
+		
+		filterForm.setCurrentPage(page);
+		
+		model.put("result", eventService.list(filterForm));
+		model.put("page", page);
+		model.put("pageTitle", "Brand Manager");
+		model.put("path", "brand");
+		model.put("filterForm", filterForm);
+		
 		return "backend/event";
 	}
 
@@ -133,8 +146,7 @@ public class EventManagerController extends MainController {
 
 	@RequestMapping(value = "/update/{id:^\\d+}", method = RequestMethod.POST)
 	public String processUpdatePage(
-			@ModelAttribute("event") @Validated(value = { Default.class,
-					AdvancedValidation.CheckSlug.class }) Event event,
+			@ModelAttribute("event") @Valid Event event,
 			@PathVariable("id") Integer id, BindingResult result, ModelMap model, RedirectAttributes redirectAttributes)
 			throws NoHandlerFoundException {
 
@@ -148,7 +160,7 @@ public class EventManagerController extends MainController {
 			event.setUpdateDate(new Date());
 			event.setPublisher(currentUser);
 			eventService.update(event);
-			redirectAttributes.addAttribute("success", "");
+			redirectAttributes.addFlashAttribute("success", "");
 			return "redirect:admin/event/update/" + id;
 		}
 
@@ -168,36 +180,36 @@ public class EventManagerController extends MainController {
 			RedirectAttributes redirectAttributes) {
 
 		if (id == null) {
-			redirectAttributes.addAttribute("error", "Program isn't get event id!");
+			redirectAttributes.addFlashAttribute("error", "Program isn't get event id!");
 			return "redirect:/admin/event";
 		}
 		Event eventCheck = eventService.getByKey(id);
 		if (eventCheck == null) {
-			redirectAttributes.addAttribute("error", "The brand isn't exist!");
+			redirectAttributes.addFlashAttribute("error", "The brand isn't exist!");
 		} else {
 			Brand brand = brandService.getByEvent(eventCheck);
 			if (brand != null)
-				redirectAttributes.addAttribute("error", "The event has already had brand!");
+				redirectAttributes.addFlashAttribute("error", "The event has already had brand!");
 			else {
 				Product product = productService.getByEvent(eventCheck);
 				if (product != null)
-					redirectAttributes.addAttribute("error", "The event has already had product!");
+					redirectAttributes.addFlashAttribute("error", "The event has already had product!");
 				else {
 					User user = userService.getByEvent(eventCheck);
 					if (user != null)
-						redirectAttributes.addAttribute("error", "The event has already had user!");
+						redirectAttributes.addFlashAttribute("error", "The event has already had user!");
 					else {
 						ProductCategory proCategory = productCategoryService.getByEvent(eventCheck);
 						if (proCategory != null)
-							redirectAttributes.addAttribute("error", "The event has already had product category!");
+							redirectAttributes.addFlashAttribute("error", "The event has already had product category!");
 						else {
 
 							Order order = orderService.getByEvent(eventCheck);
 							if (order != null)
-								redirectAttributes.addAttribute("error", "The event has already had order!");
+								redirectAttributes.addFlashAttribute("error", "The event has already had order!");
 							else {
 								eventService.delete(eventCheck);
-								redirectAttributes.addAttribute("success", "");
+								redirectAttributes.addFlashAttribute("success", "");
 							}
 						}
 					}

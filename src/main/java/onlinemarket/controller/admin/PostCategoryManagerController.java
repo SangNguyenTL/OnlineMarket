@@ -29,15 +29,18 @@ public class PostCategoryManagerController extends MainController{
 	@Autowired
 	PostCategoryService postCategoryService;
 	
+	FilterForm filterForm;
+	
 	@ModelAttribute
 	public void populateFilterForm(ModelMap model) {
-		model.put("filterForm", new FilterForm());
+		filterForm = new FilterForm();
+		model.put("filterForm", filterForm);
 		model.put("postCategoryPage", true);
 		model.put("pathAdd", "/admin/post-category/add");
 	}
 	
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public String mainPage(@ModelAttribute("filterForm") FilterForm filterForm, ModelMap model) {
+	public String mainPage(ModelMap model) {
 		model.put("pageTitle", "Post category manager");
 		model.put("path", "post-category");
 		model.put("result", postCategoryService.list(filterForm));

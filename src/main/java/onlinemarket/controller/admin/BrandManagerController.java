@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import onlinemarket.controller.MainController;
@@ -42,15 +41,20 @@ public class BrandManagerController extends MainController {
 	@Autowired
 	EventService eventService;
 	
+	FilterForm filterForm;
+	
 	@ModelAttribute
 	public void populateFilterForm(ModelMap model) {
-		model.put("filterForm", new FilterForm());
+		
+		filterForm = new FilterForm();
+		model.put("filterForm", filterForm);
 		model.put("brandPage", true);
 		model.put("pathAdd", "/admin/brand/add");
+		
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public String mainPage(@ModelAttribute("filterForm") FilterForm filterForm, ModelMap model) {
+	public String mainPage(ModelMap model) {
 			
 		ResultObject<Brand> result = brandService.list(filterForm);
 		
@@ -62,35 +66,8 @@ public class BrandManagerController extends MainController {
 		return "backend/brand";
 	}
 	
-	@RequestMapping(value = "/delete", method = {RequestMethod.POST, RequestMethod.GET})
-	public String processDeleteBrand(@RequestParam(value = "id", required = true) Integer id, RedirectAttributes redirectAttributes) {
-			
-		if(id == null) {
-			redirectAttributes.addAttribute("error", "Program isn't get brand id!");
-			return "redirect:/admin/brand";
-		}
-		Brand brandCheck = brandService.getByKey(id);
-		if (brandCheck == null) {
-			redirectAttributes.addAttribute("error", "The brand isn't exist!");
-		}else {
-			Product product = productService.getByBrand(brandCheck);
-			if(product != null) 
-				redirectAttributes.addAttribute("error", "The brand has already had product!");
-			else {
-				Event event = eventService.getByBrand(brandCheck);
-				if(event != null) 
-					redirectAttributes.addAttribute("error", "The brand has already had event!");
-				else {
-					brandService.delete(brandCheck);
-					redirectAttributes.addAttribute("success", "");
-				}
-			}
-		}
-		return "redirect:/admin/brand";
-	}
-
 	@RequestMapping(value = "/page/{page:^\\d+}", method = RequestMethod.GET)
-	public String mainPagePagination(@ModelAttribute("filterForm") FilterForm filterForm, @PathVariable("page") Integer page, ModelMap model) {
+	public String mainPagePagination(@PathVariable("page") Integer page, ModelMap model) {
 		
 		filterForm.setCurrentPage(page);
 		
@@ -103,6 +80,48 @@ public class BrandManagerController extends MainController {
 		model.put("filterForm", filterForm);
 		
 		return "backend/brand";
+	}
+	
+	@RequestMapping(value = "/{idBrand:^\\\\d}/product", method = RequestMethod.GET)
+	public String mainPageProduct(
+			@PathVariable("idBrand") Integer idBrand,
+			ModelMap model,
+			RedirectAttributes redirectAttributes ) {
+		
+		Brand brand = brandService.getByKey(idBrand);
+		if (brand == null){
+			redirectAttributes.addFlashAttribute("error", "Brand not found!");
+			return "redirect:/admin/brand";
+		}
+			
+		model.put("result", productService.listByBrand(brand, filterForm));
+		model.put("pageTitle", "Brand Manager");
+		model.put("path", "brand");
+		model.put("filterForm", filterForm);
+		
+		return "backend/product";
+	}
+	
+	@RequestMapping(value = "/{idBrand:^\\\\d}/product/page/{page:^\\d+}", method = RequestMethod.GET)
+	public String mainPagePaginationProduct(
+			@PathVariable("idBrand") Integer idBrand,
+			@PathVariable("page") Integer page, ModelMap model, RedirectAttributes redirectAttributes) {
+		
+		filterForm.setCurrentPage(page);
+		
+		Brand brand = brandService.getByKey(idBrand);
+		if (brand == null){
+			redirectAttributes.addFlashAttribute("error", "Brand not found!");
+			return "redirect:/admin/brand";
+		}
+		
+		model.put("result", productService.listByBrand(brand, filterForm));
+		model.put("page", page);
+		model.put("pageTitle", "Brand Manager");
+		model.put("path", "brand");
+		model.put("filterForm", filterForm);
+		
+		return "backend/product";
 	}
 
 	@RequestMapping(value = "/add", method = RequestMethod.GET)
@@ -121,7 +140,8 @@ public class BrandManagerController extends MainController {
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public String processAddPage(@ModelAttribute("brand") @Validated(value = { Default.class,
-			AdvancedValidation.CheckSlug.class }) Brand brand, BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
+			AdvancedValidation.CheckSlug.class }) Brand brand, BindingResult result,
+			ModelMap model, RedirectAttributes redirectAttributes) {
 		
 		String slug = brand.getSlug();
 		if (StringUtils.isNotBlank(slug)) {
@@ -129,7 +149,7 @@ public class BrandManagerController extends MainController {
 		}
 		
 		if (!result.hasErrors()) {
-			redirectAttributes.addAttribute("success", "");
+			redirectAttributes.addFlashAttribute("success", "");
 			brandService.save(brand);
 			return "redirect:/admin/brand";
 		}
@@ -145,12 +165,14 @@ public class BrandManagerController extends MainController {
 	}
 
 	@RequestMapping(value = "/update/{id:^\\d+}", method = RequestMethod.GET)
-	public String updatePage(@PathVariable("id") int id, ModelMap model) throws NoHandlerFoundException {
+	public String updatePage(@PathVariable("id") int id, ModelMap model, RedirectAttributes redirectAttributes) {
 
 		Brand brand = brandService.getByKey(id);
-		if (brand == null)
-			throw new NoHandlerFoundException(null, null, null);
-
+		if (brand == null){
+			redirectAttributes.addFlashAttribute("error", "Brand not found!");
+			return "redirect:/admin/brand";
+		}
+		
 		model.put("pageTitle", "Update brand");
 		model.put("subPageTitle", "Update");
 		model.put("description", "Update information of brand");
@@ -168,11 +190,13 @@ public class BrandManagerController extends MainController {
 			@ModelAttribute("brand") @Validated(value = { Default.class,
 					AdvancedValidation.CheckSlug.class }) Brand brand,
 			@PathVariable("id") Integer id,
-			BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) throws NoHandlerFoundException {
+			BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
 		
 			Brand brandCheck = brandService.getByKey(id);
-			if (brandCheck == null)
-				throw new NoHandlerFoundException(null, null, null);
+			if (brandCheck == null){
+				redirectAttributes.addFlashAttribute("error", "Brand not found!");
+				return "redirect:/admin/brand";
+			}
 			
 			String slug = brand.getSlug();
 			if (StringUtils.isNotBlank(slug)) {
@@ -182,7 +206,7 @@ public class BrandManagerController extends MainController {
 			if (!result.hasErrors()) {
 				brand.setUpdateDate(new Date());
 				brandService.update(brand);
-				redirectAttributes.addAttribute("success", "");
+				redirectAttributes.addFlashAttribute("success", "");
 				return "redirect:/brand/update/"+id;
 			}
 			
@@ -196,4 +220,32 @@ public class BrandManagerController extends MainController {
 			
 			return "backend/brand-add";
 	}
+	
+	@RequestMapping(value = "/delete", method = {RequestMethod.POST, RequestMethod.GET})
+	public String processDeleteBrand(@RequestParam(value = "id", required = true) Integer id, RedirectAttributes redirectAttributes) {
+			
+		if(id == null) {
+			redirectAttributes.addFlashAttribute("error", "Program isn't get brand id!");
+			return "redirect:/admin/brand";
+		}
+		Brand brandCheck = brandService.getByKey(id);
+		if (brandCheck == null) {
+			redirectAttributes.addFlashAttribute("error", "The brand isn't exist!");
+		}else {
+			Product product = productService.getByBrand(brandCheck);
+			if(product != null) 
+				redirectAttributes.addFlashAttribute("error", "The brand has already had product!");
+			else {
+				Event event = eventService.getByBrand(brandCheck);
+				if(event != null) 
+					redirectAttributes.addFlashAttribute("error", "The brand has already had event!");
+				else {
+					brandService.delete(brandCheck);
+					redirectAttributes.addFlashAttribute("success", "");
+				}
+			}
+		}
+		return "redirect:/admin/brand";
+	}
+
 }

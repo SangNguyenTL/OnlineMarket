@@ -48,17 +48,19 @@ public class ProductCategoryManagerController extends MainController{
 	@Autowired
 	EventService eventService;
 	
+	FilterForm filterForm;
+	
 	@ModelAttribute
 	public ModelMap populateAttribute(ModelMap model) {
-		
-		model.put("filterForm", new FilterForm());
+		filterForm = new FilterForm();
+		model.put("filterForm", filterForm);
 		model.put("pathAdd", "/admin/product-category/add");
 		model.put("productCategoryPage", true);
 		return model;
 	}
 	
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public String mainPage(@ModelAttribute("filterForm") FilterForm filterForm, ModelMap model) {
+	public String mainPage(ModelMap model) {
 		
 		model.put("pageTitle", "Product category manager");
 		model.put("path", "product-category");
@@ -69,7 +71,7 @@ public class ProductCategoryManagerController extends MainController{
 	}
 	
 	@RequestMapping(value = "/page/{page:^\\d+}", method = RequestMethod.GET)
-	public String mainPagePagination(@PathVariable("page") Integer page, @ModelAttribute("filterForm") FilterForm filterForm, ModelMap model){
+	public String mainPagePagination(@PathVariable("page") Integer page, ModelMap model){
 		
 		filterForm.setCurrentPage(page);
 		

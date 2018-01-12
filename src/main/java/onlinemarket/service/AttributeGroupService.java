@@ -1,5 +1,7 @@
 package onlinemarket.service;
 
+import java.util.List;
+
 import onlinemarket.form.filter.FilterForm;
 import onlinemarket.model.AttributeGroup;
 import onlinemarket.model.ProductCategory;
@@ -11,4 +13,5 @@ public interface AttributeGroupService extends InterfaceService<Integer, Attribu
 
 	ResultObject<AttributeGroup> listByProductCategory(ProductCategory productCategory, FilterForm filterForm);
 	
+	List<AttributeGroup> listWithAttributeByProductCategory(ProductCategory productCategory);
 }

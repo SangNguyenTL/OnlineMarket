@@ -10,4 +10,5 @@ public interface ProductCategoryService extends InterfaceService<Integer, Produc
 	public ResultObject<ProductCategory> list(FilterForm filterForm);
 	
 	public ProductCategory getByEvent(Event event);
+
 }

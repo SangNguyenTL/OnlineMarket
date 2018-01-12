@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 import onlinemarket.model.User;
+import onlinemarket.service.ProductCategoryService;
 import onlinemarket.service.UserService;
 import onlinemarket.service.config.ConfigurationService;
 import onlinemarket.util.Slugify;
@@ -26,6 +27,9 @@ public abstract class MainController {
 	protected ConfigurationService configurationService;
 	
 	@Autowired
+	protected ProductCategoryService productCategoryService;
+	
+	@Autowired
 	protected UserService userService;
 	
 	protected User currentUser;
@@ -36,9 +40,9 @@ public abstract class MainController {
 	public void populateMetaPage(ModelMap model) {
 		model.put("general", configurationService.getGeneral());
 		model.put("api", configurationService.getApiConfig());
-		model.put("social", configurationService.getSocial());
 		model.put("logo", configurationService.getLogo());
 		model.put("contact", configurationService.getContag());
+		model.put("productCategoryList", productCategoryService.list());
 	}
 	
 	@ModelAttribute("currentUser")
