@@ -30,6 +30,8 @@ import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 
 import nz.net.ultraq.thymeleaf.LayoutDialect;
+import onlinemarket.converter.BrandConverter;
+import onlinemarket.converter.ProductCategoryConverter;
 import onlinemarket.converter.ProvinceConverter;
 import onlinemarket.converter.RoleConverter;
 import onlinemarket.form.config.UploadConfig;
@@ -46,6 +48,12 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 	
 	@Autowired
 	ProvinceConverter provinceConverter;
+	
+	@Autowired
+	ProductCategoryConverter productCategoryConverter;
+	
+	@Autowired
+	BrandConverter brandConverter;
 	
 	@Autowired
 	RoleConverter roleConverter;
@@ -134,6 +142,8 @@ public class AppConfig extends WebMvcConfigurerAdapter {
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(roleConverter);
         registry.addConverter(provinceConverter);
+        registry.addConverter(brandConverter);
+        registry.addConverter(productCategoryConverter);
     }
      
     /**Optional. It's only required when handling '.' in @PathVariables which otherwise ignore everything after last '.' in @PathVaidables argument.

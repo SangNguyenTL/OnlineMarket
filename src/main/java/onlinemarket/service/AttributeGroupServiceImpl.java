@@ -65,7 +65,7 @@ public class AttributeGroupServiceImpl implements AttributeGroupService{
 	}
 
 	@Override
-	public List<AttributeGroup> listWithAttributeByProductCategory(ProductCategory productCategory) {
-		return attributeGroupDao.listWithAttributeByProductCategory(productCategory);
+	public List<AttributeGroup> listByProductCategory(ProductCategory productCategory) {
+		return attributeGroupDao.listByProductCategory(productCategory);
 	}
 }

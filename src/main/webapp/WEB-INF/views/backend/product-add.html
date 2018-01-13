@@ -38,13 +38,13 @@
 									<label class="col-sm-3 form-control-label">Slug</label>
 									<div class="col-sm-3">
 										<input th:errorclass="parsley-error" class="form-control" type="text" th:field="*{slug}" required data-parsley-length="[3,255]" data-parsley-id="slug" data-parsley-target="name" 
-										th:attr="data-parsley-unique-slug=@{/api/brand/check-slug}" />
+										th:attr="data-parsley-unique-slug=@{/api/product/check-slug}" />
 										<ul class="parsley-errors-list filled" id="parsley-id-slug" th:if="${#fields.hasErrors('slug')}"><li th:errors="*{slug}"> </li></ul>
 									</div>
 								</div>
 								<div class="form-group row">
 									<label class="col-sm-3 form-control-label">Image</label>
-									<div class="col-sm-3">
+									<div class="col-sm-3 box-image">
 										<div class="box p-a-xs box-thumbnail">
 						                	<a href="#" data-toggle="modal" data-target="#modal-image-gallery" ui-toggle-class="zoom" ui-target="#animate" data-target-input="featureImage">
 						                		<img th:if="*{featureImage}" th:src="@{'/'+*{featureImage}}" alt="..." class="img-thumbnail thumbnail">
@@ -69,6 +69,34 @@
 									</div>
 								</div>
 								
+								<div class="form-group row">
+									<label class="form-control-label col-sm-3">Brand</label>
+									<div class="col-sm-3">
+										<select th:field="*{brand}" class="form-control" data-parsley-id="4" required>
+											<option value="">Please choice</option>
+											<option
+												th:each="brandChoice : ${brandList}"
+												th:value="${brandChoice.id}" th:text="${brandChoice.name}"></option>
+										</select>
+										<ul class="parsley-errors-list filled" id="parsley-id-4"
+											th:if="${#fields.hasErrors('brand')}">
+											<li th:errors="*{brand}"></li>
+										</ul>
+									</div>
+									<label class="col-sm-3 form-control-label">Product Category</label>
+									<div class="col-sm-3">
+										<select th:field="*{productCategory}" class="form-control" data-parsley-id="4" required>
+											<option value="">Please choice</option>
+											<option
+												th:each="productCate : ${productCategoryList}"
+												th:value="${productCate.id}" th:text="${productCate.name}"></option>
+										</select>
+										<ul class="parsley-errors-list filled" id="parsley-id-4"
+											th:if="${#fields.hasErrors('productCategory')}">
+											<li th:errors="*{productCategory}"></li>
+										</ul>
+									</div>
+								</div>
 								
 								<div class="form-group row">
 									<label class="col-sm-3 form-control-label">Quantity</label>
@@ -82,21 +110,10 @@
 										<ul class="parsley-errors-list filled" id="parsley-id-2" th:if="${#fields.hasErrors('price')}"><li th:errors="*{price}"> </li></ul>
 									</div>
 								</div>
-								
-								<div th:each="attributeGroup : ${listAttributeGroup}" class="form-group row">
-									<h3 class="p-t-1" th:text="${attributeGroup.name}"></h3>
-									<div class="row">
-										<label class="col-sm-3" th:text="${attribute.name}"></label>
-										<div class="col-sm-9" th:each="attribute,attrStat : ${attributeGroup.attributes}">
-											<input th:errorclass="parsley-error" class="form-control" th:type="${attribute.type}" th:unless="${attribute.type} == 'textarea'" th:field="*{attributes[__${attrStat.index}__].attribute}"/>
-											<textarea class="form-control" th:if="${attribute.type} == 'textarea'" th:field="*{attributes[__${attrStat.index}__].attribute}"></textarea>
-										</div>
-									</div>
-								</div>
 								<div class="form-group row">
 									<label class="col-sm-3 form-control-label">Description</label>
 									<div class="col-sm-9">
-										<textarea th:errorclass="parsley-error" class="form-control" th:field="*{description}" data-parsley-length="[50, 4000]" data-parsley-id="description"></textarea>
+										<textarea ui-jp="summernote" th:errorclass="parsley-error" class="form-control hide" th:field="*{description}" data-parsley-length="[50, 1000000]" data-parsley-id="description"></textarea>
 										<ul class="parsley-errors-list filled" id="parsley-id-description" th:if="${#fields.hasErrors('description')}"><li th:errors="*{description}"> </li></ul>
 									</div>
 								</div>

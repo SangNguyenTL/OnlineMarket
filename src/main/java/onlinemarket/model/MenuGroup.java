@@ -4,6 +4,8 @@ package onlinemarket.model;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -84,7 +86,7 @@ public class MenuGroup implements java.io.Serializable {
 		this.description = description;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "menuGroup")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "menuGroup", cascade = CascadeType.REMOVE)
 	public Set<Menu> getMenus() {
 		return this.menus;
 	}

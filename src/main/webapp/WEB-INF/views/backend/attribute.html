@@ -32,7 +32,7 @@
 	            <button class="btn b-a white" type="submit">Go!</button>
 	          </span>
 	        </div>
-    		<input type="hidden" th:name="*{searchBy}" th:id="*{searchBy}" th:value="*{searchBy} != '' ? *{searchBy} : 'name'"/>
+    		<input type="hidden" name="searchBy" id="searchBy"/>
     		<input type="hidden" th:field="*{size}" />
     		<input type="hidden" th:field="*{order}" />
     		<input type="hidden" th:field="*{orderBy}" />

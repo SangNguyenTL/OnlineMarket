@@ -66,7 +66,7 @@ public class Attribute implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "attribute_group_id", nullable = false)
 	public AttributeGroup getAttributeGroup() {
 		return this.attributeGroup;

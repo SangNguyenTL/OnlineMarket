@@ -64,4 +64,9 @@ public class AttributeServiceImpl implements AttributeService{
 		return attributeDao.listByAttributeGroup(attributeGroup, filterForm);
 	}
 
+	@Override
+	public List<Attribute> listByAttributeGroupNoneFilter(AttributeGroup attributeGroup) {
+		return attributeDao.listByAttributeGroupNoneFilter(attributeGroup);
+	}
+
 }

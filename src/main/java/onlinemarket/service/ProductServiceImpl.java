@@ -16,11 +16,11 @@ import onlinemarket.result.ResultObject;
 
 @Service("productService")
 @Transactional
-public class ProductServiceImpl implements ProductService{
+public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	ProductDao productDao;
-	
+
 	@Override
 	public void save(Product entity) {
 		productDao.save(entity);

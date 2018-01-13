@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:filter="http://thymeleafexamples"
+	layout:decorate="templates/backend">
+<head>
+</head>
+<body>
+
+	<div ui-view class="app-body" id="view" layout:fragment="container">
+<div class="padding">
+  <div class="box">
+    <div class="box-header">
+       <h2><a th:href="@{${relativePath}}" th:text="${pageTitle}"></a></h2>
+    </div>
+	<div class="alert alert-success m-x-lg" th:if="${success} != null">
+		<strong>Congratulation!</strong> Process completed.
+	</div>
+	<div class="alert alert-danger m-x-lg" th:if="${error} != null">
+		<strong>Obbs!</strong> [[${error}]].
+	</div>
+    <div class="table-responsive">
+      	<table class="table table-hover b-t">
+      		<thead>
+      			<tr>
+      				<th>Name</th>
+      				<th>Value</th>
+      				<th>Action</th>
+      			</tr>
+      		</thead>
+      		<tbody>
+      			<tr th:each="productAttribute : ${list}">
+      				<td th:text="${productAttribute.attribute.name}"></td>
+      				<td th:text="${productAttribute.value}"></td>
+      				<td>
+      					<a th:href="@{${relativePath}+'/'+${productAttribute.attribute.attributeGroup.id}+'/update/'+${productAttribute.attribute.id}}" class="btn btn-outline b-info text-success btn-sm">Update</a>
+      				</td>
+      			</tr>
+      		</tbody>
+      	</table>
+    </div>
+    <footer class="dker p-a"></footer>
+  </div>
+</div>
+	</div>
+
+</body>
+</html>

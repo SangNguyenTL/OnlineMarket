@@ -1,12 +1,12 @@
 (function ($) {
     "use strict";
 
-    var uniqueSlugElement = $('[data-parsley-unique-slug');
+    var uniqueSlugElement = $('[data-parsley-unique-slug]');
     if(uniqueSlugElement.length > 0){
         var data = uniqueSlugElement.data();
         if(data.parsleyTarget){
             var target = $("[name="+data.parsleyTarget+"]");
-            target.on("change",function (){
+            target.on("keyup",function (){
                 var value = slug($(this).val(), {lower: true});
                 uniqueSlugElement.val(value);
                 uniqueSlugElement.trigger("change");
@@ -32,7 +32,7 @@
         pickElement.on("click", function(){
             if(galleryData.inputElment)
             galleryData.inputElment.val(galleryData.imageLink);
-            galleryData.inputElment.closest(".box").find("img").attr("src", window.location.origin+PATH+galleryData.imageLink);
+            galleryData.inputElment.closest(".box-image").find("img").attr("src", window.location.origin+PATH+galleryData.imageLink);
         })
     }
 

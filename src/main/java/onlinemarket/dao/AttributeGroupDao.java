@@ -13,6 +13,6 @@ public interface AttributeGroupDao extends InterfaceDao<Integer, AttributeGroup>
 
 	ResultObject<AttributeGroup> listByProductCategory(ProductCategory productCategory, FilterForm filterForm);
 
-	List<AttributeGroup> listWithAttributeByProductCategory(ProductCategory productCategory);
+	List<AttributeGroup> listByProductCategory(ProductCategory productCategory);
 
 }

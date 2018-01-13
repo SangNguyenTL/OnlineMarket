@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 import onlinemarket.model.User;
+import onlinemarket.service.BrandService;
 import onlinemarket.service.ProductCategoryService;
 import onlinemarket.service.UserService;
 import onlinemarket.service.config.ConfigurationService;
@@ -30,6 +31,9 @@ public abstract class MainController {
 	protected ProductCategoryService productCategoryService;
 	
 	@Autowired
+	protected BrandService brandService;
+	
+	@Autowired
 	protected UserService userService;
 	
 	protected User currentUser;
@@ -43,6 +47,7 @@ public abstract class MainController {
 		model.put("logo", configurationService.getLogo());
 		model.put("contact", configurationService.getContag());
 		model.put("productCategoryList", productCategoryService.list());
+		model.put("brandList", brandService.list());
 	}
 	
 	@ModelAttribute("currentUser")

@@ -1,5 +1,7 @@
 package onlinemarket.dao;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
@@ -59,6 +61,14 @@ public class AttributeDaoImpl extends AbstractDao<Integer, Attribute> implements
 		result.setCurrentPage(filterForm.getCurrentPage());
 		
 		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Attribute> listByAttributeGroupNoneFilter(AttributeGroup attributeGroup) {
+		Criteria criteria = createEntityCriteria();
+		criteria.add(Restrictions.eq("attributeGroup", attributeGroup));
+		return criteria.list();
 	}
 
 }

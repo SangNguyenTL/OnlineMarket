@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:filter="http://thymeleafexamples"
+	layout:decorate="templates/backend">
+<head>
+</head>
+<body>
+
+	<div ui-view class="app-body" id="view" layout:fragment="container">
+<div class="padding">
+  <div class="box">
+    <div class="box-header">
+       <h2><a th:href="@{${relativePath}}" th:text="${pageTitle}"></a></h2>
+    </div>
+	<div class="alert alert-success m-x-lg" th:if="${success} != null">
+		<strong>Congratulation!</strong> Process completed.
+	</div>
+	<div class="alert alert-danger m-x-lg" th:if="${error} != null">
+		<strong>Obbs!</strong> [[${error}]].
+	</div>
+    <div class="table-responsive">
+      	<table class="table table-hover b-t">
+      		<thead>
+      			<tr>
+      				<th>#</th>
+      				<th>Name</th>
+      				<th>Priority</th>
+      				<th>Action</th>
+      			</tr>
+      		</thead>
+      		<tbody>
+      			<tr th:each="attributeGroup: ${list}">
+      				<td th:text="${attributeGroup.id}"></td>
+      				<td th:text="${attributeGroup.name}"></td>
+      				<td th:text="${attributeGroup.priority}"></td>
+      				<td>
+      					<a th:href="@{${relativePath}+'/'+${attributeGroup.id}+'/product-attribute'}" class="btn btn-outline b-info text-info btn-sm">View Attribute</a>
+      				</td>
+      			</tr>
+      		</tbody>
+      	</table>
+    </div>
+  </div>
+</div>
+	</div>
+
+</body>
+</html>

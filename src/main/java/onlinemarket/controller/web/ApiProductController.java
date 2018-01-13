@@ -8,29 +8,29 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import onlinemarket.model.Brand;
-import onlinemarket.service.BrandService;
+import onlinemarket.model.Product;
+import onlinemarket.service.ProductService;
 import onlinemarket.util.ResponseResult;
 
-@RequestMapping("api/brand")
+@RequestMapping("api/product")
 @RestController
-public class ApiBrandController {
+public class ApiProductController {
 
 	@Autowired
-	BrandService brandService;
+	ProductService service;
 
 	@RequestMapping(value = "/check-slug", produces = MediaType.APPLICATION_JSON_VALUE, method = { RequestMethod.POST,
 			RequestMethod.GET })
 	public ResponseEntity<?> checkSlugUnique(@RequestParam(value = "value", required = true) String value,
 			@RequestParam(value = "id", required = false) Integer id) {
 
-		Brand brand = brandService.getByDeclaration("slug", value);
+		Product product = service.getByDeclaration("slug", value);
 		boolean flag = true;
-		if (brand == null)
+		if (product == null)
 			flag = false;
 		else if(id != null){
-			Brand oldBrand = brandService.getByKey(id);
-			if (oldBrand != null && oldBrand.equals(brand))
+			Product oldProduct = service.getByKey(id);
+			if (product != null && oldProduct.equals(product))
 				flag = false;
 		}
 		return ResponseEntity.ok(new ResponseResult(flag, null));
