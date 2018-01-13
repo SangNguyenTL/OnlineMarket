@@ -8,12 +8,14 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import onlinemarket.form.filter.FilterForm;
 import onlinemarket.model.Product;
+import onlinemarket.model.ProductCategory;
 import onlinemarket.model.other.AdvancedValidation;
 import onlinemarket.service.ProductCategoryService;
 import onlinemarket.service.ProductService;
@@ -60,6 +62,8 @@ public class AdminController extends MainController {
 		model.put("path", "product");
 		model.put("relativePath", "/admin/product");
 		
+		return "backend/product";
+	}
 
 	@RequestMapping("/product-category/{id:^\\d}/product")
 	public String productPage(@PathVariable("id") Integer id, @ModelAttribute("filterForm") FilterForm filterForm,
