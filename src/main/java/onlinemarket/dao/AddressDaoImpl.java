@@ -8,7 +8,7 @@ import onlinemarket.model.Address;
 import onlinemarket.model.Province;
 
 @Repository("addressDao")
-public class AddressDaoImpl extends AbstractDao<Integer, Address> implements AddressDao{
+public abstract class AddressDaoImpl extends AbstractDao<Integer, Address> implements AddressDao{
 
 	@Override
 	public Address getByProvince(Province province) {

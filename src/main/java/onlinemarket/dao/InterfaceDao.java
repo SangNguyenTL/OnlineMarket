@@ -15,6 +15,8 @@ interface InterfaceDao<PK extends Serializable,T> {
 	
 	List<T> list();
 	
+	List<T> listByDeclaration(String propertyName, Object object);
+	
 	List<T> list(Integer offset, Integer maxResults);
 	
 	List<T> listByInList(String key, List<String> listValue);

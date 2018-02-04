@@ -27,7 +27,6 @@ public class MenuGroup implements java.io.Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Integer id;
-	private String slug;
 	private String name;
 	private String description;
 	private Set<Menu> menus = new HashSet<Menu>(0);
@@ -35,13 +34,11 @@ public class MenuGroup implements java.io.Serializable {
 	public MenuGroup() {
 	}
 
-	public MenuGroup(String slug, String name) {
-		this.slug = slug;
+	public MenuGroup(String name) {
 		this.name = name;
 	}
 
-	public MenuGroup(String slug, String name, String description, Set<Menu> menus) {
-		this.slug = slug;
+	public MenuGroup(String name, String description, Set<Menu> menus) {
 		this.name = name;
 		this.description = description;
 		this.menus = menus;
@@ -57,15 +54,6 @@ public class MenuGroup implements java.io.Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	@Column(name = "slug", nullable = false)
-	public String getSlug() {
-		return this.slug;
-	}
-
-	public void setSlug(String slug) {
-		this.slug = slug;
 	}
 
 	@Column(name = "[name]", nullable = false)

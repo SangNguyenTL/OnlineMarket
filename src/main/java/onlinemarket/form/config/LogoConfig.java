@@ -3,7 +3,6 @@ package onlinemarket.form.config;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
-import org.hibernate.validator.constraints.URL;
 
 
 public class LogoConfig {

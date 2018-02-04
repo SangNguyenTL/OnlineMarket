@@ -9,7 +9,7 @@ import onlinemarket.model.ProductAttribute;
 import onlinemarket.model.ProductAttributeId;
 
 @Repository("productAttributeDao")
-public class ProductAttributeDaoImpl extends AbstractDao<ProductAttributeId, ProductAttribute> implements ProductAttributeDao{
+public abstract class ProductAttributeDaoImpl extends AbstractDao<ProductAttributeId, ProductAttribute> implements ProductAttributeDao{
 
 	@Override
 	public ProductAttribute getByAttribute(Attribute attribute) {

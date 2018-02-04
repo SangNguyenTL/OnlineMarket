@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import onlinemarket.dao.MenuDao;
 import onlinemarket.model.Menu;
+import onlinemarket.model.MenuGroup;
 
 @Service("menuDao")
 @Transactional
@@ -50,6 +51,11 @@ public class MenuServiceImpl implements MenuService{
 	@Override
 	public List<Menu> list(Integer offset, Integer maxResults) {
 		return menuDao.list(offset, maxResults);
+	}
+
+	@Override
+	public List<Menu> listByDeclaration(String propertyName, MenuGroup menuGroup) {
+		return menuDao.listByDeclaration(propertyName, menuGroup);
 	}
 
 }

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="templates/backend">
+<head>
+</head>
+<body>
+
+	<div ui-view class="app-body" id="view" layout:fragment="container">
+		<div class="padding">
+
+			<h5 class="_300 margin" th:text="${pageTitle}"></h5>
+			<div class="alert alert-success" th:if="${success}">
+				<strong>Congratulation!</strong> Process completed.
+			</div>
+			<div class="row">
+				<div class="col-md-9">
+
+					<div class="box">
+						<div class="box-header">
+							<h2>
+								<a th:href="@{${relativePath}}" th:text="${subPageTitle}"></a>
+							</h2>
+							<small th:text="${description}"></small>
+						</div>
+
+						<div class="box-divider m-a-0"></div>
+
+						<div class="box-body">
+							<form ui-jp="parsley" role="form" th:object="${groupMenu}"
+								th:action="@{${pathAction}}" method="POST">
+								<input th:if="${action} == 'update'" type="hidden"
+									th:field="*{id}" />
+								<div class="form-group row">
+									<label class="col-sm-3 form-control-label">Name</label>
+									<div class="col-sm-9">
+										<input th:errorclass="parsley-error" class="form-control"
+											type="text" th:field="*{name}" required
+											data-parsley-length="[0, 255]" data-parsley-id="1" />
+										
+										<ul class="parsley-errors-list filled" id="parsley-id-1"
+											th:if="${#fields.hasErrors('name')}">
+											<li th:errors="*{name}"></li>
+										</ul>
+									</div>
+								</div>
+								<div class="form-group row">
+									<label class="col-sm-3 form-control-label">Path</label>
+									<div class="col-sm-9">
+										<input th:errorclass="parsley-error" class="form-control"
+											type="text" th:field="*{path}" required
+											data-parsley-length="[0, 2083]" data-parsley-id="1" />
+										
+										<ul class="parsley-errors-list filled" id="parsley-id-1"
+											th:if="${#fields.hasErrors('path')}">
+											<li th:errors="*{path}"></li>
+										</ul>
+									</div>
+								</div>
+								<div class="form-group row">
+									<label class="col-sm-3 form-control-label">Description</label>
+									<div class="col-sm-9">
+										<textarea
+											th:type="*{attribute.type}" th:field="*{description}" required
+											data-parsley-length="[0, 500]" data-parsley-id="1"
+										></textarea>
+										<ul class="parsley-errors-list filled" id="parsley-id-1"
+											th:if="${#fields.hasErrors('description')}">
+											<li th:errors="*{description}"></li>
+										</ul>
+									</div>
+								</div>
+								<div class="dker p-a text-right">
+									<button type="submit" class="btn info">Save</button>
+								</div>
+							</form>
+
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

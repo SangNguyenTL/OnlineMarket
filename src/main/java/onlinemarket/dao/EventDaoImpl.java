@@ -10,7 +10,7 @@ import onlinemarket.model.ProductCategory;
 import onlinemarket.model.User;
 
 @Repository("eventDao")
-public class EventDaoImpl extends AbstractDao<Integer, Event> implements EventDao {
+public abstract class EventDaoImpl extends AbstractDao<Integer, Event> implements EventDao {
 
 	@Override
 	public Event getByBrand(Brand brand) {

@@ -1,7 +1,10 @@
 package onlinemarket.dao;
 
+import org.springframework.stereotype.Repository;
+
 import onlinemarket.model.MenuGroup;
 
-public class MenuGroupDaoImpl extends AbstractDao<Integer, MenuGroup> implements MenuGroupDao{
+@Repository("menuGroupDao")
+public abstract class MenuGroupDaoImpl extends AbstractDao<Integer, MenuGroup> implements MenuGroupDao{
 
 }

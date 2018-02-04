@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import onlinemarket.model.Province;
 
 @Repository("provinceDao")
-public class ProvinceDaoImpl extends AbstractDao<Integer, Province> implements ProvinceDao{
+public abstract class ProvinceDaoImpl extends AbstractDao<Integer, Province> implements ProvinceDao{
 
 }

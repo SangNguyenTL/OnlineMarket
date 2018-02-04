@@ -8,7 +8,7 @@ import onlinemarket.model.Brand;
 import onlinemarket.model.Event;
 
 @Repository("brandDao")
-public class BrandDaoImpl extends AbstractDao<Integer, Brand> implements BrandDao{
+public abstract class BrandDaoImpl extends AbstractDao<Integer, Brand> implements BrandDao{
 
 	@Override
 	public Brand getByEvent(Event event) {

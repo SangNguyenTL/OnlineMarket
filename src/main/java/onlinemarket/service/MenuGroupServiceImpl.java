@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import onlinemarket.dao.MenuGroupDao;
-import onlinemarket.form.filter.FilterForm;
 import onlinemarket.model.MenuGroup;
-import onlinemarket.result.ResultObject;
 
 @Service("menuGroupService")
 @Transactional
@@ -52,11 +50,6 @@ public class MenuGroupServiceImpl implements MenuGroupService{
 	@Override
 	public List<MenuGroup> list(Integer offset, Integer maxResults) {
 		return menuGroupDao.list(offset, maxResults);
-	}
-
-	@Override
-	public ResultObject<MenuGroup> list(FilterForm filterForm) {
-		return menuGroupDao.list(filterForm);
 	}
 
 }

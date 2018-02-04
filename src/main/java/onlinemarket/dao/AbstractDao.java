@@ -67,6 +67,13 @@ public abstract class AbstractDao<PK extends Serializable, T> {
 		return (List<T>) criteria.list();
     }
     
+    @SuppressWarnings("unchecked")
+	public List<T> listByDeclaration(String propertyName, Object object){
+		Criteria criteria = createEntityCriteria();
+		criteria.add(Restrictions.eq(propertyName, object));
+		return (List<T>) criteria.list();
+    }
+    
 	public long count(){
 		Criteria criteria = createEntityCriteria();
 		criteria.setProjection(Projections.rowCount());
