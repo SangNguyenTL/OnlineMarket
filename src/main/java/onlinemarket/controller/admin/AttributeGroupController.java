@@ -180,7 +180,7 @@ public class AttributeGroupController extends MainController{
 	}
 
 	
-	@RequestMapping(value = "/update/{idAtt:^\\d+}", method = RequestMethod.POST)
+	@RequestMapping(value = "/update/{idAttr:^\\d+}", method = RequestMethod.POST)
 	public String processUpdatePage(
 			@PathVariable("idAttr") int idAttr,
 			@ModelAttribute("attributeGroup") @Valid AttributeGroup attributeGroup,
@@ -198,6 +198,7 @@ public class AttributeGroupController extends MainController{
 			}
 			
 			if (!result.hasErrors()) {
+				attributeGroup.setProductCategory(productCategory);
 				attributeGroupService.update(attributeGroup);
 				redirectAttributes.addFlashAttribute("success", "");
 				return "redirect:"+relativePath;

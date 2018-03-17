@@ -32,12 +32,11 @@ public class AdminController extends MainController {
 
 	@ModelAttribute
 	public ModelMap populateAttribute(ModelMap model) {
-		model.put("productPage", true);
 		model.put("filterForm", new FilterForm());
 		return model;
 	}
 
-	@RequestMapping(value = { "" }, method = RequestMethod.GET)
+	@RequestMapping(value = "", method = RequestMethod.GET)
 	String homePage(ModelMap model) {
 
 		model.put("pageTitle", "Aministrator Page");

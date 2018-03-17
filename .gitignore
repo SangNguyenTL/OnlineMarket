@@ -27,3 +27,6 @@ hs_err_pid*
 .classpath
 .classpath
 .classpath
+.springBeans
+.settings/org.springframework.ide.eclipse.beans.core.prefs
+.settings/org.springframework.ide.eclipse.core.prefs
