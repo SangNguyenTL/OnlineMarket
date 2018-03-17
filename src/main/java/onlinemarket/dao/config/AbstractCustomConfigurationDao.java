@@ -24,7 +24,7 @@ public abstract class AbstractCustomConfigurationDao<T> {
     	
     	for (Configuration configuration : listConf) {
     		try {
-        		Field fieldObject = clazz.getClass().getDeclaredField((String) configuration.getKey());
+        		Field fieldObject = clazz.getClass().getDeclaredField(configuration.getKey());
         		fieldObject.setAccessible(true);
         		String val = configuration.getValue();
         		if(fieldObject.getClass().equals(Integer.class)) {
@@ -40,7 +40,7 @@ public abstract class AbstractCustomConfigurationDao<T> {
 				continue;
 			}
 		}
-		return (T) clazz;
+		return clazz;
     }
     
     public void saveConfiguration(T clazz) {

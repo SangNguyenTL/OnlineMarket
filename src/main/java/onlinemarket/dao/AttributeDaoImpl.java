@@ -15,7 +15,7 @@ import onlinemarket.model.AttributeGroup;
 import onlinemarket.result.ResultObject;
 
 @Repository("attributeDao")
-public abstract class AttributeDaoImpl extends AbstractDao<Integer, Attribute> implements AttributeDao{
+public class AttributeDaoImpl extends AbstractDao<Integer, Attribute> implements AttributeDao{
 
 	@Override
 	public Attribute getByAttributeGroup(AttributeGroup attributeGroup) {

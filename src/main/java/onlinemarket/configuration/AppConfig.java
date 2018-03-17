@@ -40,7 +40,7 @@ import onlinemarket.thymeleaf.dialect.FilterFormDialect;
 
 @EnableWebMvc
 @Configuration
-@ComponentScan(basePackages = {"onlinemarket"})
+@ComponentScan(basePackages = "onlinemarket")
 public class AppConfig extends WebMvcConfigurerAdapter {
 
 	@Autowired

@@ -15,7 +15,7 @@ import onlinemarket.model.ProductCategory;
 import onlinemarket.result.ResultObject;
 
 @Repository("productDao")
-public abstract class ProductDaoImpl extends AbstractDao<Integer, Product> implements ProductDao{
+public class ProductDaoImpl extends AbstractDao<Integer, Product> implements ProductDao{
 
 	@Override
 	public Product getByBrand(Brand brand) {

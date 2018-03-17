@@ -8,7 +8,7 @@ import onlinemarket.model.Event;
 import onlinemarket.model.ProductCategory;
 
 @Repository("productCategoryDao")
-public abstract class ProductCategoryDaoImpl extends AbstractDao<Integer, ProductCategory> implements ProductCategoryDao{
+public class ProductCategoryDaoImpl extends AbstractDao<Integer, ProductCategory> implements ProductCategoryDao{
 
 	@Override
 	public ProductCategory getByEvent(Event event) {

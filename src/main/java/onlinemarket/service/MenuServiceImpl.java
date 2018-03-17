@@ -11,7 +11,7 @@ import onlinemarket.dao.MenuDao;
 import onlinemarket.model.Menu;
 import onlinemarket.model.MenuGroup;
 
-@Service("menuDao")
+@Service("menuService")
 @Transactional
 public class MenuServiceImpl implements MenuService{
 

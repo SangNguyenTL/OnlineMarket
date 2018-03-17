@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import onlinemarket.model.PostCategory;
 
 @Repository("postCategoryDao")
-public abstract class PostCategoryDaoImpl extends AbstractDao<Integer, PostCategory> implements PostCategoryDao{
+public class PostCategoryDaoImpl extends AbstractDao<Integer, PostCategory> implements PostCategoryDao{
 
 }

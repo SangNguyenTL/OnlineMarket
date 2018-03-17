@@ -8,7 +8,7 @@ import onlinemarket.model.Event;
 import onlinemarket.model.User;
 
 @Repository("userDao")
-public abstract class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
+public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
 
 	@Override
 	public User getByEmail(String email) {

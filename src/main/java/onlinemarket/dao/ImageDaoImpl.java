@@ -17,7 +17,7 @@ import onlinemarket.model.Image;
 import onlinemarket.result.api.ResultImage;
 
 @Repository("imageDao")
-public abstract class ImageDaoImpl extends AbstractDao<Integer, Image> implements ImageDao{
+public class ImageDaoImpl extends AbstractDao<Integer, Image> implements ImageDao{
 
 	@SuppressWarnings("unchecked")
 	@Override

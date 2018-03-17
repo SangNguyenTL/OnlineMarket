@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import onlinemarket.model.Menu;
 
 @Repository("menuDao")
-public abstract class MenuDaoImpl extends AbstractDao<Integer, Menu> implements MenuDao{
+public class MenuDaoImpl extends AbstractDao<Integer, Menu> implements MenuDao{
 
 }
