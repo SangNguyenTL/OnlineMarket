@@ -7,18 +7,18 @@ import onlinemarket.model.Product;
 import onlinemarket.model.ProductCategory;
 import onlinemarket.result.ResultObject;
 
-public interface ProductService extends InterfaceService<Integer, Product>{
-	
-	public Product getByBrand(Brand brand);
-	
-	public Product getByEvent(Event event);
-	
-	public Product getByProductCategory(ProductCategory productCategory);
+public interface ProductService extends InterfaceService<Integer, Product> {
 
-	public ResultObject<Product> list(FilterForm filterForm);
+    Product getByBrand(Brand brand);
 
-	public ResultObject<Product> listByProductCategory(ProductCategory productCategory, FilterForm filterForm);
+    Product getByEvent(Event event);
 
-	ResultObject<Product> listByBrand(Brand brand, FilterForm filterForm);
+    Product getByProductCategory(ProductCategory productCategory);
+
+    ResultObject<Product> list(FilterForm filterForm);
+
+    ResultObject<Product> listByProductCategory(ProductCategory productCategory, FilterForm filterForm);
+
+    ResultObject<Product> listByBrand(Brand brand, FilterForm filterForm);
 
 }

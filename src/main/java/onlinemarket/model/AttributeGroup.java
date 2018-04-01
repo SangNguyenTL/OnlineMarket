@@ -36,7 +36,7 @@ public class AttributeGroup implements java.io.Serializable {
 	private String name;
 	private String description;
 	private Integer priority;
-	private Set<Attribute> attributes = new HashSet<Attribute>(0);
+	private Set<Attribute> attributes = new HashSet<>(0);
 
 	public AttributeGroup() {
 	}
@@ -79,7 +79,7 @@ public class AttributeGroup implements java.io.Serializable {
 		this.productCategory = productCategory;
 	}
 
-	@Column(name = "[name]", nullable = false)
+	@Column(name = "name", nullable = false)
 	@NotEmpty
 	@Size(max = 128)
 	public String getName() {
@@ -116,8 +116,8 @@ public class AttributeGroup implements java.io.Serializable {
 		return priority;
 	}
 
-	public void setPriority(Integer piority) {
-		this.priority = piority;
+	public void setPriority(Integer priority) {
+		this.priority = priority;
 	}
 
 }

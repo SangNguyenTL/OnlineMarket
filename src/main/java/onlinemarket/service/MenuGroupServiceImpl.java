@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import onlinemarket.util.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,7 @@ public class MenuGroupServiceImpl implements MenuGroupService{
 	}
 
 	@Override
-	public void update(MenuGroup entity) {
+	public void update(MenuGroup entity) throws CustomException {
 		menuGroupDao.update(entity);
 	}
 

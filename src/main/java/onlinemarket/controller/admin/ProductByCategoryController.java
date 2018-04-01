@@ -117,37 +117,37 @@ public class ProductByCategoryController extends MainController {
 
 	}
 
-	@RequestMapping(value = "/update/{idPr:^\\d+}", method = RequestMethod.POST)
-	public String processUpdatePage(@PathVariable("idPr") int idPr, @ModelAttribute("product") @Valid Product product,
-			BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
-
-		if (productCategory == null) {
-			redirectAttributes.addFlashAttribute("error", "Product category not found.");
-			return "redirect:/admin/product-category";
-		}
-
-		Product productCheck = productService.getByKey(idPr);
-		if (productCheck == null) {
-			redirectAttributes.addFlashAttribute("error", "Product not found.");
-			return "redirect:" + relativePath;
-		}
-
-		if (!result.hasErrors()) {
-			product.setProductCategory(productCategory);
-			productService.update(product);
-			redirectAttributes.addFlashAttribute("success", "");
-			return "redirect:" + relativePath;
-		}
-
-		model.put("pageTitle", "Update new product");
-		model.put("subPageTitle", "Update for " + productCategory.getName());
-		model.put("description", "Update product for " + productCategory.getName());
-		model.put("action", "update");
-		model.put("pathAction", relativePath + "/update");
-		model.put("product", product);
-
-		return "backend/product-add";
-	}
+//	@RequestMapping(value = "/update/{idPr:^\\d+}", method = RequestMethod.POST)
+//	public String processUpdatePage(@PathVariable("idPr") int idPr, @ModelAttribute("product") @Valid Product product,
+//			BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
+//
+//		if (productCategory == null) {
+//			redirectAttributes.addFlashAttribute("error", "Product category not found.");
+//			return "redirect:/admin/product-category";
+//		}
+//
+//		Product productCheck = productService.getByKey(idPr);
+//		if (productCheck == null) {
+//			redirectAttributes.addFlashAttribute("error", "Product not found.");
+//			return "redirect:" + relativePath;
+//		}
+//
+//		if (!result.hasErrors()) {
+//			product.setProductCategory(productCategory);
+//			productService.update(product);
+//			redirectAttributes.addFlashAttribute("success", "");
+//			return "redirect:" + relativePath;
+//		}
+//
+//		model.put("pageTitle", "Update new product");
+//		model.put("subPageTitle", "Update for " + productCategory.getName());
+//		model.put("description", "Update product for " + productCategory.getName());
+//		model.put("action", "update");
+//		model.put("pathAction", relativePath + "/update");
+//		model.put("product", product);
+//
+//		return "backend/product-add";
+//	}
 
 	@RequestMapping(value = "/delete", method = { RequestMethod.POST, RequestMethod.GET })
 	public String processDeleteProvince(@RequestParam(value = "id", required = true) Integer productId,

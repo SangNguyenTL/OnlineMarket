@@ -15,19 +15,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import onlinemarket.form.config.UploadForm;
-import onlinemarket.service.exception.CreateFolderException;
-import onlinemarket.service.exception.UploadTypeException;
+import onlinemarket.util.exception.CreateFolderException;
+import onlinemarket.util.exception.UploadTypeException;
 
 @Service
 public class StorageServiceImpl implements StorageService{
 
-	final String rootPath = "/assets/images/";
-	
+
 	@Autowired
 	ServletContext context;
 
 	@Override
 	public List<File> store(UploadForm form) throws IllegalStateException, IOException, UploadTypeException, CreateFolderException {
+		String rootPath = "/assets/images/";
 		List<MultipartFile> files = form.getFiles();
 		String uploadType = form.getUploadType();
 		Date cDate = new Date();
@@ -35,14 +35,13 @@ public class StorageServiceImpl implements StorageService{
 		long cTime = cDate.getTime();
 		String[] allowType = {"site", "product", "user", "event", "post", "brand"};
 		if(!ArrayUtils.contains(allowType, uploadType)) throw new UploadTypeException("Upload Type is isvalid");
-		String saveFolder = uploadType;
-		String drirectory = rootPath+saveFolder+"/"+cYearMonth;
-		if(!createFolder(drirectory)) throw new CreateFolderException("Can not create directory.");
-		List<File> fileList = new ArrayList<File>();
+		String directory = rootPath+uploadType+"/"+cYearMonth;
+		if(!createFolder(directory)) throw new CreateFolderException("Can not create directory.");
+		List<File> fileList = new ArrayList<>();
 		for (MultipartFile multipartFile : files) {
 			String originalFilename = multipartFile.getOriginalFilename(),
 					newName = String.valueOf(cTime)+ "-" + originalFilename;
-			File destinationFile = new File(context.getRealPath(drirectory)+"/"+newName);
+			File destinationFile = new File(context.getRealPath(directory)+"/"+newName);
 			multipartFile.transferTo(destinationFile);
 			fileList.add(destinationFile);
 		}
@@ -50,16 +49,18 @@ public class StorageServiceImpl implements StorageService{
 	}
 
 	@Override
-	public void delete(String path) {
-		if(path == null) return;
-		path = context.getRealPath("")+path.replace("/", "\\");
+	public boolean delete(String path) {
+		if(path == null) return true;
+		path = context.getRealPath(path);
+
 		File file = new File(path);
-		if(file.exists()) file.delete();
+		if(file.exists()) return file.delete();
+		else return false;
 	}
 	
-	public boolean createFolder(String path) {
+	private boolean createFolder(String path) {
 		if(path == null) return false;
-		path = context.getRealPath("")+path.replace("/", "\\");
+		path = context.getRealPath(path);
 		File folder = new File(path);
 		boolean flag = true;
 		if(!folder.exists())

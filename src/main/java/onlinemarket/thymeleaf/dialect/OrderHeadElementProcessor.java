@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -55,19 +56,18 @@ public class OrderHeadElementProcessor extends AbstractElementTagProcessor {
 		attributes.put("uri", "");
 	}
 
-	
 	@Override
 	protected void doProcess(ITemplateContext context, IProcessableElementTag tag,
 			IElementTagStructureHandler structureHandler) {
-		
+
 		filterForm = (FilterForm) context.getVariable("filterForm");
-		
-		if(filterForm == null) filterForm = new FilterForm();
-		
+
+		if (filterForm == null)
+			filterForm = new FilterForm();
+
 		processAttributes(tag);
 
-		if (!StringUtils.equalsIgnoreCase(order, "asc")
-				&& !StringUtils.equalsIgnoreCase(order, "desc"))
+		if (!StringUtils.equalsIgnoreCase(order, "asc") && !StringUtils.equalsIgnoreCase(order, "desc"))
 			order = "asc";
 
 		/*
@@ -105,30 +105,46 @@ public class OrderHeadElementProcessor extends AbstractElementTagProcessor {
 
 	private String buildQuery() {
 		StringBuilder sb = new StringBuilder();
-    	    	
+
 		for (Field field : filterForm.getClass().getDeclaredFields()) {
 			field.setAccessible(true);
 			try {
-				if(StringUtils.equals(field.getName(), "currentPage")) continue;
-				
+				if (StringUtils.equals(field.getName(), "currentPage"))
+					continue;
+
 				Object value = field.get(filterForm);
 
 				if (sb.length() > 0) {
 					sb.append('&');
 				}
-				
-				if(StringUtils.equals(field.getName(), "orderBy")){
-					value = orderBy;
+
+				if (value instanceof String && StringUtils.isEmpty((String) value))
+					continue;
+
+				if (StringUtils.equals(field.getName(), "groupSearch")) {
+
+					@SuppressWarnings("unchecked")
+					TreeMap<String, String> values = (TreeMap<String, String>) value;
+					Iterator<Map.Entry<String, String>> valueI = values.entrySet().iterator();
+					while (valueI.hasNext()) {
+						Map.Entry<String, String> valueE = valueI.next();
+						sb.append(valueE.getKey()).append("=").append(URLEncoder.encode(valueE.getValue(), "UTF-8"));
+					}
+
+				} else {
+
+					if (StringUtils.equals(field.getName(), "orderBy")) {
+						value = orderBy;
+					}
+
+					if (StringUtils.equals(filterForm.getOrderBy(), orderBy)
+							&& StringUtils.equals(field.getName(), "order")) {
+						value = ((String) value).toLowerCase().equals("asc") ? "desc" : "asc";
+					}
+
+					sb.append(URLEncoder.encode(field.getName(), "UTF-8")).append('=')
+							.append(URLEncoder.encode(String.valueOf(value), "UTF-8"));
 				}
-				
-				if(!(value instanceof Integer) && StringUtils.isBlank((String) value)) continue;
-				
-				if (StringUtils.equals(filterForm.getOrderBy(), orderBy) && StringUtils.equals(field.getName(), "order")) {
-					value = ((String) value).toLowerCase().equals("asc") ? "desc" : "asc";
-				}
-				
-				sb.append(URLEncoder.encode(field.getName(), "UTF-8")).append('=')
-						.append(URLEncoder.encode(String.valueOf(value), "UTF-8"));
 			} catch (UnsupportedEncodingException | IllegalArgumentException | IllegalAccessException e) {
 				continue;
 			}
@@ -147,7 +163,8 @@ public class OrderHeadElementProcessor extends AbstractElementTagProcessor {
 			Object value = entry.getValue();
 			if (value instanceof Integer) {
 				try {
-					if(str instanceof Integer) entry.setValue(str);
+					if (str instanceof Integer)
+						entry.setValue(str);
 					else {
 						int val = Integer.parseInt((String) str);
 						entry.setValue(val);
@@ -155,22 +172,22 @@ public class OrderHeadElementProcessor extends AbstractElementTagProcessor {
 				} catch (Exception e) {
 					continue;
 				}
-			} else if(value instanceof String ){
+			} else if (value instanceof String) {
 				entry.setValue(HtmlEscape.escapeHtml5(((String) str).trim()));
 			}
 			try {
-				
+
 				Field field = this.getClass().getDeclaredField(key);
-				
+
 				field.setAccessible(true);
-				
+
 				if (field.getClass().equals(Integer.class)) {
 					int iNum = (int) entry.getValue();
 					field.set(this, iNum);
 				} else {
 					field.set(this, entry.getValue());
 				}
-				
+
 			} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
 				continue;
 			}

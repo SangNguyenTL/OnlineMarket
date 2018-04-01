@@ -81,19 +81,21 @@
 		if (this.map == undefined || this.marker == undefined
 				|| this.searchInput.val() < 5)
 			return;
-		var geocoder = new google.maps.Geocoder();
+		var geocoder = new google.maps.Geocoder(), _this = this;
 		geocoder.geocode({
 			'address' : this.searchInput.val()
 		}, function(results, status) {
 
 			if (status == google.maps.GeocoderStatus.OK) {
-				this.settings.coordinate.lat = results[0].geometry.location
+                _this.settings.coordinate.lat = results[0].geometry.location
 						.lat();
-				this.settings.coordinate.lng = results[0].geometry.location
+                _this.settings.coordinate.lng = results[0].geometry.location
 						.lng();
+                _this.latInput.val(_this.settings.coordinate.lat);
+                _this.lngInput.val(_this.settings.coordinate.lng);
 			}
+            _this.initMap();
 		});
-		this.initMap();
 	}
 
 	MyMap.prototype.toggleBounce = function() {
@@ -101,8 +103,8 @@
 			this.marker.setAnimation(null);
 		} else {
 			this.marker.setAnimation(google.maps.Animation.BOUNCE);
-			this.latInput.val(this.marker.center.lat());
-			this.lngInput.val(this.marker.center.lng());
+			this.latInput.val(this.marker.position.lat());
+			this.lngInput.val(this.marker.position.lng());
 		}
 	}
 

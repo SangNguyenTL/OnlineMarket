@@ -8,7 +8,9 @@ public enum TypeHtml {
 	TEXTAREA("textarea"),
 	EMAIL("email"),
 	TEL("tel"),
-	DATE("date");
+	DATE("date"),
+	SELECT("select"),
+	CHECKBOX("checkbox");
 	
 	private String name;
 	

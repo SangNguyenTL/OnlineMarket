@@ -36,7 +36,7 @@ public class Attribute implements java.io.Serializable {
 	private String description;
 	private String type;
 	private int priority;
-	private Set<ProductAttribute> productAttributes = new HashSet<ProductAttribute>(0);
+	private Set<AttributeValues> attributeValues;
 
 	public Attribute() {
 	}
@@ -47,11 +47,11 @@ public class Attribute implements java.io.Serializable {
 	}
 
 	public Attribute(AttributeGroup attributeGroup, String name, String description,
-			Set<ProductAttribute> productAttributes) {
+			Set<AttributeValues> attributeValues) {
 		this.attributeGroup = attributeGroup;
 		this.name = name;
 		this.description = description;
-		this.productAttributes = productAttributes;
+		this.attributeValues = attributeValues;
 	}
 
 	@Id
@@ -76,7 +76,7 @@ public class Attribute implements java.io.Serializable {
 		this.attributeGroup = attributeGroup;
 	}
 
-	@Column(name = "[name]", nullable = false)
+	@Column(name = "name", nullable = false)
 	@Size(max = 128)
 	@NotEmpty
 	public String getName() {
@@ -97,9 +97,9 @@ public class Attribute implements java.io.Serializable {
 		this.description = description;
 	}
 
-	@Column(name = "[type]", nullable = false)
-	@Size(min = 0, max = 20)
-	@StringContain(acceptedValues = { "text", "url", "date", "hidden", "number", "email", "tel", "range" })
+	@Column(name = "type", nullable = false)
+	@Size( max = 50)
+	@StringContain(acceptedValues = { "text", "url", "date", "hidden", "number", "email", "tel", "range", "select", "checkbox" })
 	@NotEmpty
 	public String getType() {
 		return type;
@@ -109,7 +109,7 @@ public class Attribute implements java.io.Serializable {
 		this.type = type;
 	}
 
-	@Column(name = "[priority]")
+	@Column(name = "priority")
 	@Range(min = 0, max = 1000)
 	public int getPriority() {
 		return priority;
@@ -120,12 +120,12 @@ public class Attribute implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "attribute")
-	public Set<ProductAttribute> getProductAttributes() {
-		return this.productAttributes;
+	public Set<AttributeValues> getProductAttributes() {
+		return this.attributeValues;
 	}
 
-	public void setProductAttributes(Set<ProductAttribute> productAttributes) {
-		this.productAttributes = productAttributes;
+	public void setProductAttributes(Set<AttributeValues> productAttributes) {
+		this.attributeValues = productAttributes;
 	}
 
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import onlinemarket.util.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,7 @@ public class MenuServiceImpl implements MenuService{
 	}
 
 	@Override
-	public void update(Menu entity) {
+	public void update(Menu entity) throws CustomException {
 		menuDao.update(entity);
 	}
 

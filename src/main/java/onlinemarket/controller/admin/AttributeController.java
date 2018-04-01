@@ -17,11 +17,9 @@ import onlinemarket.controller.MainController;
 import onlinemarket.form.filter.FilterForm;
 import onlinemarket.model.Attribute;
 import onlinemarket.model.AttributeGroup;
-import onlinemarket.model.ProductAttribute;
 import onlinemarket.model.ProductCategory;
 import onlinemarket.service.AttributeGroupService;
 import onlinemarket.service.AttributeService;
-import onlinemarket.service.ProductAttributeService;
 import onlinemarket.service.ProductCategoryService;
 
 @Controller
@@ -37,14 +35,9 @@ public class AttributeController extends MainController {
 	@Autowired
 	ProductCategoryService productCategoryService;
 
-	@Autowired
-	ProductAttributeService productAttributeService;
-
 	ProductCategory productCategory;
 	
 	AttributeGroup attributeGroup;
-	
-	String relativePath;
 	
 	String relativePathNonAttriId;
 	
@@ -233,7 +226,7 @@ public class AttributeController extends MainController {
 
 		if (!result.hasErrors()) {
 			attribute.setAttributeGroup(attributeGroup);
-			attributeService.update(attribute);
+//			attributeService.update(attribute);
 			redirectAttributes.addFlashAttribute("success", "");
 			return "redirect:"+relativePath;
 		}
@@ -271,13 +264,13 @@ public class AttributeController extends MainController {
 		if (attribute == null) {
 			redirectAttributes.addAttribute("error", "The attribute isn't been exist!");
 		} else {
-			ProductAttribute productAttribute = productAttributeService.getByAttribute(attribute);
-			if (productAttribute != null)
-				redirectAttributes.addAttribute("error", "The attribute has already been had product!");
-			else {
-				redirectAttributes.addFlashAttribute("success", "success");
-				attributeService.delete(attribute);
-			}
+//			ProductAttribute productAttribute = productAttributeService.getByAttribute(attribute);
+//			if (productAttribute != null)
+//				redirectAttributes.addAttribute("error", "The attribute has already been had product!");
+//			else {
+//				redirectAttributes.addFlashAttribute("success", "success");
+//				attributeService.delete(attribute);
+//			}
 		}
 		return "redirect:" + relativePath;
 	}

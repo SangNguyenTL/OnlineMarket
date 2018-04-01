@@ -16,7 +16,7 @@
     });
     
     function sendFile(element, file) {
-        data = new FormData();
+        var data = new FormData();
         data.append("files", file);
         data.append("uploadType", "product");
         $.ajax({

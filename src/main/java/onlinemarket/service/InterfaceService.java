@@ -1,5 +1,7 @@
 package onlinemarket.service;
 
+import onlinemarket.util.exception.CustomException;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -7,7 +9,7 @@ public interface InterfaceService<PK extends Serializable,T> {
 	
 	void save(T entity);
 	
-	void update(T entity);
+	void update(T entity) throws CustomException;
 	
 	void delete(T entity);
 	

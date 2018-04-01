@@ -1,7 +1,7 @@
 package onlinemarket.model.other;
 
-import javax.persistence.Column;
 import javax.validation.Valid;
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -12,20 +12,20 @@ import onlinemarket.validation.PasswordsEqualConstraint;
 
 @PasswordsEqualConstraint()
 public class UserAddressNest {
-	
+
 	@Valid
 	private User user;
-	
+
 	@Valid
 	private Address address;
-	
-	@Column
+
 	@NotEmpty
-	@Size(min=6, max=60)
+	@Size(min = 6, max = 60)
 	private String confirmPassword;
-	
-	private String agree;
-	
+
+	@AssertTrue
+	private boolean agree;
+
 	public String getConfirmPassword() {
 		return confirmPassword;
 	}
@@ -33,7 +33,6 @@ public class UserAddressNest {
 	public void setConfirmPassword(String confirmPassword) {
 		this.confirmPassword = confirmPassword;
 	}
-
 
 	public User getUser() {
 		return user;
@@ -50,12 +49,12 @@ public class UserAddressNest {
 	public void setAddress(Address address) {
 		this.address = address;
 	}
-	
-	public String getAgree() {
+
+	public boolean isAgree() {
 		return agree;
 	}
 
-	public void setAgree(String agree) {
+	public void setAgree(boolean agree) {
 		this.agree = agree;
 	}
 

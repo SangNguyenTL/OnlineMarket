@@ -1,6 +1,10 @@
 package onlinemarket.form.filter;
 
+import java.util.TreeMap;
+
 public class FilterForm {
+	
+	private TreeMap<String, String> groupSearch;
 	
 	private String search = "";
 	
@@ -13,6 +17,10 @@ public class FilterForm {
 	private Integer size = 10;
 	
 	private int currentPage = 1;
+	
+	public FilterForm() {
+		groupSearch = new TreeMap<>();
+	}
 
 	public int getCurrentPage() {
 		return currentPage;
@@ -60,6 +68,14 @@ public class FilterForm {
 
 	public void setSize(Integer size) {
 		this.size = size;
+	}
+
+	public TreeMap<String, String> getGroupSearch() {
+		return groupSearch;
+	}
+
+	public void setGroupSearch(TreeMap<String, String> groupSearch) {
+		this.groupSearch = groupSearch;
 	}
 	
 }

@@ -7,4 +7,6 @@ public class AdvancedValidation {
 	public interface CheckEmail{};
 	
 	public interface CheckSlug{};
+
+	public interface AddNew{};
 }

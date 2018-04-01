@@ -25,8 +25,8 @@ import onlinemarket.model.Image;
 import onlinemarket.model.User;
 import onlinemarket.service.ImageService;
 import onlinemarket.service.UserService;
-import onlinemarket.service.exception.CreateFolderException;
-import onlinemarket.service.exception.UploadTypeException;
+import onlinemarket.util.exception.CreateFolderException;
+import onlinemarket.util.exception.UploadTypeException;
 import onlinemarket.util.FileValidator;
 import onlinemarket.util.ResponseResult;
 
@@ -47,7 +47,7 @@ public class ApiImageController {
 
 	@ModelAttribute("currentUser")
 	public User getCurrentUser() {
-		String userName = null;
+		String userName;
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 		if (principal instanceof UserDetails) {
@@ -81,7 +81,7 @@ public class ApiImageController {
 	@RequestMapping(value = "/load",
 			produces = MediaType.APPLICATION_JSON_VALUE, method = { RequestMethod.POST,
 			RequestMethod.GET })
-	public ResponseEntity<?> getUser(@ModelAttribute("imageFilter") ImageFilter imageFilter) throws Exception {
+	public ResponseEntity<?> getUser(@ModelAttribute("imageFilter") ImageFilter imageFilter){
 		return ResponseEntity.ok().body(imageService.filter(imageFilter));
 	}
 

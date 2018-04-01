@@ -2,8 +2,11 @@ package onlinemarket.dao;
 
 import onlinemarket.model.Role;
 
+import java.util.List;
+
 public interface RoleDao {
 	
-	public Role getByKey(Integer key);
-	
+	Role getByKey(Integer key);
+
+	List<Role> list();
 }

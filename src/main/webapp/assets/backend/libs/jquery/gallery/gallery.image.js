@@ -13,7 +13,7 @@
     function GalleryManager(element, options) {
         if (!window.Mustache || !window.jQuery) return;
         var defaults = {
-            title: 'Quản lý hình ảnh',
+            title: false,
             filterType: [{
                     type: 'site',
                     name: 'Application'
@@ -52,7 +52,7 @@
             },
             totalPage: 0,
             modal: false
-        };
+        },
         _this = this;
         this.element = $(element);
         this.settings = $.extend(true, defaults, options);
@@ -66,7 +66,7 @@
         this.containerImage = this.element.find('#gallery-container');
         this.init = this.init.bind(this);
         this.element.find('[ui-jp]').uiJp().then(this.init);
-        this.tabGalleryElement.on("click", function(e){
+        this.tabGalleryElement.on("click", function(){
             if(!_this.spinner.hasClass("hide")) return;
             _this.loadImage();
         });
@@ -81,13 +81,13 @@
         this.onChangeDatePicker = this.onChangeDatePicker.bind(this);
         this.onChangeUploadType = this.onChangeUploadType.bind(this);
         this.listen();
-    }
+    };
 
     GalleryManager.prototype.listen = function(){
         this.selectTypeElement.on('change', this.onSelectTypeDate);
         this.datePickerElement.on('dp.change', this.onChangeDatePicker);
         this.typeElement.on('change', this.onChangeUploadType);
-    }
+    };
 
     GalleryManager.prototype.onChangeUploadType = function () {
         this.typeElement.off('change', this.onChangeUploadType);
@@ -95,13 +95,13 @@
             return $(e).val();
         }).get().join(',');
         this.loadImage();
-    }
+    };
 
     GalleryManager.prototype.onChangeDatePicker = function (date) {
-        if(date.date == date.oldDate) return;
+        if(date.date === date.oldDate) return;
         this.settings.filter.datetime = moment(date.date, "yyyy-MM-dd").format("YYYY-MM-DD");
         this.loadImage();
-    }
+    };
 
     GalleryManager.prototype.onSelectTypeDate = function (e) {
         this.selectTypeElement.off('change', this.onSelectTypeDate);
@@ -122,7 +122,7 @@
         this.settings.datetime = this.datePickerElement.data('DateTimePicker').date();
         this.settings.filter.dateType = element.val();
         this.loadImage();
-    }
+    };
 
     GalleryManager.prototype.onDelete = function (e) {
         this.actionDeleteElement.off('click', this.onDelete);
@@ -134,7 +134,7 @@
             alert(result.message);
         });
         this.actionDeleteElement.on('click', this.onDelete);
-    }
+    };
 
     GalleryManager.prototype.selectImageElement = function (e) {
         var element = $(e.currentTarget),
@@ -149,7 +149,7 @@
             this.imageLink = box.data("path");
         }
         this.imageElement.on('click', this.selectImageElement);
-    }
+    };
 
     GalleryManager.prototype.loadImage = function () {
         var templateHtml = this.templateImage,
@@ -166,14 +166,14 @@
                 if(_this.spinner.hasClass("hide")) _this.spinner.removeClass("hide");
             },
             success:  function (result) {
-                if (typeof result != 'object') return;
+                if (typeof result !== 'object') return;
                 _this.totalPage = Math.ceil(result.totalRow / _this.settings.filter.pageSize);
                 _this.settings.filter.pageNumber = result.currentPage;
                 _this.containerImage.html('');
-                if(_this.totalPage == 1 && _this.settings.filter.pageNumber > 1 ) return;
+                if(_this.totalPage === 1 && _this.settings.filter.pageNumber > 1 ) return;
                 $.each(result.list, function (i, value) {
                     value.oldPath = value.path;
-                    value.path = window.location.origin + PATH + value.path;
+                    value.path = window.location.origin + value.path;
                     render(value, templateHtml, _this.containerImage, true);
                 });
                 _this.imageElement = _this.containerImage.find('.image-item');
@@ -190,7 +190,7 @@
                         }
                     });
                 }
-                if (_this.imageElement == undefined || _this.imageElement.length < 1) return;
+                if (_this.imageElement === undefined || _this.imageElement.length < 1) return;
                     _this.actionDeleteElement = _this.imageElement.find('.action-delete');
                     _this.onDelete = _this.onDelete.bind(_this);
                     _this.actionDeleteElement.on('click', _this.onDelete);
@@ -201,7 +201,7 @@
                     }
             },
             complete: function(){
-                if(_this.totalPage == 1 && _this.settings.filter.pageNumber > 1 ) {
+                if(_this.totalPage === 1 && _this.settings.filter.pageNumber > 1 ) {
                     _this.settings.filter.pageNumber = 1;
                     _this.pending = false;
                     _this.loadImage();
@@ -262,109 +262,111 @@
 
 
     GalleryManager.prototype.templateMain = [
-        '<h5 class="_300 margin">{{title}}n</h5>',
-        '<div class="row">',
-        '<div class="col-md-4 push-md-8">',
-        '<div class="box">',
-        '<div class="box-header">Image Filter</div>',
-        '<div class="box-body">',
-        '<ul class="list-unstyled m-t-n-sm">',
-        '{{#filterType}}',
-        '<li class="checkbox"><label class="ui-check"> <input type="checkbox" name="filterType[]" class="filterType listen-event" value="{{type}}"><i></i> {{name}}',
-        '</label></li>',
-        '{{/filterType}}',
-        '</ul>',
-        '<div class="line line-dashed b-b m-b"></div>',
-        '<div class="form-group row">',
-        '<label for="inputPassword3" class="col-sm-2 form-control-label">Date</label>',
-        '<div class="col-sm-10">',
-        '<select class="form-control c-select" id="selectTypeDate">',
-        '<option value="">Pick type date filter</option>',
-        '<option value="day">Day</option>',
-        '<option value="week">Week</option>',
-        '<option value="month">Month</option>',
-        '<option value="year">Year</option>',
-        '</select>',
-        '</div>',
-        '</div>',
-        '<div class="form-group">',
-        '<div class="input-group date action-date" id="datePicker" ui-jp="datetimepicker" ui-options="{',
-        'inline: true,',
-        'sideBySide: true,',
-        'maxDate: new Date(),',
-        'format: \'DD/MM/YYYY\',',
-        'icons: {',
-        'time: \'fa fa-clock-o\',',
-        'date: \'fa fa-calendar\',',
-        'up: \'fa fa-chevron-up\',',
-        'down: \'fa fa-chevron-down\',',
-        'previous: \'fa fa-chevron-left\',',
-        'next: \'fa fa-chevron-right\',',
-        'today: \'fa fa-screenshot\',',
-        'clear: \'fa fa-trash\',',
-        'close: \'fa fa-remove\'',
-        '}',
-        '}">',
-        '</div>',
-        '</div>',
-        '</div>',
-        '</div>',
-        '</div>',
-        '<div class="col-md-8 pull-md-4">',
+        '{{#title}}<h5 class="_300 margin">{{title}}</h5>{{/title}}',
         '<div class="b-b b-b-dark m-b-1 p-x">',
-        '<div class="row">',
-        '<div class="p-y-md clearfix nav-active-primary">',
-        '<ul class="nav nav-pills nav-sm">',
-        '<li class="nav-item active"><a class="nav-link" href="#"',
-        'data-toggle="tab" data-target="#gallery"><i class="fa fa-image"></i> Image collection <i class="fa fa-spinner"></i></a></li>',
-        '<li class="nav-item"><a class="nav-link" href="#" data-toggle="tab" data-target="#upload"><i class="fa fa-upload"></i> Upload</a></li>',
-        '</ul>',
-        '</div>',
-        '</div>',
+        	'<div class="row">',
+        		'<div class="p-y-md clearfix nav-active-primary">',
+			        '<ul class="nav nav-pills nav-sm">',
+			        '<li class="nav-item active"><a class="nav-link" href="#"',
+			        'data-toggle="tab" data-target="#gallery"><i class="fa fa-image"></i> Image collection <i class="fa fa-spinner"></i></a></li>',
+			        '<li class="nav-item"><a class="nav-link" href="#" data-toggle="tab" data-target="#upload"><i class="fa fa-upload"></i> Upload</a></li>',
+			        '</ul>',
+		        '</div>',
+	        '</div>',
         '</div>',
         '<div class="tab-content">',
-        '<div class="tab-pane p-v-sm active" id="gallery">',
-        '<div class="row" id="gallery-container" ui-jp="clipboard" data-class="clipboard-btn"></div>',
-        '<div ui-jp="twbsPagination" id="pagination-image" class="pagination"></div>',
-        '</div>',
-        '<div class="tab-pane p-v-sm" id="upload">',
-        '<form id="fileupload" ui-jp="fileupload" action="{{actionUpload}}" class="POST" enctype="multipart/form-data">',
-        '<input ui-jp="dropify" type="file" name="files" class="dropify" multiple="multiple" ui-options="{maxFileSize:\'{{maxFileSize}}\'}" />',
-        '<div class="row fileupload-buttonbar padding">',
-        '<div class="col-lg-3">',
-        '<button type="submit" class="btn btn-primary start">',
-        '<i class="glyphicon glyphicon-upload"></i> <span>Upload</span>',
-        '</button>',
-        '<button type="reset" class="btn btn-warning cancel">',
-        '<i class="glyphicon glyphicon-ban-circle"></i> <span>Cancel</span>',
-        '</button>',
-        '<span class="fileupload-process"></span>',
-        '</div>',
-        '<div class="form-group row col-lg-4">',
-        '<label class="col-sm-2 form-control-label">Select</label>',
-        '<div class="col-sm-10">',
-        '<select class="form-control input-c" name="uploadType">',
-        '{{#filterType}}',
-        '<option value="{{type}}"> {{name}}</option>',
-        '{{/filterType}}',
-        '</select>',
-        '</div>',
-        '</div>',
-        '<!-- The global progress state -->',
-        '<div class="col-lg-5 fileupload-progress fade">',
-        '<!-- The global progress bar -->',
-        '<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">',
-        '<div class="progress-bar progress-bar-success" style="width: 0%;"></div>',
-        '</div>',
-        '<!-- The extended global progress state -->',
-        '<div class="progress-extended">&nbsp;</div>',
-        '</div>',
-        '<table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>',
-        '</div>',
-        '</form>',
-        '</div>',
-        '</div>',
-        '</div>',
+        	'<div class="tab-pane p-v-sm active" id="gallery">',
+        		'<div class="row">',
+			        '<div class="col-md-4 push-md-8">',
+			        '<div class="box">',
+			        '<div class="box-header">Image Filter</div>',
+			        '<div class="box-body">',
+			        '<ul class="list-unstyled m-t-n-sm">',
+			        '{{#filterType}}',
+			        '<li class="checkbox"><label class="ui-check"> <input type="checkbox" name="filterType[]" class="filterType listen-event" value="{{type}}"><i></i> {{name}}',
+			        '</label></li>',
+			        '{{/filterType}}',
+			        '</ul>',
+			        '<div class="line line-dashed b-b m-b"></div>',
+			        '<div class="form-group row">',
+			        '<label for="inputPassword3" class="col-sm-2 form-control-label">Date</label>',
+			        '<div class="col-sm-10">',
+			        '<select class="form-control c-select" id="selectTypeDate">',
+			        '<option value="">Pick type date filter</option>',
+			        '<option value="day">Day</option>',
+			        '<option value="week">Week</option>',
+			        '<option value="month">Month</option>',
+			        '<option value="year">Year</option>',
+			        '</select>',
+			        '</div>',
+			        '</div>',
+			        '<div class="form-group">',
+			        '<div class="input-group date action-date" id="datePicker" ui-jp="datetimepicker" ui-options="{',
+			        'inline: true,',
+			        'sideBySide: true,',
+			        'maxDate: new Date(),',
+			        'format: \'DD/MM/YYYY\',',
+			        'icons: {',
+			        'time: \'fa fa-clock-o\',',
+			        'date: \'fa fa-calendar\',',
+			        'up: \'fa fa-chevron-up\',',
+			        'down: \'fa fa-chevron-down\',',
+			        'previous: \'fa fa-chevron-left\',',
+			        'next: \'fa fa-chevron-right\',',
+			        'today: \'fa fa-screenshot\',',
+			        'clear: \'fa fa-trash\',',
+			        'close: \'fa fa-remove\'',
+			        '}',
+			        '}">',
+			        '</div>',
+			        '</div>',
+			        '</div>',
+			        '</div>',
+			        '</div>',
+			        
+			        '<div class="col-md-8 pull-md-4">',
+        	        
+        	        '<div class="row" id="gallery-container" ui-jp="clipboard" data-class="clipboard-btn"></div>',
+        	        '<div ui-jp="twbsPagination" id="pagination-image" class="pagination"></div>',
+    	        '</div>',
+		        '</div>',
+	        '</div>',
+	        '<div class="tab-pane p-v-sm" id="upload">',
+	        	'<form id="fileupload" ui-jp="fileupload" action="{{actionUpload}}" class="POST" enctype="multipart/form-data">',
+	        	'<input ui-jp="dropify" type="file" name="files" class="dropify" multiple="multiple" ui-options="{maxFileSize:\'{{maxFileSize}}\'}" />',
+		        '<div class="row fileupload-buttonbar padding">',
+		        '<div class="col-lg-3">',
+		        '<button type="submit" class="btn btn-primary start">',
+		        '<i class="glyphicon glyphicon-upload"></i> <span>Upload</span>',
+		        '</button>',
+		        '<button type="reset" class="btn btn-warning cancel">',
+		        '<i class="glyphicon glyphicon-ban-circle"></i> <span>Cancel</span>',
+		        '</button>',
+		        '<span class="fileupload-process"></span>',
+		        '</div>',
+		        '<div class="form-group row col-lg-4">',
+		        '<label class="form-control-label">Select</label>',
+		        '<div>',
+		        '<select class="form-control input-c" name="uploadType">',
+		        '{{#filterType}}',
+		        '<option value="{{type}}"> {{name}}</option>',
+		        '{{/filterType}}',
+		        '</select>',
+		        '</div>',
+		        '</div>',
+		        '<!-- The global progress state -->',
+		        '<div class="col-lg-5 fileupload-progress fade">',
+		        '<!-- The global progress bar -->',
+		        '<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">',
+		        '<div class="progress-bar progress-bar-success" style="width: 0%;"></div>',
+		        '</div>',
+		        '<!-- The extended global progress state -->',
+		        '<div class="progress-extended">&nbsp;</div>',
+		        '</div>',
+		        '<table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>',
+		        '</div>',
+		        '</form>',
+	        '</div>',
         '</div>'
     ];
 

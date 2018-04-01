@@ -28,8 +28,7 @@
 					<p>
 						If you already have an account with us, please login at the Login Page. <a th:href="@{/login}">Login Page</a>.
 					</p>
-					<div class="alert alert-warning" role="alert"
-						th:if="${nest.agree} != null and ${nest.agree} != '1'">Please agree to our policies before continue</div>
+					
 					<form class="form-horizontal" th:object="${nest}" method="POST" th:action="@{/register}">
 						<fieldset id="account">
 							<legend>Your Personal Details</legend>
@@ -135,11 +134,10 @@
 								th:classappend="${#fields.hasErrors('*{address.province}')} ? 'has-error'">
 								<label for="input-country" class="col-sm-2 control-label">Province</label>
 								<div class="col-sm-10">
-									<select class="form-control" th:name="*{address.province}">
+									<select class="form-control" th:field="*{address.province}">
 										<option th:value="null"> --- Please choise --- </option>
 										<option th:each="province : ${provinceList}"
-											th:value="${province.id}" th:text="${province.name}"
-											th:selected="(${province.id} == *{address.province.id})" > --- Please choise --- </option>
+											th:value="${{province}}" th:text="${province.name}"> --- Please choise --- </option>
 									</select> <span class="help-block"
 										th:if="${#fields.hasErrors('*{address.province}')}"
 										th:errors="*{address.province}"></span>
@@ -172,9 +170,13 @@
 								</div>
 							</div>
 						</fieldset>
+						<div
+										class="alert alert-danger"
+										th:if="${#fields.hasErrors('*{agree}')}"
+										th:errors="*{agree}"></div>
 						<div class="buttons">
 							<div class="pull-right">
-								<input type="checkbox" th:field="*{agree}" th:value="1"> &nbsp; I have read and agree to the <a class="agree" th:href="@{/privacy}"><b>Privacy Policy</b></a> <input type="submit"
+								<input type="checkbox" th:field="*{agree}"> &nbsp; I have read and agree to the <a class="agree" th:href="@{/privacy}"><b>Privacy Policy</b></a> <input type="submit"
 									class="btn btn-primary" value="Continue">
 							</div>
 						</div>
@@ -214,8 +216,7 @@
 		<script type="text/javascript">
 			$(function() {
 				$('#birtdayPicker').datetimepicker({
-					format : "DD/MM/YYYY",
-					maxDate: new Date()
+					format : "DD/MM/YYYY"
 				});
 			});
 		</script>

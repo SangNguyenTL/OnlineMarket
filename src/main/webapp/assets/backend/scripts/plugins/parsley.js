@@ -21,10 +21,10 @@
 
     var pickElement = $("#modal-image-gallery [data-action=yes]");
 
-    if(pickElement.length == 1){
+    if(pickElement.length === 1){
         var galleryData = {},
-        actionModalElment = $("[data-toggle=modal]");
-        actionModalElment.on("click", function(){
+        actionModalElement = $("[data-toggle=modal]");
+        actionModalElement.on("click", function(){
             var dataInputPath = $(this).data("targetInput");
             galleryData = $("[ui-jp=galleryManager]").data("galleryManager");
             galleryData.inputElment = $("#"+dataInputPath);

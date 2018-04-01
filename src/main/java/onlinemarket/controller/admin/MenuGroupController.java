@@ -120,7 +120,7 @@ public class MenuGroupController extends MainController {
 		
 		if (!result.hasErrors()) {
 			redirectAttributes.addFlashAttribute("success", "");
-			menuGroupService.update(menuGroup);
+//			menuGroupService.update(menuGroup);
 			return "redirect:" + relativePath;
 		}
 		

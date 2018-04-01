@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:filter="http://thymeleafexamples"
+      layout:decorate="templates/backend">
+<head>
+</head>
+<body>
+
+<div ui-view class="app-body" id="view" layout:fragment="container">
+    <div class="padding">
+        <div class="box">
+            <div class="box-header">
+                <h2><a th:href="@{${relativePath}}" th:text="${pageTitle}"></a></h2>
+            </div>
+            <div class="alert alert-success m-x-lg" th:if="${success} != null">
+                <strong>Congratulation!</strong> Process completed.
+            </div>
+            <div class="alert alert-danger m-x-lg" th:if="${error} != null">
+                <strong>Obbs!</strong> [[${error}]].
+            </div>
+            <div class="row p-a">
+
+                <form th:object="${filterForm}" th:action="@{${relativePath}}" method="get">
+                    <div class="col-sm-3">
+                        <a th:href="@{${relativePath}+'/add'}" class="btn btn-info">Add new</a>
+                    </div>
+                    <div class="col-sm-3">
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="input-group input-group-sm">
+                            <select class="form-control" th:field="*{searchBy}">
+                                <option value="">Search by</option>
+                                <option value="firstName">First name</option>
+                                <option value="lastName">Last name</option>
+                                <option value="city">City</option>
+                                <option value="address">Address</option>
+                                <option value="province.name">Province</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="input-group input-group-sm">
+                            <input class="form-control" placeholder="Search" type="text" th:field="*{search}">
+                            <span class="input-group-btn">
+	                            <button class="btn b-a white" type="submit">Go!</button>
+                            </span>
+                        </div>
+                    </div>
+                    <input type="hidden" th:field="*{size}"/>
+                    <input type="hidden" th:field="*{order}"/>
+                    <input type="hidden" th:field="*{orderBy}"/>
+                </form>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover b-t">
+                    <thead>
+                    <tr>
+                        <filter:th order="asc" orderBy="id" filter:uri="@{${relativePath}}" filter:currentPage="${page}"
+                                   name="#">#
+                        </filter:th>
+                        <filter:th order="asc" orderBy="firstNamr" filter:uri="@{${relativePath}}"
+                                   filter:currentPage="${page}" name="First Name">First Name
+                        </filter:th>
+                        <filter:th order="asc" orderBy="lastName" filter:uri="@{${relativePath}}"
+                                   filter:currentPage="${page}" name="Last Name">Last Name
+                        </filter:th>
+                        <filter:th order="asc" orderBy="phone" filter:uri="@{${relativePath}}"
+                                   filter:currentPage="${page}" name="Phone">Phone
+                        </filter:th>
+                        <filter:th order="asc" orderBy="address" filter:uri="@{${relativePath}}"
+                                   filter:currentPage="${page}" name="Address">Address
+                        </filter:th>
+                        <th>Province</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody th:object="${result}">
+                    <tr th:each="address: *{list}">
+                        <td th:text="${address.id}"></td>
+                        <td th:text="${address.firstName}"></td>
+                        <td th:text="${address.lastName}"></td>
+                        <td th:text="${address.phoneNumber}"></td>
+                        <td th:text="${address.address}"></td>
+                        <td th:text="${address.province.name}"></td>
+                        <td>
+                            <form class="form-confirm" th:action="@{${relativePath}+'/delete'}" method="POST">
+                                <a th:href="@{${relativePath}+'/update/'+${address.id}}"
+                                   class="btn btn-outline b-info text-success btn-sm">Update</a>
+                                <input type="hidden" th:name="id" th:value="${address.id}">
+                                <button type="submit" class="btn btn-outline b-info text-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <footer class="dker p-a">
+                <div class="row">
+                    <div class="col-sm-4 hidden-xs">
+                        <form th:object="${filterForm}" th:action="@{${relativePath}}" method="get">
+                            <input type="hidden" th:field="*{search}"/>
+                            <input type="hidden" th:field="*{searchBy}"/>
+                            <input type="hidden" th:field="*{order}"/>
+                            <input type="hidden" th:field="*{orderBy}"/>
+                            <label class="form-control-label">Show</label>
+                            <select class="input-sm form-control w-sm inline v-middle" th:field="*{size}">
+                                <option th:value="10">10 rows</option>
+                                <option th:value="20" th:if="${result.totalPages * filterForm.size} > 10">20 rows
+                                </option>
+                                <option th:value="50" th:if="${result.totalPages * filterForm.size} > 50">50 rows
+                                </option>
+                            </select>
+                            <button type="submit" class="btn btn-sm white">Apply</button>
+                        </form>
+
+                    </div>
+                    <div class="col-sm-4 pull-right text-right text-center-xs">
+                        <filter:pagination filter:currentPage="${page}" filter:totalPages="${result.totalPages}"
+                                           filter:uri="@{${relativePath}}"></filter:pagination>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

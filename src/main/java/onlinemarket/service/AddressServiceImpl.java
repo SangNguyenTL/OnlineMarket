@@ -2,6 +2,10 @@ package onlinemarket.service;
 
 import java.util.List;
 
+import onlinemarket.form.filter.FilterForm;
+import onlinemarket.result.ResultObject;
+import onlinemarket.util.exception.AddressNotFoundException;
+import onlinemarket.util.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +17,7 @@ import onlinemarket.model.User;
 
 @Service("addressService")
 @Transactional
-public class AddressServiceImpl implements AddressService {
+public class AddressServiceImpl implements AddressService  {
 
 	@Autowired
 	AddressDao addressDao;
@@ -25,7 +29,7 @@ public class AddressServiceImpl implements AddressService {
 	}
 
 	@Override
-	public void update(Address address) {
+	public void update(Address address) throws CustomException {
 		addressDao.update(address);
 	}
 
@@ -50,7 +54,8 @@ public class AddressServiceImpl implements AddressService {
 	}
 
 	@Override
-	public void save(Address address, User user) {
+	public void save(Address address, User user) throws CustomException{
+		if(user == null) throw new CustomException("User not found");
 		address.setUser(user);
 		if (address.getLastName() == null && address.getFirstName() == null) {
 			address.setFirstName(user.getFirstName());
@@ -69,4 +74,20 @@ public class AddressServiceImpl implements AddressService {
 		return addressDao.getByProvince(province);
 	}
 
+	@Override
+	public ResultObject<Address> listByUser(User user, FilterForm filterForm) throws CustomException{
+		if(user == null) throw new CustomException("User not found");
+		if(filterForm == null) throw new CustomException("Filter error.");
+		return addressDao.listByUser(user, filterForm);
+	}
+
+	@Override
+	public void update(Address address, User user) throws CustomException, AddressNotFoundException {
+		Address addressCheck = addressDao.getByKey(address.getId());
+		if(addressCheck == null) throw new AddressNotFoundException();
+		if(user == null) throw new CustomException("User not found");
+		if(!user.equals(addressCheck.getUser())) throw new CustomException("The user is out of sync with the address");
+		address.setUser(user);
+		addressDao.update(address);
+	}
 }

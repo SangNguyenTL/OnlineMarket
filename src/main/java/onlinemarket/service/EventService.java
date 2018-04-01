@@ -9,11 +9,10 @@ import onlinemarket.result.ResultObject;
 public interface EventService extends InterfaceService<Integer, Event> {
 
 
-	
-	public Event getByProductCategory(ProductCategory productCategoryCheck);
-	
-	public ResultObject<Event> list(FilterForm filterForm);
+    Event getByProductCategory(ProductCategory productCategoryCheck);
 
-	Event getByBrand(Brand brand);
-	
+    ResultObject<Event> list(FilterForm filterForm);
+
+    Event getByBrand(Brand brand);
+
 }

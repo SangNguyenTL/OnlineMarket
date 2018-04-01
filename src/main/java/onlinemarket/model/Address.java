@@ -1,5 +1,6 @@
 package onlinemarket.model;
 // default package
+
 // Generated Jan 2, 2018 4:57:38 PM by Hibernate Tools 4.3.5.Final
 
 import java.util.HashSet;
@@ -42,14 +43,10 @@ public class Address implements java.io.Serializable {
 	private String address;
 	private String phoneNumber;
 	private String city;
-	private Set<Order> orders = new HashSet<Order>(0);
+	private Set<Order> orders = new HashSet<>(0);
 
-	public Address() {
-		this.province = new Province();
-	}
-
-	public Address(Province province, User user, String firstName, String lastName, String address,
-			String phoneNumber, String city) {
+	public Address(Province province, User user, String firstName, String lastName, String address, String phoneNumber,
+			String city) {
 		this.province = province;
 		this.user = user;
 		this.firstName = firstName;
@@ -59,8 +56,8 @@ public class Address implements java.io.Serializable {
 		this.city = city;
 	}
 
-	public Address(Province province, User user, String firstName, String lastName, String address,
-			String phoneNumber, String city, Set<Order> orders) {
+	public Address(Province province, User user, String firstName, String lastName, String address, String phoneNumber,
+			String city, Set<Order> orders) {
 		this.province = province;
 		this.user = user;
 		this.firstName = firstName;
@@ -69,6 +66,9 @@ public class Address implements java.io.Serializable {
 		this.phoneNumber = phoneNumber;
 		this.city = city;
 		this.orders = orders;
+	}
+
+	public Address() {
 	}
 
 	@Id
@@ -82,8 +82,7 @@ public class Address implements java.io.Serializable {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	
-	@NotNull(groups = {AdvancedValidation.Advanced.class})
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", nullable = false)
 	public User getUser() {
@@ -94,7 +93,7 @@ public class Address implements java.io.Serializable {
 		this.user = user;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "province_id", nullable = false)
 	@NotNull
 	public Province getProvince() {
@@ -106,8 +105,8 @@ public class Address implements java.io.Serializable {
 	}
 
 	@Column(name = "first_name", nullable = false)
-	@Size(max=64, groups = {AdvancedValidation.Advanced.class})
-	@NotEmpty(groups = {AdvancedValidation.Advanced.class})
+	@Size(max = 64, groups = { AdvancedValidation.Advanced.class })
+	@NotEmpty(groups = { AdvancedValidation.Advanced.class })
 	public String getFirstName() {
 		return this.firstName;
 	}
@@ -117,8 +116,8 @@ public class Address implements java.io.Serializable {
 	}
 
 	@Column(name = "last_name", nullable = false)
-	@Size(max=64, groups = {AdvancedValidation.Advanced.class})
-	@NotEmpty(groups = {AdvancedValidation.Advanced.class})
+	@Size(max = 64, groups = { AdvancedValidation.Advanced.class })
+	@NotEmpty(groups = { AdvancedValidation.Advanced.class })
 	public String getLastName() {
 		return this.lastName;
 	}
@@ -140,7 +139,7 @@ public class Address implements java.io.Serializable {
 
 	@Column(name = "phone_number", nullable = false, length = 11)
 	@NotNull
-	@Pattern(regexp="(^$|[0-9]{10,11})")
+	@Pattern(regexp = "(^$|[0-9]{10,11})")
 	public String getPhoneNumber() {
 		return this.phoneNumber;
 	}

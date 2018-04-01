@@ -3,10 +3,10 @@ package onlinemarket.dao;
 import onlinemarket.model.Event;
 import onlinemarket.model.User;
 
-public interface UserDao extends InterfaceDao<Integer, User>{
-	
-	public User getByEmail(String email);
+public interface UserDao extends InterfaceDao<Integer, User> {
 
-	public User getByEvent(Event event);
-	
+    User getByEmail(String email);
+
+    User getByEvent(Event event);
+
 }

@@ -232,7 +232,7 @@ public class BrandManagerController extends MainController {
 
 		if (!result.hasErrors()) {
 			brand.setUpdateDate(new Date());
-			brandService.update(brand);
+//			brandService.update(brand);
 			redirectAttributes.addFlashAttribute("success", "");
 			return "redirect:/brand/update/" + id;
 		}

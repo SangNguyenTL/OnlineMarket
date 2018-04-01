@@ -159,7 +159,7 @@ public class EventManagerController extends MainController {
 			event.setCreateDate(eventCheck.getCreateDate());
 			event.setUpdateDate(new Date());
 			event.setPublisher(currentUser);
-			eventService.update(event);
+//			eventService.update(event);
 			redirectAttributes.addFlashAttribute("success", "");
 			return "redirect:admin/event/update/" + id;
 		}

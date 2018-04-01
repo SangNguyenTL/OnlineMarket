@@ -34,9 +34,10 @@ public class ErrorController {
 		errorPage.addObject("general", configurationService.getGeneral());
 		errorPage.addObject("logo", configurationService.getLogo());
 		errorPage.addObject("titlePage", httpErrorCode + " Error");
-		errorPage.addObject("errorMsg", "Internal server error");
+		errorPage.addObject("errorMsg", ex.getLocalizedMessage());
 		errorPage.addObject("code", httpErrorCode);
-		ex.printStackTrace();
+		errorPage.addObject("exception", ex);
+
 		return errorPage;
 	}
 

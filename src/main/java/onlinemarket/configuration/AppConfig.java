@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+import onlinemarket.converter.RoleFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
@@ -30,10 +31,7 @@ import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 
 import nz.net.ultraq.thymeleaf.LayoutDialect;
-import onlinemarket.converter.BrandConverter;
-import onlinemarket.converter.ProductCategoryConverter;
-import onlinemarket.converter.ProvinceConverter;
-import onlinemarket.converter.RoleConverter;
+import onlinemarket.converter.ProvinceFormatter;
 import onlinemarket.form.config.UploadConfig;
 import onlinemarket.service.config.ConfigurationService;
 import onlinemarket.thymeleaf.dialect.FilterFormDialect;
@@ -45,30 +43,18 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 
 	@Autowired
 	ApplicationContext applicationContext;
-	
-	@Autowired
-	ProvinceConverter provinceConverter;
-	
-	@Autowired
-	ProductCategoryConverter productCategoryConverter;
-	
-	@Autowired
-	BrandConverter brandConverter;
-	
-	@Autowired
-	RoleConverter roleConverter;
-	
+
 	@Autowired
 	ConfigurationService configurationService;
-	
-    @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 
-        MappingJackson2HttpMessageConverter jacksonMessageConverter = new MappingJackson2HttpMessageConverter();
+	@Override
+	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 
-        converters.add(jacksonMessageConverter);
-    }
-    
+		MappingJackson2HttpMessageConverter jacksonMessageConverter = new MappingJackson2HttpMessageConverter();
+
+		converters.add(jacksonMessageConverter);
+	}
+
 	@Bean
 	public SpringTemplateEngine templateEngine() {
 
@@ -119,52 +105,52 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 		messageSource.setBasename("ValidationMessages");
 		return messageSource;
 	}
-	
-    @Bean
-    public JavaMailSender getMailSender(){
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 
-        Properties javaMailProperties = new Properties();
-        javaMailProperties.put("mail.smtp.starttls.enable", "true");
-        javaMailProperties.put("mail.smtp.auth", "true");
-        javaMailProperties.put("mail.transport.protocol", "smtp");
-        javaMailProperties.put("mail.debug", "true");//Prints out everything on screen
-         
-        mailSender.setJavaMailProperties(javaMailProperties);
-        return mailSender;
-    }
-    
-    /**
-     * Configure Converter to be used.
-     * In our example, we need a converter to convert string values[Roles] to UserProfiles in newUser.jsp
-     */
-    @Override
-    public void addFormatters(FormatterRegistry registry) {
-        registry.addConverter(roleConverter);
-        registry.addConverter(provinceConverter);
-        registry.addConverter(brandConverter);
-        registry.addConverter(productCategoryConverter);
-    }
-     
-    /**Optional. It's only required when handling '.' in @PathVariables which otherwise ignore everything after last '.' in @PathVaidables argument.
-     * It's a known bug in Spring [https://jira.spring.io/browse/SPR-6164], still present in Spring 4.3.0.
-     * This is a workaround for this issue.
-     */
-    @Override
-    public void configurePathMatch(PathMatchConfigurer matcher) {
-        matcher.setUseRegisteredSuffixPatternMatch(true);
-    }
-    
-    /*
-     * Upload Config
-     */
-    @Bean(name = "multipartResolver")
-    public CommonsMultipartResolver multipartResolver() {
-        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-        UploadConfig upConfig = configurationService.getUpload();
-        multipartResolver.setMaxUploadSize(upConfig.getMaxSize() * 1024 * 1024);
-        multipartResolver.setMaxUploadSizePerFile(upConfig.getMaxFileSize() * 1024 * 1024);
-        multipartResolver.setMaxInMemorySize((upConfig.getMaxSize()+5) * 1024 * 1024);
-        return new CommonsMultipartResolver();
-    }
+	@Bean
+	public JavaMailSender getMailSender() {
+		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+
+		Properties javaMailProperties = new Properties();
+		javaMailProperties.put("mail.smtp.starttls.enable", "true");
+		javaMailProperties.put("mail.smtp.auth", "true");
+		javaMailProperties.put("mail.transport.protocol", "smtp");
+		javaMailProperties.put("mail.debug", "true");// Prints out everything on screen
+
+		mailSender.setJavaMailProperties(javaMailProperties);
+		return mailSender;
+	}
+
+	/**
+	 * Configure Converter to be used. In our example, we need a converter to
+	 * convert string values[Roles] to UserProfiles in newUser.jsp
+	 */
+	@Override
+	public void addFormatters(FormatterRegistry registry) {
+		registry.addFormatter(new ProvinceFormatter());
+		registry.addFormatter(new RoleFormatter());
+	}
+
+	/**
+	 * Optional. It's only required when handling '.' in @PathVariables which
+	 * otherwise ignore everything after last '.' in @PathVaidables argument. It's a
+	 * known bug in Spring [https://jira.spring.io/browse/SPR-6164], still present
+	 * in Spring 4.3.0. This is a workaround for this issue.
+	 */
+	@Override
+	public void configurePathMatch(PathMatchConfigurer matcher) {
+		matcher.setUseRegisteredSuffixPatternMatch(true);
+	}
+
+	/*
+	 * Upload Config
+	 */
+	@Bean(name = "multipartResolver")
+	public CommonsMultipartResolver multipartResolver() {
+		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+		UploadConfig upConfig = configurationService.getUpload();
+		multipartResolver.setMaxUploadSize(upConfig.getMaxSize() * 1024 * 1024);
+		multipartResolver.setMaxUploadSizePerFile(upConfig.getMaxFileSize() * 1024 * 1024);
+		multipartResolver.setMaxInMemorySize((upConfig.getMaxSize() + 5) * 1024 * 1024);
+		return new CommonsMultipartResolver();
+	}
 }

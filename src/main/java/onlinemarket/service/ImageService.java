@@ -8,8 +8,8 @@ import onlinemarket.form.filter.ImageFilter;
 import onlinemarket.model.Image;
 import onlinemarket.model.User;
 import onlinemarket.result.api.ResultImage;
-import onlinemarket.service.exception.CreateFolderException;
-import onlinemarket.service.exception.UploadTypeException;
+import onlinemarket.util.exception.CreateFolderException;
+import onlinemarket.util.exception.UploadTypeException;
 
 public interface ImageService extends InterfaceService<Integer, Image>{
 	

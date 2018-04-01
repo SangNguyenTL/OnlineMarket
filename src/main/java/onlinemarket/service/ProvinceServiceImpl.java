@@ -2,6 +2,7 @@ package onlinemarket.service;
 
 import java.util.List;
 
+import onlinemarket.util.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +30,10 @@ public class ProvinceServiceImpl implements ProvinceService{
 	}
 
 	@Override
-	public void update(Province entity) {
+	public void update(Province entity) throws CustomException {
+		Province provinceCheck = provinceDao.getByKey(entity.getId());
+		if (provinceCheck == null)
+			throw new CustomException("Province not found");
 		provinceDao.update(entity);
 	}
 

@@ -4,21 +4,12 @@ package onlinemarket.model;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
+import javax.persistence.*;
+
 import static javax.persistence.GenerationType.IDENTITY;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -47,32 +38,32 @@ public class User implements java.io.Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Integer id;
-	private byte gender;
+	private Byte gender;
 	private String firstName;
 	private String lastName;
 	private String email;
 	private String password;
 	private Date birthday;
+	private Role role;
 	private Date createDate = new Date();
 	private Date updateDate;
-	private String state = State.ACTIVE.getState();
-	private String avatar;
-	private Set<Order> orders = new HashSet<Order>(0);
-	private Set<Comment> comments = new HashSet<Comment>(0);
-	private Set<Rating> ratings = new HashSet<Rating>(0);
-	private Set<Address> addresses = new HashSet<Address>(0);
-	private Set<Image> images = new HashSet<Image>(0);
-	private Set<Notification> notifications = new HashSet<Notification>(0);
-	private Set<Cart> carts = new HashSet<Cart>(0);
-	private Set<Post> posts = new HashSet<Post>(0);
-	private Set<Product> products = new HashSet<Product>(0);
-	private Set<Role> roles = new HashSet<Role>(0);
-	private Set<Event> events = new HashSet<Event>(0);
+	private String state = State.ACTIVE.toString();
+	private String avatar = "/assets/images/defaultImage.jpg";
+	private Set<Order> orders = new HashSet<>(0);
+	private Set<Comment> comments = new HashSet<>(0);
+	private Set<Rating> ratings = new HashSet<>(0);
+	private Set<Address> addresses = new HashSet<>(0);
+	private Set<Image> images = new HashSet<>(0);
+	private Set<Notification> notifications = new HashSet<>(0);
+	private Set<Cart> carts = new HashSet<>(0);
+	private Set<Post> posts = new HashSet<>(0);
+	private Set<Product> products = new HashSet<>(0);
+	private Set<Event> events = new HashSet<>(0);
 	
 	public User() {
 	}
 
-	public User(byte gender, String firstName, String lastName, String email, String password,
+	public User(Byte gender, String firstName, String lastName, String email, String password,
 			Date createDate, String state) {
 		this.gender = gender;
 		this.firstName = firstName;
@@ -83,10 +74,10 @@ public class User implements java.io.Serializable {
 		this.state = state;
 	}
 
-	public User(byte gender, String firstName, String lastName, String email, String password,
+	public User(Byte gender, String firstName, String lastName, String email, String password,
 			Date birthday, Date createDate, Date updateDate, String state, String avatar, Set<Order> orders,
 			Set<Comment> comments, Set<Rating> ratings, Set<Address> addresses, Set<Image> images,
-			Set<Notification> notifications, Set<Cart> carts, Set<Post> posts, Set<Product> products, Set<Role> roles) {
+			Set<Notification> notifications, Set<Cart> carts, Set<Post> posts, Set<Product> products, Role role) {
 		this.gender = gender;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -106,11 +97,10 @@ public class User implements java.io.Serializable {
 		this.carts = carts;
 		this.posts = posts;
 		this.products = products;
-		this.roles = roles;
+		this.role = role;
 	}
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-
 	@Column(name = "_id", unique = true, nullable = false)
 	public Integer getId() {
 		return this.id;
@@ -121,17 +111,18 @@ public class User implements java.io.Serializable {
 	}
 
 	@Column(name = "gender", nullable = false)
-	@Range(min=0, max=2, message = "Giới tính không hợp lệ")
+	@Range(min=0, max=2, message = "Gender is invalid.")
 	@NotNull
-	public byte getGender() {
+	public Byte getGender() {
 		return this.gender;
 	}
 
-	public void setGender(byte gender) {
+	public void setGender(Byte gender) {
 		this.gender = gender;
 	}
 
 	@Column(name = "first_name", nullable = false)
+	@Size(max = 64)
 	@NotEmpty
 	public String getFirstName() {
 		return this.firstName;
@@ -143,6 +134,7 @@ public class User implements java.io.Serializable {
 
 	@Column(name = "last_name", nullable = false)
 	@NotEmpty
+	@Size(max = 64)
 	public String getLastName() {
 		return this.lastName;
 	}
@@ -152,7 +144,7 @@ public class User implements java.io.Serializable {
 	}
 
 	@Column(name = "email", unique = true, nullable = false, length = 128)
-	@Size(max=128)
+	@Size(min = 6, max=128)
 	@Email
 	@NotEmpty
 	@UniqueEmail(groups= { AdvancedValidation.CheckEmail.class })
@@ -164,7 +156,7 @@ public class User implements java.io.Serializable {
 		this.email = email;
 	}
 	
-	@NotEmpty
+	@NotEmpty(groups = AdvancedValidation.AddNew.class)
 	@Size(min=6, max=60)
 	@JsonIgnore
 	@Column(name = "password", nullable = false, length = 60)
@@ -214,7 +206,7 @@ public class User implements java.io.Serializable {
 	@Column(name = "[state]", nullable = false, length = 10)
 	@Size(max=10)
 	@NotEmpty
-	@StringContain(acceptedValues= {"Active","Inactive","Deleted","Locked"},message="State is invalid")
+	@StringContain(acceptedValues= {"ACTIVE","INACTIVE","DELETED","LOCKED"}, message="State is invalid")
 	public String getState() {
 		return this.state;
 	}
@@ -230,7 +222,7 @@ public class User implements java.io.Serializable {
 	}
 
 	public void setAvatar(String avatar) {
-		this.avatar = avatar;
+		this.avatar = avatar == null ? this.avatar : avatar;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
@@ -323,17 +315,14 @@ public class User implements java.io.Serializable {
 		this.products = products;
 	}
 
-	@JsonIgnore
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "tb_user_role", schema = "dbo", catalog = "SmartMarket", joinColumns = {
-			@JoinColumn(name = "user_id", nullable = false, updatable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "user_role_id", nullable = false, updatable = false) })
-	public Set<Role> getRoles() {
-		return this.roles;
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "role_id", nullable =  false)
+	public Role getRole() {
+		return this.role;
 	}
 
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
+	public void setRole(Role role) {
+		this.role = role;
 	}
 
 	@JsonIgnore
@@ -346,4 +335,17 @@ public class User implements java.io.Serializable {
 		this.events = events;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		User user = (User) o;
+		return Objects.equals(id, user.id) &&
+				Objects.equals(email, user.email);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, email);
+	}
 }

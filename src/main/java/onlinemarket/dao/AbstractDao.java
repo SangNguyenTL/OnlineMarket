@@ -4,7 +4,9 @@ import java.io.Serializable;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
+import java.util.Map.Entry;
 
+import onlinemarket.util.Help;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -54,7 +56,7 @@ public abstract class AbstractDao<PK extends Serializable, T> {
     }
     
     public void update(T entity) {
-        getSession().update(entity);
+        getSession().merge(entity);
     }
     
     public void delete(T entity) {
@@ -101,35 +103,62 @@ public abstract class AbstractDao<PK extends Serializable, T> {
 	public ResultObject<T> list(FilterForm filterForm){
 		
 		Criteria criteria = createEntityCriteria();
+		return childFilterFrom(criteria, filterForm);
+	}
+
+	protected ResultObject<T> childFilterFrom(Criteria criteria, FilterForm filterForm){
+
 		ResultObject<T> result = new ResultObject<>();
-		
+
 		if(StringUtils.isNotBlank(filterForm.getSearch()) && StringUtils.isNotBlank(filterForm.getSearchBy())) {
-			criteria.add(Restrictions.like(filterForm.getSearchBy(), filterForm.getSearch()));
+			String key = filterForm.getSearchBy();
+			String[] keyArr = key.split("\\.");
+			if(keyArr.length == 2) {
+				key = keyArr[0]+"Alias";
+				criteria.createAlias(keyArr[0], key);
+				key = key+"."+keyArr[1];
+			}
+			criteria.add(Restrictions.ilike(key, "%"+filterForm.getSearch()+"%"));
 		}
-		
+
+		for(Entry<String, String> entry : filterForm.getGroupSearch().entrySet()) {
+			String key = entry.getKey(),
+					value = entry.getValue();
+			String[] keyArr = key.split("\\.");
+			if(keyArr.length == 2) {
+				key = keyArr[0]+"Alias";
+				criteria.createAlias(keyArr[0], key);
+				key = key+"."+keyArr[1];
+			}
+			if(Help.isInteger(value))
+				criteria.add(Restrictions.eq(key, Integer.parseInt(value)));
+			else
+				criteria.add(Restrictions.eq(key, value));
+		}
+
 		criteria.setProjection(Projections.rowCount());
 		Long count = (Long) criteria.uniqueResult();
 		if(count != null ) {
 			int totalPages = (int) Math.ceil((float) count/filterForm.getSize());
 			result.setTotalPages(totalPages);
 		}else result.setTotalPages(0);
-		
-		if(filterForm.getSize() > 0 && filterForm.getCurrentPage() > 0) 
+
+		if(filterForm.getSize() > 0 && filterForm.getCurrentPage() > 0)
 			criteria.setFirstResult((filterForm.getCurrentPage()- 1) * filterForm.getSize()).setMaxResults(filterForm.getSize());
 		criteria.setProjection(null);
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-		
+
 		if(StringUtils.isNotBlank(filterForm.getOrderBy()) && StringUtils.isNotBlank(filterForm.getOrder())) {
 			if(filterForm.getOrder().equals("asc"))
 				criteria.addOrder(Order.asc(filterForm.getOrderBy()));
 			else
 				criteria.addOrder(Order.desc(filterForm.getOrderBy()));
 		}
-		
+
 		result.setList(criteria.list());
-		
+
 		result.setCurrentPage(filterForm.getCurrentPage());
-		
+
 		return result;
 	}
 }

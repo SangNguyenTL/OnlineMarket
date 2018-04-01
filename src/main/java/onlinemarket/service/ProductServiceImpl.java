@@ -2,6 +2,7 @@ package onlinemarket.service;
 
 import java.util.List;
 
+import onlinemarket.util.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +28,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public void update(Product entity) {
+	public void update(Product entity) throws CustomException {
 		productDao.update(entity);
 	}
 

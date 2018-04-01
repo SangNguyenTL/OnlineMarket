@@ -52,7 +52,7 @@ public class MenuController extends MainController{
 		return model;
 	}
 	
-	@RequestMapping("")
+	@RequestMapping(value = "", method = RequestMethod.GET)
 	private String mainPage(
 			ModelMap model,
 			RedirectAttributes redirectAttributes) {
@@ -147,7 +147,7 @@ public class MenuController extends MainController{
 		
 		if (!result.hasErrors()) {
 			redirectAttributes.addFlashAttribute("success", "");
-			menuService.update(menu);
+//			menuService.update(menu);
 			return "redirect:" + relativePath;
 		}
 

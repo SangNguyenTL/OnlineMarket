@@ -45,9 +45,9 @@ public class ProductCategory implements java.io.Serializable {
 	private String description;
 	private Date createDate = new Date();
 	private Date updateDate;
-	private Set<AttributeGroup> attributeGroups = new HashSet<AttributeGroup>(0);
-	private Set<Product> products = new HashSet<Product>(0);
-	private Set<Event> events = new HashSet<Event>(0);
+	private Set<AttributeGroup> attributeGroups = new HashSet<>(0);
+	private Set<Product> products = new HashSet<>(0);
+	private Set<Event> events = new HashSet<>(0);
 
 	public ProductCategory() {
 	}

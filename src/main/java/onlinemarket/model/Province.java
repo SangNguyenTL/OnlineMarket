@@ -37,6 +37,10 @@ public class Province implements java.io.Serializable {
 	public Province() {
 	}
 
+	public Province(Integer id) {
+		this.id = id;
+	}
+	
 	public Province(String name, long shippingFee) {
 		this.name = name;
 		this.shippingFee = shippingFee;

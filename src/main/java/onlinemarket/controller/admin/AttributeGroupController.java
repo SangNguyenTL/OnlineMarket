@@ -199,7 +199,7 @@ public class AttributeGroupController extends MainController{
 			
 			if (!result.hasErrors()) {
 				attributeGroup.setProductCategory(productCategory);
-				attributeGroupService.update(attributeGroup);
+//				attributeGroupService.update(attributeGroup);
 				redirectAttributes.addFlashAttribute("success", "");
 				return "redirect:"+relativePath;
 			}

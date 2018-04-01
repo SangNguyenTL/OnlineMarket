@@ -3,230 +3,302 @@
 <head>
 </head>
 <body>
-	<div class="box-body" th:fragment="general">
-		<form ui-jp="parsley" role="form" th:object="${generalConfig}" th:action="@{/admin/config}" method="POST">
-			<div class="form-group row">
-				<label class="col-sm-3 form-control-label">Application Name</label>
-				<div class="col-sm-9">
-					<input th:errorclass="parsley-error" class="form-control" type="text" th:field="*{title}" required data-parsley-length="[3, 50]" data-parsley-id="title"/>
-					<ul class="parsley-errors-list filled" id="parsley-id-title" th:if="${#fields.hasErrors('title')}"><li th:errors="*{title}"> </li></ul>
-				</div>
-			</div>
-			<div class="form-group row">
-				<label class="col-sm-3 form-control-label">Key word</label>
-				<div class="col-sm-9">
-					<input th:errorclass="parsley-error" class="form-control" type="text" th:field="*{keyword}" required data-parsley-length="[3, 150]" data-parsley-id="keyword"/>
-					<ul class="parsley-errors-list filled" id="parsley-id-keyword" th:if="${#fields.hasErrors('keyword')}"><li th:errors="*{keyword}"> </li></ul>
-				</div>
-			</div>
-			<div class="form-group row">
-				<label class="col-sm-3 form-control-label">Description</label>
-				<div class="col-sm-9">
-					<textarea th:errorclass="parsley-error" class="form-control" th:field="*{description}" required data-parsley-length="[50, 250]"  data-parsley-id="description"></textarea>
-					<ul class="parsley-errors-list filled" id="parsley-id-description" th:if="${#fields.hasErrors('description')}"><li th:errors="*{description}"> </li></ul>
-				</div>
-			</div>
-			<div class="dker p-a text-right">
-    			<button type="submit" class="btn info">Save</button>
-			</div>
-		</form>
-	</div>
-			
-	<div class="box-body" th:fragment="upload">
-		<form ui-jp="parsley" role="form" th:object="${uploadConfig}" th:action="@{/admin/config/upload}" method="POST">
-			<div class="form-group row">
-				<label class="col-sm-3 form-control-label">File size limit</label>
-				<div class="col-sm-9">
-					<input th:errorclass="parsley-error" class="form-control" type="number" th:field="*{maxFileSize}" required data-parsley-range="[1, 20]" data-parsley-id="title"/>
-					<ul class="parsley-errors-list filled" id="parsley-id-maxFileSize" th:if="${#fields.hasErrors('maxFileSize')}"><li th:errors="*{maxFileSize}"> </li></ul>
-				</div>
-			</div>
-			<div class="form-group row">
-				<label class="col-sm-3 form-control-label">Package size limit</label>
-				<div class="col-sm-9">
-					<input th:errorclass="parsley-error" class="form-control" type="number" th:field="*{maxSize}" required data-parsley-range="[1, 100]"/>
-					<ul class="parsley-errors-list filled" id="parsley-id-maxSize" th:if="${#fields.hasErrors('maxSize')}"><li th:errors="*{maxSize}"> </li></ul>
-				</div>
-			</div>
-			<div class="dker p-a text-right">
-    			<button type="submit" class="btn info">Save</button>
-			</div>
-		</form>
-	</div>
-						
-	<div class="box-body" th:fragment="logo">
-		<form ui-jp="parsley" role="form" th:object="${logoConfig}" th:action="@{/admin/config/logo}" method="POST">
-			<div class="form-group row">
-				<label class="col-sm-3 form-control-label">Favicon</label>
-				<div class="col-sm-9 box-image">
-					<div class="box p-a-xs box-thumbnail">
-	                	<a href="#" data-toggle="modal" data-target="#modal-image-gallery" ui-toggle-class="zoom" ui-target="#animate" data-target-input="favicon">
-	                		<img th:if="*{favicon}" th:src="@{'/'+*{favicon}}" alt="..." class="img-thumbnail thumbnail">
-	                		<img th:unless="*{favicon}" th:src="@{/assets/images/defaultImage.jpg}" alt="..." class="img-thumbnail thumbnail">
-	               		</a>
-	              	</div>
-					<input th:errorclass="parsley-error" class="form-control hide" type="text" th:field="*{favicon}" required data-parsley-length="[3, 150]"/>
-					<ul class="parsley-errors-list filled" id="parsley-id-favicon" th:if="${#fields.hasErrors('favicon')}"><li th:errors="*{favicon}"> </li></ul>
-				</div>
-			</div>
-			<div class="form-group row">
-				<label class="col-sm-3 form-control-label">Logo</label>
-				<div class="col-sm-9 box-image">
-					<div class="box p-a-xs box-thumbnail">
-	                	<a href="#" data-toggle="modal" data-target="#modal-image-gallery" ui-toggle-class="zoom" ui-target="#animate" data-target-input="logo">
-	                		<img th:if="*{logo}" th:src="@{'/'+*{logo}}" alt="..." class="img-thumbnail thumbnail"/>
-	                		<img th:unless="*{logo}" th:src="@{/assets/images/defaultImage.jpg}" alt="..." class="img-thumbnail thumbnail"/>
-	               		</a>
-	              	</div>
-					<input th:errorclass="parsley-error" class="form-control hide" type="text" th:field="*{logo}" required data-parsley-length="[3, 150]"/>
-					<ul class="parsley-errors-list filled" id="parsley-id-logo" th:if="${#fields.hasErrors('logo')}"><li th:errors="*{logo}"> </li></ul>
-				</div>
-			</div>
-			<div class="dker p-a text-right">
-				<button type="submit" class="btn info">Save</button>
-			</div>
-		</form>
-		
-		<div id="modal-image-gallery" class="modal fade animate" data-backdrop="true" aria-hidden="true">
-		  <div class="modal-dialog zoom modal-lg" id="animate" ui-class="zoom">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		      	<h5 class="modal-title">Pick Image</h5>
-		      </div>
-		      <div class="modal-body" ui-jp='galleryManager' th:attr="ui-options='{modal: true, actionUpload: \''+@{/api/image/upload}+'\', actionLoadImage: \''+@{/api/image/load}+'\', actionDelete: \''+@{/api/image/delete}+'\'}'">
-		       	
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn dark-white p-x-md" data-dismiss="modal">No</button>
-		        <button type="button" class="btn danger p-x-md" data-dismiss="modal" data-action="yes">Yes</button>
-		      </div>
-		    </div><!-- /.modal-content -->
-		  </div>
-		</div>
-		<div th:replace="templates/backend/media :: media" ></div>
-	</div>
-	
-	<div class="box-body" th:fragment="social">
-		<form ui-jp="parsley" role="form" th:object="${socialConfig}" th:action="@{/admin/config/social}" method="POST">
-			<div class="form-group row">
-				<label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Facebook</label>
-				<div class="col-sm-12 col-md-8 col-lg-9">
-					<input th:errorclass="parsley-error" class="form-control"  type="url" th:field="*{facebook}" required data-parsley-id="facebook"/>
-					<ul class="parsley-errors-list filled" id="parsley-id-facebook" th:if="${#fields.hasErrors('facebook')}"><li th:errors="*{facebook}"></li></ul>
-				</div>
-			</div>
-			<div class="form-group row">
-				<label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Google +</label>
-				<div class="col-sm-12 col-md-8 col-lg-9">
-					<input th:errorclass="parsley-error" class="form-control" type="url" th:field="*{googlePlus}" required data-parsley-id="googlePlus"/>
-					<ul class="parsley-errors-list filled" id="parsley-id-googlePlus" th:if="${#fields.hasErrors('googlePlus')}"><li th:errors="*{googlePlus}"></li></ul>
-				</div>
-			</div>
-			<div class="form-group row">
-				<label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Twitter</label>
-				<div class="col-sm-12 col-md-8 col-lg-9">
-					
-					<input th:errorclass="parsley-error" class="form-control" type="url" th:field="*{twitter}" required data-parsley-id="twitter"/>
-					<ul class="parsley-errors-list filled" id="parsley-id-twitter" th:if="${#fields.hasErrors('twitter')}"><li th:errors="*{twitter}"></li></ul>
-				</div>
-			</div>
-			<div class="dker p-a text-right">
-				<button type="submit" class="btn info">Save</button>
-			</div>
-		</form>
-	</div>
+<div class="box-body" th:fragment="general">
+    <form ui-jp="parsley" role="form" th:object="${generalConfig}" th:action="@{/admin/config}" method="POST">
+        <div class="form-group row">
+            <label class="col-sm-3 form-control-label">Application Name</label>
+            <div class="col-sm-9">
+                <input th:errorclass="parsley-error" class="form-control" type="text" th:field="*{title}" required
+                       data-parsley-length="[3, 50]" data-parsley-id="title"/>
+                <ul class="parsley-errors-list filled" id="parsley-id-title" th:if="${#fields.hasErrors('title')}">
+                    <li th:errors="*{title}"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 form-control-label">Key word</label>
+            <div class="col-sm-9">
+                <input th:errorclass="parsley-error" class="form-control" type="text" th:field="*{keyword}" required
+                       data-parsley-length="[3, 150]" data-parsley-id="keyword"/>
+                <ul class="parsley-errors-list filled" id="parsley-id-keyword" th:if="${#fields.hasErrors('keyword')}">
+                    <li th:errors="*{keyword}"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 form-control-label">Description</label>
+            <div class="col-sm-9">
+                <textarea th:errorclass="parsley-error" class="form-control" th:field="*{description}" required
+                          data-parsley-length="[50, 250]" data-parsley-id="description"></textarea>
+                <ul class="parsley-errors-list filled" id="parsley-id-description"
+                    th:if="${#fields.hasErrors('description')}">
+                    <li th:errors="*{description}"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="dker p-a text-right">
+            <button type="submit" class="btn info">Save</button>
+        </div>
+    </form>
+</div>
 
-	<div class="box-body" th:fragment="api">
-		<form ui-jp="parsley" role="form" th:object="${apiConfig}" th:action="@{/admin/config/social}" method="POST">
-			<div class="form-group row">
-				<label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Api Facebook</label>
-				<div class="col-sm-12 col-md-8 col-lg-9">
-					<input th:errorclass="parsley-error" class="form-control"  type="url" th:field="*{apiFacebook}" required data-parsley-id="1"/>
-					<ul class="parsley-errors-list filled" id="parsley-id-1" th:if="${#fields.hasErrors('apiFacebook')}"><li th:errors="*{facebook}"></li></ul>
-				</div>
-			</div>
-			<div class="form-group row">
-				<label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Api Google</label>
-				<div class="col-sm-12 col-md-8 col-lg-9">
-					<input th:errorclass="parsley-error" class="form-control" type="url" th:field="*{apiGoogle}" required data-parsley-id="2"/>
-					<ul class="parsley-errors-list filled" id="parsley-id-2" th:if="${#fields.hasErrors('apiGoogle')}"><li th:errors="*{apiGoogle}"></li></ul>
-				</div>
-			</div>
-			<div class="dker p-a text-right">
-				<button type="submit" class="btn info">Save</button>
-			</div>
-		</form>
-	</div>
+<div class="box-body" th:fragment="upload">
+    <form ui-jp="parsley" role="form" th:object="${uploadConfig}" th:action="@{/admin/config/upload}" method="POST">
+        <div class="form-group row">
+            <label class="col-sm-3 form-control-label">File size limit</label>
+            <div class="col-sm-9">
+                <input th:errorclass="parsley-error" class="form-control" type="number" th:field="*{maxFileSize}"
+                       required data-parsley-range="[1, 20]" data-parsley-id="title"/>
+                <ul class="parsley-errors-list filled" id="parsley-id-maxFileSize"
+                    th:if="${#fields.hasErrors('maxFileSize')}">
+                    <li th:errors="*{maxFileSize}"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 form-control-label">Package size limit</label>
+            <div class="col-sm-9">
+                <input th:errorclass="parsley-error" class="form-control" type="number" th:field="*{maxSize}" required
+                       data-parsley-range="[1, 100]"/>
+                <ul class="parsley-errors-list filled" id="parsley-id-maxSize" th:if="${#fields.hasErrors('maxSize')}">
+                    <li th:errors="*{maxSize}"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="dker p-a text-right">
+            <button type="submit" class="btn info">Save</button>
+        </div>
+    </form>
+</div>
 
-	<div class="box-body" th:fragment="contact">
-		<form ui-jp="parsley" role="form" th:object="${contactConfig}" th:action="@{/admin/config/contact}" method="POST">
-			<div class="form-group row">
-				<label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Address</label>
-				<div class="col-sm-12 col-md-8 col-lg-9">
-					<input th:errorclass="parsley-error" class="form-control"  type="text" th:field="*{address}" placeholder="371/50/2 Truong Chinh, District Tan Binh, HCM" required data-parsley-id="address"  data-parsley-length="[10, 255]"/>
-					<ul class="parsley-errors-list filled" id="parsley-id-address" th:if="${#fields.hasErrors('address')}"><li th:errors="*{address}"></li></ul>
-				</div>
-			</div>
-			<div class="form-group row">
-				<label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Email</label>
-				<div class="col-sm-12 col-md-8 col-lg-9">
-					<input th:errorclass="parsley-error" class="form-control" placeholder="email@domain.com"  type="email" th:field="*{email}" required data-parsley-id="email"/>
-					<ul class="parsley-errors-list filled" id="parsley-id-email" th:if="${#fields.hasErrors('email')}"><li th:errors="*{email}" data-parsley-length="[6, 125]"></li></ul>
-				</div>
-			</div>
-			<div class="form-group row">
-				<label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Phone Number</label>
-				<div class="col-sm-12 col-md-8 col-lg-9">
-					<input th:errorclass="parsley-error" class="form-control"  type="text" th:field="*{phoneNumber}" required data-parsley-id="phoneNumber" placeholder="01643456554" data-parsley-type="digits"/>
-					<ul class="parsley-errors-list filled" id="parsley-id-phoneNUmber" th:if="${#fields.hasErrors('phoneNumber')}"><li th:errors="*{phoneNumber}"></li></ul>
-				</div>
-			</div>
-			<input type="hidden" th:field="*{longitude}"/>
-			<input type="hidden" th:field="*{latitude}"/>
-			<div class="form-group row">
-				<div ui-jp="mymap" id="mymap"
-				th:attr="ui-options='{coordinate : {lat : '+ *{latitude} + ', lng : '+ *{longitude} +'},marker : {draggable : true},outId : {lat : \'latitude\',lng : \'longitude\'},search : \'address\'}'"></div>
-			</div>
-			<div class="dker p-a text-right">
-				<button type="submit" class="btn info">Save</button>
-			</div>
-		</form>
-	</div>
+<div class="box-body" th:fragment="logo">
+    <form ui-jp="parsley" role="form" th:object="${logoConfig}" th:action="@{/admin/config/logo}" method="POST">
+        <div class="form-group row">
+            <label class="col-sm-3 form-control-label">Favicon</label>
+            <div class="col-sm-9 box-image">
+                <a href="#" data-toggle="modal" data-target="#modal-image-gallery" ui-toggle-class="zoom"
+                   ui-target="#animate" data-target-input="favicon">
+                    <img th:if="*{favicon}" th:src="@{*{favicon}}" alt="..."
+                         class="img-thumbnail thumbnail box-thumbnail">
+                    <img th:unless="*{favicon}" th:src="@{/assets/images/defaultImage.jpg}" alt="..."
+                         class="img-thumbnail thumbnail">
+                </a>
+                <input th:errorclass="parsley-error" class="form-control hide" type="text" th:field="*{favicon}"
+                       required data-parsley-length="[3, 150]"/>
+                <ul class="parsley-errors-list filled" id="parsley-id-favicon" th:if="${#fields.hasErrors('favicon')}">
+                    <li th:errors="*{favicon}"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 form-control-label">Logo</label>
+            <div class="col-sm-9 box-image">
+                <a href="#" data-toggle="modal" data-target="#modal-image-gallery" ui-toggle-class="zoom"
+                   ui-target="#animate" data-target-input="logo">
+                    <img th:if="*{logo}" th:src="@{*{logo}}" alt="..."
+                         class="img-thumbnail thumbnail box-thumbnail"/>
+                    <img th:unless="*{logo}" th:src="@{/assets/images/defaultImage.jpg}" alt="..."
+                         class="img-thumbnail thumbnail"/>
+                </a>
+                <input th:errorclass="parsley-error" class="form-control hide" type="text" th:field="*{logo}" required
+                       data-parsley-length="[3, 150]"/>
+                <ul class="parsley-errors-list filled" id="parsley-id-logo" th:if="${#fields.hasErrors('logo')}">
+                    <li th:errors="*{logo}"></li>
+                </ul>
+
+            </div>
+        </div>
+        <div class="dker p-a text-right">
+            <button type="submit" class="btn info">Save</button>
+        </div>
+    </form>
+
+    <div id="modal-image-gallery" class="modal fade animate" data-backdrop="true" aria-hidden="true">
+        <div class="modal-dialog zoom modal-lg" id="animate" ui-class="zoom">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Pick Image</h5>
+                </div>
+                <div class="modal-body" ui-jp='galleryManager'
+                     th:attr="ui-options='{modal: true, actionUpload: \''+@{/api/image/upload}+'\', actionLoadImage: \''+@{/api/image/load}+'\', actionDelete: \''+@{/api/image/delete}+'\'}'">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn dark-white p-x-md" data-dismiss="modal">No</button>
+                    <button type="button" class="btn danger p-x-md" data-dismiss="modal" data-action="yes">Yes</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div>
+    </div>
+    <div th:replace="templates/backend/media :: media"></div>
+</div>
+
+<div class="box-body" th:fragment="social">
+    <form ui-jp="parsley" role="form" th:object="${socialConfig}" th:action="@{/admin/config/social}" method="POST">
+        <div class="form-group row">
+            <label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Facebook</label>
+            <div class="col-sm-12 col-md-8 col-lg-9">
+                <input th:errorclass="parsley-error" class="form-control" type="url" th:field="*{facebook}" required
+                       data-parsley-id="facebook"/>
+                <ul class="parsley-errors-list filled" id="parsley-id-facebook"
+                    th:if="${#fields.hasErrors('facebook')}">
+                    <li th:errors="*{facebook}"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Google +</label>
+            <div class="col-sm-12 col-md-8 col-lg-9">
+                <input th:errorclass="parsley-error" class="form-control" type="url" th:field="*{googlePlus}" required
+                       data-parsley-id="googlePlus"/>
+                <ul class="parsley-errors-list filled" id="parsley-id-googlePlus"
+                    th:if="${#fields.hasErrors('googlePlus')}">
+                    <li th:errors="*{googlePlus}"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Twitter</label>
+            <div class="col-sm-12 col-md-8 col-lg-9">
+
+                <input th:errorclass="parsley-error" class="form-control" type="url" th:field="*{twitter}" required
+                       data-parsley-id="twitter"/>
+                <ul class="parsley-errors-list filled" id="parsley-id-twitter" th:if="${#fields.hasErrors('twitter')}">
+                    <li th:errors="*{twitter}"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="dker p-a text-right">
+            <button type="submit" class="btn info">Save</button>
+        </div>
+    </form>
+</div>
+
+<div class="box-body" th:fragment="api">
+    <form ui-jp="parsley" role="form" th:object="${apiConfig}" th:action="@{/admin/config/social}" method="POST">
+        <div class="form-group row">
+            <label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Api Facebook</label>
+            <div class="col-sm-12 col-md-8 col-lg-9">
+                <input th:errorclass="parsley-error" class="form-control" type="url" th:field="*{apiFacebook}" required
+                       data-parsley-id="1"/>
+                <ul class="parsley-errors-list filled" id="parsley-id-1" th:if="${#fields.hasErrors('apiFacebook')}">
+                    <li th:errors="*{facebook}"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Api Google</label>
+            <div class="col-sm-12 col-md-8 col-lg-9">
+                <input th:errorclass="parsley-error" class="form-control" type="url" th:field="*{apiGoogle}" required
+                       data-parsley-id="2"/>
+                <ul class="parsley-errors-list filled" id="parsley-id-2" th:if="${#fields.hasErrors('apiGoogle')}">
+                    <li th:errors="*{apiGoogle}"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="dker p-a text-right">
+            <button type="submit" class="btn info">Save</button>
+        </div>
+    </form>
+</div>
+
+<div class="box-body" th:fragment="contact">
+    <form ui-jp="parsley" role="form" th:object="${contactConfig}" th:action="@{/admin/config/contact}" method="POST">
+        <div class="form-group row">
+            <label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Address</label>
+            <div class="col-sm-12 col-md-8 col-lg-9">
+                <input th:errorclass="parsley-error" class="form-control" type="text" th:field="*{address}"
+                       placeholder="371/50/2 Truong Chinh, District Tan Binh, HCM" required data-parsley-id="address"
+                       data-parsley-length="[10, 255]"/>
+                <ul class="parsley-errors-list filled" id="parsley-id-address" th:if="${#fields.hasErrors('address')}">
+                    <li th:errors="*{address}"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Email</label>
+            <div class="col-sm-12 col-md-8 col-lg-9">
+                <input th:errorclass="parsley-error" class="form-control" placeholder="email@domain.com" type="email"
+                       th:field="*{email}" required data-parsley-id="email"/>
+                <ul class="parsley-errors-list filled" id="parsley-id-email" th:if="${#fields.hasErrors('email')}">
+                    <li th:errors="*{email}" data-parsley-length="[6, 125]"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Phone Number</label>
+            <div class="col-sm-12 col-md-8 col-lg-9">
+                <input th:errorclass="parsley-error" class="form-control" type="text" th:field="*{phoneNumber}" required
+                       data-parsley-id="phoneNumber" placeholder="01643456554" data-parsley-type="digits"/>
+                <ul class="parsley-errors-list filled" id="parsley-id-phoneNUmber"
+                    th:if="${#fields.hasErrors('phoneNumber')}">
+                    <li th:errors="*{phoneNumber}"></li>
+                </ul>
+            </div>
+        </div>
+        <input type="hidden" th:field="*{longitude}"/>
+        <input type="hidden" th:field="*{latitude}"/>
+        <div class="form-group row">
+            <div ui-jp="mymap" id="mymap"
+                 th:attr="ui-options='{coordinate : {lat : '+ *{latitude} + ', lng : '+ *{longitude} +'},marker : {draggable : true},outId : {lat : \'latitude\',lng : \'longitude\'},search : \'address\'}'"></div>
+        </div>
+        <div class="dker p-a text-right">
+            <button type="submit" class="btn info">Save</button>
+        </div>
+    </form>
+</div>
 
 
-	<div class="box-body" th:fragment="emailsystem">
-		<form ui-jp="parsley" role="form" th:object="${emailSystemConfig}" th:action="@{/admin/config/emailsystem}" method="POST">
-			<div class="form-group row">
-				<label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Email</label>
-				<div class="col-sm-12 col-md-8 col-lg-9">
-					<input th:errorclass="parsley-error" class="form-control"  type="email" th:field="*{emailHost}" required data-parsley-id="emailHost" placeholder="system@domain.com" data-parsley-length="[6, 125]"/>
-					<ul class="parsley-errors-list filled" id="parsley-id-emailHost" th:if="${#fields.hasErrors('emailHost')}"><li th:errors="*{emailHost}"></li></ul>
-				</div>
-			</div>
-			<div class="form-group row">
-				<label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Password</label>
-				<div class="col-sm-12 col-md-8 col-lg-9">
-					<input th:errorclass="parsley-error" class="form-control"  type="password" th:field="*{password}" required data-parsley-id="password"/>
-					<ul class="parsley-errors-list filled" id="parsley-id-password" th:if="${#fields.hasErrors('password')}"><li th:errors="*{password}" maxlength="60"></li></ul>
-				</div>
-			</div>
-			<div class="form-group row">
-				<label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Host</label>
-				<div class="col-sm-12 col-md-8 col-lg-9">
-					<input th:errorclass="parsley-error" class="form-control"  type="text" th:field="*{host}" placeholder="smtp.gmail.com" required data-parsley-id="host" data-parsley-length="[10, 150]" pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"/>
-					<ul class="parsley-errors-list filled" id="parsley-id-host" th:if="${#fields.hasErrors('host')}"><li th:errors="*{host}"></li></ul>
-				</div>
-			</div>
-			<div class="form-group row">
-				<label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Port</label>
-				<div class="col-sm-12 col-md-8 col-lg-9">
-					<input th:errorclass="parsley-error" class="form-control"  type="number" th:field="*{port}" data-parsley-type="digits" placeholder="587" required data-parsley-id="port" min="0" max="65535"/>
-					<ul class="parsley-errors-list filled" id="parsley-id-port" th:if="${#fields.hasErrors('port')}"><li th:errors="*{port}"></li></ul>
-				</div>
-			</div>
-			<div class="dker p-a text-right">
-				<button type="submit" class="btn info">Save</button>
-			</div>
-		</form>
-	</div>
+<div class="box-body" th:fragment="emailsystem">
+    <form ui-jp="parsley" role="form" th:object="${emailSystemConfig}" th:action="@{/admin/config/emailsystem}"
+          method="POST">
+        <div class="form-group row">
+            <label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Email</label>
+            <div class="col-sm-12 col-md-8 col-lg-9">
+                <input th:errorclass="parsley-error" class="form-control" type="email" th:field="*{emailHost}" required
+                       data-parsley-id="emailHost" placeholder="system@domain.com" data-parsley-length="[6, 125]"/>
+                <ul class="parsley-errors-list filled" id="parsley-id-emailHost"
+                    th:if="${#fields.hasErrors('emailHost')}">
+                    <li th:errors="*{emailHost}"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Password</label>
+            <div class="col-sm-12 col-md-8 col-lg-9">
+                <input th:errorclass="parsley-error" class="form-control" type="password" th:field="*{password}"
+                       required data-parsley-id="password"/>
+                <ul class="parsley-errors-list filled" id="parsley-id-password"
+                    th:if="${#fields.hasErrors('password')}">
+                    <li th:errors="*{password}" maxlength="60"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Host</label>
+            <div class="col-sm-12 col-md-8 col-lg-9">
+                <input th:errorclass="parsley-error" class="form-control" type="text" th:field="*{host}"
+                       placeholder="smtp.gmail.com" required data-parsley-id="host" data-parsley-length="[10, 150]"
+                       pattern="^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$"/>
+                <ul class="parsley-errors-list filled" id="parsley-id-host" th:if="${#fields.hasErrors('host')}">
+                    <li th:errors="*{host}"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Port</label>
+            <div class="col-sm-12 col-md-8 col-lg-9">
+                <input th:errorclass="parsley-error" class="form-control" type="number" th:field="*{port}"
+                       data-parsley-type="digits" placeholder="587" required data-parsley-id="port" min="0"
+                       max="65535"/>
+                <ul class="parsley-errors-list filled" id="parsley-id-port" th:if="${#fields.hasErrors('port')}">
+                    <li th:errors="*{port}"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="dker p-a text-right">
+            <button type="submit" class="btn info">Save</button>
+        </div>
+    </form>
+</div>
 </body>

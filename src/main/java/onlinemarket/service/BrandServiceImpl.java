@@ -2,6 +2,7 @@ package onlinemarket.service;
 
 import java.util.List;
 
+import onlinemarket.util.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +26,7 @@ public class BrandServiceImpl implements BrandService{
 	}
 
 	@Override
-	public void update(Brand entity) {
+	public void update(Brand entity) throws CustomException {
 		brandDao.update(entity);
 	}
 

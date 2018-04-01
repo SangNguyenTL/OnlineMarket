@@ -4,6 +4,7 @@ package onlinemarket.model;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -41,7 +42,7 @@ import onlinemarket.validation.UniqueProductSlug;
 public class Product implements java.io.Serializable {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	private Integer id;
@@ -58,57 +59,16 @@ public class Product implements java.io.Serializable {
 	private Date createDate = new Date();
 	private Date updateDate;
 	private String featureImage;
-	private Set<Rating> ratings = new HashSet<Rating>(0);
-	private Set<RatingStatistic> ratingStatistics = new HashSet<RatingStatistic>(0);
-	private Set<Event> events = new HashSet<Event>(0);
-	private Set<ProductAttribute> productAttributes = new HashSet<ProductAttribute>(0);
-	private Set<ProductViews> productViewses = new HashSet<ProductViews>(0);
-	private Set<ProductViewsStatistc> productViewsStatistcs = new HashSet<ProductViewsStatistc>(0);
-	private Set<Comment> comments = new HashSet<Comment>(0);
-	private Set<Cart> carts = new HashSet<Cart>(0);
+	private Set<Rating> ratings = new HashSet<>(0);
+	private Set<RatingStatistic> ratingStatistics = new HashSet<>(0);
+	private Set<Event> events = new HashSet<>(0);
+	private Set<ProductAttributeValues> productAttributeValues = new HashSet<>(0);
+	private Set<ProductViews> productViewses = new HashSet<>(0);
+	private Set<ProductViewsStatistc> productViewsStatistcs = new HashSet<>(0);
+	private Set<Comment> comments = new HashSet<>(0);
+	private Set<Cart> carts = new HashSet<>(0);
 
 	public Product() {
-	}
-
-	public Product(Brand brand, ProductCategory productCategory, User user, String name, String slug, long price,
-			int quantity, Byte state, Date createDate, String featureImage) {
-		this.brand = brand;
-		this.productCategory = productCategory;
-		this.user = user;
-		this.name = name;
-		this.slug = slug;
-		this.price = price;
-		this.quantity = quantity;
-		this.state = state;
-		this.createDate = createDate;
-		this.featureImage = featureImage;
-	}
-
-	public Product(Brand brand, ProductCategory productCategory, User user, String name, String slug,
-			String description, long price, int quantity, Byte state, Date createDate, Date updateDate,
-			String featureImage, Set<Rating> ratings, Set<RatingStatistic> ratingStatistics, Set<Event> events,
-			Set<ProductAttribute> productAttributes, Set<ProductViews> productViewses,
-			Set<ProductViewsStatistc> productViewsStatistcs, Set<Comment> comments, Set<Cart> carts) {
-		this.brand = brand;
-		this.productCategory = productCategory;
-		this.user = user;
-		this.name = name;
-		this.slug = slug;
-		this.description = description;
-		this.price = price;
-		this.quantity = quantity;
-		this.state = state;
-		this.createDate = createDate;
-		this.updateDate = updateDate;
-		this.featureImage = featureImage;
-		this.ratings = ratings;
-		this.ratingStatistics = ratingStatistics;
-		this.events = events;
-		this.productAttributes = productAttributes;
-		this.productViewses = productViewses;
-		this.productViewsStatistcs = productViewsStatistcs;
-		this.comments = comments;
-		this.carts = carts;
 	}
 
 	@Id
@@ -155,7 +115,7 @@ public class Product implements java.io.Serializable {
 		this.user = user;
 	}
 
-	@Column(name = "[name]", nullable = false)
+	@Column(name = "name", nullable = false)
 	@Size(max = 255)
 	@NotEmpty
 	public String getName() {
@@ -289,13 +249,13 @@ public class Product implements java.io.Serializable {
 		this.events = events;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.REMOVE)
-	public Set<ProductAttribute> getProductAttributes() {
-		return this.productAttributes;
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.ALL)
+	public Set<ProductAttributeValues> getProductAttributeValues() {
+		return productAttributeValues;
 	}
 
-	public void setProductAttributes(Set<ProductAttribute> productAttributes) {
-		this.productAttributes = productAttributes;
+	public void setProductAttributeValues(Set<ProductAttributeValues> productAttributeValues) {
+		this.productAttributeValues = productAttributeValues;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.REMOVE)
@@ -338,34 +298,17 @@ public class Product implements java.io.Serializable {
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((slug == null) ? 0 : slug.hashCode());
-		return result;
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Product product = (Product) o;
+		return Objects.equals(id, product.id) &&
+				Objects.equals(slug, product.slug);
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Product other = (Product) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (slug == null) {
-			if (other.slug != null)
-				return false;
-		} else if (!slug.equals(other.slug))
-			return false;
-		return true;
-	}
+	public int hashCode() {
 
+		return Objects.hash(id, slug);
+	}
 }

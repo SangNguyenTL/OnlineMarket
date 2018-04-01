@@ -12,18 +12,15 @@ public class StringContainValidator implements ConstraintValidator<StringContain
 
     @Override
     public void initialize(StringContain constraintAnnotation) {
-        valueList = new ArrayList<String>();
+        valueList = new ArrayList<>();
         for(String val : constraintAnnotation.acceptedValues()) {
-            valueList.add(val);
+            valueList.add(val.toLowerCase());
         }
     }
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        if(!valueList.contains(value)) {
-            return false;
-        }
-        return true;
+        return valueList.contains(value.toLowerCase());
     }
 
 }

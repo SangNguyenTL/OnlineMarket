@@ -2,18 +2,15 @@ package onlinemarket.model;
 
 public enum State {
 	 
-    ACTIVE("Active","Hoạt động"),
-    INACTIVE("Inactive", "Ngưng hoạt động"),
-    DELETED("Deleted","Bị xóa"),
-    LOCKED("Locked", "Bị khóa");
+    ACTIVE("Active"),
+    INACTIVE("Inactive"),
+    DELETED("Deleted"),
+    LOCKED("Locked");
      
     private String state;
-    
-    private String text;
      
-    private State(final String state, final String text){
+    State(final String state){
         this.state = state;
-        this.text = text;
     }
      
     public String getState(){
@@ -22,13 +19,7 @@ public enum State {
  
     @Override
     public String toString(){
-        return this.state;
+        return this.name();
     }
- 
- 
-    public String getName(){
-        return this.text;
-    }
- 
  
 }

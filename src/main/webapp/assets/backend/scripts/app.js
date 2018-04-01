@@ -113,15 +113,15 @@
           buttons: {
               confirm: {
                   label: 'Yes',
-                  className: 'btn-success btn btn-sm'
+                  className: 'btn-success btn m-l-sm'
               },
               cancel: {
                   label: 'No',
-                  className: 'btn-danger btn btn-sm'
+                  className: 'btn-danger btn'
               }
           },
           callback: function (result) {
-            form.trigger("submit");
+              if(result) form.trigger("submit");
           }
         });
       });

@@ -128,7 +128,7 @@ public class PostCategoryManagerController extends MainController{
 			
 			if (!result.hasErrors()) {
 				postCategory.setUpdateDate(new Date());
-				postCategoryService.update(postCategory);
+//				postCategoryService.update(postCategory);
 				redirectAttributes.addFlashAttribute("success", "");
 				return "redirect:/postCategory/update/"+id;
 			}

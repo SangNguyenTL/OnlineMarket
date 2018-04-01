@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 
+import onlinemarket.util.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +19,8 @@ import onlinemarket.form.filter.ImageFilter;
 import onlinemarket.model.Image;
 import onlinemarket.model.User;
 import onlinemarket.result.api.ResultImage;
-import onlinemarket.service.exception.CreateFolderException;
-import onlinemarket.service.exception.UploadTypeException;
+import onlinemarket.util.exception.CreateFolderException;
+import onlinemarket.util.exception.UploadTypeException;
 
 @Service("imageService")
 @Transactional
@@ -40,7 +41,7 @@ public class ImageServiceImpl implements ImageService {
 	}
 
 	@Override
-	public void update(Image entity) {
+	public void update(Image entity) throws CustomException {
 		imageDao.update(entity);
 	}
 
@@ -80,7 +81,7 @@ public class ImageServiceImpl implements ImageService {
 			Image image = new Image();
 			String name = file.getName().substring(file.getName().indexOf("-") + 1);
 			image.setName(name);
-			String path = basePath.toURI().relativize(file.toURI()).getPath();
+			String path = "/" + basePath.toURI().relativize(file.toURI()).getPath();
 			image.setPath(path);
 			image.setDataType(form.getUploadType());
 			image.setUploadDate(new Date());

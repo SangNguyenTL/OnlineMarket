@@ -20,6 +20,7 @@ import onlinemarket.form.config.LogoConfig;
 import onlinemarket.form.config.SocialConfig;
 import onlinemarket.form.config.UploadConfig;
 import onlinemarket.model.User;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 @Controller
@@ -39,25 +40,6 @@ public class ConfigurationController extends MainController{
 		model.put("configPage", true);
 	}
 	
-	@ModelAttribute("currentUser")
-	public User getCurrentUser() {
-		String userName = null;
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        
-        if (principal instanceof UserDetails) {
-            userName = ((UserDetails)principal).getUsername();
-        } else {
-            userName = principal.toString();
-        }
-        
-        currentUser = userService.getByEmail(userName);
-        if(currentUser == null) {
-            currentUser = new User();
-            currentUser.setEmail(userName);
-        } 
-        return currentUser;
-	}
-	
 	@RequestMapping(value = { "" }, method = RequestMethod.GET)
 	public String configPage(@ModelAttribute("general") GeneralConfig general,ModelMap model) {
 		model.put("path", "general");
@@ -68,14 +50,15 @@ public class ConfigurationController extends MainController{
 	}
 	
 	@RequestMapping(value = { "" }, method = RequestMethod.POST)
-	public String submitConfigPage(@Valid @ModelAttribute("general") GeneralConfig generalConfig, BindingResult result, ModelMap model) {
+	public String submitConfigPage(@Valid @ModelAttribute("general") GeneralConfig generalConfig, BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
 		
 		model.put("path", "general");
 		model.put("subPageTitle", "general");
 		model.put("description", "Set some of the basic properties of the application.");
 		if(!result.hasErrors()) {
 			configurationService.saveGeneralConfig(generalConfig);
-			return "redirect:/admin/config?success";
+			redirectAttributes.addFlashAttribute("success", true);
+			return "redirect:/admin/config";
 		}
 		
 		return "backend/config";
@@ -94,23 +77,25 @@ public class ConfigurationController extends MainController{
 	}
 	
 	@RequestMapping(value = { "upload" }, method = RequestMethod.POST)
-	public String submitUploadPage(@ModelAttribute("uploadConfig") UploadConfig upload, BindingResult result, ModelMap model) {
+	public String submitUploadPage(@ModelAttribute("uploadConfig") UploadConfig upload, BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
 		model.put("path", "upload");
 		model.put("subPageTitle", "Upload");
 		model.put("description", "Set upload limits.");
 		if(!result.hasErrors()) {
 			configurationService.saveUploadconfig(upload);
-			return "redirect:/admin/config/upload?success";
+			redirectAttributes.addFlashAttribute("success", true);
+			return "redirect:/admin/config/upload";
 		}
 		return "backend/config";
 	}
 	
-	@RequestMapping(value = { "logo" }, method = RequestMethod.GET)
-	public String configLogoPage(@ModelAttribute("logo") @Valid LogoConfig logo, BindingResult result, ModelMap model) {
+	@RequestMapping(value = { "logo" }, method = RequestMethod.POST)
+	public String configLogoPage(@ModelAttribute("logo") @Valid LogoConfig logo, BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
 		
 		if(!result.hasErrors()) {
 			configurationService.saveLogoConfig(logo);
-			return "redirect:/admin/config/logo?success";
+			redirectAttributes.addFlashAttribute("success", true);
+			return "redirect:/admin/config/logo";
 		}
 		
 		model.put("path", "logo");
@@ -122,7 +107,7 @@ public class ConfigurationController extends MainController{
 		return "backend/config"; 
 	}
 	
-	@RequestMapping(value = { "logo" }, method = RequestMethod.POST)
+	@RequestMapping(value = { "logo" }, method = RequestMethod.GET)
 	public String processLogoPage(@ModelAttribute("logo") LogoConfig logo, ModelMap model) {
 		model.put("path", "logo");
 		model.put("subPageTitle", "Logo");
@@ -141,14 +126,15 @@ public class ConfigurationController extends MainController{
 	}
 	
 	@RequestMapping( value = {"contact"}, method = RequestMethod.POST)
-	public String submitContactPage(@ModelAttribute("contactConfig") ContactConfig contact,BindingResult result, ModelMap model) {
+	public String submitContactPage(@ModelAttribute("contactConfig") ContactConfig contact,BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
 		
 		model.put("path", "contact");
 		model.put("subPageTitle", "Contact");
 		model.put("description", "Setting up a store address helps customers understand where the store is located.");
 		if(!result.hasErrors()) {
 			configurationService.saveContactConfig(contact);
-			return "redirect:/admin/config/contact?success";
+			redirectAttributes.addFlashAttribute("success", true);
+			return "redirect:/admin/config/contact";
 		}
 		
 		return "backend/config";
@@ -166,14 +152,15 @@ public class ConfigurationController extends MainController{
 	}  
 	
 	@RequestMapping( value = {"social"}, method = RequestMethod.POST)
-	public String submitSocialPage(@ModelAttribute("socialConfig") SocialConfig social,BindingResult result, ModelMap model) {
+	public String submitSocialPage(@ModelAttribute("socialConfig") SocialConfig social,BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
 		
 		model.put("path", "social");
 		model.put("subPageTitle", "Social Network");
 		model.put("description", "Set the URL of the social network page, which shows social networking applications.");
 		if(!result.hasErrors()) {
 			configurationService.saveSocialConfig(social);
-			return "redirect:/admin/config/social?success";
+			redirectAttributes.addFlashAttribute("success", true);
+			return "redirect:/admin/config/social";
 		}
 		
 		return "backend/config";
@@ -191,13 +178,14 @@ public class ConfigurationController extends MainController{
 	}
 	
 	@RequestMapping( value = {"emailsystem"}, method = RequestMethod.POST)
-	public String submitEmailSystemPage(@ModelAttribute("emailSystemConfig") EmailSystemConfig email, BindingResult result, ModelMap model) {
+	public String submitEmailSystemPage(@ModelAttribute("emailSystemConfig") EmailSystemConfig email, BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
 		model.put("path", "emailsystem");
 		model.put("subPageTitle", "Email System");
 		model.put("description", "Set parameters so that the application can send the message to the client.");
 		if(!result.hasErrors()) {
 			configurationService.saveEmailSystemConfig(email);
-			return "redirect:/admin/config/emailsystem?success";
+			redirectAttributes.addFlashAttribute("success", true);
+			return "redirect:/admin/config/emailsyste";
 		}
 		return "backend/config";
 	}
@@ -214,13 +202,14 @@ public class ConfigurationController extends MainController{
 	}
 	
 	@RequestMapping( value = {"api"}, method = RequestMethod.POST)
-	public String submitApiPage(@ModelAttribute("apiConfig") ApiConfig api, BindingResult result, ModelMap model) {
+	public String submitApiPage(@ModelAttribute("apiConfig") ApiConfig api, BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
 		model.put("path", "api");
 		model.put("subPageTitle", "Api System");
 		model.put("description", "Set api systems for applications");
 		if(!result.hasErrors()) {
 			configurationService.saveApiConfig(api);
-			return "redirect:/admin/config/api?success";
+			redirectAttributes.addFlashAttribute("success", true);
+			return "redirect:/admin/config/api";
 		}
 		return "backend/config";
 	}

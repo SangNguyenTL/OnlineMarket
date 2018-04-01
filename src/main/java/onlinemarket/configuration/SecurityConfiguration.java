@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
@@ -41,8 +42,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	PersistentTokenRepository tokenRepository;
 
 	@Autowired
+	PasswordEncoder passwordEncoder;
+
+	@Autowired
 	public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
 	}
 	@Autowired
 	private CustomAccessDeniedHandler accessDeniedHandler;
@@ -53,7 +57,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	}
 
 	@Bean
-	public BCryptPasswordEncoder passwordEncoder() throws Exception {
+	public PasswordEncoder passwordEncoder(){
 		return new BCryptPasswordEncoder();
 	}
 
@@ -69,7 +73,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .addFilterBefore(filter,CsrfFilter.class)
         .authorizeRequests()
 				.antMatchers("/admin/**", "/api/image/delete/**", "/api/image/load").hasRole("ADMIN")
-				.antMatchers("/api/imamge/**").authenticated()
+				.antMatchers("/api/image/**").authenticated()
 				.anyRequest().permitAll()
 		        .and()
 			.logout()
@@ -98,9 +102,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Bean
 	public PersistentTokenBasedRememberMeServices getPersistentTokenBasedRememberMeServices() {
-		PersistentTokenBasedRememberMeServices tokenBasedservice = new PersistentTokenBasedRememberMeServices(
+		PersistentTokenBasedRememberMeServices tokenBasedService = new PersistentTokenBasedRememberMeServices(
 				"remember-me", userDetailsService, tokenRepository);
-		return tokenBasedservice;
+		return tokenBasedService;
 	}
 
 }

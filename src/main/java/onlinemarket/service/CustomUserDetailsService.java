@@ -27,19 +27,18 @@ public class CustomUserDetailsService implements UserDetailsService{
             throws UsernameNotFoundException {
         User user = userService.getByEmail(email);
         if(user==null){
-            throw new UsernameNotFoundException("Email isn't registed.");
+            throw new UsernameNotFoundException("Email isn't registered.");
         }
             return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), 
-                 user.getState().equals("Active"), true, true, true, getGrantedAuthorities(user));
+                 user.getState().equals("ACTIVE"), true, true, true, getGrantedAuthorities(user));
     }
  
      
     private List<GrantedAuthority> getGrantedAuthorities(User user){
-        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-         
-        for(Role userRole : user.getRoles()){
-            authorities.add(new SimpleGrantedAuthority("ROLE_"+userRole.getName()));
-        }
+        List<GrantedAuthority> authorities = new ArrayList<>();
+
+        authorities.add(new SimpleGrantedAuthority("ROLE_"+user.getRole().getName()));
+
         return authorities;
     }
      

@@ -8,7 +8,7 @@
 
 	<div ui-view class="app-body" id="view" layout:fragment="container">
 	
-		<div ui-jp='galleryManager' class="padding" th:attr="ui-options='{actionUpload: \''+@{/api/image/upload}+'\', actionLoadImage: \''+@{/api/image/load}+'\', actionDelete: \''+@{/api/image/delete}+'\'}'"></div>
+		<div ui-jp='galleryManager' class="padding" th:attr="ui-options='{title: 'Image Management', actionUpload: \''+@{/api/image/upload}+'\', actionLoadImage: \''+@{/api/image/load}+'\', actionDelete: \''+@{/api/image/delete}+'\'}'"></div>
 		<div th:replace="templates/backend/media :: media"></div>
 	</div>
 </body>

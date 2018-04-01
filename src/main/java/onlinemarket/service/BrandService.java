@@ -5,12 +5,12 @@ import onlinemarket.model.Brand;
 import onlinemarket.model.Event;
 import onlinemarket.result.ResultObject;
 
-public interface BrandService extends InterfaceService<Integer, Brand>{
-	
-	public ResultObject<Brand> pagination(Integer currentPage, Integer size);
-	
-	public ResultObject<Brand> list(FilterForm filterForm);
-	
-	public Brand getByEvent(Event event);
-	
+public interface BrandService extends InterfaceService<Integer, Brand> {
+
+    ResultObject<Brand> pagination(Integer currentPage, Integer size);
+
+    ResultObject<Brand> list(FilterForm filterForm);
+
+    Brand getByEvent(Event event);
+
 }

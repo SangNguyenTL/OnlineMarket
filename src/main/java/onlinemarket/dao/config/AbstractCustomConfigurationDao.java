@@ -15,7 +15,7 @@ public abstract class AbstractCustomConfigurationDao<T> {
 	private ConfigurationDao configurationDao;
 
 	public T getConfiguration(T clazz) {
-		ArrayList<String> listValue = new ArrayList<String>();
+		ArrayList<String> listValue = new ArrayList<>();
 		for (Field field : clazz.getClass().getDeclaredFields()) {
 			field.setAccessible(true);
 			listValue.add(field.getName());

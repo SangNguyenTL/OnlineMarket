@@ -5,13 +5,13 @@ import java.io.IOException;
 import java.util.List;
 
 import onlinemarket.form.config.UploadForm;
-import onlinemarket.service.exception.CreateFolderException;
-import onlinemarket.service.exception.UploadTypeException;
+import onlinemarket.util.exception.CreateFolderException;
+import onlinemarket.util.exception.UploadTypeException;
 
 public interface StorageService {
 	
-	public List<File> store(UploadForm form) throws IllegalStateException, IOException, UploadTypeException, CreateFolderException;
+	List<File> store(UploadForm form) throws IllegalStateException, IOException, UploadTypeException, CreateFolderException;
 	
-	public void delete(String fileName);
+	boolean delete(String fileName);
 	
 }

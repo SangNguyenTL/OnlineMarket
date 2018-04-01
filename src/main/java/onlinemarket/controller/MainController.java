@@ -40,6 +40,10 @@ public abstract class MainController {
 	
 	protected Slugify slg;
 	
+	protected String relativePath;
+	
+	protected String title;
+	
 	@ModelAttribute
 	public void populateMetaPage(ModelMap model) {
 		model.put("general", configurationService.getGeneral());

@@ -3,6 +3,7 @@ package onlinemarket.thymeleaf.dialect;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -142,13 +143,24 @@ public class PaginationElementTagProcessor extends AbstractElementTagProcessor{
     		
     			Object value = field.get(filterForm);
     		
-    			if(!(value instanceof Integer) && StringUtils.isBlank((String) value)) continue;
+    			if(value instanceof String && StringUtils.isEmpty((String) value)) continue;
 	    		
+    			
 	    		if(sb.length() > 0){
 	  	          sb.append('&');
 	  	      	}
-			
-				sb.append(URLEncoder.encode(field.getName(), "UTF-8")).append('=').append(URLEncoder.encode(value.toString(), "UTF-8"));
+	    		if (StringUtils.equals(field.getName(), "groupSearch")) {
+
+					@SuppressWarnings("unchecked")
+					TreeMap<String, String> values = (TreeMap<String, String>) value;
+					Iterator<Map.Entry<String, String>> valueI = values.entrySet().iterator();
+					while (valueI.hasNext()) {
+						Map.Entry<String, String> valueE = valueI.next();
+						sb.append(valueE.getKey()).append("=").append(URLEncoder.encode(valueE.getValue(), "UTF-8"));
+					}
+
+				} else 
+					sb.append(URLEncoder.encode(field.getName(), "UTF-8")).append('=').append(URLEncoder.encode(value.toString(), "UTF-8"));
 			} catch (UnsupportedEncodingException | IllegalArgumentException | IllegalAccessException e) {
 				continue;
 			}
