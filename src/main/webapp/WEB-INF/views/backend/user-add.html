@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="templates/backend">
+<head>
+</head>
+<body>
+
+<div ui-view class="app-body" id="view" layout:fragment="container">
+    <div class="padding">
+
+        <h5 class="_300 margin" th:text="${pageTitle}"></h5>
+        <div class="alert alert-success" th:if="${success}">
+            <strong>Congratulation!</strong> Process completed.
+        </div>
+        <div class="row">
+            <div class="col-md-9">
+
+                <div class="box">
+                    <div class="box-header">
+                        <h2>
+                            <a th:href="@{${relativePath}}" th:text="${subPageTitle}"></a>
+                        </h2>
+                        <small th:text="${description}"></small>
+                    </div>
+
+                    <div class="box-divider m-a-0"></div>
+
+                    <div class="box-body">
+                        <form ui-jp="parsley" role="form" th:object="${user}"
+                              th:action="@{${pathAction}}" method="POST">
+                            <input th:if="${action} == 'update'" type="hidden"
+                                   th:field="*{id}"/>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Email</label>
+                                <div class="col-sm-9">
+                                    <input th:errorclass="parsley-error" type="email"
+                                           class="form-control" placeholder="your@email"
+                                           data-parsley-id="1" minlength="6" maxlength="128" required
+                                           th:field="*{email}">
+                                    <ul class="parsley-errors-list filled" id="parsley-id-1"
+                                        th:if="${#fields.hasErrors('email')}">
+                                        <li th:errors="*{email}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">First Name</label>
+                                <div class="col-sm-9">
+                                    <input th:errorclass="parsley-error" type="text"
+                                           class="form-control" placeholder="First Name"
+                                           data-parsley-id="2" maxlength="64" required
+                                           th:field="*{firstName}">
+                                    <ul class="parsley-errors-list filled" id="parsley-id-2"
+                                        th:if="${#fields.hasErrors('firstName')}">
+                                        <li th:errors="*{firstName}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Last Name</label>
+                                <div class="col-sm-9">
+                                    <input th:errorclass="parsley-error" type="text"
+                                           class="form-control" placeholder="First Name"
+                                           data-parsley-id="3" maxlength="64" required
+                                           th:field="*{lastName}">
+                                    <ul class="parsley-errors-list filled" id="parsley-id-3"
+                                        th:if="${#fields.hasErrors('lastName')}">
+                                        <li th:errors="*{lastName}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Avatar</label>
+                                <div class="col-sm-9 box-image">
+                                    <a href="#" data-toggle="modal" data-target="#modal-image-gallery"
+                                       ui-toggle-class="zoom" ui-target="#animate" data-target-input='avatar'>
+                                        <img th:if="*{avatar}" th:src="@{*{avatar}}" alt="..."
+                                             class="img-thumbnail thumbnail box-thumbnail">
+                                        <img th:unless="*{avatar}" th:src="@{/assets/images/defaultImage.jpg}" alt="..."
+                                             class="img-thumbnail thumbnail">
+                                    </a>
+                                    <input th:errorclass="parsley-error" class="form-control hide" type="text"
+                                           th:field="*{avatar}" data-parsley-length="[3, 150]"
+                                           data-parsley-id="8"/>
+                                    <ul class="parsley-errors-list filled" id="parsley-id-8"
+                                        th:if="${#fields.hasErrors('avatar')}">
+                                        <li th:errors="*{avatar}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Birthday</label>
+                                <div class="col-sm-9">
+                                    <input ui-jp="datetimepicker" ui-options="{format: 'DD/MM/YYYY'}" data-parsley-id="4" required
+                                           th:errorclass="parsley-error" class="form-control"
+                                           type="text" th:field="*{birthday}"/>
+                                    <ul class="parsley-errors-list filled" id="parsley-id-4"
+                                        th:if="${#fields.hasErrors('birthday')}">
+                                        <li th:errors="*{birthday}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Gender</label>
+                                <div class="col-sm-9">
+                                    <select th:field="*{gender}" class="form-control"
+                                            data-parsley-id="5" required>
+                                        <option value="">Please choice</option>
+                                        <option
+                                                th:each="gender : ${T(onlinemarket.model.Gender).values()}"
+                                                th:value="${gender.code}" th:text="${gender.text}"></option>
+                                    </select>
+                                    <ul class="parsley-errors-list filled" id="parsley-id-5"
+                                        th:if="${#fields.hasErrors('gender')}">
+                                        <li th:errors="*{gender}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">State</label>
+                                <div class="col-sm-9">
+                                    <select th:field="*{state}" class="form-control"
+                                            data-parsley-id="6" required>
+                                        <option value="">Please choice</option>
+                                        <option
+                                                th:each="st : ${T(onlinemarket.model.State).values()}"
+                                                th:value="${st}" th:text="${st.state}"></option>
+                                    </select>
+                                    <ul class="parsley-errors-list filled" id="parsley-id-6"
+                                        th:if="${#fields.hasErrors('state')}">
+                                        <li th:errors="*{state}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Role</label>
+                                <div class="col-sm-9">
+                                    <select th:field="*{role}" class="form-control"
+                                            data-parsley-id="9" required>
+                                        <option value="">Please choice</option>
+                                        <option
+                                                th:each="role : ${roles}"
+                                                th:value="${{role}}" th:text="${role.name}"></option>
+                                    </select>
+                                    <ul class="parsley-errors-list filled" id="parsley-id-9"
+                                        th:if="${#fields.hasErrors('role')}">
+                                        <li th:errors="*{role}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Password</label>
+                                <div class="col-sm-9">
+                                    <input th:if="${action} == 'add'" th:errorclass="parsley-error" type="password"
+                                           data-parsley-id="7" required minlength="6" maxlength="60"
+                                           class="form-control" th:field="*{password}">
+                                    <input th:unless="${action} == 'add'" th:errorclass="parsley-error" type="password"
+                                           data-parsley-id="7" minlength="6" maxlength="60"
+                                           class="form-control" th:field="*{password}">
+                                    <ul class="parsley-errors-list filled" id="parsley-id-7"
+                                        th:if="${#fields.hasErrors('password')}">
+                                        <li th:errors="*{password}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="dker p-a text-right">
+                                <button type="submit" class="btn info">Save</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div id="modal-image-gallery" class="modal fade animate" data-backdrop="true" aria-hidden="true">
+        <div class="modal-dialog zoom modal-lg" id="animate" ui-class="zoom">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Pick Image</h5>
+                </div>
+                <div class="modal-body" ui-jp='galleryManager'
+                     th:attr="ui-options='{modal: true, actionUpload: \''+@{/api/image/upload}+'\', actionLoadImage: \''+@{/api/image/load}+'\', actionDelete: \''+@{/api/image/delete}+'\'}'">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn dark-white p-x-md" data-dismiss="modal">No</button>
+                    <button type="button" class="btn danger p-x-md" data-dismiss="modal" data-action="yes">Yes</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div>
+    </div>
+    <div th:replace="templates/backend/media :: media"></div>
+</div>
+
+
+</body>
+</html>
