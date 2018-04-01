@@ -30,3 +30,6 @@ hs_err_pid*
 .springBeans
 .settings/org.springframework.ide.eclipse.beans.core.prefs
 .settings/org.springframework.ide.eclipse.core.prefs
+.settings/.jsdtscope
+OnlineMarket.iml
+.settings/.jsdtscope
