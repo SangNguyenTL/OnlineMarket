@@ -4,13 +4,27 @@ import onlinemarket.form.filter.FilterForm;
 import onlinemarket.model.Brand;
 import onlinemarket.model.Event;
 import onlinemarket.result.ResultObject;
+import onlinemarket.util.exception.CustomException;
+import onlinemarket.util.exception.brand.BrandHasEventException;
+import onlinemarket.util.exception.brand.BrandHasProductException;
+import onlinemarket.util.exception.brand.BrandNotFoundException;
 
-public interface BrandService extends InterfaceService<Integer, Brand> {
+import java.util.List;
 
-    ResultObject<Brand> pagination(Integer currentPage, Integer size);
+public interface BrandService {
+
+    Brand getByKey(Integer key);
+
+    Brand getByDeclaration(String key, Object value);
+
+    void save(Brand entity);
+
+    void delete(Integer id) throws BrandNotFoundException, BrandHasEventException, BrandHasProductException;
+
+    void update(Brand entity) throws BrandNotFoundException;
 
     ResultObject<Brand> list(FilterForm filterForm);
 
-    Brand getByEvent(Event event);
+    List<Brand> list();
 
 }

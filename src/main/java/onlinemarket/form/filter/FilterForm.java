@@ -8,7 +8,7 @@ public class FilterForm {
 	
 	private String search = "";
 	
-	private String searchBy = "";
+	private String searchBy = "name";
 	
 	private String order = "asc";
 	

@@ -2,7 +2,10 @@ package onlinemarket.service;
 
 import java.util.List;
 
-import onlinemarket.util.exception.CustomException;
+import onlinemarket.dao.AttributeDao;
+import onlinemarket.util.exception.attributeGroup.AttributeGroupHasAttributeException;
+import onlinemarket.util.exception.attributeGroup.AttributeGroupNotFoundException;
+import onlinemarket.util.exception.productCategory.ProductCategoryNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,20 +22,32 @@ public class AttributeGroupServiceImpl implements AttributeGroupService{
 
 	@Autowired
 	AttributeGroupDao attributeGroupDao;
-	
+
+	@Autowired
+	AttributeDao attributeDao;
+
 	@Override
-	public void save(AttributeGroup entity) {
+	public void save(AttributeGroup entity, ProductCategory productCategory) throws ProductCategoryNotFoundException {
+		if(productCategory == null) throw new ProductCategoryNotFoundException();
+		entity.setProductCategory(productCategory);
 		attributeGroupDao.save(entity);
 	}
 
 	@Override
-	public void update(AttributeGroup entity) throws CustomException {
+	public void update(AttributeGroup entity, ProductCategory productCategory) throws ProductCategoryNotFoundException, AttributeGroupNotFoundException {
+		if(productCategory == null) throw new ProductCategoryNotFoundException();
+		AttributeGroup attributeGroup = attributeGroupDao.getByKey(entity.getId());
+		if(attributeGroup == null) throw new AttributeGroupNotFoundException();
+		entity.setProductCategory(productCategory);
 		attributeGroupDao.update(entity);
 	}
 
 	@Override
-	public void delete(AttributeGroup entity) {
-		attributeGroupDao.delete(entity);
+	public void delete(Integer id) throws AttributeGroupNotFoundException, AttributeGroupHasAttributeException {
+		AttributeGroup attributeGroup = attributeGroupDao.getByKey(id);
+		if(attributeGroup == null) throw new AttributeGroupNotFoundException();
+		if(attributeDao.getUniqueResultBy("attributeGroup",attributeGroup) != null) throw new AttributeGroupHasAttributeException();
+		attributeGroupDao.delete(attributeGroup);
 	}
 
 	@Override
@@ -56,17 +71,19 @@ public class AttributeGroupServiceImpl implements AttributeGroupService{
 	}
 	
 	@Override
-	public AttributeGroup getByProductCategory(ProductCategory productCategory) {
+	public AttributeGroup getByProductCategory(ProductCategory productCategory)  throws ProductCategoryNotFoundException {
+		if(productCategory == null) throw new ProductCategoryNotFoundException();
 		return attributeGroupDao.getByProductCategory(productCategory);
 	}
 
 	@Override
-	public ResultObject<AttributeGroup> listByProductCategory(ProductCategory productCategory, FilterForm filterForm) {
+	public ResultObject<AttributeGroup> listByProductCategory(ProductCategory productCategory, FilterForm filterForm) throws ProductCategoryNotFoundException {
+		if(productCategory == null) throw new ProductCategoryNotFoundException();
 		return attributeGroupDao.listByProductCategory(productCategory, filterForm);
 	}
 
 	@Override
-	public List<AttributeGroup> listByProductCategory(ProductCategory productCategory) {
+	public List<AttributeGroup> listByProductCategory(ProductCategory productCategory) throws ProductCategoryNotFoundException {
 		return attributeGroupDao.listByProductCategory(productCategory);
 	}
 }

@@ -22,12 +22,20 @@
 					<strong>Obbs!</strong> [[${error}]].
 				</div>
 				<div class="row p-a">
-					<form th:object="${filterForm}" th:action="@{${relativePath}}"
-						method="get">
-						<div class="col-sm-3"></div>
-						<div class="col-sm-5">
+					<form th:object="${filterProduct}" th:action="@{${relativePath}}" method="POST">
+						<div class="col-sm-3">
 							<div class="input-group input-group-sm">
-								 <select class="form-control" name="searchBy" id="searchBy">
+								<select class="form-control" th:field="*{state}">
+									<option value="">State...</option>
+									<option th:each="state : ${T(onlinemarket.model.NumState).values()}"
+											th:value="${state.id}" th:text="${state.name}"></option>
+								</select>
+							</div>
+						</div>
+						<div class="col-sm-3"></div>
+						<div class="col-sm-3">
+							<div class="input-group input-group-sm">
+								 <select class="form-control" th:field="*{filterForm.searchBy}">
 									<option value="">Search by</option>
 									<option value="name">Name</option>
 									<option value="brand.name">Brand name</option>
@@ -35,16 +43,16 @@
 								</select>
 							</div>
 						</div>
-						<div class="col-sm-4">
+						<div class="col-sm-3">
 							<div class="input-group input-group-sm">
-								<input class="form-control" placeholder="Search" type="text"
-									th:field="*{search}"> <span class="input-group-btn">
+								<input class="form-control" placeholder="Search" type="text" th:field="*{filterForm.search}">
+								<span class="input-group-btn">
 									<button class="btn b-a white" type="submit">Go!</button>
 								</span>
 							</div>
-							<input type="hidden" th:field="*{size}" /> <input type="hidden"
-								th:field="*{order}" /> <input type="hidden"
-								th:field="*{orderBy}" />
+							<input type="hidden" th:field="*{filterForm.size}" />
+							<input type="hidden" th:field="*{filterForm.order}" />
+							<input type="hidden" th:field="*{filterForm.orderBy}" />
 						</div>
 					</form>
 				</div>
@@ -62,31 +70,32 @@
 								<filter:th order="asc" orderBy="brand"
 									filter:uri="@{${relativePath}}" filter:currentPage="${page}"
 									name="Brand">Brand</filter:th>
-								<filter:th order="asc" orderBy="productCategory"
+								<filter:th order="asc" orderBy="state"
 									filter:uri="@{${relativePath}}" filter:currentPage="${page}"
-									name="Category">Category</filter:th>
+									name="State">State</filter:th>
 								<filter:th order="asc" orderBy="price"
 									filter:uri="@{${relativePath}}" filter:currentPage="${page}"
 									name="Price">Price</filter:th>
 								<filter:th order="asc" orderBy="quantity"
 									filter:uri="@{${relativePath}}" filter:currentPage="${page}"
-									name="Price">Quantity</filter:th>
+									name="Quantity">Quantity</filter:th>
 								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody th:object="${result}">
 							<tr th:each="product : *{list}">
 								<td th:text="${product.id}"></td>
-								<td><span class="w-40"> <img
-										th:src="${product.featureImage}" class="w-full" alt="...">
-								</span></td>
+								<td>
+									<span class="w-40">
+										<img th:src="${product.featureImage}" class="w-full" alt="...">
+									</span>
+								</td>
 								<td th:text="${product.name}"></td>
-								<td><a
-									th:href="@{'/admin/brand/'+${product.brand.id}+'/product'}"
-									th:text="${product.brand.name}"></a></td>
-								<td><a
-									th:href="@{'/admin/product-category/'+${product.productCategory.id}+'/product'}"
-									th:text="${product.productCategory.name}"></a></td>
+								<td th:text="${product.brand.name}"></td>
+								<th:block th:each="state : ${T(onlinemarket.model.NumState).values()}">
+									<td th:if="${state.id} == ${product.state}" th:text="${state.name}"></td>
+								</th:block>
+								<td th:if="${product.state} == null">NULL</td>
 								<td th:text="${product.price}"></td>
 								<td th:text="${product.quantity}"></td>
 								<td>
@@ -94,8 +103,7 @@
 										th:action="@{'/admin/product-category/'+${product.productCategory.id}+'/product/delete'}" method="POST">
 										<a th:href="@{'/admin/product-category/'+${product.productCategory.id}+'/product/'+${product.id}+'/attribute-group'}"
 											class="btn btn-outline b-info text-primary btn-sm">Attributes</a>
-										<a th:href="@{'/admin/product-category/'+${product.productCategory.id}+'/update/'+${product.id}}"
-											class="btn btn-outline b-info text-success btn-sm">Update</a>
+										<a th:href="@{'/admin/product-category/'+${product.productCategory.id}+'/update/'+${product.id}}" class="btn btn-outline b-info text-success btn-sm">Update</a>
 										<input type="hidden" th:name="id" th:value="${product.id}">
 										<button type="submit"
 											class="btn btn-outline b-info text-danger btn-sm">Delete</button>

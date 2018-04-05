@@ -6,6 +6,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import onlinemarket.converter.RoleFormatter;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.MessageSource;
@@ -18,12 +19,10 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.orm.hibernate4.support.OpenSessionInViewInterceptor;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.*;
 import org.thymeleaf.dialect.IDialect;
 import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 import org.thymeleaf.spring4.SpringTemplateEngine;
@@ -47,12 +46,29 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 	@Autowired
 	ConfigurationService configurationService;
 
+	@Autowired
+	SessionFactory sessionFactory;
+
 	@Override
 	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 
 		MappingJackson2HttpMessageConverter jacksonMessageConverter = new MappingJackson2HttpMessageConverter();
 
 		converters.add(jacksonMessageConverter);
+	}
+
+	@Bean
+	public OpenSessionInViewInterceptor openSessionInViewInterceptor(){
+		OpenSessionInViewInterceptor openSessionInterceptor = new OpenSessionInViewInterceptor();
+		openSessionInterceptor.setSessionFactory(sessionFactory);
+		return openSessionInterceptor;
+	}
+
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		OpenSessionInViewInterceptor openSessionInterceptor = new OpenSessionInViewInterceptor();
+		openSessionInterceptor.setSessionFactory(sessionFactory);
+		registry.addWebRequestInterceptor(openSessionInterceptor);
 	}
 
 	@Bean

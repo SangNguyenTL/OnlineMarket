@@ -3,6 +3,7 @@ package onlinemarket.service;
 import java.util.List;
 
 import onlinemarket.util.exception.CustomException;
+import onlinemarket.util.exception.productCategory.ProductCategoryNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,67 +24,19 @@ public class ProductServiceImpl implements ProductService {
 	ProductDao productDao;
 
 	@Override
-	public void save(Product entity) {
-		productDao.save(entity);
-	}
-
-	@Override
-	public void update(Product entity) throws CustomException {
-		productDao.update(entity);
-	}
-
-	@Override
-	public void delete(Product entity) {
-		productDao.delete(entity);
-	}
-
-	@Override
 	public Product getByKey(Integer key) {
 		return productDao.getByKey(key);
 	}
 
 	@Override
-	public Product getByDeclaration(String key, String value) {
+	public Product getByDeclaration(String key, Object value) {
 		return productDao.getByDeclaration(key, value);
 	}
 
 	@Override
-	public List<Product> list() {
-		return productDao.list();
+	public ResultObject<Product> listByProductCategory(ProductCategory productCategory, FilterForm filterForm) throws ProductCategoryNotFoundException {
+		if(productCategory == null) throw new ProductCategoryNotFoundException();
+		return productDao.listByDeclaration("productCategory", productCategory, filterForm);
 	}
 
-	@Override
-	public List<Product> list(Integer offset, Integer maxResults) {
-		return productDao.list(offset, maxResults);
-	}
-
-	@Override
-	public Product getByBrand(Brand brand) {
-		return productDao.getByBrand(brand);
-	}
-
-	@Override
-	public Product getByProductCategory(ProductCategory productCategory) {
-		return productDao.getByProductCategory(productCategory);
-	}
-
-	@Override
-	public Product getByEvent(Event event) {
-		return productDao.getByEvent(event);
-	}
-
-	@Override
-	public ResultObject<Product> list(FilterForm filterForm) {
-		return productDao.list(filterForm);
-	}
-
-	@Override
-	public ResultObject<Product> listByProductCategory(ProductCategory productCategory, FilterForm filterForm) {
-		return productDao.listByProductCategory(productCategory, filterForm);
-	}
-
-	@Override
-	public ResultObject<Product> listByBrand(Brand brand, FilterForm filterForm) {
-		return productDao.listByProductBrand(brand, filterForm);
-	}
 }

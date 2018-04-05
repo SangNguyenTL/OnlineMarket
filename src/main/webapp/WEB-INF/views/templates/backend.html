@@ -29,10 +29,14 @@
   <link rel="stylesheet" th:href="@{/assets/backend/assets/styles/app.css}" type="text/css" />
   <!-- endbuild -->
   <link rel="stylesheet" th:href="@{/assets/backend/assets/styles/font.css}" type="text/css" />
+
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
   
   <script type="text/javascript" th:inline="javascript">
   /*<![CDATA[*/
-	var PATH = [[@{/}]],
+  var PATH = [[@{/}]],
+    PATH_IMAGE = [[@{''}]],
 	googleApiKey  = [[${api.apiGoogle}]];
 
   /*]]>*/

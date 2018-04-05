@@ -28,8 +28,7 @@ public class UniqueProductSlugValidator implements ConstraintValidator<UniquePro
 		ProductCategory productCategory = (ProductCategory) candidate;
 		ProductCategory productCategoryMod = productCategoryService.getByDeclaration("slug", productCategory.getSlug());
 		boolean isValid = false;
-		if(productCategoryMod == null) isValid = true;
-		else if(StringUtils.equals(productCategory.getSlug(), productCategory.getBeforeSlug())) isValid = true;
+		if(productCategoryMod == null || StringUtils.equals(productCategory.getSlug(), productCategory.getBeforeSlug())) isValid = true;
 		else isValid = false;
         if ( !isValid ) {
         	context.disableDefaultConstraintViolation();

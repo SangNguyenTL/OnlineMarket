@@ -173,7 +173,7 @@
                 if(_this.totalPage === 1 && _this.settings.filter.pageNumber > 1 ) return;
                 $.each(result.list, function (i, value) {
                     value.oldPath = value.path;
-                    value.path = window.location.origin + value.path;
+                    value.path = window.location.origin + PATH_IMAGE + value.path;
                     render(value, templateHtml, _this.containerImage, true);
                 });
                 _this.imageElement = _this.containerImage.find('.image-item');

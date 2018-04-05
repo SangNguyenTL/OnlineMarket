@@ -57,8 +57,8 @@
       				<td th:text="${postCategory.id}"></td>
       				<td th:text="${postCategory.name}"></td>
       				<td th:text="${postCategory.description}"></td>
-      				<td th:text="${#dates.format(postCategory.createDate, 'DD-MM-YYYY hh:mm:ss a')}"></td>
-      				<td th:text="${#dates.format(postCategory.updateDate, 'DD-MM-YYYY hh:mm:ss a')}"></td>
+      				<td th:text="${#dates.format(postCategory.createDate, 'dd-MM-yyyy hh:mm:ss a')}"></td>
+      				<td th:text="${#dates.format(postCategory.updateDate, 'dd-MM-yyyy hh:mm:ss a')}"></td>
       				<td>
       					<form class="form-confirm" th:action="@{/admin/postCategory/delete}" method="POST">
       					<a th:href="@{'/post-category/update/'+${postCategory.id}}" class="btn btn-outline b-info text-info btn-sm">View</a>

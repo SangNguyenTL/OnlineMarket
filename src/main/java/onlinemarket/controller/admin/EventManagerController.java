@@ -179,43 +179,43 @@ public class EventManagerController extends MainController {
 	public String processDeleteBrand(@RequestParam(value = "id", required = true) Integer id,
 			RedirectAttributes redirectAttributes) {
 
-		if (id == null) {
-			redirectAttributes.addFlashAttribute("error", "Program isn't get event id!");
-			return "redirect:/admin/event";
-		}
-		Event eventCheck = eventService.getByKey(id);
-		if (eventCheck == null) {
-			redirectAttributes.addFlashAttribute("error", "The brand isn't exist!");
-		} else {
-			Brand brand = brandService.getByEvent(eventCheck);
-			if (brand != null)
-				redirectAttributes.addFlashAttribute("error", "The event has already had brand!");
-			else {
-				Product product = productService.getByEvent(eventCheck);
-				if (product != null)
-					redirectAttributes.addFlashAttribute("error", "The event has already had product!");
-				else {
-					User user = userService.getByEvent(eventCheck);
-					if (user != null)
-						redirectAttributes.addFlashAttribute("error", "The event has already had user!");
-					else {
-						ProductCategory proCategory = productCategoryService.getByEvent(eventCheck);
-						if (proCategory != null)
-							redirectAttributes.addFlashAttribute("error", "The event has already had product category!");
-						else {
-
-							Order order = orderService.getByEvent(eventCheck);
-							if (order != null)
-								redirectAttributes.addFlashAttribute("error", "The event has already had order!");
-							else {
-								eventService.delete(eventCheck);
-								redirectAttributes.addFlashAttribute("success", "");
-							}
-						}
-					}
-				}
-			}
-		}
+//		if (id == null) {
+//			redirectAttributes.addFlashAttribute("error", "Program isn't get event id!");
+//			return "redirect:/admin/event";
+//		}
+//		Event eventCheck = eventService.getByKey(id);
+//		if (eventCheck == null) {
+//			redirectAttributes.addFlashAttribute("error", "The brand isn't exist!");
+//		} else {
+//			Brand brand = brandService.getByEvent(eventCheck);
+//			if (brand != null)
+//				redirectAttributes.addFlashAttribute("error", "The event has already had brand!");
+//			else {
+//				Product product = productService.getByEvent(eventCheck);
+//				if (product != null)
+//					redirectAttributes.addFlashAttribute("error", "The event has already had product!");
+//				else {
+//					User user = userService.getByEvent(eventCheck);
+//					if (user != null)
+//						redirectAttributes.addFlashAttribute("error", "The event has already had user!");
+//					else {
+//						ProductCategory proCategory = productCategoryService.getByEvent(eventCheck);
+//						if (proCategory != null)
+//							redirectAttributes.addFlashAttribute("error", "The event has already had product category!");
+//						else {
+//
+//							Order order = orderService.getByEvent(eventCheck);
+//							if (order != null)
+//								redirectAttributes.addFlashAttribute("error", "The event has already had order!");
+//							else {
+//								eventService.delete(eventCheck);
+//								redirectAttributes.addFlashAttribute("success", "");
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}
 		return "redirect:/admin/event";
 	}
 }

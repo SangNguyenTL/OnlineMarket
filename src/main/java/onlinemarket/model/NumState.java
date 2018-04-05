@@ -1,9 +1,11 @@
 package onlinemarket.model;
 
 public enum NumState {
-	
-    ACTIVE(0,"Active"),
-    INACTIVE(1, "Disable");
+
+	INSTOCK(0, "In stock"),
+	OUTOFSTOCK(1, "Out of stock"),
+	STOPSELLING(2, "Stop selling"),
+    LOCK(3, "Lock");
 	
 	private Integer id;
 	

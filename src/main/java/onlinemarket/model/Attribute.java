@@ -3,18 +3,11 @@ package onlinemarket.model;
 
 // Generated Jan 2, 2018 4:57:38 PM by Hibernate Tools 4.3.5.Final
 
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
+import java.util.List;
+import javax.persistence.*;
+
 import static javax.persistence.GenerationType.IDENTITY;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -36,7 +29,7 @@ public class Attribute implements java.io.Serializable {
 	private String description;
 	private String type;
 	private int priority;
-	private Set<AttributeValues> attributeValues;
+	private List<AttributeValues> attributeValues;
 
 	public Attribute() {
 	}
@@ -46,17 +39,8 @@ public class Attribute implements java.io.Serializable {
 		this.name = name;
 	}
 
-	public Attribute(AttributeGroup attributeGroup, String name, String description,
-			Set<AttributeValues> attributeValues) {
-		this.attributeGroup = attributeGroup;
-		this.name = name;
-		this.description = description;
-		this.attributeValues = attributeValues;
-	}
-
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-
 	@Column(name = "_id", unique = true, nullable = false)
 	public Integer getId() {
 		return this.id;
@@ -99,7 +83,7 @@ public class Attribute implements java.io.Serializable {
 
 	@Column(name = "type", nullable = false)
 	@Size( max = 50)
-	@StringContain(acceptedValues = { "text", "url", "date", "hidden", "number", "email", "tel", "range", "select", "checkbox" })
+	@StringContain(acceptedValues = { "text", "url", "date", "hidden", "number", "email", "tel", "range", "select", "checkbox", "select-multiple" })
 	@NotEmpty
 	public String getType() {
 		return type;
@@ -120,12 +104,13 @@ public class Attribute implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "attribute")
-	public Set<AttributeValues> getProductAttributes() {
+	@OrderBy("value")
+	public List<AttributeValues> getAttributeValues() {
 		return this.attributeValues;
 	}
 
-	public void setProductAttributes(Set<AttributeValues> productAttributes) {
-		this.attributeValues = productAttributes;
+	public void setAttributeValues(List<AttributeValues> attributeValues) {
+		this.attributeValues = attributeValues;
 	}
 
 }

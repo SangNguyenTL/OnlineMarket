@@ -1,15 +1,16 @@
 package onlinemarket.model;
 
 public enum TypeHtml {
-	TEXT("text"),
-	URL("url"),
-	NUMBER("number"),
-	HIDDEN("hidden"),
-	TEXTAREA("textarea"),
-	EMAIL("email"),
-	TEL("tel"),
+//	TEXT("text"),
+//	URL("url"),
+//	NUMBER("number"),
+//	HIDDEN("hidden"),
+//	TEXTAREA("textarea"),
+//	EMAIL("email"),
+//	TEL("tel"),
 	DATE("date"),
 	SELECT("select"),
+	SELECT_MULTIPLE("select-multiple"),
 	CHECKBOX("checkbox");
 	
 	private String name;

@@ -1,6 +1,7 @@
 package onlinemarket.util;
 
 import com.ibm.icu.text.Transliterator;
+import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
 import java.text.Normalizer;
@@ -10,6 +11,7 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
+@Component
 public class Slugify {
 	private static final String BUILTIN_REPLACEMENTS_FILENAME = "replacements.properties";
 	private static final Properties REPLACEMENTS = new Properties();

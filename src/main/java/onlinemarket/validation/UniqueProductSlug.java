@@ -12,7 +12,7 @@ import javax.validation.Constraint;
 @Documented
 @Retention(RUNTIME)
 @Target({ ElementType.TYPE })
-@Constraint(validatedBy = UniqueProductCategorySlugValidator.class)
+@Constraint(validatedBy = UniqueProductSlugValidator.class)
 public @interface UniqueProductSlug {
 	
 	String message() default "{onlinemarket.validation.UniqueProductSlug.message}";

@@ -31,5 +31,8 @@ public class FilterUser {
 	public void setState(String state) {
 		this.state = state;
 	}
-	
+
+	public FilterUser(FilterForm filterForm) {
+		this.filterForm = filterForm;
+	}
 }

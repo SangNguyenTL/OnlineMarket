@@ -26,7 +26,7 @@ import onlinemarket.service.ProvinceService;
 
 @Controller
 @RequestMapping("/admin/province")
-public class ProvinceManagerController extends MainController {
+public class ProvinceController extends MainController {
 
     @Autowired
     ProvinceService provinceService;

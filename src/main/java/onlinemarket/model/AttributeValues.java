@@ -1,8 +1,13 @@
 package onlinemarket.model;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.Objects;
+
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Table(name = "tb_attribute_values", schema = "dbo", catalog = "SmartMarket")
@@ -13,7 +18,23 @@ public class AttributeValues {
     private Attribute attribute;
     private Collection<ProductAttributeValues> productAttributeValues;
 
+    public AttributeValues() {
+    }
+
+    public AttributeValues(String value, Attribute attribute) {
+        this.value = value;
+        this.attribute = attribute;
+    }
+
+    public AttributeValues(String value, String link, Attribute attribute) {
+        this.value = value;
+        this.link = link;
+        this.attribute = attribute;
+    }
+
+
     @Id
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "_id", nullable = false)
     public Integer getId() {
         return id;
@@ -24,6 +45,8 @@ public class AttributeValues {
     }
 
     @Basic
+    @NotEmpty
+    @Size(max = 500)
     @Column(name = "value", nullable = false, length = 500)
     public String getValue() {
         return value;
@@ -34,6 +57,7 @@ public class AttributeValues {
     }
 
     @Basic
+    @Size(max = 2088)
     @Column(name = "link", nullable = true, length = 2083)
     public String getLink() {
         return link;

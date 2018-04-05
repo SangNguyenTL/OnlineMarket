@@ -63,42 +63,6 @@ public class User implements java.io.Serializable {
 	public User() {
 	}
 
-	public User(Byte gender, String firstName, String lastName, String email, String password,
-			Date createDate, String state) {
-		this.gender = gender;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.password = password;
-		this.createDate = createDate;
-		this.state = state;
-	}
-
-	public User(Byte gender, String firstName, String lastName, String email, String password,
-			Date birthday, Date createDate, Date updateDate, String state, String avatar, Set<Order> orders,
-			Set<Comment> comments, Set<Rating> ratings, Set<Address> addresses, Set<Image> images,
-			Set<Notification> notifications, Set<Cart> carts, Set<Post> posts, Set<Product> products, Role role) {
-		this.gender = gender;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.password = password;
-		this.birthday = birthday;
-		this.createDate = createDate;
-		this.updateDate = updateDate;
-		this.state = state;
-		this.avatar = avatar;
-		this.orders = orders;
-		this.comments = comments;
-		this.ratings = ratings;
-		this.addresses = addresses;
-		this.images = images;
-		this.notifications = notifications;
-		this.carts = carts;
-		this.posts = posts;
-		this.products = products;
-		this.role = role;
-	}
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
 	@Column(name = "_id", unique = true, nullable = false)

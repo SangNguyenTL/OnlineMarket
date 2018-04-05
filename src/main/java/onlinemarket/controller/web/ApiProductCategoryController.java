@@ -29,8 +29,8 @@ public class ApiProductCategoryController {
 		if (productCategory == null)
 			flag = false;
 		else if (id != null) {
-			ProductCategory oldProductCateogory = productCategoryService.getByKey(id);
-			if (oldProductCateogory != null && oldProductCateogory.equals(productCategory))
+			ProductCategory oldProductCategory = productCategoryService.getByKey(id);
+			if (oldProductCategory != null && oldProductCategory.equals(productCategory))
 				flag = false;
 		}
 		return ResponseEntity.ok(new ResponseResult(flag, null));

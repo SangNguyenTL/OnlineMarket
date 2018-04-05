@@ -6,19 +6,15 @@ import onlinemarket.model.Event;
 import onlinemarket.model.Product;
 import onlinemarket.model.ProductCategory;
 import onlinemarket.result.ResultObject;
+import onlinemarket.util.exception.productCategory.ProductCategoryNotFoundException;
 
-public interface ProductService extends InterfaceService<Integer, Product> {
+public interface ProductService {
 
-    Product getByBrand(Brand brand);
+    Product getByKey(Integer key);
 
-    Product getByEvent(Event event);
+    Product getByDeclaration(String key, Object value);
 
-    Product getByProductCategory(ProductCategory productCategory);
+    ResultObject<Product> listByProductCategory(ProductCategory productCategory, FilterForm filterForm) throws ProductCategoryNotFoundException;
 
-    ResultObject<Product> list(FilterForm filterForm);
-
-    ResultObject<Product> listByProductCategory(ProductCategory productCategory, FilterForm filterForm);
-
-    ResultObject<Product> listByBrand(Brand brand, FilterForm filterForm);
 
 }

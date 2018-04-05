@@ -6,6 +6,8 @@ import org.hibernate.QueryException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.web.authentication.rememberme.CookieTheftException;
+import org.springframework.security.web.csrf.InvalidCsrfTokenException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -86,6 +88,24 @@ public class ErrorController {
 		errorPage.addObject("pageTitle", httpErrorCode + " Error");
 		errorPage.addObject("errorMsg", "Not found!");
 		errorPage.addObject("code", httpErrorCode);
+
 		return errorPage;
 	}
+
+	@ExceptionHandler({InvalidCsrfTokenException.class, CookieTheftException.class})
+	@ResponseStatus(value = HttpStatus.REQUEST_TIMEOUT)
+	public ModelAndView errorPageTimeOut(HttpServletRequest httpRequest, Exception ex){
+		ModelAndView errorPage = new ModelAndView("backend/error");
+
+		int httpErrorCode = HttpStatus.REQUEST_TIMEOUT.value();
+
+		errorPage.addObject("general", configurationService.getGeneral());
+		errorPage.addObject("logo", configurationService.getLogo());
+		errorPage.addObject("pageTitle", httpErrorCode + " Error");
+		errorPage.addObject("errorMsg", ex.getLocalizedMessage());
+		errorPage.addObject("code", httpErrorCode);
+
+		return errorPage;
+	}
+
 }

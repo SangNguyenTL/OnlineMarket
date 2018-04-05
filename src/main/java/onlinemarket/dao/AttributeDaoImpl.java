@@ -17,31 +17,4 @@ import onlinemarket.result.ResultObject;
 @Repository("attributeDao")
 public class AttributeDaoImpl extends AbstractDao<Integer, Attribute> implements AttributeDao{
 
-	@Override
-	public Attribute getByAttributeGroup(AttributeGroup attributeGroup) {
-		Criteria criteria = createEntityCriteria();
-		criteria.add(Restrictions.eq("attributeGroup", attributeGroup));
-		return (Attribute) criteria.uniqueResult();
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public ResultObject<Attribute> listByAttributeGroup(AttributeGroup attributeGroup, FilterForm filterForm) {
-		
-		Criteria criteria = createEntityCriteria();
-		ResultObject<Attribute> result = new ResultObject<>();
-		
-		criteria.add(Restrictions.eq("attributeGroup", attributeGroup));
-		
-		return childFilterFrom(criteria, filterForm);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<Attribute> listByAttributeGroupNoneFilter(AttributeGroup attributeGroup) {
-		Criteria criteria = createEntityCriteria();
-		criteria.add(Restrictions.eq("attributeGroup", attributeGroup));
-		return criteria.list();
-	}
-
 }

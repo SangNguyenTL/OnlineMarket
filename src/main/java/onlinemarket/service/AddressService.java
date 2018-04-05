@@ -7,6 +7,7 @@ import onlinemarket.model.User;
 import onlinemarket.result.ResultObject;
 import onlinemarket.util.exception.AddressNotFoundException;
 import onlinemarket.util.exception.CustomException;
+import onlinemarket.util.exception.address.AddressHasOrderException;
 
 public interface AddressService extends InterfaceService<Integer, Address> {
 
@@ -17,4 +18,6 @@ public interface AddressService extends InterfaceService<Integer, Address> {
     Address getByProvince(Province province);
 
     ResultObject<Address> listByUser(User user, FilterForm filterForm) throws CustomException;
+
+    void delete(Integer id) throws AddressHasOrderException, AddressNotFoundException;
 }

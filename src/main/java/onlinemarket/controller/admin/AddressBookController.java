@@ -9,14 +9,12 @@ import onlinemarket.service.ProvinceService;
 import onlinemarket.service.UserService;
 import onlinemarket.util.exception.AddressNotFoundException;
 import onlinemarket.util.exception.CustomException;
+import onlinemarket.util.exception.address.AddressHasOrderException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -38,16 +36,25 @@ public class AddressBookController extends MainController {
     @Autowired
     ProvinceService provinceService;
 
+    private String userPath;
+
     @ModelAttribute
     public ModelMap populateAttribute(@PathVariable("userId") Integer userId, ModelMap model) {
 
         user = userService.getByKey(userId);
         if (user != null) {
             title = "Address book of " + user.getFirstName();
-            relativePath = "/admin/user/" + user.getId() + "/address-book";
+            userPath = "/admin/user/" + user.getId();
+            relativePath = userPath + "/address-book";
         }
+        generateBreadcrumbs();
+        breadcrumbs.add(new String[]{"/admin", "Admin"});
+        breadcrumbs.add(new String[]{userPath, "User management"});
+        breadcrumbs.add(new String[]{relativePath, "Address book"});
+
         filterForm = new FilterForm();
         model.put("relativePath", relativePath);
+        model.put("pathAdd", relativePath+"/add");
         model.put("filterForm", filterForm);
         model.put("user", user);
         model.put("userPage", true);
@@ -55,10 +62,27 @@ public class AddressBookController extends MainController {
         return model;
     }
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @RequestMapping(value = "", method = {RequestMethod.GET , RequestMethod.POST})
     public String mainPage(@ModelAttribute("filterForm") FilterForm filterForm, ModelMap modelMap, RedirectAttributes redirectAttributes) {
 
         try {
+            modelMap.put("pageTitle", title);
+            modelMap.put("result", addressService.listByUser(user, filterForm));
+            modelMap.put("filterForm", filterForm);
+
+        } catch (CustomException ex) {
+            redirectAttributes.addFlashAttribute("error", ex.getMessage());
+            return "redirect:/admin/user";
+        }
+
+        return "backend/address-book";
+    }
+
+    @RequestMapping(value = "/page/{page:^\\d+}", method = {RequestMethod.GET , RequestMethod.POST})
+    public String paginationPage(@ModelAttribute("filterForm") FilterForm filterForm, @PathVariable("page") Integer page, ModelMap modelMap, RedirectAttributes redirectAttributes) {
+
+        try {
+            filterForm.setCurrentPage(page);
             modelMap.put("pageTitle", title);
             modelMap.put("result", addressService.listByUser(user, filterForm));
             modelMap.put("filterForm", filterForm);
@@ -176,5 +200,20 @@ public class AddressBookController extends MainController {
         }
 
         return "backend/address-add";
+    }
+
+    @RequestMapping(value = "/delete", method = {RequestMethod.POST, RequestMethod.GET})
+    public String processDeleteProvince(
+            @RequestParam(value = "id") Integer idAddress,
+            RedirectAttributes redirectAttributes) {
+
+        try {
+            addressService.delete(idAddress);
+            redirectAttributes.addFlashAttribute("success", "success");
+        } catch (AddressHasOrderException | AddressNotFoundException ex) {
+            redirectAttributes.addFlashAttribute("error", ex.getMessage());
+        }
+
+        return "redirect:" + relativePath;
     }
 }

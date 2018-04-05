@@ -1,151 +1,200 @@
 <!DOCTYPE html>
-<html 	xmlns:th="http://www.thymeleaf.org"
-		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-		layout:decorate="templates/backend">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="templates/backend">
 <head>
 </head>
 <body>
 
-  <div ui-view class="app-body" id="view" layout:fragment="container">
-		<div class="padding">
+<div ui-view class="app-body" id="view" layout:fragment="container">
+    <div class="padding">
 
-			<h5 class="_300 margin" th:text="${pageTitle}"></h5>
-			<div class="alert alert-success" th:if="${success}">
-				<strong>Congratulation!</strong> Process completed.
-			</div>
-			<div class="row">
-				<div class="col-md-9">
+        <h5 class="_300 margin" th:text="${pageTitle}"></h5>
+        <div class="alert alert-success" th:if="${success}">
+            <strong>Congratulation!</strong> Process completed.
+        </div>
+        <div class="row">
+            <div class="col-md-9">
 
-					<div class="box">
-						<div class="box-header">
-							<h2 th:text="${subPageTitle}"></h2>
-							<small th:text="${description}"></small>
-						</div>
+                <form ui-jp="parsley" role="form" th:object="${product}" th:action="@{${pathAction}}" method="POST">
+                    <input th:if="${action} == 'update'" type="hidden" th:field="*{id}"/>
+                    <input th:if="${action} == 'update'" type="hidden" id="beforeSlug" name="beforeSlug"
+                           th:value="*{slug}"/>
+                    <div class="box">
+                        <div class="box-header">
+                            <h2 th:text="${subPageTitle}"></h2>
+                            <small th:text="${description}"></small>
+                        </div>
 
-						<div class="box-divider m-a-0"></div>
-						
-						<div class="box-body">
-							
-							<form ui-jp="parsley" role="form" th:object="${product}" th:action="@{${pathAction}}" method="POST">
-								<input th:if="${action} == 'update'" type="hidden" th:field="*{id}" />
-								<input th:if="${action} == 'update'" type="hidden" id="beforeSlug" name="beforeSlug" th:value="*{slug}" />
-								<div class="form-group row">
-									<label class="col-sm-3 form-control-label">Name</label>
-									<div class="col-sm-3">
-										<input th:errorclass="parsley-error" class="form-control" type="text" th:field="*{name}" required data-parsley-length="[3, 255]" data-parsley-id="name"/>
-										<ul class="parsley-errors-list filled" id="parsley-id-name" th:if="${#fields.hasErrors('name')}"><li th:errors="*{name}"> </li></ul>
-									</div>
-									<label class="col-sm-3 form-control-label">Slug</label>
-									<div class="col-sm-3">
-										<input th:errorclass="parsley-error" class="form-control" type="text" th:field="*{slug}" required data-parsley-length="[3,255]" data-parsley-id="slug" data-parsley-target="name" 
-										th:attr="data-parsley-unique-slug=@{/api/product/check-slug}" />
-										<ul class="parsley-errors-list filled" id="parsley-id-slug" th:if="${#fields.hasErrors('slug')}"><li th:errors="*{slug}"> </li></ul>
-									</div>
-								</div>
-								<div class="form-group row">
-									<label class="col-sm-3 form-control-label">Image</label>
-									<div class="col-sm-3 box-image">
-										<div class="box p-a-xs box-thumbnail">
-						                	<a href="#" data-toggle="modal" data-target="#modal-image-gallery" ui-toggle-class="zoom" ui-target="#animate" data-target-input="featureImage">
-						                		<img th:if="*{featureImage}" th:src="@{'/'+*{featureImage}}" alt="..." class="img-thumbnail thumbnail">
-						                		<img th:unless="*{featureImage}" th:src="@{/assets/images/defaultImage.jpg}" alt="..." class="img-thumbnail thumbnail">
-					                		</a>
-						              	</div>
-										<input th:errorclass="parsley-error" class="form-control hide" type="text" th:field="*{featureImage}" required data-parsley-length="[3, 150]"/>
-										<ul class="parsley-errors-list filled" id="parsley-id-featureImage" th:if="${#fields.hasErrors('featureImage')}"><li th:errors="*{featureImage}"> </li></ul>
-									</div>
-									<label class="col-sm-3 form-control-label">State</label>
-									<div class="col-sm-3">
-										<select th:field="*{state}" class="form-control" data-parsley-id="4" required>
-											<option value="">Please choice</option>
-											<option
-												th:each="st : ${T(onlinemarket.model.NumState).values()}"
-												th:value="${st.id}" th:text="${st.name}"></option>
-										</select>
-										<ul class="parsley-errors-list filled" id="parsley-id-4"
-											th:if="${#fields.hasErrors('state')}">
-											<li th:errors="*{state}"></li>
-										</ul>
-									</div>
-								</div>
-								
-								<div class="form-group row">
-									<label class="form-control-label col-sm-3">Brand</label>
-									<div class="col-sm-3">
-										<select th:field="*{brand}" class="form-control" data-parsley-id="4" required>
-											<option value="">Please choice</option>
-											<option
-												th:each="brandChoice : ${brandList}"
-												th:value="${brandChoice.id}" th:text="${brandChoice.name}"></option>
-										</select>
-										<ul class="parsley-errors-list filled" id="parsley-id-4"
-											th:if="${#fields.hasErrors('brand')}">
-											<li th:errors="*{brand}"></li>
-										</ul>
-									</div>
-									<label class="col-sm-3 form-control-label">Product Category</label>
-									<div class="col-sm-3">
-										<select th:field="*{productCategory}" class="form-control" data-parsley-id="4" required>
-											<option value="">Please choice</option>
-											<option
-												th:each="productCate : ${productCategoryList}"
-												th:value="${productCate.id}" th:text="${productCate.name}"></option>
-										</select>
-										<ul class="parsley-errors-list filled" id="parsley-id-4"
-											th:if="${#fields.hasErrors('productCategory')}">
-											<li th:errors="*{productCategory}"></li>
-										</ul>
-									</div>
-								</div>
-								
-								<div class="form-group row">
-									<label class="col-sm-3 form-control-label">Quantity</label>
-									<div class="col-sm-3">
-										<input th:errorclass="parsley-error" class="form-control" type="number" th:field="*{quantity}" data-parsley-type="digits" required data-parsley-range="[0, 10000]" data-parsley-id="2"/>
-										<ul class="parsley-errors-list filled" id="parsley-id-2" th:if="${#fields.hasErrors('quantity')}"><li th:errors="*{quantity}"> </li></ul>
-									</div>
-									<label class="col-sm-3 form-control-label">Price</label>
-									<div class="col-sm-3">
-										<input th:errorclass="parsley-error" class="form-control" type="number" th:field="*{price}" data-parsley-type="digits" required data-parsley-range="[0, 100000000]" data-parsley-id="2"/>
-										<ul class="parsley-errors-list filled" id="parsley-id-2" th:if="${#fields.hasErrors('price')}"><li th:errors="*{price}"> </li></ul>
-									</div>
-								</div>
-								<div class="form-group row">
-									<label class="col-sm-3 form-control-label">Description</label>
-									<div class="col-sm-9">
-										<textarea ui-jp="summernote" th:errorclass="parsley-error" class="form-control hide" th:field="*{description}" data-parsley-length="[50, 1000000]" data-parsley-id="description"></textarea>
-										<ul class="parsley-errors-list filled" id="parsley-id-description" th:if="${#fields.hasErrors('description')}"><li th:errors="*{description}"> </li></ul>
-									</div>
-								</div>
-								<div class="dker p-a text-right">
-					    			<button type="submit" class="btn info">Save</button>
-								</div>
-							</form>
-						
-						</div>
-					</div>
+                        <div class="box-divider m-a-0"></div>
 
-				</div>
-			</div>
-		</div>
-		<div id="modal-image-gallery" class="modal fade animate" data-backdrop="true" aria-hidden="true">
-		  <div class="modal-dialog zoom modal-lg" id="animate" ui-class="zoom">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		      	<h5 class="modal-title">Pick Image</h5>
-		      </div>
-		      <div class="modal-body" ui-jp='galleryManager' th:attr="ui-options='{modal: true, actionUpload: \''+@{/api/image/upload}+'\', actionLoadImage: \''+@{/api/image/load}+'\', actionDelete: \''+@{/api/image/delete}+'\'}'">
-		       	
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn dark-white p-x-md" data-dismiss="modal">No</button>
-		        <button type="button" class="btn danger p-x-md" data-dismiss="modal" data-action="yes">Yes</button>
-		      </div>
-		    </div><!-- /.modal-content -->
-		  </div>
-		</div>
-		<div th:replace="templates/backend/media :: media" ></div>
-  </div>
+                        <div class="box-body">
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Name</label>
+                                <div class="col-sm-9">
+                                    <input th:errorclass="parsley-error" class="form-control" type="text"
+                                           th:field="*{name}" required data-parsley-length="[3, 255]"
+                                           data-parsley-id="name"/>
+                                    <ul class="parsley-errors-list filled" id="parsley-id-name"
+                                        th:if="${#fields.hasErrors('name')}">
+                                        <li th:errors="*{name}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Slug</label>
+                                <div class="col-sm-3">
+                                    <input th:errorclass="parsley-error" class="form-control" type="text"
+                                           th:field="*{slug}" required data-parsley-length="[3,255]"
+                                           data-parsley-id="slug" data-parsley-target="name"
+                                           th:attr="data-parsley-unique-slug=@{/api/product/check-slug}"/>
+                                    <ul class="parsley-errors-list filled" id="parsley-id-slug"
+                                        th:if="${#fields.hasErrors('slug')}">
+                                        <li th:errors="*{slug}"></li>
+                                    </ul>
+                                </div>
+                                <label class="form-control-label col-sm-3">Brand</label>
+                                <div class="col-sm-3">
+                                    <select th:field="*{brand}" class="form-control" data-parsley-id="4" required>
+                                        <option value="">Please choice</option>
+                                        <option
+                                                th:each="brandChoice : ${brandList}"
+                                                th:value="${brandChoice.id}" th:text="${brandChoice.name}"></option>
+                                    </select>
+                                    <ul class="parsley-errors-list filled" id="parsley-id-4"
+                                        th:if="${#fields.hasErrors('brand')}">
+                                        <li th:errors="*{brand}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Image</label>
+                                <div class="col-sm-3 box-image">
+                                    <a href="#" data-toggle="modal" data-target="#modal-image-gallery"
+                                       ui-toggle-class="zoom" ui-target="#animate" data-target-input="featureImage">
+                                        <img th:if="*{featureImage}" th:src="@{*{featureImage}}" alt="..."
+                                             class="img-thumbnail thumbnail">
+                                        <img th:unless="*{featureImage}" th:src="@{/assets/images/defaultImage.jpg}"
+                                             alt="..." class="img-thumbnail thumbnail">
+                                    </a>
+                                    <input th:errorclass="parsley-error" class="form-control hide" type="text"
+                                           th:field="*{featureImage}" required maxlength="2088"/>
+                                    <ul class="parsley-errors-list filled" id="parsley-id-favicon"
+                                        th:if="${#fields.hasErrors('featureImage')}">
+                                        <li th:errors="*{featureImage}"></li>
+                                    </ul>
+                                </div>
+                                <label class="col-sm-3 form-control-label">State</label>
+                                <div class="col-sm-3">
+                                    <select th:field="*{state}" class="form-control" data-parsley-id="4" required>
+                                        <option value="">Please choice</option>
+                                        <option
+                                                th:each="st : ${T(onlinemarket.model.NumState).values()}"
+                                                th:value="${st.id}" th:text="${st.name}"></option>
+                                    </select>
+                                    <ul class="parsley-errors-list filled" id="parsley-id-4"
+                                        th:if="${#fields.hasErrors('state')}">
+                                        <li th:errors="*{state}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Quantity</label>
+                                <div class="col-sm-3">
+                                    <input th:errorclass="parsley-error" class="form-control" type="number"
+                                           th:field="*{quantity}" data-parsley-type="digits" required
+                                           data-parsley-range="[0, 10000]" data-parsley-id="2"/>
+                                    <ul class="parsley-errors-list filled" id="parsley-id-2"
+                                        th:if="${#fields.hasErrors('quantity')}">
+                                        <li th:errors="*{quantity}"></li>
+                                    </ul>
+                                </div>
+                                <label class="col-sm-3 form-control-label">Price</label>
+                                <div class="col-sm-3">
+                                    <input th:errorclass="parsley-error" class="form-control" type="number"
+                                           th:field="*{price}" data-parsley-type="digits" required
+                                           data-parsley-range="[0, 100000000]" data-parsley-id="2"/>
+                                    <ul class="parsley-errors-list filled" id="parsley-id-2"
+                                        th:if="${#fields.hasErrors('price')}">
+                                        <li th:errors="*{price}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Description</label>
+                                <div class="col-sm-9">
+                                    <div class="box m-b-md">
+                                        <textarea ui-jp="summernote" ui-options="{height: 350}"
+                                                  th:errorclass="parsley-error" class="form-control hide"
+                                                  th:field="*{description}" data-parsley-length="[50, 1000000]"
+                                                  data-parsley-id="description"></textarea>
+                                        <ul class="parsley-errors-list filled" id="parsley-id-description"
+                                            th:if="${#fields.hasErrors('description')}">
+                                            <li th:errors="*{description}"></li>
+                                        </ul>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div th:each="attributeGroup : ${productCategory.attributeGroups}" class="box">
+                        <div class="box-header">
+                            <h2 th:text="${attributeGroup.name}"></h2>
+                            <small th:text="${attributeGroup.description}"></small>
+                        </div>
+                        <div class="box-divider m-a-0"></div>
+                        <div class="box-body">
+
+                            <div th:each="attribute, attributeStat : ${attributeGroup.attributes}" class="form-group row">
+                                <label class="col-sm-3 form-control-label" th:text="${attribute.name}"></label>
+                                <div class="col-sm-9" th:id="'attributeValues-' + ${product.processCount()}">
+                                    <select th:if="${attribute.type} == 'select'" th:field="*{productAttributeValues[__*{countAttribute}__].attributeValues.id}" ui-jp="select2" ui-options="{placeholder: 'Select an option'}" style="width: 100%" class="form-control">
+                                        <option value="">Pick value...</option>
+                                        <option th:each="attributeValue : ${attribute.attributeValues}" th:value="${attributeValue.id}" th:text="${attributeValue.value}"></option>
+                                    </select>
+                                    <select th:if="${attribute.type} == 'select-multiple'"  th:field="*{productAttributeValues[__*{countAttribute}__].attributeValues}" ui-jp="select2" ui-options="{placeholder: 'Select an option'}" style="width: 100%" class="form-control" multiple>
+                                        <option value="">Pick value...</option>
+                                        <option th:each="attributeValue : ${attribute.attributeValues}" th:value="${attributeValue.id}" th:text="${attributeValue.value}"></option>
+                                    </select>
+                                    <input th:if="${attribute.type} == 'date'" th:field="*{productAttributeValues[__*{countAttribute}__].attributeValues.value}" class="form-control" type="text" ui-jp="datetimepicker" ui-options="{format: 'DD/MM/YYYY'}" pattern="^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$">
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="box">
+                        <div class="dker p-a text-right">
+                            <button type="submit" class="btn info">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="modal-image-gallery" class="modal fade animate" data-backdrop="true" aria-hidden="true">
+        <div class="modal-dialog zoom modal-lg" id="animate" ui-class="zoom">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Pick Image</h5>
+                </div>
+                <div class="modal-body" ui-jp='galleryManager'
+                     th:attr="ui-options='{modal: true, actionUpload: \''+@{/api/image/upload}+'\', actionLoadImage: \''+@{/api/image/load}+'\', actionDelete: \''+@{/api/image/delete}+'\'}'">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn dark-white p-x-md" data-dismiss="modal">No</button>
+                    <button type="button" class="btn danger p-x-md" data-dismiss="modal" data-action="yes">Yes</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div>
+    </div>
+    <div th:replace="templates/backend/media :: media"></div>
+</div>
 
 </body>
 </html>

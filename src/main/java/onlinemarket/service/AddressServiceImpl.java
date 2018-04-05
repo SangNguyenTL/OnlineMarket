@@ -2,10 +2,12 @@ package onlinemarket.service;
 
 import java.util.List;
 
+import onlinemarket.dao.OrderDao;
 import onlinemarket.form.filter.FilterForm;
 import onlinemarket.result.ResultObject;
 import onlinemarket.util.exception.AddressNotFoundException;
 import onlinemarket.util.exception.CustomException;
+import onlinemarket.util.exception.address.AddressHasOrderException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,8 @@ public class AddressServiceImpl implements AddressService  {
 	@Autowired
 	AddressDao addressDao;
 
+	@Autowired
+	OrderDao orderDao;
 	
 	@Override
 	public void save(Address address) {
@@ -79,6 +83,14 @@ public class AddressServiceImpl implements AddressService  {
 		if(user == null) throw new CustomException("User not found");
 		if(filterForm == null) throw new CustomException("Filter error.");
 		return addressDao.listByUser(user, filterForm);
+	}
+
+	@Override
+	public void delete(Integer id) throws AddressHasOrderException, AddressNotFoundException {
+		Address address = addressDao.getByKey(id);
+		if(address == null) throw new AddressNotFoundException();
+		if(orderDao.getUniqueResultBy("address", address) != null) throw new AddressHasOrderException();
+		delete(address);
 	}
 
 	@Override

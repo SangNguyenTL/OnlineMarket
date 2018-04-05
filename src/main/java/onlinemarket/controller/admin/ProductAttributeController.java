@@ -75,7 +75,7 @@ public class ProductAttributeController extends MainController {
 		}
 
 		model.put("pageTitle", "Attribute group of " + product.getName());
-		model.put("list", attributeGroupService.listByProductCategory(productCategory));
+//		model.put("list", attributeGroupService.listByProductCategory(productCategory));
 		model.put("path", "product");
 
 		return "backend/product-attribute-group";

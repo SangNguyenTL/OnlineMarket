@@ -13,14 +13,14 @@
         <td>
             <span class="preview avatar">
                 {% if (file.path) { %}
-                    <a href="{%=PATH+file.path%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=PATH+file.path%}"></a>
+                    <a href="{%=PATH_IMAGE+file.path%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=PATH_IMAGE+file.path%}"></a>
                 {% } %}
             </span>
         </td>
         <td>
             <p class="name">
                 {% if (file.url) { %}
-                    <a href="{%=PATH+file.path%}" title="{%=PATH+file.path%}" download="{%=PATH+file.path%}" {%=file.path?'data-gallery':''%}>{%=file.name%}</a>
+                    <a href="{%=PATH_IMAGE+file.path%}" title="{%=PATH_IMAGE+file.path%}" download="{%=PATH_IMAGE+file.path%}" {%=file.path?'data-gallery':''%}>{%=file.name%}</a>
                 {% } else { %}
                     <span>{%=file.name%}</span>
                 {% } %}

@@ -2,7 +2,10 @@ package onlinemarket.service;
 
 import java.util.List;
 
-import onlinemarket.util.exception.CustomException;
+import onlinemarket.dao.AttributeValuesDao;
+import onlinemarket.util.exception.attribute.AttributeHasAttributeValuesException;
+import onlinemarket.util.exception.attribute.AttributeNotFoundException;
+import onlinemarket.util.exception.attributeGroup.AttributeGroupNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,59 +18,54 @@ import onlinemarket.result.ResultObject;
 
 @Service("attributeService")
 @Transactional
-public class AttributeServiceImpl implements AttributeService{
+public class AttributeServiceImpl implements AttributeService {
 
-	@Autowired
-	AttributeDao attributeDao;
-	
-	@Override
-	public void save(Attribute entity) {
-		attributeDao.save(entity);
-	}
+    @Autowired
+    AttributeDao attributeDao;
 
-	@Override
-	public void update(Attribute entity) throws CustomException {
-		attributeDao.update(entity);
-	}
+    @Autowired
+    AttributeValuesDao attributeValuesDao;
 
-	@Override
-	public void delete(Attribute entity) {
-		attributeDao.delete(entity);
-	}
+    @Override
+    public Attribute getByKey(Integer id) {
+        return attributeDao.getByKey(id);
+    }
 
-	@Override
-	public Attribute getByKey(Integer key) {
-		return attributeDao.getByKey(key);
-	}
+    @Override
+    public void save(Attribute attribute, AttributeGroup attributeGroup) throws AttributeGroupNotFoundException {
+        if(attributeGroup == null) throw new AttributeGroupNotFoundException();
+        attribute.setAttributeGroup(attributeGroup);
+        attributeDao.save(attribute);
+    }
 
-	@Override
-	public Attribute getByDeclaration(String key, String value) {
-		return attributeDao.getByDeclaration(key, value);
-	}
+    @Override
+    public void delete(Integer id) throws AttributeNotFoundException, AttributeHasAttributeValuesException {
+        Attribute attribute = attributeDao.getByKey(id);
+        if(attribute == null) throw new AttributeNotFoundException();
+        if(attributeValuesDao.getUniqueResultBy("attribute", attribute) != null) throw new AttributeHasAttributeValuesException();
+        attributeDao.delete(attribute);
+    }
 
-	@Override
-	public List<Attribute> list() {
-		return attributeDao.list();
-	}
+    @Override
+    public void update(Attribute attribute, AttributeGroup attributeGroup) throws AttributeNotFoundException, AttributeGroupNotFoundException {
 
-	@Override
-	public List<Attribute> list(Integer offset, Integer maxResults) {
-		return attributeDao.list(offset, maxResults);
-	}
+        if(attributeGroup == null) throw new AttributeGroupNotFoundException();
+        Attribute attribute1 = attributeDao.getByKey(attribute.getId());
+        if(attribute1 == null) throw new AttributeNotFoundException();
+        attribute.setAttributeGroup(attributeGroup);
+        attributeDao.update(attribute);
 
-	@Override
-	public Attribute getByAttributeGroup(AttributeGroup attributeGroup) {
-		return attributeDao.getByAttributeGroup(attributeGroup);
-	}
+    }
 
-	@Override
-	public ResultObject<Attribute> listByAttributeGroup(AttributeGroup attributeGroup, FilterForm filterForm) {
-		return attributeDao.listByAttributeGroup(attributeGroup, filterForm);
-	}
+    @Override
+    public ResultObject<Attribute> listByAttributeGroup(AttributeGroup attributeGroup, FilterForm filterForm) throws AttributeGroupNotFoundException {
+        if (attributeGroup == null) throw new AttributeGroupNotFoundException();
+        return attributeDao.listByDeclaration("attributeGroup", attributeGroup, filterForm);
+    }
 
-	@Override
-	public List<Attribute> listByAttributeGroupNoneFilter(AttributeGroup attributeGroup) {
-		return attributeDao.listByAttributeGroupNoneFilter(attributeGroup);
-	}
+    @Override
+    public List<Attribute> listByAttributeGroup(AttributeGroup attributeGroup) {
+        return attributeDao.listByDeclaration("attributeGroup", attributeGroup);
+    }
 
 }

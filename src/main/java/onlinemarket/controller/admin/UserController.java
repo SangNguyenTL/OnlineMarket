@@ -29,6 +29,8 @@ public class UserController extends MainController {
 
     protected FilterForm filterForm;
 
+    private FilterUser filterUser;
+
     @Autowired
     RoleService roleService;
 
@@ -41,15 +43,21 @@ public class UserController extends MainController {
         title = "User management page";
         relativePath = "/admin/user";
         filterForm = new FilterForm();
+        filterUser = new FilterUser(filterForm);
+        generateBreadcrumbs();
+        breadcrumbs.add(new String[]{"/admin", "Admin"});
+        breadcrumbs.add(new String[]{relativePath, "User management page"});
         model.put("relativePath", relativePath);
         model.put("filterForm", filterForm);
+        model.put("filterUser", filterUser);
         model.put("roles", roleService.list());
+        model.put("pathAdd", relativePath+"/add");
         model.put("userPage", true);
 
         return model;
     }
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @RequestMapping(value = "", method = {RequestMethod.GET , RequestMethod.POST})
     String mainPage(@ModelAttribute("filterUser") FilterUser filterUser, ModelMap model) {
 
         filterUser.setFilterForm(filterForm);
@@ -67,9 +75,8 @@ public class UserController extends MainController {
         return "backend/user";
     }
 
-    @RequestMapping(value = "/page/{page:^\\d+}", method = RequestMethod.GET)
-    public String mainPagePagination(@PathVariable("page") Integer page,
-                                     @ModelAttribute("filterUser") FilterUser filterUser, ModelMap model) {
+    @RequestMapping(value = "/page/{page:^\\d+}", method = {RequestMethod.GET , RequestMethod.POST})
+    public String mainPagePagination(@ModelAttribute("filterUser") FilterUser filterUser, @PathVariable("page") Integer page, ModelMap model) {
 
         filterUser.setFilterForm(filterForm);
         if (filterUser.getState() != null)
@@ -151,19 +158,19 @@ public class UserController extends MainController {
                 redirectAttributes.addFlashAttribute("success", true);
                 return "redirect:/admin/user";
             }
+            model.put("pageTitle", "Update information user");
+            model.put("subPageTitle", "Update");
+            model.put("description", "Enter the information you want to change");
+            model.put("path", "user-add");
+            model.put("action", "update");
+            model.put("pathAction", "/admin/user/update");
+            model.put("user", user);
+
+            return "backend/user-add";
+
         } catch (CustomException ex) {
             redirectAttributes.addFlashAttribute("error", ex.getMessage());
             return "redirect:/admin/user";
         }
-
-        model.put("pageTitle", "Update information user");
-        model.put("subPageTitle", "Update");
-        model.put("description", "Enter the information you want to change");
-        model.put("path", "user-add");
-        model.put("action", "update");
-        model.put("pathAction", "/admin/user/update");
-        model.put("user", user);
-
-        return "backend/user-add";
     }
 }

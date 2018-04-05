@@ -81,7 +81,7 @@ public class Brand implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "[name]", nullable = false)
+	@Column(name = "name", nullable = false)
 	@NotEmpty
 	@Size(min = 3, max = 64)
 	public String getName() {

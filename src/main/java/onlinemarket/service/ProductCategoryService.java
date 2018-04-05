@@ -4,10 +4,10 @@ import onlinemarket.form.filter.FilterForm;
 import onlinemarket.model.Event;
 import onlinemarket.model.ProductCategory;
 import onlinemarket.result.ResultObject;
-import onlinemarket.util.exception.productCategory.ProductCategoryHasAttributeGroup;
-import onlinemarket.util.exception.productCategory.ProductCategoryHasEvent;
-import onlinemarket.util.exception.productCategory.ProductCategoryHasProduct;
-import onlinemarket.util.exception.productCategory.ProductCategoryNotFound;
+import onlinemarket.util.exception.productCategory.ProductCategoryHasAttributeGroupException;
+import onlinemarket.util.exception.productCategory.ProductCategoryHasEventException;
+import onlinemarket.util.exception.productCategory.ProductCategoryHasProductException;
+import onlinemarket.util.exception.productCategory.ProductCategoryNotFoundException;
 
 public interface ProductCategoryService extends InterfaceService<Integer, ProductCategory>{
 
@@ -15,5 +15,5 @@ public interface ProductCategoryService extends InterfaceService<Integer, Produc
 	
 	ProductCategory getByEvent(Event event);
 
-	void delete(Integer id) throws ProductCategoryNotFound, ProductCategoryHasProduct, ProductCategoryHasEvent, ProductCategoryHasAttributeGroup;
+	void delete(Integer id) throws ProductCategoryNotFoundException, ProductCategoryHasProductException, ProductCategoryHasEventException, ProductCategoryHasAttributeGroupException;
 }

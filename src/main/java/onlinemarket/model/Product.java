@@ -2,10 +2,7 @@ package onlinemarket.model;
 // default package
 // Generated Jan 2, 2018 4:57:38 PM by Hibernate Tools 4.3.5.Final
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -62,11 +59,12 @@ public class Product implements java.io.Serializable {
 	private Set<Rating> ratings = new HashSet<>(0);
 	private Set<RatingStatistic> ratingStatistics = new HashSet<>(0);
 	private Set<Event> events = new HashSet<>(0);
-	private Set<ProductAttributeValues> productAttributeValues = new HashSet<>(0);
+	private List<ProductAttributeValues> productAttributeValues;
 	private Set<ProductViews> productViewses = new HashSet<>(0);
 	private Set<ProductViewsStatistc> productViewsStatistcs = new HashSet<>(0);
 	private Set<Comment> comments = new HashSet<>(0);
 	private Set<Cart> carts = new HashSet<>(0);
+	private Integer countAttribute;
 
 	public Product() {
 	}
@@ -187,7 +185,7 @@ public class Product implements java.io.Serializable {
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "DD/MM/YYYYY hh:mm:ss a")
+	@DateTimeFormat(pattern = "dd/MM/yyyy hh:mm:ss a")
 	@Column(name = "create_date", nullable = false, length = 23)
 	public Date getCreateDate() {
 		return this.createDate;
@@ -198,7 +196,7 @@ public class Product implements java.io.Serializable {
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "DD/MM/YYYYY hh:mm:ss a")
+	@DateTimeFormat(pattern = "dd/MM/yyyy hh:mm:ss a")
 	@Column(name = "update_date", length = 23)
 	public Date getUpdateDate() {
 		return this.updateDate;
@@ -250,11 +248,11 @@ public class Product implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.ALL)
-	public Set<ProductAttributeValues> getProductAttributeValues() {
+	public List<ProductAttributeValues> getProductAttributeValues() {
 		return productAttributeValues;
 	}
 
-	public void setProductAttributeValues(Set<ProductAttributeValues> productAttributeValues) {
+	public void setProductAttributeValues(List<ProductAttributeValues> productAttributeValues) {
 		this.productAttributeValues = productAttributeValues;
 	}
 
@@ -311,4 +309,19 @@ public class Product implements java.io.Serializable {
 
 		return Objects.hash(id, slug);
 	}
+
+    @Transient
+    public Integer getCountAttribute() {
+	    if(countAttribute == null) countAttribute = 0;
+        return countAttribute;
+    }
+
+    public void setCountAttribute(Integer countAttribute) {
+        this.countAttribute = countAttribute;
+    }
+
+    public Integer processCount(){
+	    if(countAttribute == null) countAttribute = -1;
+	    return countAttribute++;
+    }
 }

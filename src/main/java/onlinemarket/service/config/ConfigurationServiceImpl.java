@@ -26,7 +26,7 @@ import onlinemarket.model.Configuration;
 
 @Service("configurationService")
 @Transactional
-public class ConfigurationServiceImp implements ConfigurationService {
+public class ConfigurationServiceImpl implements ConfigurationService {
 	
 	@Autowired
 	private ConfigurationDao dao;

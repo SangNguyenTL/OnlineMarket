@@ -2,6 +2,8 @@ package onlinemarket.controller.admin;
 
 import javax.validation.Valid;
 
+import onlinemarket.form.filter.FilterProduct;
+import onlinemarket.util.exception.productCategory.ProductCategoryNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -22,73 +24,113 @@ import onlinemarket.service.ProductCategoryService;
 import onlinemarket.service.ProductService;
 
 @Controller
-@RequestMapping("/admin/product-category/{id:^\\d}/product")
+@RequestMapping("/admin/product-category/{productCategoryId:^\\d}/product")
 public class ProductByCategoryController extends MainController {
 
 	@Autowired
 	ProductService productService;
 
 	@Autowired
-	ProductCategoryService productCategoryService;
-
-	@Autowired
 	AttributeGroupService attributeGroupService;
 
-	ProductCategory productCategory;
+	private ProductCategory productCategory;
 
-	String relativePath;
+	private String productCategoryPath;
 
-	FilterForm filterForm;
+	private String relativePath;
+
+	private FilterForm filterForm;
+
+	private FilterProduct filterProduct;
 
 	@ModelAttribute
-	public ModelMap populateAttribute(@PathVariable("id") Integer id, ModelMap model) {
-		
-		relativePath = buildRelativePath(id);
-		productCategory = productCategoryService.getByKey(id);
+	public ModelMap populateAttribute(@PathVariable("productCategoryId") Integer productCategoryId, ModelMap model) {
+
+
+		productCategory = productCategoryService.getByKey(productCategoryId);
+		productCategoryPath = "/admin/product-category";
+		relativePath = productCategoryPath + "/" + productCategoryId + "/product";
+
+		generateBreadcrumbs();
+		breadcrumbs.add(new String[]{ productCategoryPath, "Product Category"});
+		breadcrumbs.add(new String[]{ relativePath, "Product"});
+
 		filterForm = new FilterForm();
+		filterProduct = new FilterProduct(filterForm);
 		model.put("productPage", true);
-		model.put("path", productCategory.getSlug() + "-add");
+		model.put("path", productCategory.getSlug() + "-product");
 		model.put("productCategory", productCategory);
 		model.put("filterForm", filterForm);
+		model.put("filterProduct", filterProduct);
 		model.put("relativePath", relativePath);
 		model.put("pathAdd", relativePath + "/add");
 
 		return model;
 	}
 
-	@RequestMapping(value = "", method = RequestMethod.GET)
-	public String mainPage(ModelMap model, RedirectAttributes redirectAttributes) {
+	@RequestMapping(value = "", method = {RequestMethod.GET, RequestMethod.POST})
+	public String mainPage(@ModelAttribute("filterProduct") FilterProduct filterProduct, ModelMap model, RedirectAttributes redirectAttributes) {
 
-		if (productCategory == null) {
-			redirectAttributes.addFlashAttribute("error", "Product category not found.");
-			return "redirect:/admin/product-category";
+		try{
+			filterProduct.setFilterForm(filterForm);
+			if(filterProduct.getState() != null){
+				filterForm.getGroupSearch().put("state", filterProduct.getState());
+			}
+
+			model.put("result", productService.listByProductCategory(productCategory, filterForm));
+			model.put("pageTitle", "Product manager for " + productCategory.getName());
+			model.put("filterProduct", filterProduct);
+			model.put("filterForm", filterForm);
+
+			return "backend/product";
+		} catch (ProductCategoryNotFoundException e) {
+			redirectAttributes.addFlashAttribute("error", e.getMessage());
+			return "redirect:" + productCategoryPath;
 		}
 
-		model.put("pageTitle", "Product manager for " + productCategory.getName());
-		model.put("result", productService.listByProductCategory(productCategory, filterForm));
-		model.put("filterForm", filterForm);
-
-		return "backend/product";
 	}
 
-	@RequestMapping(value = "/page/{page:^\\d+}", method = RequestMethod.GET)
-	public String mainPagePagination(@PathVariable("page") Integer page, ModelMap model,
+	@RequestMapping(value = "/page/{page:^\\d+}", method = {RequestMethod.GET, RequestMethod.POST})
+	public String mainPagePagination(@ModelAttribute("filterProduct") FilterProduct filterProduct, @PathVariable("page") Integer page, ModelMap model,
 			RedirectAttributes redirectAttributes) {
 
-		filterForm.setCurrentPage(page);
-		filterForm.setOrderBy("priority");
-		filterForm.setOrder("asc");
+		try{
+			filterForm.setCurrentPage(page);
+			if(filterProduct.getState() != null){
+				filterForm.getGroupSearch().put("state", filterProduct.getState());
+			}
 
-		if (productCategory == null) {
-			redirectAttributes.addFlashAttribute("error", "Product category not found.");
-			return "redirect:/admin/product-category";
+			model.put("result", productService.listByProductCategory(productCategory, filterForm));
+			model.put("pageTitle", "Product manager for " + productCategory.getName());
+			model.put("filterProduct", filterProduct);
+			model.put("filterForm", filterForm);
+
+			return "backend/product";
+		} catch (ProductCategoryNotFoundException e) {
+			redirectAttributes.addFlashAttribute("error", e.getMessage());
+			return "redirect:" + productCategoryPath;
+		}
+	}
+
+	@RequestMapping( value = "/add", method = RequestMethod.GET)
+	public String addPage(ModelMap modelMap, RedirectAttributes redirectAttributes){
+
+		 try {
+			 if(productCategory == null) throw new ProductCategoryNotFoundException();
+
+			 modelMap.put("subPageTitle", "Add");
+			 modelMap.put("description", "Add product for " + productCategory.getName());
+			 modelMap.put("pageTitle", "Add new product");
+			 modelMap.put("action", "add");
+			 modelMap.put("pathAction", relativePath + "/add");
+			 modelMap.put("product", new Product());
+
+		} catch (ProductCategoryNotFoundException e) {
+			redirectAttributes.addFlashAttribute("error", e.getMessage());
+			return "redirect:" + productCategoryPath;
 		}
 
-		model.put("pageTitle", "Product manager for " + productCategory.getName());
-		model.put("result", productService.listByProductCategory(productCategory, filterForm));
-		model.put("filterForm", filterForm);
-
-		return "backend/product";
+		return "backend/product-add";
 	}
 
 	@RequestMapping(value = "/update/{idPr:^\\d+}", method = RequestMethod.GET)
@@ -159,13 +201,9 @@ public class ProductByCategoryController extends MainController {
 			return "redirect:" + relativePath;
 		}
 		
-		productService.delete(product);
+//		productService.delete(product);
 		
 		return "redirect:" + relativePath;
-	}
-
-	public String buildRelativePath(int id) {
-		return "/admin/product-category/" + id + "/product";
 	}
 
 }

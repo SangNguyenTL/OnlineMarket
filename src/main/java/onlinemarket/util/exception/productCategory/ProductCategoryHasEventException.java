@@ -1,7 +1,7 @@
 package onlinemarket.util.exception.productCategory;
 
-public class ProductCategoryHasEvent extends Exception{
-    public ProductCategoryHasEvent() {
+public class ProductCategoryHasEventException extends Exception{
+    public ProductCategoryHasEventException() {
         super("The product category had events.");
     }
 }

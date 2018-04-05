@@ -3,8 +3,8 @@ package onlinemarket.model;
 
 // Generated Jan 2, 2018 4:57:38 PM by Hibernate Tools 4.3.5.Final
 
-import java.util.HashSet;
-import java.util.Set;
+
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -36,7 +36,7 @@ public class AttributeGroup implements java.io.Serializable {
 	private String name;
 	private String description;
 	private Integer priority;
-	private Set<Attribute> attributes = new HashSet<>(0);
+	private List<Attribute> attributes;
 
 	public AttributeGroup() {
 	}
@@ -48,14 +48,6 @@ public class AttributeGroup implements java.io.Serializable {
 
 	}
 
-	public AttributeGroup(ProductCategory productCategory, String name, String description, Set<Attribute> attributes) {
-
-		this.productCategory = productCategory;
-		this.name = name;
-		this.description = description;
-		this.attributes = attributes;
-
-	}
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -69,7 +61,7 @@ public class AttributeGroup implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "product_category_id", nullable = false)
 	public ProductCategory getProductCategory() {
 		return this.productCategory;
@@ -103,11 +95,11 @@ public class AttributeGroup implements java.io.Serializable {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "attributeGroup")
 	@Fetch(FetchMode.SELECT)
 	@OrderBy("priority")
-	public Set<Attribute> getAttributes() {
+	public List<Attribute> getAttributes() {
 		return this.attributes;
 	}
 
-	public void setAttributes(Set<Attribute> attributes) {
+	public void setAttributes(List<Attribute> attributes) {
 		this.attributes = attributes;
 	}
 

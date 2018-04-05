@@ -1,94 +1,96 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="utf-8" />
-  <title th:text="(${pageTitle} == null) ? ${general.title} : (${pageTitle} + ' | '+ ${general.title})"></title>
-  <meta name="description" th:content="${general.description}">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimal-ui" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8"/>
+    <title th:text="(${pageTitle} == null) ? ${general.title} : (${pageTitle} + ' | '+ ${general.title})"></title>
+    <meta name="description" th:content="${general.description}">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimal-ui"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-  <!-- for ios 7 style, multi-resolution icon of 152x152 -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-barstyle" content="black-translucent">
-  <link rel="apple-touch-icon" th:href="@{${logo.logo}}">
-  <meta name="apple-mobile-web-app-title" th:content="${general.title}">
-  <!-- for Chrome on Android, multi-resolution icon of 196x196 -->
-  <meta name="mobile-web-app-capable" content="yes">
-  <link rel="shortcut icon" sizes="196x196" th:href="@{${logo.logo}}">
-  
-  <!-- style -->
-  <link rel="stylesheet" th:href="@{/assets/backend/assets/animate.css/animate.min.css}" type="text/css" />
-  <link rel="stylesheet" th:href="@{/assets/backend/assets/glyphicons/glyphicons.css}" type="text/css" />
-  <link rel="stylesheet" th:href="@{/assets/backend/assets/font-awesome/css/font-awesome.min.css}" type="text/css" />
-  <link rel="stylesheet" th:href="@{/assets/backend/assets/material-design-icons/material-design-icons.css}" type="text/css" />
+    <!-- for ios 7 style, multi-resolution icon of 152x152 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-barstyle" content="black-translucent">
+    <link rel="apple-touch-icon" th:href="@{${logo.logo}}">
+    <meta name="apple-mobile-web-app-title" th:content="${general.title}">
+    <!-- for Chrome on Android, multi-resolution icon of 196x196 -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="shortcut icon" sizes="196x196" th:href="@{${logo.logo}}">
 
-  <link rel="stylesheet" th:href="@{/assets/backend/assets/bootstrap/dist/css/bootstrap.min.css}" type="text/css" />
-  <!-- build:css ../assets/styles/app.min.css -->
-  <link rel="stylesheet" th:href="@{/assets/backend/assets/styles/app.css}" type="text/css" />
-  <!-- endbuild -->
-  <link rel="stylesheet" th:href="@{/assets/backend/assets/styles/font.css}" type="text/css" />
-   <script type="text/javascript" th:inline="javascript">
- /*<![CDATA[*/
-var PATH = [[@{/}]],
-googleApiKey  = "AIzaSyDwgEWMLktEQnK7Cn8SBMDTV6jn1I1G3fc";
+    <!-- style -->
+    <link rel="stylesheet" th:href="@{/assets/backend/assets/animate.css/animate.min.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/assets/backend/assets/glyphicons/glyphicons.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/assets/backend/assets/font-awesome/css/font-awesome.min.css}" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/assets/backend/assets/material-design-icons/material-design-icons.css}"
+          type="text/css"/>
 
- /*]]>*/
- </script>
+    <link rel="stylesheet" th:href="@{/assets/backend/assets/bootstrap/dist/css/bootstrap.min.css}" type="text/css"/>
+    <!-- build:css ../assets/styles/app.min.css -->
+    <link rel="stylesheet" th:href="@{/assets/backend/assets/styles/app.css}" type="text/css"/>
+    <!-- endbuild -->
+    <link rel="stylesheet" th:href="@{/assets/backend/assets/styles/font.css}" type="text/css"/>
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        var PATH = [[@{/}]],
+            PATH_IMAGE = [[@{''}]],
+            googleApiKey = "AIzaSyDwgEWMLktEQnK7Cn8SBMDTV6jn1I1G3fc";
+
+        /*]]>*/
+    </script>
 </head>
 <body th:inline="text">
-  <div class="app" id="app">
+<div class="app" id="app">
 
-<!-- ############ LAYOUT START-->
-<div class="app-body bg-auto w-full" th:classappend="${code} < 500 ? 'amber' : 'indigo'">
-  <div class="text-center pos-rlt p-y-md">
-    <h1 class="text-shadow m-a-0 text-white text-4x">
-      <span class="text-2x font-bold block m-t-lg" th:text="${code}"></span>
-    </h1>
-    <h2 class="h1 m-y-lg text-black">OOPS!</h2>
-    <p class="h5 m-y-lg text-u-c font-bold text-black" th:text="${errorMsg}"></p>
-    <pre class="container black text-left" th:if="${exception}">
+    <!-- ############ LAYOUT START-->
+    <div class="app-body bg-auto w-full" th:classappend="${code} < 500 ? 'amber' : 'indigo'">
+        <div class="text-center pos-rlt p-y-md">
+            <h1 class="text-shadow m-a-0 text-white text-4x">
+                <span class="text-2x font-bold block m-t-lg" th:text="${code}"></span>
+            </h1>
+            <h2 class="h1 m-y-lg text-black">OOPS!</h2>
+            <p class="h5 m-y-lg text-u-c font-bold text-black" th:text="${errorMsg}"></p>
+            <pre class="container black text-left" th:if="${exception}">
     	<th:block th:each="ste : ${exception.stackTrace}">
     		[[${ste}]]
     	</th:block>
     </pre>
-    <a th:href="@{/}" class="md-btn amber-700 md-raised p-x-md">
-      <span class="text-white">Trở về trang chủ</span>
-    </a>
-  </div>
+            <a th:href="@{/}" class="md-btn amber-700 md-raised p-x-md">
+                <span class="text-white">Trở về trang chủ</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- ############ LAYOUT END-->
+
 </div>
-
-<!-- ############ LAYOUT END-->
-
-  </div>
 <!-- build:js scripts/app.html.js -->
 <!-- jQuery -->
-  <script th:src="@{/assets/backend/libs/jquery/jquery/dist/jquery.js}"></script>
+<script th:src="@{/assets/backend/libs/jquery/jquery/dist/jquery.js}"></script>
 <!-- Bootstrap -->
-  <script th:src="@{/assets/backend/libs/jquery/tether/dist/js/tether.min.js}"></script>
-  <script th:src="@{/assets/backend/libs/jquery/bootstrap/dist/js/bootstrap.js}"></script>
+<script th:src="@{/assets/backend/libs/jquery/tether/dist/js/tether.min.js}"></script>
+<script th:src="@{/assets/backend/libs/jquery/bootstrap/dist/js/bootstrap.js}"></script>
 <!-- core -->
-  <script th:src="@{/assets/backend/libs/jquery/underscore/underscore-min.js}"></script>
-  <script th:src="@{/assets/backend/libs/jquery/jQuery-Storage-API/jquery.storageapi.min.js}"></script>
-  <script th:src="@{/assets/backend/libs/jquery/PACE/pace.min.js}"></script>
+<script th:src="@{/assets/backend/libs/jquery/underscore/underscore-min.js}"></script>
+<script th:src="@{/assets/backend/libs/jquery/jQuery-Storage-API/jquery.storageapi.min.js}"></script>
+<script th:src="@{/assets/backend/libs/jquery/PACE/pace.min.js}"></script>
 
-  <script th:src="@{/assets/backend/scripts/config.lazyload.js}"></script>
+<script th:src="@{/assets/backend/scripts/config.lazyload.js}"></script>
 
-  <script th:src="@{/assets/backend/scripts/palette.js}"></script>
-  <script th:src="@{/assets/backend/scripts/ui-load.js}"></script>
-  <script th:src="@{/assets/backend/scripts/ui-jp.js}"></script>
-  <script th:src="@{/assets/backend/scripts/ui-include.js}"></script>
-  <script th:src="@{/assets/backend/scripts/ui-device.js}"></script>
-  <script th:src="@{/assets/backend/scripts/ui-form.js}"></script>
-  <script th:src="@{/assets/backend/scripts/ui-nav.js}"></script>
-  <script th:src="@{/assets/backend/scripts/ui-screenfull.js}"></script>
-  <script th:src="@{/assets/backend/scripts/ui-scroll-to.js}"></script>
-  <script th:src="@{/assets/backend/scripts/ui-toggle-class.js}"></script>
+<script th:src="@{/assets/backend/scripts/palette.js}"></script>
+<script th:src="@{/assets/backend/scripts/ui-load.js}"></script>
+<script th:src="@{/assets/backend/scripts/ui-jp.js}"></script>
+<script th:src="@{/assets/backend/scripts/ui-include.js}"></script>
+<script th:src="@{/assets/backend/scripts/ui-device.js}"></script>
+<script th:src="@{/assets/backend/scripts/ui-form.js}"></script>
+<script th:src="@{/assets/backend/scripts/ui-nav.js}"></script>
+<script th:src="@{/assets/backend/scripts/ui-screenfull.js}"></script>
+<script th:src="@{/assets/backend/scripts/ui-scroll-to.js}"></script>
+<script th:src="@{/assets/backend/scripts/ui-toggle-class.js}"></script>
 
-  <script th:src="@{/assets/backend/scripts/app.js}"></script>
+<script th:src="@{/assets/backend/scripts/app.js}"></script>
 
-  <!-- ajax -->
-  <script th:src="@{/assets/backend/libs/jquery/jquery-pjax/jquery.pjax.js}"></script>
-  <script th:src="@{/assets/backend/scripts/ajax.js}"></script>
+<!-- ajax -->
+<script th:src="@{/assets/backend/libs/jquery/jquery-pjax/jquery.pjax.js}"></script>
+<script th:src="@{/assets/backend/scripts/ajax.js}"></script>
 <!-- endbuild -->
 </body>
 </html>

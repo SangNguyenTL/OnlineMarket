@@ -2,7 +2,13 @@ package onlinemarket.service;
 
 import java.util.List;
 
+import onlinemarket.dao.EventDao;
+import onlinemarket.dao.ProductDao;
+import onlinemarket.util.Slugify;
 import onlinemarket.util.exception.CustomException;
+import onlinemarket.util.exception.brand.BrandHasEventException;
+import onlinemarket.util.exception.brand.BrandHasProductException;
+import onlinemarket.util.exception.brand.BrandNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,20 +25,37 @@ public class BrandServiceImpl implements BrandService{
 
 	@Autowired
 	BrandDao brandDao;
-	
+
+	@Autowired
+	EventDao eventDao;
+
+	@Autowired
+	ProductDao productDao;
+
+	@Autowired
+	Slugify slugify;
+
 	@Override
 	public void save(Brand entity) {
+		slugify.slugify(entity.getSlug());
 		brandDao.save(entity);
 	}
 
 	@Override
-	public void update(Brand entity) throws CustomException {
-		brandDao.update(entity);
+	public void delete(Integer id) throws BrandNotFoundException, BrandHasEventException, BrandHasProductException {
+		Brand brand = brandDao.getByKey(id);
+		if(brand == null) throw new BrandNotFoundException();
+		if(eventDao.getUniqueResultBy("brand", brand) != null) throw new BrandHasEventException();
+		if(productDao.getByDeclaration("brand", brand) != null) throw new BrandHasProductException();
+		brandDao.delete(brand);
+
 	}
 
 	@Override
-	public void delete(Brand entity) {
-		brandDao.delete(entity);
+	public void update(Brand entity) throws BrandNotFoundException {
+		if(brandDao.getByKey(entity.getId()) == null) throw new BrandNotFoundException();
+		slugify.slugify(entity.getSlug());
+		brandDao.update(entity);
 	}
 
 	@Override
@@ -41,40 +64,10 @@ public class BrandServiceImpl implements BrandService{
 	}
 
 	@Override
-	@Transactional(readOnly=true)
-	public Brand getByDeclaration(String key, String value) {
+	public Brand getByDeclaration(String key, Object value) {
 		return brandDao.getByDeclaration(key, value);
 	}
 
-	@Override
-	public List<Brand> list() {
-		return brandDao.list();
-	}
-
-	@Override
-	public List<Brand> list(Integer offset, Integer maxResults) {
-		return brandDao.list(offset, maxResults);
-	}
-
-	@Override
-	public ResultObject<Brand> pagination(Integer currentPage, Integer size) {
-		
-		if(size < 1) size = 1;
-		if(size > 50) size = 50;
-		if(currentPage < 1) currentPage = 1;
-		
-		ResultObject<Brand> result = new ResultObject<>();
-		
-		Integer totalPages = (int) Math.ceil(brandDao.count() / size);
-		
-		result.setTotalPages(totalPages);
-		
-		result.setCurrentPage(currentPage);
-		
-		result.setList(brandDao.list((currentPage - 1) * size, size));
-		
-		return result;
-	}
 
 	@Override
 	public ResultObject<Brand> list(FilterForm filterForm) {
@@ -82,8 +75,9 @@ public class BrandServiceImpl implements BrandService{
 	}
 
 	@Override
-	public Brand getByEvent(Event event) {
-		return brandDao.getByEvent(event);
+	public List<Brand> list() {
+		return brandDao.list();
 	}
+
 
 }

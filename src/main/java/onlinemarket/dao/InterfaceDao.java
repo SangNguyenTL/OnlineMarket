@@ -11,11 +11,15 @@ interface InterfaceDao<PK extends Serializable,T> {
 	
 	T getByKey(PK key);
 	
-	T getByDeclaration(String key, String value);
+	T getByDeclaration(String key, Object value);
+
+	T getUniqueResultBy(String key, Object value);
 	
 	List<T> list();
 	
 	List<T> listByDeclaration(String propertyName, Object object);
+
+	ResultObject<T> listByDeclaration(String propertyName, Object object, FilterForm filterForm);
 	
 	List<T> list(Integer offset, Integer maxResults);
 	
@@ -30,6 +34,8 @@ interface InterfaceDao<PK extends Serializable,T> {
 	void update(T entity);
 	
 	long count();
-	
-	public ResultObject<T> list(FilterForm filterForm);
+
+	long countBy(String key, Object value);
+
+	ResultObject<T> list(FilterForm filterForm);
 }

@@ -3,12 +3,15 @@ package onlinemarket.service;
 import java.util.Date;
 import java.util.List;
 
+import onlinemarket.dao.AttributeGroupDao;
+import onlinemarket.dao.EventDao;
+import onlinemarket.dao.ProductDao;
 import onlinemarket.util.exception.CustomException;
 import onlinemarket.util.Slugify;
-import onlinemarket.util.exception.productCategory.ProductCategoryHasAttributeGroup;
-import onlinemarket.util.exception.productCategory.ProductCategoryHasEvent;
-import onlinemarket.util.exception.productCategory.ProductCategoryHasProduct;
-import onlinemarket.util.exception.productCategory.ProductCategoryNotFound;
+import onlinemarket.util.exception.productCategory.ProductCategoryHasAttributeGroupException;
+import onlinemarket.util.exception.productCategory.ProductCategoryHasEventException;
+import onlinemarket.util.exception.productCategory.ProductCategoryHasProductException;
+import onlinemarket.util.exception.productCategory.ProductCategoryNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +29,17 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     @Autowired
     ProductCategoryDao productCategoryDao;
 
-    protected Slugify slg;
+    @Autowired
+    EventDao eventDao;
+
+    @Autowired
+    ProductDao productDao;
+
+    @Autowired
+    AttributeGroupDao attributeGroupDao;
+
+    @Autowired
+    Slugify slg;
 
     @Override
     public void save(ProductCategory entity) {
@@ -85,13 +98,13 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     }
 
     @Override
-    public void delete(Integer id) throws ProductCategoryNotFound, ProductCategoryHasProduct, ProductCategoryHasEvent, ProductCategoryHasAttributeGroup {
+    public void delete(Integer id) throws ProductCategoryNotFoundException, ProductCategoryHasProductException, ProductCategoryHasEventException, ProductCategoryHasAttributeGroupException {
 
         ProductCategory productCategory = productCategoryDao.getByKey(id);
-        if(productCategory == null) throw new ProductCategoryNotFound();
-        if(!productCategory.getProducts().isEmpty()) throw new ProductCategoryHasProduct();
-        if(!productCategory.getEvents().isEmpty()) throw new ProductCategoryHasEvent();
-        if(!productCategory.getAttributeGroups().isEmpty()) throw new ProductCategoryHasAttributeGroup();
+        if(productCategory == null) throw new ProductCategoryNotFoundException();
+        if(productDao.getUniqueResultBy("productCategory", productCategory) != null) throw new ProductCategoryHasProductException();
+        if(eventDao.getUniqueResultBy("productCategory", productCategory) != null) throw new ProductCategoryHasEventException();
+        if(attributeGroupDao.getUniqueResultBy("productCategory", productCategory) != null) throw new ProductCategoryHasAttributeGroupException();
         productCategoryDao.delete(productCategory);
 
     }
