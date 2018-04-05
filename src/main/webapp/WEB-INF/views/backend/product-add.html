@@ -16,6 +16,7 @@
         <div class="row">
             <div class="col-md-9">
 
+                <!--/*@thymesVar id="product" type="onlinemarket.model.Product"*/-->
                 <form ui-jp="parsley" role="form" th:object="${product}" th:action="@{${pathAction}}" method="POST">
                     <input th:if="${action} == 'update'" type="hidden" th:field="*{id}"/>
                     <input th:if="${action} == 'update'" type="hidden" id="beforeSlug" name="beforeSlug"
@@ -29,7 +30,6 @@
                         <div class="box-divider m-a-0"></div>
 
                         <div class="box-body">
-
                             <div class="form-group row">
                                 <label class="col-sm-3 form-control-label">Name</label>
                                 <div class="col-sm-9">
@@ -54,23 +54,20 @@
                                         <li th:errors="*{slug}"></li>
                                     </ul>
                                 </div>
-                                <label class="form-control-label col-sm-3">Brand</label>
+                                <label class="col-sm-3 form-control-label">Weight</label>
                                 <div class="col-sm-3">
-                                    <select th:field="*{brand}" class="form-control" data-parsley-id="4" required>
-                                        <option value="">Please choice</option>
-                                        <option
-                                                th:each="brandChoice : ${brandList}"
-                                                th:value="${brandChoice.id}" th:text="${brandChoice.name}"></option>
-                                    </select>
-                                    <ul class="parsley-errors-list filled" id="parsley-id-4"
-                                        th:if="${#fields.hasErrors('brand')}">
-                                        <li th:errors="*{brand}"></li>
+                                    <input th:errorclass="parsley-error" type="text" class="form-control"
+                                           data-parsley-id="2" data-parsley-range="[0, 1000000]" required
+                                           th:field="*{weight}">
+                                    <ul class="parsley-errors-list filled" id="parsley-id-11"
+                                        th:if="${#fields.hasErrors('state')}">
+                                        <li th:errors="*{weight}"></li>
                                     </ul>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-3 form-control-label">Image</label>
-                                <div class="col-sm-3 box-image">
+                                <div class="col-sm-9 box-image">
                                     <a href="#" data-toggle="modal" data-target="#modal-image-gallery"
                                        ui-toggle-class="zoom" ui-target="#animate" data-target-input="featureImage">
                                         <img th:if="*{featureImage}" th:src="@{*{featureImage}}" alt="..."
@@ -85,28 +82,68 @@
                                         <li th:errors="*{featureImage}"></li>
                                     </ul>
                                 </div>
+                            </div>
+                            <div class="form-group row">
                                 <label class="col-sm-3 form-control-label">State</label>
                                 <div class="col-sm-3">
                                     <select th:field="*{state}" class="form-control" data-parsley-id="4" required>
                                         <option value="">Please choice</option>
+                                        <!--/*@thymesVar id="st" type="onlinemarket.model.State"*/-->
                                         <option
                                                 th:each="st : ${T(onlinemarket.model.NumState).values()}"
                                                 th:value="${st.id}" th:text="${st.name}"></option>
                                     </select>
-                                    <ul class="parsley-errors-list filled" id="parsley-id-4"
+                                    <ul class="parsley-errors-list filled"
                                         th:if="${#fields.hasErrors('state')}">
                                         <li th:errors="*{state}"></li>
                                     </ul>
                                 </div>
+                                <label class="form-control-label col-sm-3">Brand</label>
+                                <div class="col-sm-3">
+                                    <select th:field="*{brand}" class="form-control" data-parsley-id="4" required>
+                                        <option value="">Please choice</option>
+                                        <!--/*@thymesVar id="brandList" type="java.util.List<onlinemarket.model.Brand>"*/-->
+                                        <!--/*@thymesVar id="brandChoice" type="onlinemarket.model.Brand"*/-->
+                                        <option
+                                                th:each="brandChoice : ${brandList}"
+                                                th:value="${brandChoice.id}" th:text="${brandChoice.name}"></option>
+                                    </select>
+                                    <ul class="parsley-errors-list filled" id="parsley-id-4"
+                                        th:if="${#fields.hasErrors('brand')}">
+                                        <li th:errors="*{brand}"></li>
+                                    </ul>
+                                </div>
                             </div>
 
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Release Date</label>
+                                <div class="col-sm-3">
+                                    <input ui-jp="datetimepicker" ui-options="{format: 'DD/MM/YYYY'}" data-parsley-id="4" required
+                                           th:errorclass="parsley-error" class="form-control"
+                                           type="text" th:field="*{releaseDate}"/>
+                                    <ul class="parsley-errors-list filled"
+                                        th:if="${#fields.hasErrors('releaseDate')}">
+                                        <li th:errors="*{releaseDate}"></li>
+                                    </ul>
+                                </div>
+                                <label class="col-sm-3 form-control-label">Size</label>
+                                <div class="col-sm-3">
+                                    <input th:errorclass="parsley-error" class="form-control" type="number"
+                                           th:field="*{quantity}" data-parsley-type="digits" required
+                                           maxlength="150" data-parsley-id="2"/>
+                                    <ul class="parsley-errors-list filled"
+                                        th:if="${#fields.hasErrors('quantity')}">
+                                        <li th:errors="*{quantity}"></li>
+                                    </ul>
+                                </div>
+                            </div>
                             <div class="form-group row">
                                 <label class="col-sm-3 form-control-label">Quantity</label>
                                 <div class="col-sm-3">
                                     <input th:errorclass="parsley-error" class="form-control" type="number"
                                            th:field="*{quantity}" data-parsley-type="digits" required
                                            data-parsley-range="[0, 10000]" data-parsley-id="2"/>
-                                    <ul class="parsley-errors-list filled" id="parsley-id-2"
+                                    <ul class="parsley-errors-list filled"
                                         th:if="${#fields.hasErrors('quantity')}">
                                         <li th:errors="*{quantity}"></li>
                                     </ul>
@@ -134,13 +171,13 @@
                                             th:if="${#fields.hasErrors('description')}">
                                             <li th:errors="*{description}"></li>
                                         </ul>
-
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                     </div>
+                    <!--/*@thymesVar id="productCategory" type="onlinemarket.model.ProductCategory"*/-->
                     <div th:each="attributeGroup : ${productCategory.attributeGroups}" class="box">
                         <div class="box-header">
                             <h2 th:text="${attributeGroup.name}"></h2>
@@ -148,7 +185,6 @@
                         </div>
                         <div class="box-divider m-a-0"></div>
                         <div class="box-body">
-
                             <div th:each="attribute, attributeStat : ${attributeGroup.attributes}" class="form-group row">
                                 <label class="col-sm-3 form-control-label" th:text="${attribute.name}"></label>
                                 <div class="col-sm-9" th:id="'attributeValues-' + ${product.processCount()}">
@@ -160,12 +196,9 @@
                                         <option value="">Pick value...</option>
                                         <option th:each="attributeValue : ${attribute.attributeValues}" th:value="${attributeValue.id}" th:text="${attributeValue.value}"></option>
                                     </select>
-                                    <input th:if="${attribute.type} == 'date'" th:field="*{productAttributeValues[__*{countAttribute}__].attributeValues.value}" class="form-control" type="text" ui-jp="datetimepicker" ui-options="{format: 'DD/MM/YYYY'}" pattern="^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$">
                                 </div>
                             </div>
-
                         </div>
-
                     </div>
                     <div class="box">
                         <div class="dker p-a text-right">

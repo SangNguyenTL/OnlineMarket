@@ -133,6 +133,8 @@ public class ProductByCategoryController extends MainController {
 		return "backend/product-add";
 	}
 
+	
+
 	@RequestMapping(value = "/update/{idPr:^\\d+}", method = RequestMethod.GET)
 	public String updatePage(@PathVariable("idPr") int idPr, ModelMap model, RedirectAttributes redirectAttributes) {
 

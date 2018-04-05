@@ -53,6 +53,9 @@ public class Product implements java.io.Serializable {
 	private long price;
 	private int quantity;
 	private Byte state;
+	private Integer weight;
+	private Date releaseDate;
+	private String size;
 	private Date createDate = new Date();
 	private Date updateDate;
 	private String featureImage;
@@ -154,7 +157,7 @@ public class Product implements java.io.Serializable {
 		this.description = description;
 	}
 
-	@Column(name = "price", nullable = false, precision = 13, scale = 0)
+	@Column(name = "price", nullable = false, precision = 13, scale = 6)
 	@Range(max = 1000000000)
 	public long getPrice() {
 		return this.price;
@@ -216,6 +219,39 @@ public class Product implements java.io.Serializable {
 	public void setFeatureImage(String featureImage) {
 		this.featureImage = featureImage;
 	}
+
+
+	@Column(name = "weight", nullable = false)
+	@Range(min = 0, max = 1000000)
+	public Integer getWeight() {
+		return weight;
+	}
+
+	public void setWeight(Integer weight) {
+		this.weight = weight;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@DateTimeFormat(pattern = "dd/MM/yyyy hh:mm:ss a")
+	@Column(name = "release_date", nullable = false, length = 23)
+	public Date getReleaseDate() {
+		return releaseDate;
+	}
+
+	public void setReleaseDate(Date releaseDate) {
+		this.releaseDate = releaseDate;
+	}
+
+	@Column(name = "size", nullable = false)
+	@Size(min = 3, max = 150)
+	public String getSize() {
+		return size;
+	}
+
+	public void setSize(String size) {
+		this.size = size;
+	}
+
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.REMOVE)
 	public Set<Rating> getRatings() {

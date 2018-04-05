@@ -167,7 +167,7 @@ public class User implements java.io.Serializable {
 		this.updateDate = updateDate;
 	}
 
-	@Column(name = "[state]", nullable = false, length = 10)
+	@Column(name = "state", nullable = false, length = 10)
 	@Size(max=10)
 	@NotEmpty
 	@StringContain(acceptedValues= {"ACTIVE","INACTIVE","DELETED","LOCKED"}, message="State is invalid")
