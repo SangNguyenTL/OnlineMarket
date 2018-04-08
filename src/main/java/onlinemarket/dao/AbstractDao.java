@@ -134,7 +134,7 @@ public abstract class AbstractDao<PK extends Serializable, T> {
 
     }
 
-    protected ResultObject<T> childFilterFrom(Criteria criteria, FilterForm filterForm) {
+    ResultObject<T> childFilterFrom(Criteria criteria, FilterForm filterForm) {
 
         ResultObject<T> result = new ResultObject<>();
 

@@ -29,6 +29,7 @@
 
                     <div class="box-body">
 
+                        <!--/*@thymesVar id="brand" type="onlinemarket.model.Brand"*/-->
                         <form ui-jp="parsley" role="form" th:object="${brand}" th:action="@{${pathAction}}"
                               method="POST">
                             <input th:if="${action} == 'update'" type="hidden" th:field="*{id}"/>
@@ -64,7 +65,7 @@
                                 <div class="col-sm-3 box-image">
                                     <a href="#" data-toggle="modal" data-target="#modal-image-gallery"
                                        ui-toggle-class="zoom" ui-target="#animate" data-target-input="imagePath">
-                                        <img th:if="*{imagePath}" th:src="@{*{featureImage}}" alt="..."
+                                        <img th:if="*{imagePath}" th:src="@{*{imagePath}}" alt="..."
                                              class="img-thumbnail thumbnail">
                                         <img th:unless="*{imagePath}" th:src="@{/assets/images/defaultImage.jpg}"
                                              alt="..." class="img-thumbnail thumbnail">

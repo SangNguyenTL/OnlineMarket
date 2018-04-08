@@ -8,7 +8,9 @@
 
 <div ui-view class="app-body" id="view" layout:fragment="container">
     <div class="padding">
-
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item" th:each="breadcrumb : ${breadcrumbs}"><a th:href="@{${breadcrumb[0]}}" th:text="${breadcrumb[1]}"></a></li>
+        </ol>
         <h5 class="_300 margin" th:text="${pageTitle}"></h5>
         <div class="alert alert-success" th:if="${success}">
             <strong>Congratulation!</strong> Process completed.
@@ -100,7 +102,7 @@
                                 </div>
                                 <label class="form-control-label col-sm-3">Brand</label>
                                 <div class="col-sm-3">
-                                    <select th:field="*{brand}" class="form-control" data-parsley-id="4" required>
+                                    <select th:field="*{brand.id}" class="form-control" data-parsley-id="4" required>
                                         <option value="">Please choice</option>
                                         <!--/*@thymesVar id="brandList" type="java.util.List<onlinemarket.model.Brand>"*/-->
                                         <!--/*@thymesVar id="brandChoice" type="onlinemarket.model.Brand"*/-->
@@ -118,7 +120,7 @@
                             <div class="form-group row">
                                 <label class="col-sm-3 form-control-label">Release Date</label>
                                 <div class="col-sm-3">
-                                    <input ui-jp="datetimepicker" ui-options="{format: 'DD/MM/YYYY'}" data-parsley-id="4" required
+                                    <input ui-jp="datetimepicker" ui-options="{format: 'MM/YYYY'}" data-parsley-id="4" required
                                            th:errorclass="parsley-error" class="form-control"
                                            type="text" th:field="*{releaseDate}"/>
                                     <ul class="parsley-errors-list filled"
@@ -128,12 +130,12 @@
                                 </div>
                                 <label class="col-sm-3 form-control-label">Size</label>
                                 <div class="col-sm-3">
-                                    <input th:errorclass="parsley-error" class="form-control" type="number"
-                                           th:field="*{quantity}" data-parsley-type="digits" required
+                                    <input th:errorclass="parsley-error" class="form-control" type="text"
+                                           th:field="*{size}" required
                                            maxlength="150" data-parsley-id="2"/>
                                     <ul class="parsley-errors-list filled"
-                                        th:if="${#fields.hasErrors('quantity')}">
-                                        <li th:errors="*{quantity}"></li>
+                                        th:if="${#fields.hasErrors('size')}">
+                                        <li th:errors="*{size}"></li>
                                     </ul>
                                 </div>
                             </div>
@@ -184,18 +186,22 @@
                             <small th:text="${attributeGroup.description}"></small>
                         </div>
                         <div class="box-divider m-a-0"></div>
+                        <div class="box-divider m-a-0"></div>
                         <div class="box-body">
                             <div th:each="attribute, attributeStat : ${attributeGroup.attributes}" class="form-group row">
                                 <label class="col-sm-3 form-control-label" th:text="${attribute.name}"></label>
-                                <div class="col-sm-9" th:id="'attributeValues-' + ${product.processCount()}">
-                                    <select th:if="${attribute.type} == 'select'" th:field="*{productAttributeValues[__*{countAttribute}__].attributeValues.id}" ui-jp="select2" ui-options="{placeholder: 'Select an option'}" style="width: 100%" class="form-control">
-                                        <option value="">Pick value...</option>
-                                        <option th:each="attributeValue : ${attribute.attributeValues}" th:value="${attributeValue.id}" th:text="${attributeValue.value}"></option>
+                                <div class="col-sm-9 row" th:id="'attributeValues-' + ${product.processCount()}">
+                                    <select th:if="${attribute.type} == 'select'" th:id="'productAttributeValues' + *{countAttribute} + '.attributeValuesId'" th:name="'productAttributeValues[' + *{countAttribute} + '].attributeValuesId'" ui-jp="select2" ui-options="{placeholder: 'Select an option', allowClear: true}" style="width: 100%" class="form-control">
+                                        <option></option>
+                                        <option th:each="attributeValue : ${attribute.attributeValues}" th:value="${attributeValue.id}" th:text="${attributeValue.value}" th:selected="${product.checkProductAttributes(attributeValue)}"></option>
                                     </select>
-                                    <select th:if="${attribute.type} == 'select-multiple'"  th:field="*{productAttributeValues[__*{countAttribute}__].attributeValues}" ui-jp="select2" ui-options="{placeholder: 'Select an option'}" style="width: 100%" class="form-control" multiple>
-                                        <option value="">Pick value...</option>
-                                        <option th:each="attributeValue : ${attribute.attributeValues}" th:value="${attributeValue.id}" th:text="${attributeValue.value}"></option>
-                                    </select>
+                                    <div th:if="${attribute.type} == 'checkbox'" th:each="attributeValue : ${attribute.attributeValues}" class="checkbox col-sm-3">
+                                        <label>
+                                            <input type="checkbox" th:id="'productAttributeValues' + *{countAttribute} + '.attributeValuesId'" th:name="'productAttributeValues[' + *{countAttribute} + '].attributeValuesId'" th:value="${attributeValue.id}" th:checked="${product.checkProductAttributes(attributeValue)}"/>
+                                            <i class="dark-white"></i>
+                                            [[${attributeValue.value}]]
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                         </div>

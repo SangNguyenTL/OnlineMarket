@@ -1,13 +1,17 @@
 package onlinemarket.controller.admin;
 
 import javax.validation.Valid;
+import javax.validation.groups.Default;
 
 import onlinemarket.form.filter.FilterProduct;
+import onlinemarket.model.other.AdvancedValidation;
+import onlinemarket.util.exception.product.ProductNotFoundException;
 import onlinemarket.util.exception.productCategory.ProductCategoryNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -133,65 +137,85 @@ public class ProductByCategoryController extends MainController {
 		return "backend/product-add";
 	}
 
-	
+	@RequestMapping( value = "/add", method = RequestMethod.POST)
+	public String processAddPage(@Validated(value = {AdvancedValidation.CheckSlug.class, Default.class}) @ModelAttribute("product") Product product, ModelMap modelMap, RedirectAttributes redirectAttributes, BindingResult result){
+		try{
 
-	@RequestMapping(value = "/update/{idPr:^\\d+}", method = RequestMethod.GET)
-	public String updatePage(@PathVariable("idPr") int idPr, ModelMap model, RedirectAttributes redirectAttributes) {
+			if(!result.hasErrors()){
+				productService.save(product, productCategory, currentUser);
+				redirectAttributes.addFlashAttribute("success", true);
+			}else{
+				modelMap.put("subPageTitle", "Add");
+				modelMap.put("description", "Add product for " + productCategory.getName());
+				modelMap.put("pageTitle", "Add new product");
+				modelMap.put("action", "add");
+				modelMap.put("pathAction", relativePath + "/add");
+				modelMap.put("product", product);
 
-		if (productCategory == null) {
-			redirectAttributes.addFlashAttribute("error", "Product category not found.");
-			return "redirect:/admin/product-category";
+				return "backend/product-add";
+			}
+
+		}catch (ProductCategoryNotFoundException e){
+			redirectAttributes.addFlashAttribute("error", e.getMessage());
 		}
 
-		Product product = productService.getByKey(idPr);
+		return "redirect:" + relativePath;
+	}
 
-		if (product == null) {
-			redirectAttributes.addFlashAttribute("error", "Product not found.");
+	@RequestMapping(value = "/update/{productId:^\\d+}", method = RequestMethod.GET)
+	public String updatePage(@PathVariable("productId") Integer productId, ModelMap modelMap, RedirectAttributes redirectAttributes) {
+
+		try {
+			if(productCategory == null) throw new ProductCategoryNotFoundException();
+			Product product = productService.getByKey(productId);
+			if(product == null) throw new ProductNotFoundException();
+
+			modelMap.put("subPageTitle", "Update new product");
+			modelMap.put("description", "Update product for " + productCategory.getName());
+			modelMap.put("pageTitle", "Update new product");
+			modelMap.put("action", "update");
+			modelMap.put("pathAction", relativePath + "/update");
+			modelMap.put("product", product);
+
+		} catch (ProductCategoryNotFoundException e) {
+			redirectAttributes.addFlashAttribute("error", e.getMessage());
+			return "redirect:" + productCategoryPath;
+		} catch (ProductNotFoundException e) {
+			redirectAttributes.addFlashAttribute("error", e.getMessage());
 			return "redirect:" + relativePath;
 		}
-
-		model.put("pageTitle", "Update new product");
-		model.put("subPageTitle", "Update for " + productCategory.getName());
-		model.put("description", "Update product for " + productCategory.getName());
-		model.put("action", "update");
-		model.put("pathAction", relativePath + "/update");
-		model.put("product", product);
 
 		return "backend/product-add";
 
 	}
 
-//	@RequestMapping(value = "/update/{idPr:^\\d+}", method = RequestMethod.POST)
-//	public String processUpdatePage(@PathVariable("idPr") int idPr, @ModelAttribute("product") @Valid Product product,
-//			BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
-//
-//		if (productCategory == null) {
-//			redirectAttributes.addFlashAttribute("error", "Product category not found.");
-//			return "redirect:/admin/product-category";
-//		}
-//
-//		Product productCheck = productService.getByKey(idPr);
-//		if (productCheck == null) {
-//			redirectAttributes.addFlashAttribute("error", "Product not found.");
-//			return "redirect:" + relativePath;
-//		}
-//
-//		if (!result.hasErrors()) {
-//			product.setProductCategory(productCategory);
-//			productService.update(product);
-//			redirectAttributes.addFlashAttribute("success", "");
-//			return "redirect:" + relativePath;
-//		}
-//
-//		model.put("pageTitle", "Update new product");
-//		model.put("subPageTitle", "Update for " + productCategory.getName());
-//		model.put("description", "Update product for " + productCategory.getName());
-//		model.put("action", "update");
-//		model.put("pathAction", relativePath + "/update");
-//		model.put("product", product);
-//
-//		return "backend/product-add";
-//	}
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	public String processUpdatePage(@ModelAttribute("product") Product product, ModelMap modelMap,BindingResult result,RedirectAttributes redirectAttributes) {
+
+		try {
+			if(!result.hasErrors()){
+				productService.update(product, productCategory, currentUser);
+				redirectAttributes.addFlashAttribute("success", true);
+				return "redirect:"+ relativePath;
+			}else{
+				modelMap.put("subPageTitle", "Update new product");
+				modelMap.put("description", "Update product for " + productCategory.getName());
+				modelMap.put("pageTitle", "Update new product");
+				modelMap.put("action", "update");
+				modelMap.put("pathAction", relativePath + "/update");
+				modelMap.put("product", product);
+
+				return "backend/product-add";
+			}
+
+		} catch (ProductCategoryNotFoundException e) {
+			redirectAttributes.addFlashAttribute("error", e.getMessage());
+			return "redirect:" + productCategoryPath;
+		} catch (ProductNotFoundException e) {
+			redirectAttributes.addFlashAttribute("error", e.getMessage());
+			return "redirect:" + relativePath;
+		}
+	}
 
 	@RequestMapping(value = "/delete", method = { RequestMethod.POST, RequestMethod.GET })
 	public String processDeleteProvince(@RequestParam(value = "id", required = true) Integer productId,

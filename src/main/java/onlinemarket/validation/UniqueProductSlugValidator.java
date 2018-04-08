@@ -3,32 +3,31 @@ package onlinemarket.validation;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import onlinemarket.model.Product;
+import onlinemarket.service.ProductService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
-import onlinemarket.model.ProductCategory;
-import onlinemarket.service.ProductCategoryService;
-
 @Component
-public class UniqueProductSlugValidator implements ConstraintValidator<UniqueProductCategorySlug, Object>{
+public class UniqueProductSlugValidator implements ConstraintValidator<UniqueProductSlug, Object>{
 
 	@Autowired
-	ProductCategoryService productCategoryService;
+	ProductService productService;
 	
 	@Override
-	public void initialize(UniqueProductCategorySlug constraintAnnotation) {
+	public void initialize(UniqueProductSlug constraintAnnotation) {
 		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
 	}
 
 	@Override
 	public boolean isValid(Object candidate, ConstraintValidatorContext context) {
 		
-		ProductCategory productCategory = (ProductCategory) candidate;
-		ProductCategory productCategoryMod = productCategoryService.getByDeclaration("slug", productCategory.getSlug());
+		Product product = (Product) candidate;
+		Product product1 = productService.getByDeclaration("slug", product.getSlug());
 		boolean isValid = false;
-		if(productCategoryMod == null || StringUtils.equals(productCategory.getSlug(), productCategory.getBeforeSlug())) isValid = true;
+		if(product1 == null || StringUtils.equals(product1.getSlug(), product.getBeforeSlug())) isValid = true;
 		else isValid = false;
         if ( !isValid ) {
         	context.disableDefaultConstraintViolation();

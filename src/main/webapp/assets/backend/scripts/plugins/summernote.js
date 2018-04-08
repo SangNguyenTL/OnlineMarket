@@ -1,16 +1,16 @@
 (function ($) {
     "use strict";
-    $('[ui-jp=summernote]').on('summernote.init', function(e) {
-        var elment = $(e.currentTarget), outputElement = elment.closest(".form-group").find("textarea");
-        elment.code(outputElement.val());
+    $(document).on('summernote.init', '[ui-jp=summernote]' ,function(e) {
+        var element = $(e.currentTarget), outputElement = element.closest(".form-group").find("textarea");
+        element.code(outputElement.val());
     });
 
-    $('[ui-jp=summernote]').on('summernote.change', function(e, content) {
-        var elment = $(e.currentTarget), outputElement = elment.closest(".form-group").find("textarea");
+    $(document).on('summernote.change', '[ui-jp=summernote]', function(e, content) {
+        var element = $(e.currentTarget), outputElement = element.closest(".form-group").find("textarea");
         outputElement.html(content);
     });
 
-    $('[ui-jp=summernote]').on('summernote.image.upload', function(file) {
+    $(document).on('summernote.image.upload', '[ui-jp=summernote]', function(file) {
         var element = $(this), url = element.data().url;
         sendFile(element, file)
     });

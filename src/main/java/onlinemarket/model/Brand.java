@@ -43,7 +43,7 @@ public class Brand implements java.io.Serializable {
 	private String beforeSlug;
 	private String imagePath;
 	private String description;
-	private Date createDate = new Date();
+	private Date createDate;
 	private Date updateDate;
 	private Set<Product> products = new HashSet<Product>(0);
 	private Set<Event> events = new HashSet<Event>(0);
@@ -69,7 +69,10 @@ public class Brand implements java.io.Serializable {
 		this.events = events;
 	}
 
-	@Id
+    public Brand(Integer id) {
+    }
+
+    @Id
 	@GeneratedValue(strategy = IDENTITY)
 
 	@Column(name = "_id", unique = true, nullable = false)

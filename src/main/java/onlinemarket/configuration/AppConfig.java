@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
-import onlinemarket.converter.RoleFormatter;
+import onlinemarket.converter.*;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -30,7 +30,6 @@ import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 
 import nz.net.ultraq.thymeleaf.LayoutDialect;
-import onlinemarket.converter.ProvinceFormatter;
 import onlinemarket.form.config.UploadConfig;
 import onlinemarket.service.config.ConfigurationService;
 import onlinemarket.thymeleaf.dialect.FilterFormDialect;
@@ -144,6 +143,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 	public void addFormatters(FormatterRegistry registry) {
 		registry.addFormatter(new ProvinceFormatter());
 		registry.addFormatter(new RoleFormatter());
+		registry.addFormatter(new AttributeValuesFormatter());
 	}
 
 	/**

@@ -1,11 +1,9 @@
 package onlinemarket.service;
 
 import onlinemarket.form.filter.FilterForm;
-import onlinemarket.model.Brand;
-import onlinemarket.model.Event;
-import onlinemarket.model.Product;
-import onlinemarket.model.ProductCategory;
+import onlinemarket.model.*;
 import onlinemarket.result.ResultObject;
+import onlinemarket.util.exception.product.ProductNotFoundException;
 import onlinemarket.util.exception.productCategory.ProductCategoryNotFoundException;
 
 public interface ProductService {
@@ -14,7 +12,10 @@ public interface ProductService {
 
     Product getByDeclaration(String key, Object value);
 
-    ResultObject<Product> listByProductCategory(ProductCategory productCategory, FilterForm filterForm) throws ProductCategoryNotFoundException;
+    void save(Product product, ProductCategory productCategory, User user) throws ProductCategoryNotFoundException;
 
+    void update(Product product, ProductCategory productCategory, User user) throws ProductCategoryNotFoundException, ProductNotFoundException;
+
+    ResultObject<Product> listByProductCategory(ProductCategory productCategory, FilterForm filterForm) throws ProductCategoryNotFoundException;
 
 }

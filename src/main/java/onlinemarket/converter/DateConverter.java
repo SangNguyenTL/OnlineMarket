@@ -13,13 +13,13 @@ public class DateConverter implements Converter<String, Date> {
 
 	@Override
 	public Date convert(String source) {
-		SimpleDateFormat sf = new SimpleDateFormat("YYYY-MM-DDTHH:mm:ss.sssZ");
+		SimpleDateFormat sf = new SimpleDateFormat("dd-MM-yyyy hh:mm a");
 		sf.setTimeZone(TimeZone.getTimeZone("UTC"));
 		if (!source.isEmpty()) {
 			try {
 				return sf.parse(source);
 			} catch (ParseException e) {
-				e.printStackTrace();
+
 			}
 		}
 		return null;

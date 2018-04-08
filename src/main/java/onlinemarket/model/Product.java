@@ -62,7 +62,7 @@ public class Product implements java.io.Serializable {
 	private Set<Rating> ratings = new HashSet<>(0);
 	private Set<RatingStatistic> ratingStatistics = new HashSet<>(0);
 	private Set<Event> events = new HashSet<>(0);
-	private List<ProductAttributeValues> productAttributeValues;
+	private List<ProductAttributeValues> productAttributeValues = new ArrayList<>();
 	private Set<ProductViews> productViewses = new HashSet<>(0);
 	private Set<ProductViewsStatistc> productViewsStatistcs = new HashSet<>(0);
 	private Set<Comment> comments = new HashSet<>(0);
@@ -70,6 +70,22 @@ public class Product implements java.io.Serializable {
 	private Integer countAttribute;
 
 	public Product() {
+	}
+
+	public void updateProduct(Product product){
+		brand = product.brand;
+		productCategory = product.productCategory;
+		user = product.user;
+		name = product.name;
+		slug = product.slug;
+		description = product.description;
+		price = product.price;
+		quantity = product.quantity;
+		state = product.state;
+		weight = product.weight;
+		size = product.size;
+		updateDate = new Date();
+		featureImage = product.featureImage;
 	}
 
 	@Id
@@ -97,7 +113,6 @@ public class Product implements java.io.Serializable {
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "category_id", nullable = false)
-	@NotNull
 	public ProductCategory getProductCategory() {
 		return this.productCategory;
 	}
@@ -232,7 +247,7 @@ public class Product implements java.io.Serializable {
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "dd/MM/yyyy hh:mm:ss a")
+	@DateTimeFormat(pattern = "MM/yyyy")
 	@Column(name = "release_date", nullable = false, length = 23)
 	public Date getReleaseDate() {
 		return releaseDate;
@@ -283,7 +298,7 @@ public class Product implements java.io.Serializable {
 		this.events = events;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 	public List<ProductAttributeValues> getProductAttributeValues() {
 		return productAttributeValues;
 	}
@@ -360,4 +375,11 @@ public class Product implements java.io.Serializable {
 	    if(countAttribute == null) countAttribute = -1;
 	    return countAttribute++;
     }
+
+    public boolean checkProductAttributes(AttributeValues attributeValues){
+		ProductAttributeValues productAttributeValue = new ProductAttributeValues();
+		productAttributeValue.setAttributeValuesId(attributeValues.getId());
+		productAttributeValue.setProductId(this.getId());
+		return productAttributeValues.contains(productAttributeValue);
+	}
 }

@@ -16,5 +16,4 @@ import onlinemarket.result.ResultObject;
 
 @Repository("productDao")
 public class ProductDaoImpl extends AbstractDao<Integer, Product> implements ProductDao{
-
 }

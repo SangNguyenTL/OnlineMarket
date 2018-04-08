@@ -49,6 +49,9 @@ public class ProductCategory implements java.io.Serializable {
 		this.updateDate = updateDate;
 	}
 
+	public ProductCategory(Integer id) {
+	}
+
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)

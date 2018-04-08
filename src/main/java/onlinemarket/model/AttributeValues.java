@@ -32,6 +32,9 @@ public class AttributeValues {
         this.attribute = attribute;
     }
 
+    public AttributeValues(Integer id) {
+    }
+
 
     @Id
     @GeneratedValue(strategy = IDENTITY)

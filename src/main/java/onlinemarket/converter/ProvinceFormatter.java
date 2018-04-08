@@ -1,6 +1,5 @@
 package onlinemarket.converter;
 
-import java.text.ParseException;
 import java.util.Locale;
 
 import org.springframework.format.Formatter;
@@ -11,6 +10,7 @@ public class ProvinceFormatter implements Formatter<Province>{
 
 	@Override
 	public String print(Province arg0, Locale arg1) {
+		if(arg0 == null) return null;
 		return Integer.toString(arg0.getId());
 	}
 
