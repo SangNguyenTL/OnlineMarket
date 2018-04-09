@@ -2,17 +2,16 @@ package onlinemarket.model;
 // default package
 // Generated Jan 2, 2018 4:57:38 PM by Hibernate Tools 4.3.5.Final
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import javax.persistence.*;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import onlinemarket.validation.PasswordsEqualConstraint;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
@@ -31,6 +30,7 @@ import onlinemarket.validation.UniqueEmail;
  */
 @Entity
 @Table(name = "tb_user", schema = "dbo", catalog = "SmartMarket", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
+@PasswordsEqualConstraint()
 public class User implements java.io.Serializable {
 
 	/**
@@ -43,16 +43,18 @@ public class User implements java.io.Serializable {
 	private String lastName;
 	private String email;
 	private String password;
+	private String confirmPassword;
+	private boolean agree;
 	private Date birthday;
 	private Role role;
-	private Date createDate = new Date();
+	private Date createDate;
 	private Date updateDate;
 	private String state = State.ACTIVE.toString();
 	private String avatar = "/assets/images/defaultImage.jpg";
 	private Set<Order> orders = new HashSet<>(0);
 	private Set<Comment> comments = new HashSet<>(0);
 	private Set<Rating> ratings = new HashSet<>(0);
-	private Set<Address> addresses = new HashSet<>(0);
+	private List<Address> addresses = new ArrayList<>(0);
 	private Set<Image> images = new HashSet<>(0);
 	private Set<Notification> notifications = new HashSet<>(0);
 	private Set<Cart> carts = new HashSet<>(0);
@@ -231,11 +233,11 @@ public class User implements java.io.Serializable {
 	
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-	public Set<Address> getAddresses() {
+	public List<Address> getAddresses() {
 		return addresses;
 	}
 
-	public void setAddresses(Set<Address> addresses) {
+	public void setAddresses(List<Address> addresses) {
 		this.addresses = addresses;
 	}
 
@@ -311,5 +313,27 @@ public class User implements java.io.Serializable {
 	@Override
 	public int hashCode() {
 		return Objects.hash(id, email);
+	}
+
+	@Transient
+	@NotEmpty
+	@JsonIgnore
+	public String getConfirmPassword() {
+		return confirmPassword;
+	}
+
+	public void setConfirmPassword(String confirmPassword) {
+		this.confirmPassword = confirmPassword;
+	}
+
+	@Transient
+	@JsonIgnore
+	@AssertTrue
+	public boolean isAgree() {
+		return agree;
+	}
+
+	public void setAgree(boolean agree) {
+		this.agree = agree;
 	}
 }

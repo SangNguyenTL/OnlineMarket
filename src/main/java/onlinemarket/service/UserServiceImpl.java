@@ -35,13 +35,17 @@ public class UserServiceImpl implements UserService {
 	private PasswordEncoder passwordEncoder;
 
 	private User beforeRegister(User entity) {
-
 		if (entity.getState() == null)
 			entity.setState(State.ACTIVE.getState());
 		if (entity.getRole() == null) {
 			Role role = roleDao.getByKey(1);
 			entity.setRole(role);
 		}
+		if(!entity.getAddresses().isEmpty()){
+			entity.getAddresses().get(0).setFirstName(entity.getFirstName());
+			entity.getAddresses().get(0).setLastName(entity.getLastName());
+		}
+		entity.setCreateDate(new Date());
 		entity.setPassword(passwordEncoder.encode(entity.getPassword()));
 		return entity;
 	}
@@ -59,8 +63,6 @@ public class UserServiceImpl implements UserService {
 			entity.setPassword(passwordEncoder.encode(entity.getPassword()));
 		else
 			entity.setPassword(user.getPassword());
-        passwordEncoder.matches("123456",entity.getPassword());
-		entity.setCreateDate(user.getCreateDate());
 		entity.setUpdateDate(new Date());
 		userDao.update(entity);
 	}
@@ -89,20 +91,6 @@ public class UserServiceImpl implements UserService {
 	@Transactional(readOnly = true)
 	public User getByEmail(String email) {
 		return userDao.getByEmail(email);
-	}
-
-	@Override
-	public void register(User user, Address address) {
-		beforeRegister(user);
-		address.setUser(user);
-		if (address.getLastName() == null && address.getFirstName() == null) {
-			address.setFirstName(user.getFirstName());
-			address.setLastName(user.getLastName());
-		}
-		HashSet<Address> addressList = new HashSet<>();
-		addressList.add(address);
-		user.setAddresses(addressList);
-		userDao.persist(user);
 	}
 
 	@Override

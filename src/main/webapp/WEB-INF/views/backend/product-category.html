@@ -60,7 +60,7 @@
       				<td th:text="${#dates.format(productCategory.createDate, 'dd-MM-yyyy hh:mm:ss a')}"></td>
       				<td th:text="${#dates.format(productCategory.updateDate, 'dd-MM-yyyy hh:mm:ss a')}"></td>
       				<td>
-      					<form class="form-confirm" th:action="@{/admin/product-category/delete}" method="POST">
+      					<form class="form-confirm" th:action="@{${relativePath} + '/delete'}" method="POST">
       					<a th:href="@{${relativePath} + '/' + ${productCategory.id}+ '/attribute-group'}" class="btn btn-outline b-info text-info btn-sm">View Attribute Group</a>
       					<a th:href="@{${relativePath} + '/' + ${productCategory.id}+ '/attribute-group/add'}" class="btn btn-outline b-primary text-primary btn-sm">Add Attribute Group</a>
       					<a th:href="@{${relativePath} + '/update/'+${productCategory.id}}" class="btn btn-outline b-info text-success btn-sm">Update</a>

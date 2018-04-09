@@ -29,150 +29,151 @@
 						If you already have an account with us, please login at the Login Page. <a th:href="@{/login}">Login Page</a>.
 					</p>
 					
-					<form class="form-horizontal" th:object="${nest}" method="POST" th:action="@{/register}">
+					<!--/*@thymesVar id="user" type="onlinemarket.model.User"*/-->
+					<form class="form-horizontal" th:object="${user}" method="POST" th:action="@{/register}">
 						<fieldset id="account">
 							<legend>Your Personal Details</legend>
 							<div class="form-group required"
-								th:classappend="${#fields.hasErrors('*{user.firstName}')} ? 'has-error'">
-								<label for="input-firstname" class="col-sm-2 control-label">First Name</label>
+								th:classappend="${#fields.hasErrors('firstName')} ? 'has-error'">
+								<label class="col-sm-2 control-label">First Name</label>
 								<div class="col-sm-10">
 									<input type="text" class="form-control"
-										placeholder="First Name" th:field="*{user.firstName}">
+										placeholder="First Name" th:field="*{firstName}">
 									<span class="help-block"
-										th:if="${#fields.hasErrors('*{user.firstName}')}"
-										th:errors="*{user.firstName}"></span>
+										th:if="${#fields.hasErrors('firstName')}"
+										th:errors="*{firstName}"></span>
 								</div>
 							</div>
 							<div class="form-group required"
-								th:classappend="${#fields.hasErrors('*{user.lastName}')} ? 'has-error'">
-								<label for="input-lastname" class="col-sm-2 control-label">Last Name</label>
+								th:classappend="${#fields.hasErrors('lastName')} ? 'has-error'">
+								<label class="col-sm-2 control-label">Last Name</label>
 								<div class="col-sm-10">
 									<input type="text" class="form-control"
-										placeholder="Last Name" th:field="*{user.lastName}">
+										placeholder="Last Name" th:field="*{lastName}">
 									<span class="help-block"
-										th:if="${#fields.hasErrors('*{user.lastName}')}"
-										th:errors="*{user.lastName}"></span>
+										th:if="${#fields.hasErrors('lastName')}"
+										th:errors="*{lastName}"></span>
 								</div>
 							</div>
 							<div class="form-group required"
-								th:classappend="${#fields.hasErrors('*{user.email}')} ? 'has-error'">
-								<label for="input-email" class="col-sm-2 control-label">E-Mail</label>
+								th:classappend="${#fields.hasErrors('email')} ? 'has-error'">
+								<label class="col-sm-2 control-label">E-Mail</label>
 								<div class="col-sm-10">
 									<input type="email" class="form-control" placeholder="E-Mail"
-										th:field="*{user.email}"> <span class="help-block"
-										th:if="${#fields.hasErrors('*{user.email}')}"
-										th:errors="*{user.email}"></span>
+										th:field="*{email}"> <span class="help-block"
+										th:if="${#fields.hasErrors('email')}"
+										th:errors="*{email}"></span>
 								</div>
 							</div>
 							<div class="form-group required"
-								th:classappend="${#fields.hasErrors('*{address.phoneNumber}')} ? 'has-error'">
-								<label for="input-telephone" class="col-sm-2 control-label">Telephone</label>
+								th:classappend="${#fields.hasErrors('addresses[0].phoneNumber')} ? 'has-error'">
+								<label class="col-sm-2 control-label">Telephone</label>
 								<div class="col-sm-10">
 									<input type="tel" class="form-control"
-										placeholder="Telephone" th:field="*{address.phoneNumber}">
+										placeholder="Telephone" th:field="*{addresses[0].phoneNumber}">
 									<span class="help-block"
-										th:if="${#fields.hasErrors('*{address.phoneNumber}')}"
-										th:errors="*{address.phoneNumber}"></span>
+										th:if="${#fields.hasErrors('addresses[0].phoneNumber')}"
+										th:errors="*{addresses[0].phoneNumber}"></span>
 								</div>
 							</div>
 							<div class="form-group required"
-								th:classappend="${#fields.hasErrors('*{user.birthday}')} ? 'has-error'">
-								<label for="input-birthday" class="col-sm-2 control-label">Birthday</label>
+								th:classappend="${#fields.hasErrors('birthday')} ? 'has-error'">
+								<label class="col-sm-2 control-label">Birthday</label>
 								<div class="col-sm-10">
 									<div class="input-group date" id="birtdayPicker">
 										<input type='text' class="form-control"
-											th:field="*{user.birthday}" /> <span
+											th:field="*{birthday}" /> <span
 											class="input-group-addon"> <span
 											class="glyphicon glyphicon-calendar"></span>
 										</span>
 									</div>
 									<span class="help-block"
-										th:if="${#fields.hasErrors('*{user.birthday}')}"
-										th:errors="*{user.birthday}"></span>
+										th:if="${#fields.hasErrors('birthday')}"
+										th:errors="*{birthday}"></span>
 								</div>
 							</div>
 							<div class="form-group required"
-								th:classappend="${#fields.hasErrors('*{user.gender}')} ? 'has-error'">
-								<label for="input-gender" class="col-sm-2 control-label">Gender</label>
+								th:classappend="${#fields.hasErrors('gender')} ? 'has-error'">
+								<label class="col-sm-2 control-label">Gender</label>
 								<div class="col-sm-10">
 									<div class="radio"
 										th:each="gender : ${T(onlinemarket.model.Gender).values()}">
-										<label> <input type="radio" th:field="*{user.gender}"
+										<label> <input type="radio" th:field="*{gender}"
 											th:value="${gender.code}" /> [[${gender.text}]]
 										</label>
 									</div>
 									<span class="help-block"
-										th:if="${#fields.hasErrors('*{user.gender}')}"
-										th:errors="*{user.gender}"></span>
+										th:if="${#fields.hasErrors('gender')}"
+										th:errors="*{gender}"></span>
 								</div>
 							</div>
 						</fieldset>
 						<fieldset id="address">
 							<legend>Your Address</legend>
 							<div class="form-group required"
-								th:classappend="${#fields.hasErrors('*{address.address}')} ? 'has-error'">
-								<label for="input-address" class="col-sm-2 control-label">Address</label>
+								th:classappend="${#fields.hasErrors('addresses[0].address')} ? 'has-error'">
+								<label class="col-sm-2 control-label">Address</label>
 								<div class="col-sm-10">
 									<input type="text" class="form-control" placeholder="Address"
-										th:field="*{address.address}"> <span
+										th:field="*{addresses[0].address}"> <span
 										class="help-block"
-										th:if="${#fields.hasErrors('*{address.address}')}"
-										th:errors="*{address.address}"></span>
+										th:if="${#fields.hasErrors('addresses[0].address')}"
+										th:errors="*{addresses[0].address}"></span>
 								</div>
 							</div>
 							<div class="form-group required"
-								th:classappend="${#fields.hasErrors('*{address.city}')} ? 'has-error'">
-								<label for="input-city" class="col-sm-2 control-label">City</label>
+								th:classappend="${#fields.hasErrors('addresses[0].city')} ? 'has-error'">
+								<label class="col-sm-2 control-label">City</label>
 								<div class="col-sm-10">
 									<input type="text" class="form-control" placeholder="City"
-										th:field="*{address.city}"> <span class="help-block"
-										th:if="${#fields.hasErrors('*{address.city}')}"
-										th:errors="*{address.city}"></span>
+										th:field="*{addresses[0].city}"> <span class="help-block"
+										th:if="${#fields.hasErrors('addresses[0].city')}"
+										th:errors="*{addresses[0].city}"></span>
 								</div>
 							</div>
 							<div class="form-group required"
-								th:classappend="${#fields.hasErrors('*{address.province}')} ? 'has-error'">
-								<label for="input-country" class="col-sm-2 control-label">Province</label>
+								th:classappend="${#fields.hasErrors('addresses[0].province.id')} ? 'has-error'">
+								<label class="col-sm-2 control-label">Province</label>
 								<div class="col-sm-10">
-									<select class="form-control" th:field="*{address.province}">
+									<select class="form-control" th:field="*{addresses[0].province.id}">
 										<option th:value="null"> --- Please choise --- </option>
 										<option th:each="province : ${provinceList}"
-											th:value="${{province}}" th:text="${province.name}"> --- Please choise --- </option>
+											th:value="${province.id}" th:text="${province.name}"> --- Please choise --- </option>
 									</select> <span class="help-block"
-										th:if="${#fields.hasErrors('*{address.province}')}"
-										th:errors="*{address.province}"></span>
+										th:if="${#fields.hasErrors('addresses[0].province.id')}"
+										th:errors="*{addresses[0].province.id}"></span>
 								</div>
 							</div>
 						</fieldset>
 						<fieldset>
 							<legend>Your Password</legend>
 							<div class="form-group required"
-								th:classappend="${#fields.hasErrors('*{user.password}')} ? 'has-error'">
-								<label for="input-password" class="col-sm-2 control-label">Password</label>
+								th:classappend="${#fields.hasErrors('password')} ? 'has-error'">
+								<label class="col-sm-2 control-label">Password</label>
 								<div class="col-sm-10">
 									<input type="password" class="form-control"
-										placeholder="Password" value="" th:field="*{user.password}">
+										placeholder="Password" value="" th:field="*{password}">
 									<span class="help-block"
-										th:if="${#fields.hasErrors('*{user.password}')}"
-										th:errors="*{user.password}"></span>
+										th:if="${#fields.hasErrors('password')}"
+										th:errors="*{password}"></span>
 								</div>
 							</div>
 							<div class="form-group required"
-								th:classappend="${#fields.hasErrors('*{confirmPassword}')} ? 'has-error'">
-								<label for="input-confirm" class="col-sm-2 control-label">Password Confirm</label>
+								th:classappend="${#fields.hasErrors('confirmPassword')} ? 'has-error'">
+								<label class="col-sm-2 control-label">Password Confirm</label>
 								<div class="col-sm-10">
 									<input type="password" class="form-control"
 										placeholder="Password Confirm"
 										th:field="*{confirmPassword}"> <span
 										class="help-block"
-										th:if="${#fields.hasErrors('*{confirmPassword}')}"
+										th:if="${#fields.hasErrors('confirmPassword')}"
 										th:errors="*{confirmPassword}"></span>
 								</div>
 							</div>
 						</fieldset>
 						<div
 										class="alert alert-danger"
-										th:if="${#fields.hasErrors('*{agree}')}"
+										th:if="${#fields.hasErrors('agree')}"
 										th:errors="*{agree}"></div>
 						<div class="buttons">
 							<div class="pull-right">

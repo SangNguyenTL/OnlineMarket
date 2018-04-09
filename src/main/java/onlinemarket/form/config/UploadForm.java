@@ -9,10 +9,11 @@ import onlinemarket.validation.StringContain;
 
 public class UploadForm {
 	
-	List<MultipartFile> files;
+	private List<MultipartFile> files;
 	
 	@NotEmpty
 	@StringContain(acceptedValues= {"site", "post", "product", "brand", "user"})
+	private
 	String uploadType;
 
 	public List<MultipartFile> getFiles() {

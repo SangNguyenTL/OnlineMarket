@@ -5,8 +5,10 @@ import java.util.Date;
 import java.util.List;
 
 import onlinemarket.dao.AttributeValuesDao;
+import onlinemarket.dao.CommentDao;
 import onlinemarket.model.*;
 import onlinemarket.util.exception.CustomException;
+import onlinemarket.util.exception.product.ProductHasCommentException;
 import onlinemarket.util.exception.product.ProductNotFoundException;
 import onlinemarket.util.exception.productCategory.ProductCategoryNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     ProductDao productDao;
+
+    @Autowired
+    CommentDao commentDao;
 
     @Autowired
     AttributeValuesDao attributeValuesDao;
@@ -70,6 +75,14 @@ public class ProductServiceImpl implements ProductService {
         product1.updateProduct(product);
         product1.getProductAttributeValues().addAll(productAttributeValuesList);
         productDao.update(product1);
+    }
+
+    @Override
+    public void delete(Integer id) throws ProductNotFoundException, ProductHasCommentException {
+        Product product = productDao.getByKey(id);
+        if(product == null) throw new ProductNotFoundException();
+        if(commentDao.getUniqueResultBy("products.id", product.getId()) != null) throw new ProductHasCommentException();
+        productDao.delete(product);
     }
 
     @Override

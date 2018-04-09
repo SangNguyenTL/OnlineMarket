@@ -3,6 +3,7 @@ package onlinemarket.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.groups.Default;
 
+import onlinemarket.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -16,8 +17,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import onlinemarket.model.other.AdvancedValidation;
-import onlinemarket.model.other.UserAddressNest;
 import onlinemarket.service.ProvinceService;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("")
@@ -49,22 +50,23 @@ public class HomeController extends MainController {
 		if (currentUser.getId() != null)
 			return "redirect:/";
 
-		model.put("pageTitle", "Resiter");
+		model.put("pageTitle", "Register");
 		model.put("provinceList", provinceService.list());
-		model.put("nest", new UserAddressNest());
+		model.put("user", new User());
 
 		return "frontend/register";
 
 	}
 
 	@RequestMapping(value = { "/register" }, method = RequestMethod.POST)
-	public String processRegister(@ModelAttribute("nest") @Validated(value = { Default.class,
-			AdvancedValidation.CheckEmail.class, AdvancedValidation.AddNew.class }) UserAddressNest userAddressNest, BindingResult result, ModelMap model) {
+	public String processRegister(@ModelAttribute("user") @Validated(value = { Default.class,
+			AdvancedValidation.CheckEmail.class, AdvancedValidation.AddNew.class })User user, BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
 
 		// User and address are valid.
 		if (!result.hasErrors()) {
-			userService.register(userAddressNest.getUser(), userAddressNest.getAddress());
-			return "redirect:/login?success";
+			userService.save(user);
+			redirectAttributes.addFlashAttribute("success", true);
+			return "redirect:/login";
 		}
 
 		model.put("pageTitle", "Register");

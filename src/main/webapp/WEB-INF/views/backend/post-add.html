@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+         layout:decorate="templates/backend">
+<head>
+</head>
+<body>
+
+<div ui-view class="app-body" id="view" layout:fragment="container">
+    <div class="padding">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item" th:each="breadcrumb : ${breadcrumbs}"><a th:href="@{${breadcrumb[0]}}"
+                                                                                 th:text="${breadcrumb[1]}"></a></li>
+        </ol>
+        <h5 class="_300 margin" th:text="${pageTitle}"></h5>
+        <div class="alert alert-success" th:if="${success}">
+            <strong>Congratulation!</strong> Process completed.
+        </div>
+        <div class="row">
+            <div class="col-md-9">
+                <div class="box">
+                    <div class="box-header">
+                        <h2 th:text="${subPageTitle}"></h2>
+                        <small th:text="${description}"></small>
+                    </div>
+                    <div class="box-divider m-a-0"></div>
+                    <div class="box-body">
+                        <!--/*@thymesVar id="post" type="onlinemarket.model.Post"*/-->
+                        <form ui-jp="parsley" role="form" th:object="${post}" th:action="@{${pathAction}}" method="POST">
+                            <input th:if="${action} == 'update'" type="hidden" th:field="*{id}" />
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Title</label>
+                                <div class="col-sm-9">
+                                    <input th:errorclass="parsley-error" class="form-control" type="text" th:field="*{title}" required data-parsley-length="[3, 255]"/>
+                                    <ul class="parsley-errors-list filled" th:if="${#fields.hasErrors('title')}"><li th:errors="*{title}"> </li></ul>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Category</label>
+                                <div class="col-sm-3">
+                                    <select th:field="*{postCategory.id}" class="form-control" required>
+                                        <option value="">Choice option...</option>
+                                        <option th:each="postCategory : ${postCategoryList}" th:value="${postCategory.id}" th:text="${postCategory.name}"></option>
+                                    </select>
+                                </div>
+                                <label class="col-sm-3 form-control-label">State</label>
+                                <div class="col-sm-3">
+                                    <select th:field="*{status}" class="form-control" required>
+                                        <option value="">Choice option...</option>
+                                        <option th:each="status : ${T(onlinemarket.model.NumStatePost).values()}" th:value="${status.id}" th:text="${status.state}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Image</label>
+                                <div class="col-sm-9 box-image">
+                                    <a href="#" data-toggle="modal" data-target="#modal-image-gallery"
+                                       ui-toggle-class="zoom" ui-target="#animate" data-target-input="featureImage">
+                                        <img th:if="*{featureImage}" th:src="@{*{featureImage}}" alt="..."
+                                             class="img-thumbnail thumbnail">
+                                        <img th:unless="*{featureImage}" th:src="@{/assets/images/defaultImage.jpg}"
+                                             alt="..." class="img-thumbnail thumbnail">
+                                    </a>
+                                    <input th:errorclass="parsley-error" class="form-control hide" type="text"
+                                           th:field="*{featureImage}" required maxlength="1024"/>
+                                    <ul class="parsley-errors-list filled" id="parsley-id-favicon"
+                                        th:if="${#fields.hasErrors('featureImage')}">
+                                        <li th:errors="*{featureImage}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Content</label>
+                                <div class="col-sm-9">
+                                    <div class="box m-b-md">
+                                        <textarea required ui-jp="summernote" ui-options="{height: 350, callbacks : { onImageUpload: window.sendFile}}"
+                                              th:errorclass="parsley-error" class="form-control" th:field="*{content}" data-parsley-length="[50, 10000000]"></textarea>
+                                    </div>
+                                    <ul class="parsley-errors-list filled" th:if="${#fields.hasErrors('content')}"><li th:errors="*{content}"> </li></ul>
+                                </div>
+                            </div>
+
+                            <div class="dker p-a text-right">
+                                <button type="submit" class="btn info">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

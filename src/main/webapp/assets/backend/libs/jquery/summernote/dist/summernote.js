@@ -5553,7 +5553,7 @@
 
       // If onImageUpload options setted
       if (callbacks.onImageUpload) {
-        bindCustomEvent($holder, callbacks, 'image.upload')(files);
+        bindCustomEvent($holder, callbacks, 'image.upload')(files, modules.editor, $editable);
       // else insert Image as dataURL
       } else {
         $.each(files, function (idx, file) {
@@ -5874,20 +5874,20 @@
       // All editor status will be saved on editable with jquery's data
       // for support multiple editor with singleton object.
       layoutInfo.editable().data('callbacks', {
-        onInit: options.onInit,
-        onFocus: options.onFocus,
-        onBlur: options.onBlur,
-        onKeydown: options.onKeydown,
-        onKeyup: options.onKeyup,
-        onMousedown: options.onMousedown,
-        onEnter: options.onEnter,
-        onPaste: options.onPaste,
-        onBeforeCommand: options.onBeforeCommand,
-        onChange: options.onChange,
-        onImageUpload: options.onImageUpload,
-        onImageUploadError: options.onImageUploadError,
-        onMediaDelete: options.onMediaDelete,
-        onToolbarClick: options.onToolbarClick
+        onInit: options.callbacks.onInit,
+        onFocus: options.callbacks.onFocus,
+        onBlur: options.callbacks.onBlur,
+        onKeydown: options.callbacks.onKeydown,
+        onKeyup: options.callbacks.onKeyup,
+        onMousedown: options.callbacks.onMousedown,
+        onEnter: options.callbacks.onEnter,
+        onPaste: options.callbacks.onPaste,
+        onBeforeCommand: options.callbacks.onBeforeCommand,
+        onChange: options.callbacks.onChange,
+        onImageUpload: options.callbacks.onImageUpload,
+        onImageUploadError: options.callbacks.onImageUploadError,
+        onMediaDelete: options.callbacks.onMediaDelete,
+        onToolbarClick: options.callbacks.onToolbarClick
       });
 
       var styleInfo = modules.editor.styleFromNode(layoutInfo.editable());

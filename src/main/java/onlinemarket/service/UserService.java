@@ -12,8 +12,6 @@ public interface UserService extends InterfaceService<Integer, User> {
 
     User getByEvent(Event event);
 
-    void register(User user, Address address);
-
     ResultObject<User> list(FilterForm filterForm);
 
 }

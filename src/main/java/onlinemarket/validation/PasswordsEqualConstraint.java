@@ -14,7 +14,7 @@ import javax.validation.Constraint;
 @Constraint(validatedBy = PasswordsEqualConstraintValidator.class)
 public @interface PasswordsEqualConstraint {
 	
-	String message() default "Mật khẩu bạn nhập không khớp";
+	String message() default "The password you entered does not match";
 
     Class<String>[] groups() default {};
 

@@ -13,7 +13,7 @@ public class BeforeTodayValidator implements ConstraintValidator<BeforeToday, Da
 
 	@Override
 	public boolean isValid(Date arg0, ConstraintValidatorContext arg1) {
-
+		if(arg0 == null) return false;
         return arg0.before(new Date());
 	}
 

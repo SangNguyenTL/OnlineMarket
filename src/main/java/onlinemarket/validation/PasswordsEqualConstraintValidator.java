@@ -6,7 +6,6 @@ import javax.validation.ConstraintValidatorContext;
 import org.springframework.stereotype.Component;
 
 import onlinemarket.model.User;
-import onlinemarket.model.other.UserAddressNest;
 
 @Component
 public class PasswordsEqualConstraintValidator implements ConstraintValidator<PasswordsEqualConstraint, Object> {
@@ -20,10 +19,9 @@ public class PasswordsEqualConstraintValidator implements ConstraintValidator<Pa
 
 	@Override
 	public boolean isValid(Object candidate, ConstraintValidatorContext arg1) {
-	    UserAddressNest nest = (UserAddressNest) candidate;
-	    User user = nest.getUser();
-	    if(user.getPassword() == null) return true;
-	    boolean isValid = user.getPassword().equals(nest.getConfirmPassword());
+	    User user = (User) candidate;
+	    if(user.getPassword() == null) return false;
+	    boolean isValid = user.getPassword().equals(user.getConfirmPassword());
 
         if ( !isValid ) {
         	arg1.disableDefaultConstraintViolation();

@@ -13,8 +13,10 @@ import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import onlinemarket.model.other.AdvancedValidation;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
 
@@ -54,7 +56,7 @@ public class Province implements java.io.Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-
+	@NotNull(groups = AdvancedValidation.AddNew.class)
 	@Column(name = "_id", unique = true, nullable = false)
 	public Integer getId() {
 		return this.id;

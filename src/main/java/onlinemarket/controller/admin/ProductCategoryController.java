@@ -7,7 +7,6 @@ import onlinemarket.util.exception.productCategory.ProductCategoryHasAttributeGr
 import onlinemarket.util.exception.productCategory.ProductCategoryHasEventException;
 import onlinemarket.util.exception.productCategory.ProductCategoryHasProductException;
 import onlinemarket.util.exception.productCategory.ProductCategoryNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -23,7 +22,6 @@ import onlinemarket.controller.MainController;
 import onlinemarket.form.filter.FilterForm;
 import onlinemarket.model.ProductCategory;
 import onlinemarket.model.other.AdvancedValidation;
-import onlinemarket.result.ResultObject;
 
 @Controller
 @RequestMapping("/admin/product-category")
@@ -65,10 +63,9 @@ public class ProductCategoryController extends MainController {
             @PathVariable("page") Integer page, ModelMap model) {
 
         filterForm.setCurrentPage(page);
-        ResultObject<ProductCategory> result = productCategoryService.list(filterForm);
         model.put("path", "productCategory");
         model.put("page", page);
-        model.put("result", result);
+        model.put("result", productCategoryService.list(filterForm));
         model.put("filterForm", filterForm);
 
         return "backend/productCategory";

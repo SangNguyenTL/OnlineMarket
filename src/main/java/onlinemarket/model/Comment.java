@@ -38,9 +38,9 @@ public class Comment implements java.io.Serializable {
 	private byte status;
 	private Date updateDate;
 	private Date createDate;
-	private Set<Product> products = new HashSet<Product>(0);
-	private Set<Comment> comments = new HashSet<Comment>(0);
-	private Set<Post> posts = new HashSet<Post>(0);
+	private Set<Product> products = new HashSet<>(0);
+	private Set<Comment> comments = new HashSet<>(0);
+	private Set<Post> posts = new HashSet<>(0);
 
 	public Comment() {
 	}
@@ -98,7 +98,7 @@ public class Comment implements java.io.Serializable {
 		this.user = user;
 	}
 
-	@Column(name = "[content]", nullable = false)
+	@Column(name = "content", nullable = false)
 	public String getContent() {
 		return this.content;
 	}

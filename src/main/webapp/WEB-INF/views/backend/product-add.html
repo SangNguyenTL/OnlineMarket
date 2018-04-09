@@ -165,7 +165,7 @@
                                 <label class="col-sm-3 form-control-label">Description</label>
                                 <div class="col-sm-9">
                                     <div class="box m-b-md">
-                                        <textarea ui-jp="summernote" ui-options="{height: 350}"
+                                        <textarea ui-jp="summernote" ui-options="{height: 350, callbacks : { onImageUpload: window.sendFile}}"
                                                   th:errorclass="parsley-error" class="form-control hide"
                                                   th:field="*{description}" data-parsley-length="[50, 1000000]"
                                                   data-parsley-id="description"></textarea>

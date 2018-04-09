@@ -1,4 +1,32 @@
 // lazyload config
+uploadType = uploadType || "product";
+
+window.sendFile = function(files, editor, welEditable){
+    var data = new FormData();
+    for(var i = 0; i < files.length; i++){
+        data.append("files["+i+"]", files[i]);
+    }
+    data.append("uploadType", uploadType);
+    $.ajax({
+        data: data,
+        type: "POST",
+        url: PATH + 'api/image/upload',
+        enctype: 'multipart/form-data',
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function(result) {
+        	if(typeof result == "object"){
+        		$.each(result, function (i, v) {
+                    editor.insertImage(welEditable, window.location.origin + PATH + v.path, v.name);
+                })
+			}
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus+" "+errorThrown)
+        }
+    });
+}
 var MODULE_CONFIG = {
 	easyPieChart : [ PATH
 			+ 'assets/backend/libs/jquery/jquery.easy-pie-chart/dist/jquery.easypiechart.fill.js' ],

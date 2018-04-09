@@ -5,7 +5,7 @@ import java.util.TreeMap;
 public class FilterForm {
 	
 	private TreeMap<String, String> groupSearch;
-	
+
 	private String search = "";
 	
 	private String searchBy = "name";

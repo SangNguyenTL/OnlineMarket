@@ -5,6 +5,7 @@ import javax.validation.groups.Default;
 
 import onlinemarket.form.filter.FilterProduct;
 import onlinemarket.model.other.AdvancedValidation;
+import onlinemarket.util.exception.product.ProductHasCommentException;
 import onlinemarket.util.exception.product.ProductNotFoundException;
 import onlinemarket.util.exception.productCategory.ProductCategoryNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,6 @@ import onlinemarket.form.filter.FilterForm;
 import onlinemarket.model.Product;
 import onlinemarket.model.ProductCategory;
 import onlinemarket.service.AttributeGroupService;
-import onlinemarket.service.ProductCategoryService;
 import onlinemarket.service.ProductService;
 
 @Controller
@@ -68,6 +68,7 @@ public class ProductByCategoryController extends MainController {
 		model.put("filterProduct", filterProduct);
 		model.put("relativePath", relativePath);
 		model.put("pathAdd", relativePath + "/add");
+		model.put("pageType", "product");
 
 		return model;
 	}
@@ -218,17 +219,16 @@ public class ProductByCategoryController extends MainController {
 	}
 
 	@RequestMapping(value = "/delete", method = { RequestMethod.POST, RequestMethod.GET })
-	public String processDeleteProvince(@RequestParam(value = "id", required = true) Integer productId,
+	public String processDeleteProvince(@RequestParam(value = "id") Integer productId,
 			RedirectAttributes redirectAttributes) {
-		
-		Product product = productService.getByKey(productId);
-		if(product == null) {
-			redirectAttributes.addFlashAttribute("error", "Product not found.");
-			return "redirect:" + relativePath;
+
+		try {
+			productService.delete(productId);
+			redirectAttributes.addFlashAttribute("success", true);
+		} catch (ProductNotFoundException|ProductHasCommentException e) {
+			redirectAttributes.addFlashAttribute("error", e.getMessage());
 		}
-		
-//		productService.delete(product);
-		
+
 		return "redirect:" + relativePath;
 	}
 
