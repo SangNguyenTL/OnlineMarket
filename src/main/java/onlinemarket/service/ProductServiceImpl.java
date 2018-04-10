@@ -42,13 +42,35 @@ public class ProductServiceImpl implements ProductService {
         return productDao.getByDeclaration(key, value);
     }
 
+    private List<ProductAttributeValues> makeListProductAttributeValues(Product newProduct, List<ProductAttributeValues> inputList){
+        List<ProductAttributeValues> productAttributeValuesList = new ArrayList<>();
+        for(int i = 0; i< inputList.size(); i++){
+            ProductAttributeValues productAttributeValues = inputList.get(i);
+            if(productAttributeValues.getAttributeValuesId()!= null) {
+                AttributeValues attributeValues = attributeValuesDao.getByKey(productAttributeValues.getAttributeValuesId());
+                if(attributeValues != null){
+                    ProductAttributeValues productAttributeValues1 = new ProductAttributeValues();
+                    productAttributeValues1.setProductId(newProduct.getId());
+                    productAttributeValues1.setAttributeValuesId(attributeValues.getId());
+                    productAttributeValuesList.add(productAttributeValues1);
+                }
+            }
+        }
+        return productAttributeValuesList;
+    }
+
     @Override
     public void save(Product product, ProductCategory productCategory, User user) throws ProductCategoryNotFoundException {
         if (productCategory == null) throw new ProductCategoryNotFoundException();
         product.setProductCategory(productCategory);
         product.setCreateDate(new Date());
         product.setUser(user);
-        productDao.save(product);
+        product.setProductCategory(productCategory);
+        List<ProductAttributeValues> productAttributeValuesList = new ArrayList<>(product.getProductAttributeValues());
+        product.getProductAttributeValues().clear();
+        productDao.persist(product);
+        product.setProductAttributeValues(makeListProductAttributeValues(product, productAttributeValuesList));
+        productDao.update(product);
     }
 
     @Override
@@ -59,21 +81,8 @@ public class ProductServiceImpl implements ProductService {
         product.setUser(user);
         product.setProductCategory(productCategory);
         product1.getProductAttributeValues().clear();
-        List<ProductAttributeValues> productAttributeValuesList = new ArrayList<>();
-        for(int i = 0; i< product.getProductAttributeValues().size(); i++){
-            ProductAttributeValues productAttributeValues = product.getProductAttributeValues().get(i);
-            if(productAttributeValues.getAttributeValuesId()!= null) {
-                AttributeValues attributeValues = attributeValuesDao.getByKey(productAttributeValues.getAttributeValuesId());
-                if(attributeValues != null){
-                    ProductAttributeValues productAttributeValues1 = new ProductAttributeValues();
-                    productAttributeValues1.setProductId(product.getId());
-                    productAttributeValues1.setAttributeValuesId(attributeValues.getId());
-                    productAttributeValuesList.add(productAttributeValues1);
-                }
-            }
-        }
         product1.updateProduct(product);
-        product1.getProductAttributeValues().addAll(productAttributeValuesList);
+        product1.getProductAttributeValues().addAll(makeListProductAttributeValues(product1, product.getProductAttributeValues()));
         productDao.update(product1);
     }
 

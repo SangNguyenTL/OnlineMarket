@@ -70,6 +70,7 @@
         this.containerImage = this.element.find('#gallery-container');
         this.init = this.init.bind(this);
         this.element.find('[ui-jp]').uiJp().then(this.init);
+        this.inputElment = false;
         this.tabGalleryElement.on("click", function(){
             if(!_this.spinner.hasClass("hide")) return;
             _this.loadImage();

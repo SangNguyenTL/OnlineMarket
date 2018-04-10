@@ -80,7 +80,7 @@
                     <img th:if="*{favicon}" th:src="@{*{favicon}}" alt="..." class="img-thumbnail thumbnail box-thumbnail">
                     <img th:unless="*{favicon}" th:src="@{/assets/images/defaultImage.jpg}" alt="..." class="img-thumbnail thumbnail">
                 </a>
-                <input th:errorclass="parsley-error" class="form-control hide" type="text" th:field="*{favicon}" required maxlength="2088""/>
+                <input th:errorclass="parsley-error" class="form-control hide" type="text" th:field="*{favicon}" required maxlength="2088"/>
                 <ul class="parsley-errors-list filled" id="parsley-id-favicon" th:if="${#fields.hasErrors('favicon')}">
                     <li th:errors="*{favicon}"></li>
                 </ul>

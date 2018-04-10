@@ -1,6 +1,10 @@
 // lazyload config
 uploadType = uploadType || "product";
 
+window.templateFontAwesome = function(icon) {
+    return '<i class="fa ' + icon.id + '"></i> ' + icon.text;
+};
+
 window.sendFile = function(files){
     var data = new FormData();
     for(var i = 0; i < files.length; i++){

@@ -50,13 +50,14 @@ public class BrandServiceImpl implements BrandService{
 		if(eventDao.getUniqueResultBy("brand", brand) != null) throw new BrandHasEventException();
 		if(productDao.getByDeclaration("brand", brand) != null) throw new BrandHasProductException();
 		brandDao.delete(brand);
-
 	}
 
 	@Override
 	public void update(Brand entity) throws BrandNotFoundException {
-		if(brandDao.getByKey(entity.getId()) == null) throw new BrandNotFoundException();
+		Brand brand = brandDao.getByKey(entity.getId());
+		if(brand == null) throw new BrandNotFoundException();
 		entity.setSlug(slugify.slugify(entity.getSlug()));
+		entity.setCreateDate(brand.getCreateDate());
 		entity.setUpdateDate(new Date());
 		brandDao.update(entity);
 	}
