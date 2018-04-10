@@ -2,26 +2,19 @@ package onlinemarket.model;
 // default package
 // Generated Jan 2, 2018 4:57:38 PM by Hibernate Tools 4.3.5.Final
 
+import onlinemarket.model.other.AdvancedValidation;
 import onlinemarket.validation.StringContain;
+import onlinemarket.validation.UniquePostSlug;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
+import javax.persistence.*;
+
 import static javax.persistence.GenerationType.IDENTITY;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -30,166 +23,189 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "tb_post", schema = "dbo", catalog = "SmartMarket")
+@UniquePostSlug(groups = {AdvancedValidation.CheckSlug.class})
 public class Post implements java.io.Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private Integer id;
-	private PostCategory postCategory;
-	private User user;
-	private String title;
-	private String content;
-	private Date createDate;
-	private Date updateDate;
-	private Byte status;
-	private String postType;
-	private String featureImage;
-	private Set<Comment> comments = new HashSet<Comment>(0);
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    private Integer id;
+    private PostCategory postCategory;
+    private User user;
+    private String title;
+    private String slug;
+    private String beforeSlug;
+    private String content;
+    private Date createDate;
+    private Date updateDate;
+    private Byte status;
+    private String postType;
+    private String featureImage;
+    private Set<Comment> comments = new HashSet<>(0);
 
-	public Post() {
-	}
+    public Post() {
+    }
 
-	public Post(PostCategory postCategory, User user, String title, String content, Date createDate,
-			byte status, String postType, String featureImage) {
-		this.postCategory = postCategory;
-		this.user = user;
-		this.title = title;
-		this.content = content;
-		this.createDate = createDate;
-		this.status = status;
-		this.postType = postType;
-		this.featureImage = featureImage;
-	}
+    public Post(PostCategory postCategory, User user, String title, String content, Date createDate,
+                byte status, String postType, String featureImage) {
+        this.postCategory = postCategory;
+        this.user = user;
+        this.title = title;
+        this.content = content;
+        this.createDate = createDate;
+        this.status = status;
+        this.postType = postType;
+        this.featureImage = featureImage;
+    }
 
-	public Post(PostCategory postCategory, User user, String title, String content, Date createDate,
-			Date updateDate, byte status, String postType, String featureImage, Set<Comment> comments) {
-		this.postCategory = postCategory;
-		this.user = user;
-		this.title = title;
-		this.content = content;
-		this.createDate = createDate;
-		this.updateDate = updateDate;
-		this.status = status;
-		this.postType = postType;
-		this.featureImage = featureImage;
-		this.comments = comments;
-	}
+    public Post(PostCategory postCategory, User user, String title, String content, Date createDate,
+                Date updateDate, byte status, String postType, String featureImage, Set<Comment> comments) {
+        this.postCategory = postCategory;
+        this.user = user;
+        this.title = title;
+        this.content = content;
+        this.createDate = createDate;
+        this.updateDate = updateDate;
+        this.status = status;
+        this.postType = postType;
+        this.featureImage = featureImage;
+        this.comments = comments;
+    }
 
-	@Id
-	@GeneratedValue(strategy = IDENTITY)
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
 
-	@Column(name = "_id", unique = true, nullable = false)
-	public Integer getId() {
-		return this.id;
-	}
+    @Column(name = "_id", unique = true, nullable = false)
+    public Integer getId() {
+        return this.id;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "post_category_id", nullable = false)
-	@NotNull
-	public PostCategory getPostCategory() {
-		return this.postCategory;
-	}
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_category_id")
+    @NotNull(groups = AdvancedValidation.AddPost.class)
+    public PostCategory getPostCategory() {
+        return this.postCategory;
+    }
 
-	public void setPostCategory(PostCategory postCategory) {
-		this.postCategory = postCategory;
-	}
+    public void setPostCategory(PostCategory postCategory) {
+        this.postCategory = postCategory;
+    }
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "publisher_id", nullable = false)
-	public User getUser() {
-		return this.user;
-	}
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "publisher_id", nullable = false)
+    public User getUser() {
+        return this.user;
+    }
 
-	public void setUser(User user) {
-		this.user = user;
-	}
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-	@Column(name = "title", nullable = false)
-	@Size(max = 255)
-	@NotEmpty
-	public String getTitle() {
-		return this.title;
-	}
+    @Column(name = "title", nullable = false)
+    @Size(max = 255)
+    @NotEmpty
+    public String getTitle() {
+        return this.title;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	@Column(name = "content", nullable = false)
-	@Size(max = 10000000)
-	public String getContent() {
-		return this.content;
-	}
+    @Column(name = "slug", nullable = false)
+    @Size(max = 255)
+    @NotEmpty
+    public String getSlug() {
+        return this.slug;
+    }
 
-	public void setContent(String content) {
-		this.content = content;
-	}
+    public void setSlug(String slug) {
+        this.slug = slug;
+    }
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "create_date", nullable = false, length = 23)
-	public Date getCreateDate() {
-		return this.createDate;
-	}
+    @Transient
+    public String getBeforeSlug() {
+        return beforeSlug;
+    }
 
-	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
-	}
+    public void setBeforeSlug(String beforeSlug) {
+        this.beforeSlug = beforeSlug;
+    }
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "update_date", length = 23)
-	public Date getUpdateDate() {
-		return this.updateDate;
-	}
+    @Column(name = "content", nullable = false)
+    @Size(max = 10000000)
+    public String getContent() {
+        return this.content;
+    }
 
-	public void setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
-	}
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-	@Column(name = "status", nullable = false)
-	@Range(min = 0 , max = 3)
-	public Byte getStatus() {
-		return this.status;
-	}
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "create_date", nullable = false, length = 23)
+    public Date getCreateDate() {
+        return this.createDate;
+    }
 
-	public void setStatus(Byte status) {
-		this.status = status;
-	}
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
 
-	@Column(name = "post_type", nullable = false)
-	public String getPostType() {
-		return this.postType;
-	}
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "update_date", length = 23)
+    public Date getUpdateDate() {
+        return this.updateDate;
+    }
 
-	public void setPostType(String postType) {
-		this.postType = postType;
-	}
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
+    }
 
-	@Column(name = "feature_image", nullable = false, length = 1024)
-	@Size(max = 1024)
-	public String getFeatureImage() {
-		return this.featureImage;
-	}
+    @Column(name = "status", nullable = false)
+    @Range(min = 0, max = 3)
+    public Byte getStatus() {
+        return this.status;
+    }
 
-	public void setFeatureImage(String featureImage) {
-		this.featureImage = featureImage;
-	}
+    public void setStatus(Byte status) {
+        this.status = status;
+    }
 
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "tb_comment_post", schema = "dbo", catalog = "SmartMarket", joinColumns = {
-			@JoinColumn(name = "post_id", nullable = false, updatable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "comment_id", nullable = false, updatable = false) })
-	public Set<Comment> getComments() {
-		return this.comments;
-	}
+    @Column(name = "post_type", nullable = false)
+    public String getPostType() {
+        return this.postType;
+    }
 
-	public void setComments(Set<Comment> comments) {
-		this.comments = comments;
-	}
+    public void setPostType(String postType) {
+        this.postType = postType;
+    }
+
+    @Column(name = "feature_image", length = 1024)
+    @Size(max = 1024)
+    public String getFeatureImage() {
+        return this.featureImage;
+    }
+
+    public void setFeatureImage(String featureImage) {
+        this.featureImage = featureImage;
+    }
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "tb_comment_post", schema = "dbo", catalog = "SmartMarket", joinColumns = {
+            @JoinColumn(name = "post_id", nullable = false, updatable = false)}, inverseJoinColumns = {
+            @JoinColumn(name = "comment_id", nullable = false, updatable = false)})
+    public Set<Comment> getComments() {
+        return this.comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
+    }
 
 }

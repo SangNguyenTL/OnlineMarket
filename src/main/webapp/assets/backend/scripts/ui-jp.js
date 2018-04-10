@@ -1,7 +1,8 @@
 (function ($, MODULE_CONFIG) {
 	"use strict";
   var promise = false,
-	  deferred = $.Deferred();
+	  deferred = $.Deferred(), i = 0;
+  window.obList = [];
 
   $.fn.uiJp = function(){
 
@@ -19,7 +20,8 @@
 		  }
 
 		  promise = uiLoad.load(MODULE_CONFIG[self.attr('ui-jp')]).then( function(){
-			  self[self.attr('ui-jp')].apply(self, options);
+              window.obList['$'+self.attr('ui-jp')] = self[self.attr('ui-jp')].apply(self, options);
+              i++;
 		  });
 	  });
 

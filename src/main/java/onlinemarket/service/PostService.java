@@ -9,11 +9,14 @@ import onlinemarket.util.exception.post.PostNotFoundException;
 import onlinemarket.util.exception.postCategory.PostCategoryNotFoundException;
 
 public interface PostService {
+
     Post getByKey(Integer key);
 
-    void save(Post post, User user) throws PostCategoryNotFoundException;
+    Post getByDeclaration(String key, Object value);
 
-    void update(Post post, User user) throws PostCategoryNotFoundException, PostNotFoundException;
+    void save(Post post, User user, String postType) throws PostCategoryNotFoundException;
+
+    void update(Post post, User user, String postType) throws PostCategoryNotFoundException, PostNotFoundException;
 
     void delete(Integer id) throws PostNotFoundException, PostHasCommentException;
 

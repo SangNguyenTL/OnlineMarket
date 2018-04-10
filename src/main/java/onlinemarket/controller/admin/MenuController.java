@@ -28,23 +28,21 @@ public class MenuController extends MainController{
 	@Autowired
 	MenuGroupService menuGroupService;
 	
-	@Autowired
-	MenuService menuService;
-	
 	String relativePath;
-	
+
+	String menuGroupPath;
+
 	MenuGroup menuGroup;
 	
 	List<MenuGroup> menuGroupList;
 	
 	@ModelAttribute
 	private ModelMap populateAttribute(
-			@PathVariable("menuGroupId") Integer menuGrid,
+			@PathVariable("menuGroupId") Integer menuGroupId,
 			ModelMap model) {
-		
-		relativePath = "/admin/menu-group"+menuGrid+"/menu";
-		menuGroup = menuGroupService.getByKey(menuGrid);
-		menuGroupList = menuGroupService.list();
+		menuGroupPath = "/admin/menu-group";
+		relativePath = relativePath+"/"+menuGroupId+"/menu";
+		menuGroup = menuGroupService.getByKey(menuGroupId);
 		model.put("menuGroupList", menuGroupList);
 		model.put("relativePath", relativePath);
 		model.put("menuGroup", menuGroup);
@@ -59,125 +57,12 @@ public class MenuController extends MainController{
 
 		if(menuGroup == null) {
 			redirectAttributes.addFlashAttribute("error", "Menu group not found");
-			return "redirect:/admin/menu-group";
+			return "redirect:" + menuGroupPath;
 		}
 		
 		model.put("pageTitle", "Menu manager for group "+menuGroup.getName());
-		model.put("list", menuService.listByDeclaration("menugGroup", menuGroup));
-		
+
 		return "backend/menu";
 	}
-	
 
-	@RequestMapping(value = "/add", method = RequestMethod.GET)
-	public String addPage(ModelMap model) {
-
-		model.put("subPageTitle", "Add new menu group");
-		model.put("description", "Information fo menu group");
-		model.put("pageTitle", "Add new menu group");
-		model.put("action", "add");
-		model.put("pathAction", relativePath + "/add");
-		model.put("menuGroupList", menuGroupList);
-		model.put("menu", new Menu());
-
-		return "backend/menu-add";
-	}
-
-	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public String processAddPage(@ModelAttribute("menu") @Valid Menu menu,
-			BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
-
-		if (!result.hasErrors()) {
-			redirectAttributes.addFlashAttribute("success", "");
-			menuGroupService.save(menuGroup);
-			return "redirect:/admin/menu-group";
-		}
-
-		model.put("subPageTitle", "Add new menu group");
-		model.put("description", "Information fo menu group");
-		model.put("pageTitle", "Add new menu group");
-		model.put("action", "add");
-		model.put("pathAction", relativePath + "/add");
-		model.put("menu", menu);
-
-		return "backend/menu-add";
-	}
-
-	@RequestMapping(value = "/update/{menuId:^\\d+}", method = RequestMethod.GET)
-	public String updatePage(@PathVariable("menuId") int menuId, ModelMap model,
-			RedirectAttributes redirectAttributes) {
-
-		if (menuGroup == null) {
-			redirectAttributes.addFlashAttribute("error", "Menu group not found.");
-			return "redirect:/admin/menu-group";
-		}
-		
-		Menu menu = menuService.getByKey(menuId);
-		if (menu == null) {
-			redirectAttributes.addFlashAttribute("error", "Menu not found.");
-			return "redirect:" + relativePath;
-		}
-
-		model.put("subPageTitle", "Update menu");
-		model.put("description", "Information fo menu");
-		model.put("pageTitle", "Update menu");
-		model.put("action", "add");
-		model.put("pathAction", relativePath + "/update/" + menuId);
-		model.put("menu", menu);
-
-		return "backend/menu-add";
-
-	}
-
-	@RequestMapping(value = "/update/{menuId:^\\d+}", method = RequestMethod.POST)
-	public String processUpdatePage(@PathVariable("menuId") int menuId,
-			@ModelAttribute("menu") @Valid Menu menu, BindingResult result,
-			ModelMap model, RedirectAttributes redirectAttributes) {
-
-		if (menuGroup == null) {
-			redirectAttributes.addFlashAttribute("error", "Menu group not found.");
-			return "redirect:/admin/menu-group";
-		}
-		
-		Menu menuCheck = menuService.getByKey(menuId);
-		if (menuCheck == null) {
-			redirectAttributes.addFlashAttribute("error", "Menu not found.");
-			return "redirect:" + relativePath;
-		}
-		
-		if (!result.hasErrors()) {
-			redirectAttributes.addFlashAttribute("success", "");
-//			menuService.update(menu);
-			return "redirect:" + relativePath;
-		}
-
-		model.put("subPageTitle", "Update menu");
-		model.put("description", "Information fo menu");
-		model.put("pageTitle", "Update menu");
-		model.put("action", "add");
-		model.put("pathAction", relativePath + "/update/" + menuId);
-		model.put("menu", menu);
-		
-		return "backend/menu-add";
-	}
-
-	@RequestMapping(value = "/delete", method = { RequestMethod.POST, RequestMethod.GET })
-	public String processDeleteProvince(@RequestParam(value = "id", required = true) Integer idMenuGroup,
-			RedirectAttributes redirectAttributes) {
-
-		if (idMenuGroup == null) {
-			redirectAttributes.addAttribute("error", "Program wasn't gotten attibute group id!");
-			return "redirect:" + relativePath;
-		}
-		
-		MenuGroup menuGroupCheck = menuGroupService.getByKey(idMenuGroup);
-		if (menuGroupCheck == null) {
-			redirectAttributes.addFlashAttribute("error", "Menu group not found.");
-			return "redirect:/admin/menu-group";
-		}
-		
-		menuGroupService.delete(menuGroupCheck);
-		
-		return "redirect:" + relativePath;
-	}
 }

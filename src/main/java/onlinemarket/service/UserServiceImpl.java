@@ -63,6 +63,7 @@ public class UserServiceImpl implements UserService {
 			entity.setPassword(passwordEncoder.encode(entity.getPassword()));
 		else
 			entity.setPassword(user.getPassword());
+		entity.setCreateDate(user.getCreateDate());
 		entity.setUpdateDate(new Date());
 		userDao.update(entity);
 	}

@@ -159,8 +159,10 @@ public class PaginationElementTagProcessor extends AbstractElementTagProcessor{
 						sb.append(valueE.getKey()).append("=").append(URLEncoder.encode(valueE.getValue(), "UTF-8"));
 					}
 
-				} else 
+				} else {
+					value = value == null ? new String("") : value;
 					sb.append(URLEncoder.encode(field.getName(), "UTF-8")).append('=').append(URLEncoder.encode(value.toString(), "UTF-8"));
+				}
 			} catch (UnsupportedEncodingException | IllegalArgumentException | IllegalAccessException e) {
 				continue;
 			}

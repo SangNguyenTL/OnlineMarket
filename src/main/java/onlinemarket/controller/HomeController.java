@@ -60,7 +60,7 @@ public class HomeController extends MainController {
 
 	@RequestMapping(value = { "/register" }, method = RequestMethod.POST)
 	public String processRegister(@ModelAttribute("user") @Validated(value = { Default.class,
-			AdvancedValidation.CheckEmail.class, AdvancedValidation.AddNew.class })User user, BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
+			AdvancedValidation.CheckEmail.class, AdvancedValidation.Register.class })User user, BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
 
 		// User and address are valid.
 		if (!result.hasErrors()) {

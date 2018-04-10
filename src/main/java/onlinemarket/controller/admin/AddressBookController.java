@@ -172,7 +172,7 @@ public class AddressBookController extends MainController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String processUpdatePage(@Valid @ModelAttribute("address") Address address, ModelMap modelMap, BindingResult result, RedirectAttributes redirectAttributes) {
+    public String processUpdatePage(@Valid @ModelAttribute("address") Address address, BindingResult result, ModelMap modelMap, RedirectAttributes redirectAttributes) {
 
         try {
 

@@ -29,7 +29,7 @@ public class MenuGroup implements java.io.Serializable {
 	private Integer id;
 	private String name;
 	private String description;
-	private Set<Menu> menus = new HashSet<Menu>(0);
+	private Set<Menu> menus = new HashSet<>(0);
 
 	public MenuGroup() {
 	}
@@ -56,7 +56,7 @@ public class MenuGroup implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@Column(name = "[name]", nullable = false)
+	@Column(name = "name", nullable = false)
 	public String getName() {
 		return this.name;
 	}
@@ -74,7 +74,7 @@ public class MenuGroup implements java.io.Serializable {
 		this.description = description;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "menuGroup", cascade = CascadeType.REMOVE)
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "menuGroup", cascade = CascadeType.ALL)
 	public Set<Menu> getMenus() {
 		return this.menus;
 	}

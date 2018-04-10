@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 
 import javax.validation.Constraint;
 
-@Target({ ElementType.FIELD, ElementType.METHOD })
+@Target({ ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Constraint(validatedBy = UniqueEmailValidator.class)

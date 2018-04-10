@@ -5,6 +5,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import onlinemarket.util.exception.CustomException;
+import onlinemarket.util.exception.menuGroup.MenuGroupNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,13 +25,19 @@ public class MenuGroupServiceImpl implements MenuGroupService{
 	}
 
 	@Override
-	public void update(MenuGroup entity) throws CustomException {
+	public void update(MenuGroup entity) throws MenuGroupNotFoundException {
+		MenuGroup menuGroup = menuGroupDao.getByKey(entity.getId());
+		if(menuGroup == null) throw new MenuGroupNotFoundException();
 		menuGroupDao.update(entity);
 	}
 
 	@Override
-	public void delete(MenuGroup entity) {
-		menuGroupDao.delete(entity);
+	public void delete(Integer key) throws MenuGroupNotFoundException {
+
+		MenuGroup menuGroup = menuGroupDao.getByKey(key);
+		if(menuGroup == null) throw new MenuGroupNotFoundException();
+		menuGroupDao.delete(menuGroup);
+
 	}
 
 	@Override
@@ -39,18 +46,8 @@ public class MenuGroupServiceImpl implements MenuGroupService{
 	}
 
 	@Override
-	public MenuGroup getByDeclaration(String key, String value) {
-		return menuGroupDao.getByDeclaration(key, value);
-	}
-
-	@Override
 	public List<MenuGroup> list() {
 		return menuGroupDao.list();
-	}
-
-	@Override
-	public List<MenuGroup> list(Integer offset, Integer maxResults) {
-		return menuGroupDao.list(offset, maxResults);
 	}
 
 }

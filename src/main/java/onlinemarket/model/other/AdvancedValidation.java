@@ -9,4 +9,8 @@ public class AdvancedValidation {
 	public interface CheckSlug{};
 
 	public interface AddNew{};
+
+	public interface Register{};
+
+	public interface AddPost{};
 }

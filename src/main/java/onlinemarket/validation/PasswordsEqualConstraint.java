@@ -16,7 +16,7 @@ public @interface PasswordsEqualConstraint {
 	
 	String message() default "The password you entered does not match";
 
-    Class<String>[] groups() default {};
+    Class<?>[] groups() default {};
 
-    Class<String>[] payload() default {};
+    Class<?>[] payload() default {};
 }

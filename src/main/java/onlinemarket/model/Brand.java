@@ -137,7 +137,6 @@ public class Brand implements java.io.Serializable {
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@NotNull
 	@Column(name = "create_date", nullable = false, length = 23)
 	public Date getCreateDate() {
 		return this.createDate;

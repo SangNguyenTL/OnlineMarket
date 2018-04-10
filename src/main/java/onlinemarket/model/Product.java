@@ -56,7 +56,7 @@ public class Product implements java.io.Serializable {
 	private Integer weight;
 	private Date releaseDate;
 	private String size;
-	private Date createDate = new Date();
+	private Date createDate;
 	private Date updateDate;
 	private String featureImage;
 	private Set<Rating> ratings = new HashSet<>(0);

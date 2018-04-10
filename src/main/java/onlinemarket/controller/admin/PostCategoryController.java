@@ -55,6 +55,17 @@ public class PostCategoryController extends MainController {
         return "backend/post-category";
     }
 
+    @RequestMapping(value = "/page/{page:^\\d+}", method = RequestMethod.GET)
+    public String mainPagePagination(@PathVariable("page") Integer page, ModelMap model) {
+        filterForm.setCurrentPage(page);
+        model.put("pageTitle", "Post category manager");
+        model.put("path", "post-category");
+        model.put("result", postCategoryService.list(filterForm));
+        model.put("filterForm", filterForm);
+
+        return "backend/post-category";
+    }
+
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public String addPage(ModelMap model) {
 

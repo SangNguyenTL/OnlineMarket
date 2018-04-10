@@ -28,6 +28,8 @@
                         <!--/*@thymesVar id="post" type="onlinemarket.model.Post"*/-->
                         <form ui-jp="parsley" role="form" th:object="${post}" th:action="@{${pathAction}}" method="POST">
                             <input th:if="${action} == 'update'" type="hidden" th:field="*{id}" />
+                            <input th:if="${action} == 'update'" type="hidden" id="beforeSlug" name="beforeSlug"
+                                   th:value="*{slug}"/>
                             <div class="form-group row">
                                 <label class="col-sm-3 form-control-label">Title</label>
                                 <div class="col-sm-9">
@@ -36,6 +38,19 @@
                                 </div>
                             </div>
                             <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Slug</label>
+                                <div class="col-sm-9">
+                                    <input th:errorclass="parsley-error" class="form-control" type="text"
+                                           th:field="*{slug}" required data-parsley-length="[3,255]"
+                                           data-parsley-id="slug" data-parsley-target="title"
+                                           th:attr="data-parsley-unique-slug=@{/api/post/check-slug}"/>
+                                    <ul class="parsley-errors-list filled" id="parsley-id-slug"
+                                        th:if="${#fields.hasErrors('slug')}">
+                                        <li th:errors="*{slug}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group row" th:if="${postType} == 'post'">
                                 <label class="col-sm-3 form-control-label">Category</label>
                                 <div class="col-sm-3">
                                     <select th:field="*{postCategory.id}" class="form-control" required>
@@ -45,6 +60,15 @@
                                 </div>
                                 <label class="col-sm-3 form-control-label">State</label>
                                 <div class="col-sm-3">
+                                    <select th:field="*{status}" class="form-control" required>
+                                        <option value="">Choice option...</option>
+                                        <option th:each="status : ${T(onlinemarket.model.NumStatePost).values()}" th:value="${status.id}" th:text="${status.state}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row" th:if="${postType} == 'page'">
+                                <label class="col-sm-3 form-control-label">State</label>
+                                <div class="col-sm-9">
                                     <select th:field="*{status}" class="form-control" required>
                                         <option value="">Choice option...</option>
                                         <option th:each="status : ${T(onlinemarket.model.NumStatePost).values()}" th:value="${status.id}" th:text="${status.state}"></option>
@@ -62,7 +86,7 @@
                                              alt="..." class="img-thumbnail thumbnail">
                                     </a>
                                     <input th:errorclass="parsley-error" class="form-control hide" type="text"
-                                           th:field="*{featureImage}" required maxlength="1024"/>
+                                           th:field="*{featureImage}" maxlength="1024"/>
                                     <ul class="parsley-errors-list filled" id="parsley-id-favicon"
                                         th:if="${#fields.hasErrors('featureImage')}">
                                         <li th:errors="*{featureImage}"></li>
@@ -89,6 +113,24 @@
             </div>
         </div>
     </div>
+    <div id="modal-image-gallery" class="modal fade animate" data-backdrop="true" aria-hidden="true">
+        <div class="modal-dialog zoom modal-lg" id="animate" ui-class="zoom">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Pick Image</h5>
+                </div>
+                <div class="modal-body" ui-jp='galleryManager'
+                     th:attr="ui-options='{modal: true, actionUpload: \''+@{/api/image/upload}+'\', actionLoadImage: \''+@{/api/image/load}+'\', actionDelete: \''+@{/api/image/delete}+'\'}'">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn dark-white p-x-md" data-dismiss="modal">No</button>
+                    <button type="button" class="btn danger p-x-md" data-dismiss="modal" data-action="yes">Yes</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div>
+    </div>
+    <div th:replace="templates/backend/media :: media"></div>
 </div>
 
 

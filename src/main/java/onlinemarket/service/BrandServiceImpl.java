@@ -1,5 +1,6 @@
 package onlinemarket.service;
 
+import java.util.Date;
 import java.util.List;
 
 import onlinemarket.dao.EventDao;
@@ -37,7 +38,8 @@ public class BrandServiceImpl implements BrandService{
 
 	@Override
 	public void save(Brand entity) {
-		slugify.slugify(entity.getSlug());
+		entity.setSlug(slugify.slugify(entity.getSlug()));
+		entity.setCreateDate(new Date());
 		brandDao.save(entity);
 	}
 
@@ -54,7 +56,8 @@ public class BrandServiceImpl implements BrandService{
 	@Override
 	public void update(Brand entity) throws BrandNotFoundException {
 		if(brandDao.getByKey(entity.getId()) == null) throw new BrandNotFoundException();
-		slugify.slugify(entity.getSlug());
+		entity.setSlug(slugify.slugify(entity.getSlug()));
+		entity.setUpdateDate(new Date());
 		brandDao.update(entity);
 	}
 

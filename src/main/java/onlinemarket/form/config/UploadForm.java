@@ -12,9 +12,8 @@ public class UploadForm {
 	private List<MultipartFile> files;
 	
 	@NotEmpty
-	@StringContain(acceptedValues= {"site", "post", "product", "brand", "user"})
-	private
-	String uploadType;
+	@StringContain(acceptedValues= {"site", "post", "page", "product", "brand", "event", "user"})
+	private String uploadType;
 
 	public List<MultipartFile> getFiles() {
 		return files;

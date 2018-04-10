@@ -31,6 +31,10 @@
                     name: 'Post'
                 },
                 {
+                    type: 'page',
+                    name: 'Page'
+                },
+                {
                     type: 'product',
                     name: 'Product'
                 },

@@ -132,6 +132,7 @@ public class OrderHeadElementProcessor extends AbstractElementTagProcessor {
 					}
 
 				} else {
+					value = value == null ? new String("") : value;
 
 					if (StringUtils.equals(field.getName(), "orderBy")) {
 						value = orderBy;

@@ -1,7 +1,7 @@
 // lazyload config
 uploadType = uploadType || "product";
 
-window.sendFile = function(files, editor, welEditable){
+window.sendFile = function(files){
     var data = new FormData();
     for(var i = 0; i < files.length; i++){
         data.append("files["+i+"]", files[i]);
@@ -18,7 +18,7 @@ window.sendFile = function(files, editor, welEditable){
         success: function(result) {
         	if(typeof result == "object"){
         		$.each(result, function (i, v) {
-                    editor.insertImage(welEditable, window.location.origin + PATH + v.path, v.name);
+                    window.obList.$summernote.summernote('insertImage', window.location.origin + PATH + v.path, v.name);
                 })
 			}
         },
@@ -26,7 +26,7 @@ window.sendFile = function(files, editor, welEditable){
             console.log(textStatus+" "+errorThrown)
         }
     });
-}
+};
 var MODULE_CONFIG = {
 	easyPieChart : [ PATH
 			+ 'assets/backend/libs/jquery/jquery.easy-pie-chart/dist/jquery.easypiechart.fill.js' ],
@@ -58,8 +58,8 @@ var MODULE_CONFIG = {
 	sortable : [ PATH + 'assets/backend/libs/jquery/html.sortable/dist/html.sortable.min.js' ],
 	nestable : [ PATH + 'assets/backend/libs/jquery/nestable/jquery.nestable.css',
 			PATH + 'assets/backend/libs/jquery/nestable/jquery.nestable.js' ],
-	summernote : [ PATH + 'assets/backend/libs/jquery/summernote/dist/summernote.css',
-			PATH + 'assets/backend/libs/jquery/summernote/dist/summernote.js',
+	summernote : [ PATH + 'assets/backend/libs/jquery/summernote/dist/summernote-bs4.css',
+			PATH + 'assets/backend/libs/jquery/summernote/dist/summernote-bs4.js',
 			PATH + 'assets/backend/scripts/plugins/summernote.js'],
 	parsley : [ PATH + 'assets/backend/libs/jquery/parsleyjs/dist/parsley.css',
 			PATH + 'assets/backend/libs/jquery/parsleyjs/dist/parsley.min.js',

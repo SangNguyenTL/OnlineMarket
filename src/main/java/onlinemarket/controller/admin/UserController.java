@@ -20,7 +20,6 @@ import onlinemarket.form.filter.FilterUser;
 import onlinemarket.model.User;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
 import javax.validation.groups.Default;
 
 @Controller
@@ -111,19 +110,21 @@ public class UserController extends MainController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String processAddPage(@Validated(value = {Default.class, AdvancedValidation.CheckEmail.class, AdvancedValidation.AddNew.class}) @ModelAttribute("user") User user, BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
+    public String processAddPage(
+            @Validated(value = {Default.class, AdvancedValidation.CheckEmail.class}) @ModelAttribute("user") User user,
+            BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
 
         if (!result.hasErrors()) {
             redirectAttributes.addFlashAttribute("success", true);
             userService.save(user);
-            return "redirect:/admin/user";
+            return "redirect:"+relativePath;
         }
         model.put("pageTitle", "Add new user");
         model.put("subPageTitle", "Add");
         model.put("description", "Enter information user");
         model.put("path", "user-add");
         model.put("action", "add");
-        model.put("pathAction", "/admin/user/add");
+        model.put("pathAction", relativePath+"/add");
         model.put("user", user);
 
         return "backend/user-add";
@@ -135,7 +136,7 @@ public class UserController extends MainController {
         User user = userService.getByKey(id);
         if (user == null) {
             redirectAttributes.addFlashAttribute("error", "User not found.");
-            return "redirect:/admin/user";
+            return "redirect:"+relativePath;
         }
 
         model.put("pageTitle", "Update information user");
@@ -143,14 +144,16 @@ public class UserController extends MainController {
         model.put("description", "Enter the information you want to change");
         model.put("path", "user-add");
         model.put("action", "update");
-        model.put("pathAction", "/admin/user/update");
+        model.put("pathAction", relativePath+"/update");
         model.put("user", user);
 
         return "backend/user-add";
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String processUpdatePage(@Valid @ModelAttribute("user") User user, ModelMap model, BindingResult result, RedirectAttributes redirectAttributes) {
+    public String processUpdatePage(
+            @Validated(value = {Default.class, AdvancedValidation.CheckEmail.class}) @ModelAttribute("user") User user, BindingResult result,
+            ModelMap model, RedirectAttributes redirectAttributes) {
 
         try {
             if(!result.hasErrors()){
@@ -163,14 +166,14 @@ public class UserController extends MainController {
             model.put("description", "Enter the information you want to change");
             model.put("path", "user-add");
             model.put("action", "update");
-            model.put("pathAction", "/admin/user/update");
+            model.put("pathAction", relativePath+"/update");
             model.put("user", user);
 
             return "backend/user-add";
 
         } catch (CustomException ex) {
             redirectAttributes.addFlashAttribute("error", ex.getMessage());
-            return "redirect:/admin/user";
+            return "redirect:"+relativePath;
         }
     }
 }

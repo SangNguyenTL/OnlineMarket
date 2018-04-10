@@ -35,7 +35,7 @@
                         </select>
                     </div>
                     <div class="col-sm-3">
-                        <select class="form-control" th:field="*{postCategory.slug}">
+                        <select class="form-control" th:field="*{postCategory.slug}" th:if="${postType} == 'post'">
                             <option value="">Post category...</option>
                             <option th:each="postCategory : ${postCategoryList}"
                                     th:value="${postCategory.slug}" th:text="${postCategory.name}"></option>
@@ -72,7 +72,7 @@
                                    filter:uri="@{${relativePath}}" filter:currentPage="${page}"
                                    name="Name">Name</filter:th>
                         <th>Publisher</th>
-                        <th>Category</th>
+                        <th th:if="${postType} == 'post'">Category</th>
                         <filter:th order="asc" orderBy="status"
                                    filter:uri="@{${relativePath}}" filter:currentPage="${page}"
                                    name="Status">Status</filter:th>
@@ -90,7 +90,7 @@
                         <td th:text="${post.id}"></td>
                         <td th:text="${post.name}"></td>
                         <td th:text="${post.user.firstName}"></td>
-                        <td th:text="${post.postCategory.name}"></td>
+                        <td th:if="${postType} == 'post'" th:text="${post.postCategory.name}"></td>
                         <th:block th:each="state : ${T(onlinemarket.model.NumStatePost).values()}">
                             <td th:if="${state.id} == ${post.status}" th:text="${state.name}"></td>
                         </th:block>

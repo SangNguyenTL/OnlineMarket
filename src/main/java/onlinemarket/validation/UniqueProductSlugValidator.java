@@ -32,7 +32,7 @@ public class UniqueProductSlugValidator implements ConstraintValidator<UniquePro
         if ( !isValid ) {
         	context.disableDefaultConstraintViolation();
         	context
-                    .buildConstraintViolationWithTemplate( "{onlinemarket.isUniqueProductCategorySlug}" )
+                    .buildConstraintViolationWithTemplate( "{onlinemarket.isUniqueProductSlug}" )
                     .addPropertyNode( "slug" ).addConstraintViolation();
         }
 		return isValid;

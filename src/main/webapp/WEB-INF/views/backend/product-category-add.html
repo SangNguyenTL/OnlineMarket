@@ -28,6 +28,7 @@
 						
 						<div class="box-body">
 							
+							<!--/*@thymesVar id="productCategory" type="onlinemarket.model.ProductCategory"*/-->
 							<form ui-jp="parsley" role="form" th:object="${productCategory}" th:action="@{${pathAction}}" method="POST">
 								<input th:if="${action} == 'update'" type="hidden" th:field="*{id}" />
 								<input th:if="${action} == 'update'" type="hidden" id="beforeSlug" name="beforeSlug" th:value="*{slug}" />

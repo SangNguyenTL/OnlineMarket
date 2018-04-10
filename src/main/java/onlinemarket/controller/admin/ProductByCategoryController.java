@@ -139,7 +139,7 @@ public class ProductByCategoryController extends MainController {
 	}
 
 	@RequestMapping( value = "/add", method = RequestMethod.POST)
-	public String processAddPage(@Validated(value = {AdvancedValidation.CheckSlug.class, Default.class}) @ModelAttribute("product") Product product, ModelMap modelMap, RedirectAttributes redirectAttributes, BindingResult result){
+	public String processAddPage(@Validated(value = {AdvancedValidation.CheckSlug.class, Default.class}) @ModelAttribute("product") Product product,BindingResult result , ModelMap modelMap, RedirectAttributes redirectAttributes){
 		try{
 
 			if(!result.hasErrors()){
@@ -191,7 +191,7 @@ public class ProductByCategoryController extends MainController {
 	}
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String processUpdatePage(@ModelAttribute("product") Product product, ModelMap modelMap,BindingResult result,RedirectAttributes redirectAttributes) {
+	public String processUpdatePage(@ModelAttribute("product") Product product, BindingResult result, ModelMap modelMap,RedirectAttributes redirectAttributes) {
 
 		try {
 			if(!result.hasErrors()){

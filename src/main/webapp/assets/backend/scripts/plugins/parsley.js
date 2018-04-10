@@ -13,7 +13,7 @@
                     id: id
                 },
                 dataType: 'json',
-                method: 'GET'
+                method: 'POST'
             });
 
             return xhr.then(function (data) {
@@ -33,6 +33,42 @@
         },
         messages: {
             en: 'Slug of item is invalid, the slug may be already exists!'
+        },
+        priority: 32
+    });
+
+    window.Parsley.addValidator('uniqueEmail', {
+        validateString: function (value, requirement, instance) {
+
+            var elementId = instance.$element.closest("form").find("[name=id]"), id = elementId.val();
+
+            var xhr = $.ajax({
+                url: requirement,
+                data: {
+                    value : value,
+                    id: id
+                },
+                dataType: 'json',
+                method: 'POST'
+            });
+
+            return xhr.then(function (data) {
+                if (!data.error) {
+                    return true;
+                } else {
+                    return $.Deferred().reject();
+                }
+            },function(data){
+                if(data.responseJSON.errors){
+                    $.each(data.responseJSON.errors, function(k, val){
+                        alert(val,"danger")
+                    })
+                }
+                return false;
+            });
+        },
+        messages: {
+            en: 'Email of user is invalid, the email may be already exists!'
         },
         priority: 32
     });

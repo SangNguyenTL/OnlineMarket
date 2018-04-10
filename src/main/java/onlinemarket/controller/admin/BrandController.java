@@ -93,11 +93,6 @@ public class BrandController extends MainController {
 			@ModelAttribute("brand") Brand brand,
 			BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
 
-		String slug = brand.getSlug();
-		if (StringUtils.isNotBlank(slug)) {
-			brand.setSlug(slg.slugify(slug));
-		}
-
 		if (!result.hasErrors()) {
 			redirectAttributes.addFlashAttribute("success", "");
 			brandService.save(brand);

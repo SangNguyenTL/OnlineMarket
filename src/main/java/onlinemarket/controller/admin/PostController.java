@@ -4,6 +4,7 @@ import onlinemarket.controller.MainController;
 import onlinemarket.form.filter.FilterForm;
 import onlinemarket.form.filter.FilterPost;
 import onlinemarket.model.Post;
+import onlinemarket.model.other.AdvancedValidation;
 import onlinemarket.service.PostCategoryService;
 import onlinemarket.service.PostService;
 import onlinemarket.util.exception.post.PostHasCommentException;
@@ -13,13 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
+import javax.validation.groups.Default;
 
 @Controller
-@RequestMapping("/admin/{postType:(?:post|page)}")
+@RequestMapping("/admin/{postType:(?:post)}")
 public class PostController extends MainController {
 
     private FilterForm filterForm;
@@ -38,40 +40,39 @@ public class PostController extends MainController {
     public ModelMap populateAttribute(@PathVariable("postType") String postType, ModelMap model) {
         filterForm = new FilterForm();
         this.postType = postType;
-        title = String.valueOf(postType.charAt(0)).toUpperCase() + postType.substring(1);
+        title = "Post";
         filterForm.getGroupSearch().put("postType", postType);
         filterPost = new FilterPost(filterForm);
-        title = "Post manager";
         relativePath = "/admin/post";
         generateBreadcrumbs();
         breadcrumbs.add(new String[]{"/admin", "Admin"});
-        breadcrumbs.add(new String[]{relativePath, title});
+        breadcrumbs.add(new String[]{relativePath, title+" manager"});
         model.put("relativePath", relativePath);
         model.put("filterForm", filterForm);
         model.put("filterPost", filterPost);
-        model.put("pathAdd", relativePath+"/add");
-        if(postType.equals("post"))
-            model.put("postPage", true);
-        if(postType.equals("page"))
-            model.put("pagePage", true);
+        model.put("pathAdd", relativePath + "/add");
+        model.put("postPage", true);
+        model.put("uploadType", "post");
         model.put("postCategoryList", postCategoryService.list());
 
         return model;
     }
 
     @RequestMapping(value = "", method = {RequestMethod.GET, RequestMethod.POST})
-    public String mainPage(@ModelAttribute("filterPost") FilterPost filterPost, ModelMap modelMap){
+    public String mainPage(
+            @ModelAttribute("filterPost") FilterPost filterPost, ModelMap modelMap) {
 
         filterPost.setFilterForm(filterForm);
-        if(filterPost.getStatus() != null){
+        if (filterPost.getStatus() != null) {
             filterForm.getGroupSearch().put("status", filterPost.getStatus());
         }
-        if(filterPost.getPostCategory() != null){
+        if (filterPost.getPostCategory() != null) {
             filterForm.getGroupSearch().put("postCategory.name", filterPost.getPostCategory().getName());
         }
 
         modelMap.put("result", postService.list(filterForm));
-        modelMap.put("pageTitle", title+" manager");
+        modelMap.put("pageTitle", title + " manager");
+        modelMap.put("path", "post");
         modelMap.put("filterPost", filterPost);
         modelMap.put("filterForm", filterForm);
 
@@ -85,51 +86,53 @@ public class PostController extends MainController {
 
         filterForm.setCurrentPage(page);
         filterPost.setFilterForm(filterForm);
-        if(filterPost.getStatus() != null){
+        if (filterPost.getStatus() != null) {
             filterForm.getGroupSearch().put("status", filterPost.getStatus());
         }
-        if(filterPost.getPostCategory() != null){
+        if (filterPost.getPostCategory() != null) {
             filterForm.getGroupSearch().put("postCategory.name", filterPost.getPostCategory().getName());
         }
 
         modelMap.put("result", postService.list(filterForm));
-        modelMap.put("pageTitle", title+" manager");
+        modelMap.put("pageTitle", title + " manager");
         modelMap.put("filterPost", filterPost);
+        modelMap.put("path", "post");
         modelMap.put("filterForm", filterForm);
 
-        return "backend/postCategory";
+        return "backend/post";
     }
 
-    @RequestMapping( value = "/add", method = RequestMethod.GET)
-    public String addPage(ModelMap modelMap){
+    @RequestMapping(value = "/add", method = RequestMethod.GET)
+    public String addPage(ModelMap modelMap) {
 
         modelMap.put("subPageTitle", "Add");
-        modelMap.put("pageTitle", "Add new "+ postType);
+        modelMap.put("pageTitle", "Add new " + postType);
         modelMap.put("action", "add");
         modelMap.put("pathAction", relativePath + "/add");
+        modelMap.put("path", "post-add");
         modelMap.put("post", new Post());
 
         return "backend/post-add";
     }
 
-    @RequestMapping( value = "/add", method = RequestMethod.POST)
-    public String processAddPage(@Valid @ModelAttribute("post") Post post, ModelMap modelMap, RedirectAttributes redirectAttributes, BindingResult result){
-        try{
-
-            if(!result.hasErrors()){
-                postService.save(post, currentUser);
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    public String processAddPost(@Validated(value = {Default.class, AdvancedValidation.CheckSlug.class, AdvancedValidation.AddPost.class}) @ModelAttribute("post") Post post, BindingResult result, ModelMap modelMap, RedirectAttributes redirectAttributes) {
+        try {
+            if (!result.hasErrors()) {
+                postService.save(post, currentUser, postType);
                 redirectAttributes.addFlashAttribute("success", true);
-            }else{
+            } else {
                 modelMap.put("subPageTitle", "Add");
-                modelMap.put("pageTitle", "Add new "+ postType);
+                modelMap.put("pageTitle", "Add new " + postType);
                 modelMap.put("action", "add");
                 modelMap.put("pathAction", relativePath + "/add");
+                modelMap.put("path", "post-add");
                 modelMap.put("post", post);
 
                 return "backend/post-add";
             }
 
-        }catch (PostCategoryNotFoundException e){
+        } catch (PostCategoryNotFoundException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
 
@@ -141,11 +144,12 @@ public class PostController extends MainController {
 
         try {
             Post post = postService.getByKey(postId);
-            if(post == null) throw new PostNotFoundException();
+            if (post == null) throw new PostNotFoundException();
 
-            modelMap.put("subPageTitle", "Update new "+ postType);
+            modelMap.put("subPageTitle", "Update " + postType);
             modelMap.put("pageTitle", "Update");
             modelMap.put("action", "update");
+            modelMap.put("path", "post-add");
             modelMap.put("pathAction", relativePath + "/update");
             modelMap.put("post", post);
 
@@ -159,36 +163,36 @@ public class PostController extends MainController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String processUpdatePage(@ModelAttribute("post") Post post, ModelMap modelMap,BindingResult result,RedirectAttributes redirectAttributes) {
-
+    public String processUpdatePost(@Validated(value = {Default.class, AdvancedValidation.CheckSlug.class}) @ModelAttribute("post") Post post, BindingResult result, ModelMap modelMap, RedirectAttributes redirectAttributes) {
         try {
-            if(!result.hasErrors()){
-                postService.update(post, currentUser);
+            if (!result.hasErrors()) {
+                postService.update(post, currentUser, postType);
                 redirectAttributes.addFlashAttribute("success", true);
-                return "redirect:"+ relativePath;
-            }else{
-                modelMap.put("subPageTitle", "Update new "+ postType);
+                return "redirect:" + relativePath;
+            } else {
+                modelMap.put("subPageTitle", "Update " + postType);
                 modelMap.put("pageTitle", "Update");
                 modelMap.put("action", "update");
+                modelMap.put("path", "post-add");
                 modelMap.put("pathAction", relativePath + "/update");
                 modelMap.put("post", post);
 
                 return "backend/post-add";
             }
 
-        }catch (PostCategoryNotFoundException|PostNotFoundException e) {
+        } catch (PostCategoryNotFoundException | PostNotFoundException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             return "redirect:" + relativePath;
         }
     }
 
-    @RequestMapping(value = "/delete", method = { RequestMethod.POST, RequestMethod.GET })
+    @RequestMapping(value = "/delete", method = {RequestMethod.POST, RequestMethod.GET})
     public String processDeleteProvince(@RequestParam(value = "id") Integer postId,
                                         RedirectAttributes redirectAttributes) {
 
         try {
             postService.delete(postId);
-        } catch (PostNotFoundException|PostHasCommentException e) {
+        } catch (PostNotFoundException | PostHasCommentException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
 
