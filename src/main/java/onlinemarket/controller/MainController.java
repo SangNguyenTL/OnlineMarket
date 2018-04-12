@@ -93,7 +93,7 @@ public abstract class MainController {
     protected List<String[]> generateBreadcrumbs(){
         if(breadcrumbs == null) breadcrumbs = new ArrayList<>();
         else breadcrumbs.clear();
-        breadcrumbs.add(new String[] {"", "Home"});
+        breadcrumbs.add(new String[] {"/", "Home"});
         return breadcrumbs;
     }
 

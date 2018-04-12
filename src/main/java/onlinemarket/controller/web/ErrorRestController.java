@@ -4,145 +4,83 @@ import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 
+import onlinemarket.result.api.FieldErrorDTO;
 import org.springframework.core.annotation.Order;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.HttpMediaTypeNotSupportedException;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import onlinemarket.result.api.ApiError;
 
 @ControllerAdvice(annotations = RestController.class)
 @Order(1)
 public class ErrorRestController extends ResponseEntityExceptionHandler {
-	
-	@ExceptionHandler({ Exception.class })
-	public ResponseEntity<Object> handleAll(Exception ex, WebRequest request) {
-	    ApiError apiError = new ApiError(
-	      HttpStatus.INTERNAL_SERVER_ERROR, ex.getLocalizedMessage(), "error occurred");
-	    ex.printStackTrace();
-	    return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
-	}
-	
-	@Override
-	protected ResponseEntity<Object> handleMethodArgumentNotValid(
-	  MethodArgumentNotValidException ex, 
-	  HttpHeaders headers, 
-	  HttpStatus status, 
-	  WebRequest request) {
-	    List<String> errors = new ArrayList<String>();
-	    for (FieldError error : ex.getBindingResult().getFieldErrors()) {
-	        errors.add(error.getField() + ": " + error.getDefaultMessage());
-	    }
-	    for (ObjectError error : ex.getBindingResult().getGlobalErrors()) {
-	        errors.add(error.getObjectName() + ": " + error.getDefaultMessage());
-	    }
-	     
-	    ApiError apiError = 
-	      new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
-	    return handleExceptionInternal(ex, apiError, headers, apiError.getStatus(), request);
-	}
-     
-	@Override
-	protected ResponseEntity<Object> handleMissingServletRequestParameter(
-	  MissingServletRequestParameterException ex, HttpHeaders headers, 
-	  HttpStatus status, WebRequest request) {
-	    String error = ex.getParameterName() + " parameter is missing";
-	     
-	    ApiError apiError = 
-	      new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), error);
-	    return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
-	}
-	
-    @ExceptionHandler({ AccessDeniedException.class })
-    public ResponseEntity<Object> handleAccessDeniedException(Exception ex, WebRequest request) {
-        return new ResponseEntity<Object>(
-          "Access denied message here", new HttpHeaders(), HttpStatus.FORBIDDEN);
+
+    public ErrorRestController() {
+        super();
     }
-    
-    @ExceptionHandler({ ConstraintViolationException.class })
-    public ResponseEntity<Object> handleConstraintViolation(
-      ConstraintViolationException ex, WebRequest request) {
-        List<String> errors = new ArrayList<String>();
-        for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
-            errors.add(violation.getRootBeanClass().getName() + " " + 
-              violation.getPropertyPath() + ": " + violation.getMessage());
+
+    // API
+
+    // 400
+
+    @ExceptionHandler({ DataIntegrityViolationException.class })
+    public ResponseEntity<Object> handleBadRequest(final DataIntegrityViolationException ex, final WebRequest request) {
+        final String bodyOfResponse = ex.getMessage();
+        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(final HttpMessageNotReadableException ex, final HttpHeaders headers, final HttpStatus status, final WebRequest request) {
+        final String bodyOfResponse = ex.getMessage();
+        // ex.getCause() instanceof JsonMappingException, JsonParseException // for additional information later on
+        return handleExceptionInternal(ex, bodyOfResponse, headers, HttpStatus.BAD_REQUEST, request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(final MethodArgumentNotValidException ex, final HttpHeaders headers, final HttpStatus status, final WebRequest request) {
+        List<ObjectError> errors = ex.getBindingResult().getAllErrors();
+        List<FieldErrorDTO> fieldErrorDTOList = new ArrayList<>();
+        for(int i = 0; i < errors.size(); i++ ){
+            ObjectError objectError = errors.get(i);
+            fieldErrorDTOList.add(new FieldErrorDTO(objectError.getObjectName(), objectError.getDefaultMessage()));
         }
-     
-        ApiError apiError = 
-          new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), errors);
-        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
+        return handleExceptionInternal(ex, fieldErrorDTOList, headers, HttpStatus.BAD_REQUEST, request);
     }
-    
-    @ExceptionHandler({ MethodArgumentTypeMismatchException.class })
-    public ResponseEntity<Object> handleMethodArgumentTypeMismatch(
-      MethodArgumentTypeMismatchException ex, WebRequest request) {
-        String error = ex.getName() + " should be of type " + ex.getRequiredType().getName();
-     
-        ApiError apiError = 
-          new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), error);
-        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
+
+    // 403
+    @ExceptionHandler({ AccessDeniedException.class })
+    public ResponseEntity<Object> handleAccessDeniedException(final Exception ex, final WebRequest request) {
+        System.out.println("request" + request.getUserPrincipal());
+        return new ResponseEntity<Object>("Access denied message here", new HttpHeaders(), HttpStatus.FORBIDDEN);
     }
-    
-    @Override
-    protected ResponseEntity<Object> handleNoHandlerFoundException(
-      NoHandlerFoundException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        String error = "No handler found for " + ex.getHttpMethod() + " " + ex.getRequestURL();
-     
-        ApiError apiError = new ApiError(HttpStatus.NOT_FOUND, ex.getLocalizedMessage(), error);
-        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
+
+    // 409
+
+    @ExceptionHandler({ InvalidDataAccessApiUsageException.class, DataAccessException.class })
+    protected ResponseEntity<Object> handleConflict(final RuntimeException ex, final WebRequest request) {
+        final String bodyOfResponse = ex.getMessage();return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
-    
-    @Override
-    protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(
-      HttpRequestMethodNotSupportedException ex, 
-      HttpHeaders headers, 
-      HttpStatus status, 
-      WebRequest request) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(ex.getMethod());
-        builder.append(" method is not supported for this request. Supported methods are ");
-        for (Object t : ex.getSupportedHttpMethods().toArray()) {
-        	builder.append(t.toString() + " ");
-		}
-     
-        ApiError apiError = new ApiError(HttpStatus.METHOD_NOT_ALLOWED, 
-          ex.getLocalizedMessage(), builder.toString());
-        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
-    }
-    
-    @Override
-    protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(
-      HttpMediaTypeNotSupportedException ex, 
-      HttpHeaders headers, 
-      HttpStatus status, 
-      WebRequest request) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(ex.getContentType());
-        builder.append(" media type is not supported. Supported media types are ");
-     
-        for (Object t : ex.getSupportedMediaTypes().toArray()) {
-        	builder.append(t.toString() + ", ");
-		}
-        
-        ApiError apiError = new ApiError(HttpStatus.UNSUPPORTED_MEDIA_TYPE, 
-          ex.getLocalizedMessage(), builder.substring(0, builder.length() - 2));
-        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
+
+    // 412
+
+    // 500
+
+    @ExceptionHandler({ NullPointerException.class, IllegalArgumentException.class, IllegalStateException.class })
+    /*500*/public ResponseEntity<Object> handleInternal(final RuntimeException ex, final WebRequest request) {
+        logger.error("500 Status Code", ex);
+        final String bodyOfResponse = ex.getMessage();
+        return handleExceptionInternal(ex, bodyOfResponse, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR, request);
     }
 }
 

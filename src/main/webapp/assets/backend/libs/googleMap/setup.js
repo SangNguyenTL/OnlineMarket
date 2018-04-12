@@ -8,7 +8,7 @@
 		root.MyMap = factory(root.jQuery);
 	}
 }(this, function($) {
-	var pluginName = "mymap";
+	var pluginName = "myMap";
 	function MyMap(element, options) {
 		if (!google.maps.Geocoder)
 			return;
@@ -24,15 +24,15 @@
 			},
 			outId : {
 				lat : '',
-				lng : '',
+				lng : ''
 			},
 			search : ''
-		}
+		};
 
 		this.element = element;
 		this.input = $(element);
 		this.settings = $.extend(true, defaults, options, this.input
-				.data('mymap'));
+				.data(pluginName));
 		this.geocoder = new google.maps.Geocoder();
 		if (this.settings.outId.lat != '' && this.settings.outId.lng != '') {
 			this.latInput = $('#' + this.settings.outId.lat);
@@ -46,7 +46,7 @@
 		this.onSearch = this.onSearch.bind(this);
 		this.toggleBounce = this.toggleBounce.bind(this);
 
-		this.initMap()
+		this.initMap();
 
 		if (this.settings.search != "") {
 			this.searchInput = $("#" + this.settings.search);
@@ -74,7 +74,7 @@
 
 		this.marker.addListener('click', this.toggleBounce);
 
-	}
+	};
 
 	MyMap.prototype.onSearch = function() {
 
@@ -96,7 +96,7 @@
 			}
             _this.initMap();
 		});
-	}
+	};
 
 	MyMap.prototype.toggleBounce = function() {
 		if (this.marker.getAnimation() !== null) {
@@ -106,7 +106,7 @@
 			this.latInput.val(this.marker.position.lat());
 			this.lngInput.val(this.marker.position.lng());
 		}
-	}
+	};
 
 	$.fn[pluginName] = function(options) {
 		this.each(function() {

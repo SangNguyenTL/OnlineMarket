@@ -232,7 +232,7 @@
         <input type="hidden" th:field="*{longitude}"/>
         <input type="hidden" th:field="*{latitude}"/>
         <div class="form-group row">
-            <div ui-jp="mymap" id="mymap"
+            <div ui-jp="myMap" id="mymap"
                  th:attr="ui-options='{coordinate : {lat : '+ *{latitude} + ', lng : '+ *{longitude} +'},marker : {draggable : true},outId : {lat : \'latitude\',lng : \'longitude\'},search : \'address\'}'"></div>
         </div>
         <div class="dker p-a text-right">

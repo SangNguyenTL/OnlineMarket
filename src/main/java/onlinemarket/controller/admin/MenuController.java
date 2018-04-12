@@ -33,9 +33,7 @@ public class MenuController extends MainController{
 	String menuGroupPath;
 
 	MenuGroup menuGroup;
-	
-	List<MenuGroup> menuGroupList;
-	
+
 	@ModelAttribute
 	private ModelMap populateAttribute(
 			@PathVariable("menuGroupId") Integer menuGroupId,
@@ -43,7 +41,6 @@ public class MenuController extends MainController{
 		menuGroupPath = "/admin/menu-group";
 		relativePath = relativePath+"/"+menuGroupId+"/menu";
 		menuGroup = menuGroupService.getByKey(menuGroupId);
-		model.put("menuGroupList", menuGroupList);
 		model.put("relativePath", relativePath);
 		model.put("menuGroup", menuGroup);
 		model.put("menuGroupPage", true);

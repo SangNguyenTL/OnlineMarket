@@ -224,7 +224,7 @@
             
             
         });
-    }
+    };
 
     GalleryManager.prototype.render = function (data, template, target, isAppend) {
         if (!Array.isArray(template)) return false;
@@ -234,7 +234,7 @@
         if (isAppend)
             target.append(rendered);
         else target.html(rendered);
-    }
+    };
 
     GalleryManager.prototype.templateImage = [
         '<div class="col-sm-4 image-item" id="image-{{id}}">',
@@ -262,7 +262,7 @@
         '</div>',
         '</div>',
         '</div>',
-    ]
+    ];
 
 
 

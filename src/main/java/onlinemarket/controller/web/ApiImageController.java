@@ -30,76 +30,67 @@ import onlinemarket.util.exception.UploadTypeException;
 import onlinemarket.util.FileValidator;
 import onlinemarket.util.ResponseResult;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/api/image")
 public class ApiImageController {
 
-	@Autowired
-	private UserService userService;
+    @Autowired
+    private UserService userService;
 
-	private User currentUser;
+    private User currentUser;
 
-	@Autowired
-	FileValidator fileValidator;
+    @Autowired
+    FileValidator fileValidator;
 
-	@Autowired
-	ImageService imageService;
+    @Autowired
+    ImageService imageService;
 
-	@ModelAttribute("currentUser")
-	public User getCurrentUser() {
-		String userName;
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    @ModelAttribute("currentUser")
+    public User getCurrentUser() {
+        String userName;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-		if (principal instanceof UserDetails) {
-			userName = ((UserDetails) principal).getUsername();
-		} else {
-			userName = principal.toString();
-		}
+        if (principal instanceof UserDetails) {
+            userName = ((UserDetails) principal).getUsername();
+        } else {
+            userName = principal.toString();
+        }
 
-		currentUser = userService.getByEmail(userName);
-		if (currentUser == null) {
-			currentUser = new User();
-			currentUser.setEmail(userName);
-		}
-		return currentUser;
-	}
+        currentUser = userService.getByEmail(userName);
+        if (currentUser == null) {
+            currentUser = new User();
+            currentUser.setEmail(userName);
+        }
+        return currentUser;
+    }
 
-	@InitBinder("uploadFrom")
-	protected void initBinderUploadFrom(WebDataBinder binder) {
-		binder.setValidator(fileValidator);
-	}
+    @InitBinder("uploadFrom")
+    protected void initBinderUploadFrom(WebDataBinder binder) {
+        binder.setValidator(fileValidator);
+    }
 
-	@RequestMapping(value = "/delete/{id:^\\d+}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> getUser(@PathVariable("id") Integer id) {
-		Image image = imageService.getByKey(id);
-		if (image == null)
-			return ResponseEntity.ok(new ResponseResult(true, "Image not found!"));
-		imageService.remove(image);
-		return ResponseEntity.ok().body(new ResponseResult(false, "Image was removed!"));
-	}
+    @RequestMapping(value = "/delete/{id:^\\d+}", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getUser(@PathVariable("id") Integer id) {
+        Image image = imageService.getByKey(id);
+        if (image == null)
+            return ResponseEntity.ok(new ResponseResult(true, "Image not found!"));
+        imageService.remove(image);
+        return ResponseEntity.ok().body(new ResponseResult(false, "Image was removed!"));
+    }
 
-	@RequestMapping(value = "/load",
-			produces = MediaType.APPLICATION_JSON_VALUE, method = { RequestMethod.POST,
-			RequestMethod.GET })
-	public ResponseEntity<?> getUser(@ModelAttribute("imageFilter") ImageFilter imageFilter){
-		return ResponseEntity.ok().body(imageService.filter(imageFilter));
-	}
+    @RequestMapping(value = "/load", produces = MediaType.APPLICATION_JSON_VALUE, method = {RequestMethod.POST, RequestMethod.GET})
+    public ResponseEntity<?> getUser(@ModelAttribute("imageFilter") ImageFilter imageFilter) {
+        return ResponseEntity.ok().body(imageService.filter(imageFilter));
+    }
 
-	@RequestMapping(value = "/upload",
-			method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> upload(@ModelAttribute("uploadFrom") UploadForm uploadForm, BindingResult result) {
-
-		List<String> listError = new ArrayList<>();
-		if (result.hasErrors()) {
-			for (ObjectError error : result.getAllErrors()) {
-				listError.add(error.getDefaultMessage());
-			}
-			return ResponseEntity.badRequest().body(listError);
-		}
-		try {
-			return ResponseEntity.ok().body(imageService.save(uploadForm, currentUser));
-		} catch (IllegalStateException | IOException | UploadTypeException | CreateFolderException e) {
-			return ResponseEntity.badRequest().body(new ResponseResult(true, e.getMessage()));
-		}
-	}
+    @RequestMapping(value = "/upload", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> upload(@Valid @ModelAttribute("uploadFrom") UploadForm uploadForm) {
+        try {
+            return ResponseEntity.ok().body(imageService.save(uploadForm, currentUser));
+        } catch (IllegalStateException | IOException | UploadTypeException | CreateFolderException e) {
+            return ResponseEntity.badRequest().body(new ResponseResult(true, e.getMessage()));
+        }
+    }
 }

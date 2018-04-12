@@ -8,7 +8,7 @@ public enum TypeHtml {
 //	TEXTAREA("textarea"),
 //	EMAIL("email"),
 //	TEL("tel"),
-	DATE("date"),
+//	DATE("date"),
 	SELECT("select"),
 	SELECT_MULTIPLE("select-multiple"),
 	CHECKBOX("checkbox");
