@@ -2,25 +2,13 @@ package onlinemarket.service.config;
 
 import java.util.List;
 
+import onlinemarket.dao.config.*;
+import onlinemarket.form.config.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import onlinemarket.dao.ConfigurationDao;
-import onlinemarket.dao.config.ApiConfigDao;
-import onlinemarket.dao.config.ContactConfigDao;
-import onlinemarket.dao.config.EmailSystemConfigDao;
-import onlinemarket.dao.config.GeneralConfigDao;
-import onlinemarket.dao.config.LogoConfigDao;
-import onlinemarket.dao.config.SocialConfigDao;
-import onlinemarket.dao.config.UploadConfigDao;
-import onlinemarket.form.config.ApiConfig;
-import onlinemarket.form.config.ContactConfig;
-import onlinemarket.form.config.EmailSystemConfig;
-import onlinemarket.form.config.GeneralConfig;
-import onlinemarket.form.config.LogoConfig;
-import onlinemarket.form.config.SocialConfig;
-import onlinemarket.form.config.UploadConfig;
 import onlinemarket.model.Configuration;
 
 
@@ -51,6 +39,9 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 	
 	@Autowired
 	private ApiConfigDao apiConfigDao;
+
+	@Autowired
+	private MenuPositionConfigDao menuPositionConfigDao;
 	
 	@Override
 	public Configuration getByKey(Integer id) {
@@ -94,7 +85,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
     }
 
 	@Override
-	public ContactConfig getContag() {
+	public ContactConfig getContact() {
 		return contactConfigDao.getConfiguration(new ContactConfig());
 	}
 
@@ -127,7 +118,12 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 	public ApiConfig getApiConfig() {
 		return apiConfigDao.getConfiguration(new ApiConfig());
 	}
-	
+
+	@Override
+	public MenuPositionConfig getMenuPositionConfig() {
+		return menuPositionConfigDao.getConfiguration(new MenuPositionConfig());
+	}
+
 	@Override
 	public void saveGeneralConfig(GeneralConfig generalConfig) {
 		generalConfigDao.saveConfiguration(generalConfig);
@@ -161,5 +157,10 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 	@Override
 	public void saveApiConfig(ApiConfig apiConfig) {
 		apiConfigDao.saveConfiguration(apiConfig);
+	}
+
+	@Override
+	public void saveMenuPositionConfig(MenuPositionConfig menuPositionConfig) {
+		menuPositionConfigDao.saveConfiguration(menuPositionConfig);
 	}
 }

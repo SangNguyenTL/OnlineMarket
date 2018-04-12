@@ -242,7 +242,7 @@
 </div>
 
 
-<div class="box-body" th:fragment="emailsystem">
+<div class="box-body" th:fragment="emailSystem">
     <form ui-jp="parsley" role="form" th:object="${emailSystemConfig}" th:action="@{/admin/config/emailsystem}"
           method="POST">
         <div class="form-group row">
@@ -289,6 +289,121 @@
                 </ul>
             </div>
         </div>
+        <div class="dker p-a text-right">
+            <button type="submit" class="btn info">Save</button>
+        </div>
+    </form>
+</div>
+
+<div class="box-body" th:fragment="menuPosition">
+    <form ui-jp="parsley" role="form" th:object="${menuPositionConfig}" th:action="@{/admin/config/menu-position}"
+          method="POST">
+        <div class="form-group row">
+            <label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Top</label>
+            <div class="col-sm-12 col-md-8 col-lg-9">
+                <select th:errorclass="parsley-error" class="form-control" th:field="*{top}">
+                    <option value="">-- Choice menu ---</option>
+                    <option th:each="menuGroup : ${menuGroupList}" th:value="${menuGroup.id}" th:text="${menuGroup.name}"></option>
+                </select>
+                <ul class="parsley-errors-list filled"
+                    th:if="${#fields.hasErrors('top')}">
+                    <li th:errors="*{top}"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Header</label>
+            <div class="col-sm-12 col-md-8 col-lg-9">
+                <select th:errorclass="parsley-error" class="form-control" th:field="*{header}">
+                    <option value="">-- Choice menu ---</option>
+                    <option th:each="menuGroup : ${menuGroupList}" th:value="${menuGroup.id}" th:text="${menuGroup.name}"></option>
+                </select>
+                <ul class="parsley-errors-list filled"
+                    th:if="${#fields.hasErrors('header')}">
+                    <li th:errors="*{header}"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Footer 1</label>
+            <div class="col-sm-12 col-md-8 col-lg-9">
+                <select th:errorclass="parsley-error" class="form-control" th:field="*{footerFirst}">
+                    <option value="">-- Choice menu ---</option>
+                    <option th:each="menuGroup : ${menuGroupList}" th:value="${menuGroup.id}" th:text="${menuGroup.name}"></option>
+                </select>
+                <ul class="parsley-errors-list filled"
+                    th:if="${#fields.hasErrors('footerFirst')}">
+                    <li th:errors="*{footerFirst}"></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Footer 2</label>
+            <div class="col-sm-12 col-md-8 col-lg-9">
+                <select th:errorclass="parsley-error" class="form-control" th:field="*{footerSecond}">
+                    <option value="">-- Choice menu ---</option>
+                    <option th:each="menuGroup : ${menuGroupList}" th:value="${menuGroup.id}" th:text="${menuGroup.name}"></option>
+                </select>
+                <ul class="parsley-errors-list filled"
+                    th:if="${#fields.hasErrors('footerSecond')}">
+                    <li th:errors="*{footerSecond}"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Footer 3</label>
+            <div class="col-sm-12 col-md-8 col-lg-9">
+                <select th:errorclass="parsley-error" class="form-control" th:field="*{footerThird}">
+                    <option value="">-- Choice menu ---</option>
+                    <option th:each="menuGroup : ${menuGroupList}" th:value="${menuGroup.id}" th:text="${menuGroup.name}"></option>
+                </select>
+                <ul class="parsley-errors-list filled"
+                    th:if="${#fields.hasErrors('footerThird')}">
+                    <li th:errors="*{footerThird}"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Footer 4</label>
+            <div class="col-sm-12 col-md-8 col-lg-9">
+                <select th:errorclass="parsley-error" class="form-control" th:field="*{footerFour}">
+                    <option value="">-- Choice menu ---</option>
+                    <option th:each="menuGroup : ${menuGroupList}" th:value="${menuGroup.id}" th:text="${menuGroup.name}"></option>
+                </select>
+                <ul class="parsley-errors-list filled"
+                    th:if="${#fields.hasErrors('footerFour')}">
+                    <li th:errors="*{footerFour}"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Footer Bottom Right</label>
+            <div class="col-sm-12 col-md-8 col-lg-9">
+                <select th:errorclass="parsley-error" class="form-control" th:field="*{footerBottomRight}">
+                    <option value="">-- Choice menu ---</option>
+                    <option th:each="menuGroup : ${menuGroupList}" th:value="${menuGroup.id}" th:text="${menuGroup.name}"></option>
+                </select>
+                <ul class="parsley-errors-list filled"
+                    th:if="${#fields.hasErrors('footerBottomRight')}">
+                    <li th:errors="*{footerBottomRight}"></li>
+                </ul>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Footer Bottom</label>
+            <div class="col-sm-12 col-md-8 col-lg-9">
+                <select th:errorclass="parsley-error" class="form-control" th:field="*{footerBottom}">
+                    <option value="">-- Choice menu ---</option>
+                    <option th:each="menuGroup : ${menuGroupList}" th:value="${menuGroup.id}" th:text="${menuGroup.name}"></option>
+                </select>
+                <ul class="parsley-errors-list filled"
+                    th:if="${#fields.hasErrors('footerBottom')}">
+                    <li th:errors="*{footerBottom}"></li>
+                </ul>
+            </div>
+        </div>
+
         <div class="dker p-a text-right">
             <button type="submit" class="btn info">Save</button>
         </div>

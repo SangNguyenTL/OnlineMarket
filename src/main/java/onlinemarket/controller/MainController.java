@@ -54,9 +54,12 @@ public abstract class MainController {
     @ModelAttribute
     public void populateMetaPage(ModelMap model) {
         model.put("general", configurationService.getGeneral());
-        model.put("api", configurationService.getApiConfig());
         model.put("logo", configurationService.getLogo());
-        model.put("contact", configurationService.getContag());
+        model.put("upload", configurationService.getUpload());
+        model.put("contact", configurationService.getContact());
+        model.put("api", configurationService.getApiConfig());
+        model.put("social", configurationService.getSocial());
+        model.put("menuPosition", configurationService.getMenuPositionConfig());
         model.put("productCategoryList", productCategoryService.list());
         model.put("brandList", brandService.list());
     }

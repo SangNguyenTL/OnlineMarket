@@ -136,27 +136,25 @@
                             class="nav-text">Add new</span></a></li>
                 </ul>
             </li>
-            <li th:class="${menuGroupPage} ? 'active'" >
-              <a>
+            <li th:class="${menuGroupPage} ? 'active'">
+                <a>
                   <span class="nav-caret">
                   <i class="fa fa-caret-down"></i>
                 </span>
-                <span class="nav-icon">
+                    <span class="nav-icon">
                   <i class="material-icons">&#xe3fc;
                     <span th:attr="ui-include='\''+ @{/assets/backend/assets/images/i_0.svg} +'\''"></span>
                   </i>
                 </span>
-                <span class="nav-text">Menu</span>
-              </a>
-              <ul class="nav-sub nav-mega">
-                <li th:class="${path} == 'menu-group' ? 'active'"><a th:href="@{/admin/menu-group}"><span class="nav-text">List</span></a></li>
-                <li th:class="${path} == 'menu-group-add' ? 'active'"><a th:href="@{/admin/menu-groupy/add}"><span class="nav-text">Add new menu group</span></a></li>
-            </ul>
-           </li>
-
-
-
-
+                    <span class="nav-text">Menu</span>
+                </a>
+                <ul class="nav-sub nav-mega">
+                    <li th:class="${path} == 'menu-group' ? 'active'"><a th:href="@{/admin/menu-group}"><span
+                            class="nav-text">List</span></a></li>
+                    <li th:class="${path} == 'menu-group-add' ? 'active'"><a th:href="@{/admin/menu-groupy/add}"><span
+                            class="nav-text">Add new menu group</span></a></li>
+                </ul>
+            </li>
 
 
             <!--li th:class="${eventPage} ? 'active'" >
@@ -217,14 +215,16 @@
 									Setup</span></a></li>
                     <li th:class="${path} == 'logo' ? 'active'"><a
                             th:href="@{/admin/config/logo}"><span class="nav-text">Logo</span></a></li>
+                    <li th:class="${path} == 'menuPosition' ? 'active'"><a
+                            th:href="@{/admin/config/menu-position}"><span class="nav-text">Menu Position</span></a></li>
                     <li th:class="${path} == 'socialble' ? 'active'"><a
                             th:href="@{/admin/config/social}"><span class="nav-text">Social
 									Network</span></a></li>
                     <li th:class="${path} == 'upload' ? 'active'"><a
                             th:href="@{/admin/config/upload}"><span class="nav-text">Upload
 									Photo</span></a></li>
-                    <li th:class="${path} == 'email' ? 'active'"><a
-                            th:href="@{/admin/config/emailsystem}"><span class="nav-text">Email
+                    <li th:class="${path} == 'emailSystem' ? 'active'"><a
+                            th:href="@{/admin/config/email-system}"><span class="nav-text">Email
 									System</span></a></li>
                     <li th:class="${path} == 'contact' ? 'active'"><a
                             th:href="@{/admin/config/contact}"><span class="nav-text">Contact</span></a></li>

@@ -2,6 +2,9 @@ package onlinemarket.controller.admin;
 
 import javax.validation.Valid;
 
+import onlinemarket.form.config.*;
+import onlinemarket.service.MenuGroupService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -12,13 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import onlinemarket.controller.MainController;
-import onlinemarket.form.config.ApiConfig;
-import onlinemarket.form.config.ContactConfig;
-import onlinemarket.form.config.EmailSystemConfig;
-import onlinemarket.form.config.GeneralConfig;
-import onlinemarket.form.config.LogoConfig;
-import onlinemarket.form.config.SocialConfig;
-import onlinemarket.form.config.UploadConfig;
 import onlinemarket.model.User;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -26,16 +22,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping("/admin/config")
 public class ConfigurationController extends MainController{
+
+	@Autowired
+	MenuGroupService menuGroupService;
 	
 	@ModelAttribute
-	@Override
-	public void populateMetaPage(ModelMap model) {
-		model.put("general", configurationService.getGeneral());
-		model.put("logo", configurationService.getLogo());
-		model.put("upload", configurationService.getUpload());
-		model.put("contact", configurationService.getContag());
-		model.put("api", configurationService.getApiConfig());
-		model.put("social", configurationService.getSocial());
+	public void populateModel(ModelMap model) {
+		generateBreadcrumbs();
+		breadcrumbs.add(new String[]{"/admin", "Admin"});
+		breadcrumbs.add(new String[]{"/admin/config", "Settings"});
 		model.put("pageTitle", "Setting");
 		model.put("configPage", true);
 	}
@@ -166,10 +161,10 @@ public class ConfigurationController extends MainController{
 		return "backend/config";
 	}	
 	
-	@RequestMapping( value = {"emailsystem"}, method = RequestMethod.GET)
+	@RequestMapping( value = {"email-system"}, method = RequestMethod.GET)
 	public String configEmailSystemPage(@ModelAttribute("email") EmailSystemConfig email, ModelMap model) {
 		
-		model.put("path", "emailsystem");
+		model.put("path", "emailSystem");
 		model.put("subPageTitle", "Email System");
 		model.put("description", "Set parameters so that the application can send the message to the client.");
 		model.put("emailSystemConfig", email);
@@ -177,15 +172,15 @@ public class ConfigurationController extends MainController{
 		return "backend/config";
 	}
 	
-	@RequestMapping( value = {"emailsystem"}, method = RequestMethod.POST)
+	@RequestMapping( value = {"email-system"}, method = RequestMethod.POST)
 	public String submitEmailSystemPage(@ModelAttribute("emailSystemConfig") EmailSystemConfig email, BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
-		model.put("path", "emailsystem");
+		model.put("path", "emailSystem");
 		model.put("subPageTitle", "Email System");
 		model.put("description", "Set parameters so that the application can send the message to the client.");
 		if(!result.hasErrors()) {
 			configurationService.saveEmailSystemConfig(email);
 			redirectAttributes.addFlashAttribute("success", true);
-			return "redirect:/admin/config/emailsyste";
+			return "redirect:/admin/config/email-system";
 		}
 		return "backend/config";
 	}
@@ -210,6 +205,31 @@ public class ConfigurationController extends MainController{
 			configurationService.saveApiConfig(api);
 			redirectAttributes.addFlashAttribute("success", true);
 			return "redirect:/admin/config/api";
+		}
+		return "backend/config";
+	}
+	@RequestMapping( value = {"menu-position"}, method = RequestMethod.GET)
+	public String configMenuPositionPage(@ModelAttribute("menuPosition") MenuPositionConfig menuPositionConfig, ModelMap model) {
+
+		model.put("path", "menuPosition");
+		model.put("menuGroupList", menuGroupService.list());
+		model.put("subPageTitle", "Menu position");
+		model.put("description", "Set position for menu");
+		model.put("menuPositionConfig", menuPositionConfig);
+
+		return "backend/config";
+	}
+
+	@RequestMapping( value = {"menu-position"}, method = RequestMethod.POST)
+	public String submitMenuPositionPage(@ModelAttribute("menuPositionConfig") MenuPositionConfig menuPositionConfig, BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
+		model.put("path", "menuPosition");
+		model.put("subPageTitle", "Menu position");
+		model.put("description", "Set position for menu");
+		model.put("menuGroupList", menuGroupService.list());
+		if(!result.hasErrors()) {
+			configurationService.saveMenuPositionConfig(menuPositionConfig);
+			redirectAttributes.addFlashAttribute("success", true);
+			return "redirect:/admin/config/menu-position";
 		}
 		return "backend/config";
 	}

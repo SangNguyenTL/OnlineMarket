@@ -1,13 +1,7 @@
 package onlinemarket.service.config;
 
 
-import onlinemarket.form.config.ApiConfig;
-import onlinemarket.form.config.ContactConfig;
-import onlinemarket.form.config.EmailSystemConfig;
-import onlinemarket.form.config.GeneralConfig;
-import onlinemarket.form.config.LogoConfig;
-import onlinemarket.form.config.SocialConfig;
-import onlinemarket.form.config.UploadConfig;
+import onlinemarket.form.config.*;
 import onlinemarket.model.Configuration;
 import onlinemarket.service.InterfaceService;
 
@@ -16,7 +10,7 @@ public interface ConfigurationService extends InterfaceService<Integer, Configur
 	
 	boolean isConfigurationUnique(String key);
 	
-	ContactConfig getContag();
+	ContactConfig getContact();
 	
 	EmailSystemConfig getEmail();
 	
@@ -29,6 +23,8 @@ public interface ConfigurationService extends InterfaceService<Integer, Configur
 	GeneralConfig getGeneral();
 	
 	ApiConfig getApiConfig();
+
+	MenuPositionConfig getMenuPositionConfig();
 	
 	void saveGeneralConfig(GeneralConfig generalConfig);
 	
@@ -43,4 +39,6 @@ public interface ConfigurationService extends InterfaceService<Integer, Configur
 	void saveUploadconfig(UploadConfig uploadConfig);
 	
 	void saveApiConfig(ApiConfig apiConfig);
+
+	void saveMenuPositionConfig(MenuPositionConfig menuPositionConfig);
 }
