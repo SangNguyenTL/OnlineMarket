@@ -75,9 +75,8 @@ public class ErrorController {
 		return errorPage;
 	}
 
-	@ExceptionHandler(NoHandlerFoundException.class)
-	@ResponseStatus(value = HttpStatus.NOT_FOUND)
-	public ModelAndView errorPageNotFound(HttpServletRequest httpRequest) {
+	@ExceptionHandler({NoHandlerFoundException.class})
+	public ModelAndView errorPageNotFound(NoHandlerFoundException ex) {
 
 		ModelAndView errorPage = new ModelAndView("backend/error");
 

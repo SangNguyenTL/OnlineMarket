@@ -18,6 +18,14 @@ public class GeneralConfig {
 	@Size(min = 30, max = 250)
 	private String description;
 
+	@NotEmpty
+	@Size(max = 350)
+	private String footerText;
+
+	@NotEmpty
+	@Size(max = 150)
+	private String licenseText;
+
 	public String getTitle() {
 		return title;
 	}
@@ -41,5 +49,20 @@ public class GeneralConfig {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
+	public String getFooterText() {
+		return footerText;
+	}
+
+	public void setFooterText(String footerText) {
+		this.footerText = footerText;
+	}
+
+	public String getLicenseText() {
+		return licenseText;
+	}
+
+	public void setLicenseText(String licenseText) {
+		this.licenseText = licenseText;
+	}
 }

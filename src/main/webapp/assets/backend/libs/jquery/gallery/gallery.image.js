@@ -13,51 +13,51 @@
     function GalleryManager(element, options) {
         if (!window.Mustache || !window.jQuery) return;
         var defaults = {
-            title: false,
-            filterType: [{
+                title: false,
+                filterType: [{
                     type: 'site',
                     name: 'Application'
                 },
-                {
-                    type: 'user',
-                    name: 'User'
+                    {
+                        type: 'user',
+                        name: 'User'
+                    },
+                    {
+                        type: 'event',
+                        name: 'Event'
+                    },
+                    {
+                        type: 'post',
+                        name: 'Post'
+                    },
+                    {
+                        type: 'page',
+                        name: 'Page'
+                    },
+                    {
+                        type: 'product',
+                        name: 'Product'
+                    },
+                    {
+                        type: 'brand',
+                        name: 'Brand'
+                    }
+                ],
+                actionUpload: false,
+                actionDelete: false,
+                actionLoadImage: false,
+                maxFileSize: '5M',
+                filter: {
+                    pageNumber: 1,
+                    pageSize: 12,
+                    uploadType: '',
+                    dateType: '',
+                    datetime: ''
                 },
-                {
-                    type: 'event',
-                    name: 'Event'
-                },
-                {
-                    type: 'post',
-                    name: 'Post'
-                },
-                {
-                    type: 'page',
-                    name: 'Page'
-                },
-                {
-                    type: 'product',
-                    name: 'Product'
-                },
-                {
-                    type: 'brand',
-                    name: 'Brand'
-                }
-            ],
-            actionUpload: false,
-            actionDelete: false,
-            actionLoadImage: false,
-            maxFileSize: '5M',
-            filter: {
-                pageNumber: 1,
-                pageSize: 12,
-                uploadType: '',
-                dateType: '',
-                datetime: ''
+                totalPage: 0,
+                modal: false
             },
-            totalPage: 0,
-            modal: false
-        },
-        _this = this;
+            _this = this;
         this.element = $(element);
         this.settings = $.extend(true, defaults, options);
         this.render(this.settings, this.templateMain, this.element);
@@ -124,7 +124,8 @@
             default:
                 break;
         }
-        this.settings.datetime = this.datePickerElement.data('DateTimePicker').date();
+        this.settings.filter.datetime = this.datePickerElement.data('DateTimePicker').date();
+        this.settings.filter.datetime = moment(this.settings.filter.datetime).format("YYYY-MM-DD");
         this.settings.filter.dateType = element.val();
         this.loadImage();
     };
@@ -134,8 +135,8 @@
         if (!this.settings.actionDelete) return;
         var box = $(e.target).closest('.image-item');
         $.post(this.settings.actionDelete+'/'+ $(e.currentTarget).data('id'), {}, function (result) {
-            if (!result.error) 
-            box.remove();
+            if (!result.error)
+                box.remove();
             alert(result.message);
         });
         this.actionDeleteElement.on('click', this.onDelete);
@@ -191,19 +192,19 @@
                         onPageClick: function (e, page) {
                             _this.settings.filter.pageNumber = page;
                             if(!_this.pending)
-                            _this.loadImage();
+                                _this.loadImage();
                         }
                     });
                 }
                 if (_this.imageElement === undefined || _this.imageElement.length < 1) return;
-                    _this.actionDeleteElement = _this.imageElement.find('.action-delete');
-                    _this.onDelete = _this.onDelete.bind(_this);
-                    _this.actionDeleteElement.on('click', _this.onDelete);
+                _this.actionDeleteElement = _this.imageElement.find('.action-delete');
+                _this.onDelete = _this.onDelete.bind(_this);
+                _this.actionDeleteElement.on('click', _this.onDelete);
 
-                    if (_this.settings.modal) {
-                        _this.selectImageElement = _this.selectImageElement.bind(_this);
-                        _this.imageElement.on('click', _this.selectImageElement);
-                    }
+                if (_this.settings.modal) {
+                    _this.selectImageElement = _this.selectImageElement.bind(_this);
+                    _this.imageElement.on('click', _this.selectImageElement);
+                }
             },
             complete: function(){
                 if(_this.totalPage === 1 && _this.settings.filter.pageNumber > 1 ) {
@@ -219,10 +220,10 @@
                 clipboard.on('success', function(e) {
                     alert('Link was saved to clipboard!');
                 });
-                
+
             }
-            
-            
+
+
         });
     };
 
@@ -269,109 +270,109 @@
     GalleryManager.prototype.templateMain = [
         '{{#title}}<h5 class="_300 margin">{{title}}</h5>{{/title}}',
         '<div class="b-b b-b-dark m-b-1 p-x">',
-        	'<div class="row">',
-        		'<div class="p-y-md clearfix nav-active-primary">',
-			        '<ul class="nav nav-pills nav-sm">',
-			        '<li class="nav-item active"><a class="nav-link" href="#"',
-			        'data-toggle="tab" data-target="#gallery"><i class="fa fa-image"></i> Image collection <i class="fa fa-spinner"></i></a></li>',
-			        '<li class="nav-item"><a class="nav-link" href="#" data-toggle="tab" data-target="#upload"><i class="fa fa-upload"></i> Upload</a></li>',
-			        '</ul>',
-		        '</div>',
-	        '</div>',
+        '<div class="row">',
+        '<div class="p-y-md clearfix nav-active-primary">',
+        '<ul class="nav nav-pills nav-sm">',
+        '<li class="nav-item active"><a class="nav-link" href="#"',
+        'data-toggle="tab" data-target="#gallery"><i class="fa fa-image"></i> Image collection <i class="fa fa-spinner"></i></a></li>',
+        '<li class="nav-item"><a class="nav-link" href="#" data-toggle="tab" data-target="#upload"><i class="fa fa-upload"></i> Upload</a></li>',
+        '</ul>',
+        '</div>',
+        '</div>',
         '</div>',
         '<div class="tab-content">',
-        	'<div class="tab-pane p-v-sm active" id="gallery">',
-        		'<div class="row">',
-			        '<div class="col-md-4 push-md-8">',
-			        '<div class="box">',
-			        '<div class="box-header">Image Filter</div>',
-			        '<div class="box-body">',
-			        '<ul class="list-unstyled m-t-n-sm">',
-			        '{{#filterType}}',
-			        '<li class="checkbox"><label class="ui-check"> <input type="checkbox" name="filterType[]" class="filterType listen-event" value="{{type}}"><i></i> {{name}}',
-			        '</label></li>',
-			        '{{/filterType}}',
-			        '</ul>',
-			        '<div class="line line-dashed b-b m-b"></div>',
-			        '<div class="form-group row">',
-			        '<label for="inputPassword3" class="col-sm-2 form-control-label">Date</label>',
-			        '<div class="col-sm-10">',
-			        '<select class="form-control c-select" id="selectTypeDate">',
-			        '<option value="">Pick type date filter</option>',
-			        '<option value="day">Day</option>',
-			        '<option value="week">Week</option>',
-			        '<option value="month">Month</option>',
-			        '<option value="year">Year</option>',
-			        '</select>',
-			        '</div>',
-			        '</div>',
-			        '<div class="form-group">',
-			        '<div class="input-group date action-date" id="datePicker" ui-jp="datetimepicker" ui-options="{',
-			        'inline: true,',
-			        'sideBySide: true,',
-			        'maxDate: new Date(),',
-			        'format: \'DD/MM/YYYY\',',
-			        'icons: {',
-			        'time: \'fa fa-clock-o\',',
-			        'date: \'fa fa-calendar\',',
-			        'up: \'fa fa-chevron-up\',',
-			        'down: \'fa fa-chevron-down\',',
-			        'previous: \'fa fa-chevron-left\',',
-			        'next: \'fa fa-chevron-right\',',
-			        'today: \'fa fa-screenshot\',',
-			        'clear: \'fa fa-trash\',',
-			        'close: \'fa fa-remove\'',
-			        '}',
-			        '}">',
-			        '</div>',
-			        '</div>',
-			        '</div>',
-			        '</div>',
-			        '</div>',
-			        
-			        '<div class="col-md-8 pull-md-4">',
-        	        
-        	        '<div class="row" id="gallery-container" ui-jp="clipboard" data-class="clipboard-btn"></div>',
-        	        '<div ui-jp="twbsPagination" id="pagination-image" class="pagination"></div>',
-    	        '</div>',
-		        '</div>',
-	        '</div>',
-	        '<div class="tab-pane p-v-sm" id="upload">',
-	        	'<form id="fileupload" ui-jp="fileupload" action="{{actionUpload}}" class="POST" enctype="multipart/form-data">',
-	        	'<input ui-jp="dropify" type="file" name="files" class="dropify" multiple="multiple" ui-options="{maxFileSize:\'{{maxFileSize}}\'}" />',
-		        '<div class="row fileupload-buttonbar padding">',
-		        '<div class="col-lg-3">',
-		        '<button type="submit" class="btn btn-primary start">',
-		        '<i class="glyphicon glyphicon-upload"></i> <span>Upload</span>',
-		        '</button>',
-		        '<button type="reset" class="btn btn-warning cancel">',
-		        '<i class="glyphicon glyphicon-ban-circle"></i> <span>Cancel</span>',
-		        '</button>',
-		        '<span class="fileupload-process"></span>',
-		        '</div>',
-		        '<div class="form-group row col-lg-4">',
-		        '<label class="form-control-label">Select</label>',
-		        '<div>',
-		        '<select class="form-control input-c" name="uploadType">',
-		        '{{#filterType}}',
-		        '<option value="{{type}}"> {{name}}</option>',
-		        '{{/filterType}}',
-		        '</select>',
-		        '</div>',
-		        '</div>',
-		        '<!-- The global progress state -->',
-		        '<div class="col-lg-5 fileupload-progress fade">',
-		        '<!-- The global progress bar -->',
-		        '<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">',
-		        '<div class="progress-bar progress-bar-success" style="width: 0%;"></div>',
-		        '</div>',
-		        '<!-- The extended global progress state -->',
-		        '<div class="progress-extended">&nbsp;</div>',
-		        '</div>',
-		        '<table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>',
-		        '</div>',
-		        '</form>',
-	        '</div>',
+        '<div class="tab-pane p-v-sm active" id="gallery">',
+        '<div class="row">',
+        '<div class="col-md-4 push-md-8">',
+        '<div class="box">',
+        '<div class="box-header">Image Filter</div>',
+        '<div class="box-body">',
+        '<ul class="list-unstyled m-t-n-sm">',
+        '{{#filterType}}',
+        '<li class="checkbox"><label class="ui-check"> <input type="checkbox" name="filterType[]" class="filterType listen-event" value="{{type}}"><i></i> {{name}}',
+        '</label></li>',
+        '{{/filterType}}',
+        '</ul>',
+        '<div class="line line-dashed b-b m-b"></div>',
+        '<div class="form-group row">',
+        '<label for="inputPassword3" class="col-sm-2 form-control-label">Date</label>',
+        '<div class="col-sm-10">',
+        '<select class="form-control c-select" id="selectTypeDate">',
+        '<option value="">Pick type date filter</option>',
+        '<option value="day">Day</option>',
+        '<option value="week">Week</option>',
+        '<option value="month">Month</option>',
+        '<option value="year">Year</option>',
+        '</select>',
+        '</div>',
+        '</div>',
+        '<div class="form-group">',
+        '<div class="input-group date action-date" id="datePicker" ui-jp="datetimepicker" ui-options="{',
+        'inline: true,',
+        'sideBySide: true,',
+        'maxDate: new Date(),',
+        'format: \'DD/MM/YYYY\',',
+        'icons: {',
+        'time: \'fa fa-clock-o\',',
+        'date: \'fa fa-calendar\',',
+        'up: \'fa fa-chevron-up\',',
+        'down: \'fa fa-chevron-down\',',
+        'previous: \'fa fa-chevron-left\',',
+        'next: \'fa fa-chevron-right\',',
+        'today: \'fa fa-screenshot\',',
+        'clear: \'fa fa-trash\',',
+        'close: \'fa fa-remove\'',
+        '}',
+        '}">',
+        '</div>',
+        '</div>',
+        '</div>',
+        '</div>',
+        '</div>',
+
+        '<div class="col-md-8 pull-md-4">',
+
+        '<div class="row" id="gallery-container" ui-jp="clipboard" data-class="clipboard-btn"></div>',
+        '<div ui-jp="twbsPagination" id="pagination-image" class="pagination"></div>',
+        '</div>',
+        '</div>',
+        '</div>',
+        '<div class="tab-pane p-v-sm" id="upload">',
+        '<form id="fileupload" ui-jp="fileupload" action="{{actionUpload}}" class="POST" enctype="multipart/form-data">',
+        '<input ui-jp="dropify" type="file" name="files" class="dropify" multiple="multiple" ui-options="{maxFileSize:\'{{maxFileSize}}\', contentType: \'application/json\'}" />',
+        '<div class="row fileupload-buttonbar padding">',
+        '<div class="col-lg-3">',
+        '<button type="submit" class="btn btn-primary start">',
+        '<i class="glyphicon glyphicon-upload"></i> <span>Upload</span>',
+        '</button>',
+        '<button type="reset" class="btn btn-warning cancel">',
+        '<i class="glyphicon glyphicon-ban-circle"></i> <span>Cancel</span>',
+        '</button>',
+        '<span class="fileupload-process"></span>',
+        '</div>',
+        '<div class="form-group row col-lg-4">',
+        '<label class="form-control-label">Select</label>',
+        '<div>',
+        '<select class="form-control input-c" name="uploadType">',
+        '{{#filterType}}',
+        '<option value="{{type}}"> {{name}}</option>',
+        '{{/filterType}}',
+        '</select>',
+        '</div>',
+        '</div>',
+        '<!-- The global progress state -->',
+        '<div class="col-lg-5 fileupload-progress fade">',
+        '<!-- The global progress bar -->',
+        '<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">',
+        '<div class="progress-bar progress-bar-success" style="width: 0%;"></div>',
+        '</div>',
+        '<!-- The extended global progress state -->',
+        '<div class="progress-extended">&nbsp;</div>',
+        '</div>',
+        '<table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>',
+        '</div>',
+        '</form>',
+        '</div>',
         '</div>'
     ];
 

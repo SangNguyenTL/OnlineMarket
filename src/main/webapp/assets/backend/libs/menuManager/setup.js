@@ -59,7 +59,7 @@
             return;
         }
 
-        if (parent != null)
+        if (parent.length > 0)
             item.data("parentId", parent.data("id"));
         else
             item.data("parentId", null);
@@ -84,7 +84,7 @@
         var _this = this, flag = true;
         if (!this.oldData)
             return flag;
-        $.each(data, function(i, v) {
+        $.each(_this.oldData, function(i, v) {
             if (data[i] != _this.oldData[i]){
                 flag = false;
                 return;
@@ -263,7 +263,7 @@
         if (v.icon)
             v.iconHtml = '<i class="fa ' + v.icon + '"></i>';
         _this.render(v, _this.templateItem, container, true);
-        if (v.menus.lenght == 0)
+        if (v.menus.length == 0)
             return;
         var newItem = container.find("#item-" + v.id)
             , childContainer = {};

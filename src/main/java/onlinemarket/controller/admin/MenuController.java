@@ -39,7 +39,9 @@ public class MenuController extends MainController{
 			@PathVariable("menuGroupId") Integer menuGroupId,
 			ModelMap model) {
 		menuGroupPath = "/admin/menu-group";
-		relativePath = relativePath+"/"+menuGroupId+"/menu";
+		relativePath = menuGroupPath+"/"+menuGroupId+"/menu";
+		generateBreadcrumbs();
+		breadcrumbs.add(new String[]{ menuGroupPath, "Menu group"});
 		menuGroup = menuGroupService.getByKey(menuGroupId);
 		model.put("relativePath", relativePath);
 		model.put("menuGroup", menuGroup);

@@ -2,6 +2,7 @@ package onlinemarket.controller;
 
 import javax.annotation.PostConstruct;
 
+import onlinemarket.service.MenuSiteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,7 +21,6 @@ import onlinemarket.service.config.ConfigurationService;
 import onlinemarket.util.Slugify;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public abstract class MainController {
@@ -39,6 +39,9 @@ public abstract class MainController {
 
     @Autowired
     protected UserService userService;
+
+    @Autowired
+    MenuSiteService menuSiteService;
 
     protected User currentUser;
 
@@ -62,11 +65,12 @@ public abstract class MainController {
         model.put("menuPosition", configurationService.getMenuPositionConfig());
         model.put("productCategoryList", productCategoryService.list());
         model.put("brandList", brandService.list());
+        model.put("menuSite", menuSiteService.generateMenu());
     }
 
     @ModelAttribute("currentUser")
     public User getCurrentUser() {
-        String userName = null;
+        String userName;
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         if (principal instanceof UserDetails) {

@@ -1,16 +1,10 @@
 package onlinemarket.controller.web;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,9 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import onlinemarket.form.config.UploadForm;
 import onlinemarket.form.filter.ImageFilter;
 import onlinemarket.model.Image;
-import onlinemarket.model.User;
 import onlinemarket.service.ImageService;
-import onlinemarket.service.UserService;
 import onlinemarket.util.exception.CreateFolderException;
 import onlinemarket.util.exception.UploadTypeException;
 import onlinemarket.util.FileValidator;
@@ -37,34 +29,10 @@ import javax.validation.Valid;
 public class ApiImageController {
 
     @Autowired
-    private UserService userService;
-
-    private User currentUser;
-
-    @Autowired
     FileValidator fileValidator;
 
     @Autowired
     ImageService imageService;
-
-    @ModelAttribute("currentUser")
-    public User getCurrentUser() {
-        String userName;
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if (principal instanceof UserDetails) {
-            userName = ((UserDetails) principal).getUsername();
-        } else {
-            userName = principal.toString();
-        }
-
-        currentUser = userService.getByEmail(userName);
-        if (currentUser == null) {
-            currentUser = new User();
-            currentUser.setEmail(userName);
-        }
-        return currentUser;
-    }
 
     @InitBinder("uploadFrom")
     protected void initBinderUploadFrom(WebDataBinder binder) {
@@ -81,14 +49,14 @@ public class ApiImageController {
     }
 
     @RequestMapping(value = "/load", produces = MediaType.APPLICATION_JSON_VALUE, method = {RequestMethod.POST, RequestMethod.GET})
-    public ResponseEntity<?> getUser(@ModelAttribute("imageFilter") ImageFilter imageFilter) {
+    public ResponseEntity<?> getUser(@ModelAttribute ImageFilter imageFilter) {
         return ResponseEntity.ok().body(imageService.filter(imageFilter));
     }
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> upload(@Valid @ModelAttribute("uploadFrom") UploadForm uploadForm) {
+    public ResponseEntity<?> upload(@Valid @ModelAttribute UploadForm uploadForm) {
         try {
-            return ResponseEntity.ok().body(imageService.save(uploadForm, currentUser));
+            return ResponseEntity.ok().body(imageService.save(uploadForm));
         } catch (IllegalStateException | IOException | UploadTypeException | CreateFolderException e) {
             return ResponseEntity.badRequest().body(new ResponseResult(true, e.getMessage()));
         }

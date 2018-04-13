@@ -8,8 +8,12 @@ import java.util.List;
 
 import javax.servlet.ServletContext;
 
+import onlinemarket.dao.UserDao;
 import onlinemarket.util.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +35,9 @@ public class ImageServiceImpl implements ImageService {
 
 	@Autowired
 	ImageDao imageDao;
+
+	@Autowired
+	UserDao userDao;
 
 	@Autowired
 	StorageService storageService;
@@ -72,23 +79,30 @@ public class ImageServiceImpl implements ImageService {
 	}
 
 	@Override
-	public List<Image> save(UploadForm form, User user)
+	public List<Image> save(UploadForm form)
 			throws IllegalStateException, IOException, UploadTypeException, CreateFolderException {
-		List<File> fileList = storageService.store(form);
-		File basePath = new File(context.getRealPath(""));
+
 		List<Image> imageList = new ArrayList<>();
-		for (File file : fileList) {
-			Image image = new Image();
-			String name = file.getName().substring(file.getName().indexOf("-") + 1);
-			image.setName(name);
-			String path = "/" + basePath.toURI().relativize(file.toURI()).getPath();
-			image.setPath(path);
-			image.setDataType(form.getUploadType());
-			image.setUploadDate(new Date());
-			image.setUser(user);
-			imageDao.save(image);
-			imageList.add(image);
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+			User user = userDao.getByEmail(authentication.getName());
+			List<File> fileList = storageService.store(form);
+			File basePath = new File(context.getRealPath(""));
+			for (File file : fileList) {
+				Image image = new Image();
+				String name = file.getName().substring(file.getName().indexOf("-") + 1);
+				image.setName(name);
+				String path = "/" + basePath.toURI().relativize(file.toURI()).getPath();
+				image.setPath(path);
+				image.setDataType(form.getUploadType());
+				image.setUploadDate(new Date());
+				image.setUser(user);
+				imageDao.save(image);
+				imageList.add(image);
+			}
 		}
+
 		return imageList;
 	}
 

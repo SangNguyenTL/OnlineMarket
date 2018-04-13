@@ -7,7 +7,6 @@ import java.util.List;
 import onlinemarket.dao.AttributeValuesDao;
 import onlinemarket.dao.CommentDao;
 import onlinemarket.model.*;
-import onlinemarket.util.exception.CustomException;
 import onlinemarket.util.exception.product.ProductHasCommentException;
 import onlinemarket.util.exception.product.ProductNotFoundException;
 import onlinemarket.util.exception.productCategory.ProductCategoryNotFoundException;
@@ -44,11 +43,10 @@ public class ProductServiceImpl implements ProductService {
 
     private List<ProductAttributeValues> makeListProductAttributeValues(Product newProduct, List<ProductAttributeValues> inputList){
         List<ProductAttributeValues> productAttributeValuesList = new ArrayList<>();
-        for(int i = 0; i< inputList.size(); i++){
-            ProductAttributeValues productAttributeValues = inputList.get(i);
-            if(productAttributeValues.getAttributeValuesId()!= null) {
+        for (ProductAttributeValues productAttributeValues : inputList) {
+            if (productAttributeValues.getAttributeValuesId() != null) {
                 AttributeValues attributeValues = attributeValuesDao.getByKey(productAttributeValues.getAttributeValuesId());
-                if(attributeValues != null){
+                if (attributeValues != null) {
                     ProductAttributeValues productAttributeValues1 = new ProductAttributeValues();
                     productAttributeValues1.setProductId(newProduct.getId());
                     productAttributeValues1.setAttributeValuesId(attributeValues.getId());

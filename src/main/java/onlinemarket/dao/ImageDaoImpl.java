@@ -28,7 +28,7 @@ public class ImageDaoImpl extends AbstractDao<Integer, Image> implements ImageDa
 		criteria.setProjection(Projections.rowCount());
 		if(filter.getUploadType() != null && filter.getUploadType().length > 0) 
 			criteria.add(Restrictions.in("dataType", filter.getUploadType()));
-		if(filter.getDatetime() != null && StringUtils.isNotBlank(filter.getDateType())) {
+		if(StringUtils.isNotBlank(filter.getDateType()) && filter.getDatetime() != null) {
 		
 			Calendar c = Calendar.getInstance();
 			c.setTime(filter.getDatetime());

@@ -28,12 +28,10 @@ public class AppInitializer implements WebApplicationInitializer {
     public void onStartup(ServletContext servletContext) throws ServletException {
         AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
         rootContext.register(AppConfig.class);
-
         configureDispatcherServlet(servletContext, rootContext);
         EnumSet<DispatcherType> dispatcherTypes = EnumSet.of(DispatcherType.REQUEST, DispatcherType.FORWARD);
         configureCharacterEncodingFilter(servletContext, dispatcherTypes);
         servletContext.addListener(new ContextLoaderListener(rootContext));
-
     }
 
     private void configureDispatcherServlet(ServletContext servletContext, WebApplicationContext rootContext) {
