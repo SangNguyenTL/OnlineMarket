@@ -6,13 +6,14 @@ import onlinemarket.model.AttributeValues;
 import onlinemarket.result.ResultObject;
 import onlinemarket.util.exception.attribute.AttributeNotFoundException;
 import onlinemarket.util.exception.attributeValues.AttributeValuesHasProductException;
+import onlinemarket.util.exception.attributeValues.AttributeValuesIsExistException;
 import onlinemarket.util.exception.attributeValues.AttributeValuesNotFoundException;
 
 public interface AttributeValuesService {
 
     AttributeValues getByKey(Integer id);
 
-    void save(AttributeValues attributeValues, Attribute attribute) throws AttributeNotFoundException;
+    void save(AttributeValues attributeValues, Attribute attribute) throws AttributeNotFoundException, AttributeValuesIsExistException;
 
     void update(AttributeValues attributeValues, Attribute attribute) throws AttributeNotFoundException, AttributeValuesNotFoundException;
 

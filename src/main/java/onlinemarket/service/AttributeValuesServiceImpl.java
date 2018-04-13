@@ -7,10 +7,15 @@ import onlinemarket.model.AttributeValues;
 import onlinemarket.result.ResultObject;
 import onlinemarket.util.exception.attribute.AttributeNotFoundException;
 import onlinemarket.util.exception.attributeValues.AttributeValuesHasProductException;
+import onlinemarket.util.exception.attributeValues.AttributeValuesIsExistException;
 import onlinemarket.util.exception.attributeValues.AttributeValuesNotFoundException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service("attributeValuesServiceImpl")
 @Transactional
@@ -25,19 +30,26 @@ public class AttributeValuesServiceImpl implements AttributeValuesService{
     }
 
     @Override
-    public void save(AttributeValues attributeValues, Attribute attribute) throws AttributeNotFoundException {
+    public void save(AttributeValues attributeValues, Attribute attribute) throws AttributeNotFoundException, AttributeValuesIsExistException {
         if(attribute == null) throw new AttributeNotFoundException();
         String[] arrayValue = attributeValues.getValue().split(",");
         if(arrayValue.length > 1){
             AttributeValues attributeValues1;
+            List<String> valuesExist = new ArrayList<>();
             for(int i = 0; i < arrayValue.length; i++){
                 if(i ==0 )
                     attributeValues1 = new AttributeValues(arrayValue[i].trim(), attributeValues.getLink(), attribute);
                 else
                     attributeValues1 = new AttributeValues(arrayValue[i].trim(), attribute);
-                attributeValuesDao.save(attributeValues1);
+                if(attributeValuesDao.getByAttributeAndValue(attribute, attributeValues1.getValue()) == null)
+                    attributeValuesDao.save(attributeValues1);
+                else valuesExist.add(attributeValues1.getValue());
             }
+            if(valuesExist.size() > 0)
+                throw new AttributeValuesIsExistException(StringUtils.join(valuesExist, ", ") + " is exist!");
+
         }else {
+            if(attributeValuesDao.getByAttributeAndValue(attribute, attributeValues.getValue()) != null) throw new AttributeValuesIsExistException();
             attributeValues.setAttribute(attribute);
             attributeValuesDao.save(attributeValues);
         }

@@ -103,7 +103,7 @@
             <div class="col-sm-9 box-image">
                 <a href="#" data-toggle="modal" data-target="#modal-image-gallery" ui-toggle-class="zoom" ui-target="#animate" data-target-input="favicon">
                     <img th:if="*{favicon}" th:src="@{*{favicon}}" alt="..." class="img-thumbnail thumbnail box-thumbnail">
-                    <img th:unless="*{favicon}" th:src="@{/assets/images/defaultImage.jpg}" alt="..." class="img-thumbnail thumbnail">
+                    <img th:unless="*{favicon}" th:src="@{/assets/images/defaultImage.jpg}" alt="..." class="img-thumbnail thumbnail box-thumbnail">
                 </a>
                 <input th:errorclass="parsley-error" class="form-control hide" type="text" th:field="*{favicon}" required maxlength="2088"/>
                 <ul class="parsley-errors-list filled" id="parsley-id-favicon" th:if="${#fields.hasErrors('favicon')}">
@@ -117,7 +117,7 @@
                 <a href="#" data-toggle="modal" data-target="#modal-image-gallery" ui-toggle-class="zoom"
                    ui-target="#animate" data-target-input="logo">
                     <img th:if="*{logo}" th:src="@{*{logo}}" alt="..." class="img-thumbnail thumbnail box-thumbnail"/>
-                    <img th:unless="*{logo}" th:src="@{/assets/images/defaultImage.jpg}" alt="..." class="img-thumbnail thumbnail"/>
+                    <img th:unless="*{logo}" th:src="@{/assets/images/defaultImage.jpg}" alt="..." class="img-thumbnail thumbnail box-thumbnail"/>
                 </a>
                 <input th:errorclass="parsley-error" class="form-control hide" type="text" th:field="*{logo}" required maxlength="2088"/>
                 <ul class="parsley-errors-list filled" id="parsley-id-logo" th:if="${#fields.hasErrors('logo')}">

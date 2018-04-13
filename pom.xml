@@ -22,7 +22,6 @@
 		<jackson.version>2.4.0</jackson.version>
 		<jaxb-api.version>2.2.11</jaxb-api.version>
 		<commons-lang3.version>3.7</commons-lang3.version>
-		<slf4j.version>1.6.6</slf4j.version>
 		<war.pakage.name>OnlineMarket</war.pakage.name>
 	</properties>
 	<dependencies>
@@ -212,11 +211,13 @@
 			<version>60.1</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/commons-logging/commons-logging -->
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
-			<version>${slf4j.version}</version>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.2</version>
 		</dependency>
+
 	</dependencies>
 	<build>
 		<plugins>

@@ -12,6 +12,7 @@ import onlinemarket.service.AttributeValuesService;
 import onlinemarket.util.exception.attribute.AttributeNotFoundException;
 import onlinemarket.util.exception.attributeGroup.AttributeGroupNotFoundException;
 import onlinemarket.util.exception.attributeValues.AttributeValuesHasProductException;
+import onlinemarket.util.exception.attributeValues.AttributeValuesIsExistException;
 import onlinemarket.util.exception.attributeValues.AttributeValuesNotFoundException;
 import onlinemarket.util.exception.productCategory.ProductCategoryNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -206,6 +207,9 @@ public class AttributeValuesController extends MainController {
         } catch (AttributeNotFoundException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             return "redirect:" + attributePath;
+        } catch (AttributeValuesIsExistException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:" + relativePath;
         }
 
     }

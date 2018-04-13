@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<!--/*@thymesVar id="general" type="onlinemarket.form.config.GeneralConfig"*/-->
+<!--/*@thymesVar id="logo" type="onlinemarket.form.config.LogoConfig"*/-->
+<!--/*@thymesVar id="menuSite" type="onlinemarket.util.MenuSite"*/-->
+<!--/*@thymesVar id="currentUser" type="onlinemarket.model.User"*/-->
+<!--/*@thymesVar id="social" type="onlinemarket.form.config.SocialConfig"*/-->
+<!--/*@thymesVar id="pageTitle" type="java.lang.String"*/-->
+<!--/*@thymesVar id="pathAdd" type="java.lang.String"*/-->
 <head>
   <meta charset="utf-8" />
   <title th:text="(${pageTitle} == null) ? ${general.title} : (${pageTitle} + ' | '+ ${general.title})"></title>
@@ -261,51 +268,7 @@
       </div>
     </div>
     
-    <div class="switcher box-color black lt" id="sw-demo">
-      <a href="#" ui-toggle-class="active" target="#sw-demo" class="box-color black lt text-color sw-btn">
-        <i class="fa fa-list text-white"></i>
-      </a>
-      <div class="box-header">
-        <h2>Demos</h2>
-      </div>
-      <div class="box-divider"></div>
-      <div class="box-body">
-        <div class="text-u-c text-center _600 clearfix">
-          <a href="dashboard.html"
-            class="p-a col-xs-6 primary">
-            <span class="text-white">Default</span>
-          </a>
-          <a href="dashboard.0.html"
-            class="p-a col-xs-6 success">
-            <span class="text-white">Zero</span>
-          </a>
-          <a href="dashboard.1.html"
-            class="p-a col-xs-6 blue">
-            <span class="text-white">One</span>
-          </a>
-          <a href="dashboard.2.html"
-            class="p-a col-xs-6 warn">
-            <span class="text-white">Two</span>
-          </a>
-          <a href="dashboard.3.html"
-            class="p-a col-xs-6 danger">
-            <span class="text-white">Three</span>
-          </a>
-          <a href="dashboard.4.html"
-            class="p-a col-xs-6 green">
-            <span class="text-white">Four</span>
-          </a>
-          <a href="dashboard.5.html"
-            class="p-a col-xs-6 info">
-            <span class="text-white">Five</span>
-          </a>
-          <div 
-            class="p-a col-xs-6 lter">
-            <span class="text">...</span>
-          </div>
-        </div>
-      </div>
-    </div>
+
   </div>
   <!-- / -->
 

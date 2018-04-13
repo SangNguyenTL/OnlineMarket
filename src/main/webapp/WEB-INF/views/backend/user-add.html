@@ -83,7 +83,7 @@
                                         <img th:if="*{avatar}" th:src="@{*{avatar}}" alt="..."
                                              class="img-thumbnail thumbnail box-thumbnail">
                                         <img th:unless="*{avatar}" th:src="@{/assets/images/defaultImage.jpg}" alt="..."
-                                             class="img-thumbnail thumbnail">
+                                             class="img-thumbnail thumbnail box-thumbnail">
                                     </a>
                                     <input th:errorclass="parsley-error" class="form-control hide" type="text"
                                            th:field="*{avatar}" data-parsley-length="[3, 150]"

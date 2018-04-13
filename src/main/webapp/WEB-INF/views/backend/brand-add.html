@@ -66,9 +66,9 @@
                                     <a href="#" data-toggle="modal" data-target="#modal-image-gallery"
                                        ui-toggle-class="zoom" ui-target="#animate" data-target-input="imagePath">
                                         <img th:if="*{imagePath}" th:src="@{*{imagePath}}" alt="..."
-                                             class="img-thumbnail thumbnail">
+                                             class="img-thumbnail thumbnail box-thumbnail">
                                         <img th:unless="*{imagePath}" th:src="@{/assets/images/defaultImage.jpg}"
-                                             alt="..." class="img-thumbnail thumbnail">
+                                             alt="..." class="img-thumbnail thumbnail box-thumbnail">
                                     </a>
                                     <input th:errorclass="parsley-error" class="form-control hide" type="text"
                                            th:field="*{imagePath}" required maxlength="2088"/>
