@@ -67,7 +67,7 @@ public class Product implements java.io.Serializable {
 	private Set<ProductViewsStatistc> productViewsStatistcs = new HashSet<>(0);
 	private Set<Comment> comments = new HashSet<>(0);
 	private Set<Cart> carts = new HashSet<>(0);
-	private Integer countAttribute;
+	private Integer countAttribute = -1;
 
 	public Product() {
 	}
@@ -363,7 +363,6 @@ public class Product implements java.io.Serializable {
 
     @Transient
     public Integer getCountAttribute() {
-	    if(countAttribute == null) countAttribute = 0;
         return countAttribute;
     }
 
@@ -372,7 +371,6 @@ public class Product implements java.io.Serializable {
     }
 
     public Integer processCount(){
-	    if(countAttribute == null) countAttribute = -1;
 	    return countAttribute++;
     }
 

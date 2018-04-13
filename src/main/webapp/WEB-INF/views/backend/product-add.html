@@ -19,7 +19,7 @@
             <div class="col-md-9">
 
                 <!--/*@thymesVar id="product" type="onlinemarket.model.Product"*/-->
-                <form ui-jp="parsley" role="form" th:object="${product}" th:action="@{${pathAction}}" method="POST">
+                <form id="formProduct" ui-jp="parsley" role="form" th:object="${product}" th:action="@{${pathAction}}" method="POST">
                     <input th:if="${action} == 'update'" type="hidden" th:field="*{id}"/>
                     <input th:if="${action} == 'update'" type="hidden" id="beforeSlug" name="beforeSlug"
                            th:value="*{slug}"/>
@@ -190,14 +190,16 @@
                         <div class="box-body">
                             <div th:each="attribute, attributeStat : ${attributeGroup.attributes}" class="form-group row">
                                 <label class="col-sm-3 form-control-label" th:text="${attribute.name}"></label>
-                                <div class="col-sm-9 row">
-                                    <select th:alt="'attributeValues-' + ${product.processCount()}" th:if="${attribute.type} == 'select'" th:id="'productAttributeValues' + *{countAttribute} + '.attributeValuesId'" th:name="'productAttributeValues[' + *{countAttribute} + '].attributeValuesId'" ui-jp="select2" ui-options="{placeholder: 'Select an option', allowClear: true}" style="width: 100%" class="form-control">
+                                <div th:if="${attribute.type} == 'select'" class="col-sm-9 row" th:id="'attributeValues-' + ${product.processCount()}">
+                                    <select th:id="'productAttributeValues' + *{countAttribute} + 'AttributeValuesId'" th:name="'productAttributeValues[' + *{countAttribute} + '].attributeValuesId'" ui-jp="select2" ui-options="{placeholder: 'Select an option', allowClear: true}" style="width: 100%" class="form-control">
                                         <option></option>
                                         <option th:each="attributeValue : ${attribute.attributeValues}" th:value="${attributeValue.id}" th:text="${attributeValue.value}" th:selected="${product.checkProductAttributes(attributeValue)}"></option>
                                     </select>
-                                    <div th:if="${attribute.type} == 'checkbox'" th:each="attributeValue : ${attribute.attributeValues}" class="checkbox col-sm-3">
-                                        <label th:id="'attributeValues-' + ${product.processCount()}">
-                                            <input type="checkbox" th:id="'productAttributeValues' + *{countAttribute} + '.attributeValuesId'" th:name="'productAttributeValues[' + *{countAttribute} + '].attributeValuesId'" th:value="${attributeValue.id}" th:checked="${product.checkProductAttributes(attributeValue)}"/>
+                                </div>
+                                <div class="col-sm-9 row" th:if="${attribute.type} == 'checkbox'">
+                                    <div  th:each="attributeValue : ${attribute.attributeValues}" th:id="'attributeValues-' + ${product.processCount()}" class="checkbox col-sm-3">
+                                        <label>
+                                            <input type="checkbox" th:id="'productAttributeValues' + *{countAttribute} + 'AttributeValuesId'" th:name="'productAttributeValues[' + *{countAttribute} + '].attributeValuesId'" th:value="${attributeValue.id}" th:checked="${product.checkProductAttributes(attributeValue)}"/>
                                             <i class="dark-white"></i>
                                             [[${attributeValue.value}]]
                                         </label>
