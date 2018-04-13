@@ -86,7 +86,7 @@ public class Brand implements java.io.Serializable {
 
 	@Column(name = "name", nullable = false)
 	@NotEmpty
-	@Size(min = 3, max = 64)
+	@Size(min = 2, max = 64)
 	public String getName() {
 		return this.name;
 	}
@@ -97,7 +97,7 @@ public class Brand implements java.io.Serializable {
 
 	@Column(name = "slug", nullable = false, length = 64, unique = true)
 	@NotEmpty
-	@Size(min = 3, max = 64)
+	@Size(min = 2, max = 64)
 	public String getSlug() {
 		return this.slug;
 	}
