@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import onlinemarket.controller.MainController;
 import onlinemarket.form.filter.FilterForm;
-import onlinemarket.form.filter.FilterUser;
 import onlinemarket.model.User;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -27,8 +26,6 @@ import javax.validation.groups.Default;
 public class UserController extends MainController {
 
     protected FilterForm filterForm;
-
-    private FilterUser filterUser;
 
     @Autowired
     RoleService roleService;
@@ -42,13 +39,11 @@ public class UserController extends MainController {
         title = "User management page";
         relativePath = "/admin/user";
         filterForm = new FilterForm();
-        filterUser = new FilterUser(filterForm);
         generateBreadcrumbs();
         breadcrumbs.add(new String[]{"/admin", "Admin"});
         breadcrumbs.add(new String[]{relativePath, "User management page"});
         model.put("relativePath", relativePath);
         model.put("filterForm", filterForm);
-        model.put("filterUser", filterUser);
         model.put("roles", roleService.list());
         model.put("pathAdd", relativePath+"/add");
         model.put("userPage", true);
@@ -57,31 +52,18 @@ public class UserController extends MainController {
     }
 
     @RequestMapping(value = "", method = {RequestMethod.GET , RequestMethod.POST})
-    String mainPage(@ModelAttribute("filterUser") FilterUser filterUser, ModelMap model) {
+    String mainPage(@ModelAttribute("filterForm") FilterForm filterForm, ModelMap model) {
 
-        filterUser.setFilterForm(filterForm);
-        if (filterUser.getState() != null)
-            filterForm.getGroupSearch().put("state", filterUser.getState());
-        if (filterUser.getRole() != null)
-            filterForm.getGroupSearch().put("role.id", Integer.toString(filterUser.getRole()));
         model.put("pageTitle", title);
         model.put("result", userService.list(filterForm));
         model.put("filterForm", filterForm);
-        model.put("filterUser", filterUser);
         model.put("path", "user");
-        model.addAllAttributes(filterForm.getGroupSearch());
 
         return "backend/user";
     }
 
     @RequestMapping(value = "/page/{page:^\\d+}", method = {RequestMethod.GET , RequestMethod.POST})
-    public String mainPagePagination(@ModelAttribute("filterUser") FilterUser filterUser, @PathVariable("page") Integer page, ModelMap model) {
-
-        filterUser.setFilterForm(filterForm);
-        if (filterUser.getState() != null)
-            filterForm.getGroupSearch().put("state", filterUser.getState());
-        if (filterUser.getRole() != null)
-            filterForm.getGroupSearch().put("role.id", Integer.toString(filterUser.getRole()));
+    public String mainPagePagination(@ModelAttribute("filterForm") FilterForm filterForm, @PathVariable("page") Integer page, ModelMap model) {
 
         filterForm.setCurrentPage(page);
 
@@ -89,7 +71,6 @@ public class UserController extends MainController {
         model.put("result", userService.list(filterForm));
         model.put("filterForm", filterForm);
         model.put("path", "user");
-        model.put("filterUser", filterUser);
         model.addAllAttributes(filterForm.getGroupSearch());
 
         return "backend/user";

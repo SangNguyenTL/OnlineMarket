@@ -20,11 +20,11 @@
     <!-- for ios 7 style, multi-resolution icon of 152x152 -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-barstyle" content="black-translucent">
-    <link rel="apple-touch-icon" th:href="@{${logo.logo}}">
-    <meta name="apple-mobile-web-app-title" content="Flatkit">
+    <link rel="apple-touch-icon" th:href="@{${logo.favicon}}">
+    <meta name="apple-mobile-web-app-title" th:content="${general.title}">
     <!-- for Chrome on Android, multi-resolution icon of 196x196 -->
     <meta name="mobile-web-app-capable" content="yes">
-    <link rel="shortcut icon" sizes="196x196" th:href="@{${logo.logo}}">
+    <link rel="shortcut icon" sizes="196x196" th:href="@{${logo.favicon}}">
 
 
     <!-- CSS Part Start-->

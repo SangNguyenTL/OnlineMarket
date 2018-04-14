@@ -3,6 +3,16 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:filter="http://thymeleafexamples"
       layout:decorate="templates/backend">
+<!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
+<!--/*@thymesVar id="relativePath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="pageTitle" type="java.lang.String"*/-->
+<!--/*@thymesVar id="error" type="java.lang.String"*/-->
+<!--/*@thymesVar id="success" type="java.lang.Boolean"*/-->
+<!--/*@thymesVar id="filterForm" type="onlinemarket.form.filter.FilterForm"*/-->
+<!--/*@thymesVar id="state" type="onlinemarket.model.State"*/-->
+<!--/*@thymesVar id="result" type="onlinemarket.result.ResultObject<onlinemarket.model.User>"*/-->
+<!--/*@thymesVar id="user" type="onlinemarket.model.User"*/-->
+<!--/*@thymesVar id="roles" type="java.util.List<onlinemarket.model.Role>"*/-->
 <head>
 </head>
 <body>
@@ -26,10 +36,10 @@
                 <strong>Obbs!</strong> [[${error}]].
             </div>
             <div class="row p-a">
-                <form th:object="${filterUser}" th:action="@{${relativePath}}" method="POST">
+                <form th:object="${filterForm}" th:action="@{${relativePath}}" method="POST">
                     <div class="col-sm-3">
                         <div class="input-group input-group-sm">
-                            <select class="form-control" th:field="*{role}">
+                            <select class="form-control" th:field="*{groupSearch['role']}">
                                 <option value="">Role...</option>
                                 <option th:each="role : ${roles}"
                                         th:value="${role.id}" th:text="${role.name}"></option>
@@ -38,16 +48,16 @@
                     </div>
                     <div class="col-sm-3">
                         <div class="input-group input-group-sm">
-                            <select class="form-control" th:field="*{state}">
+                            <select class="form-control" th:field="*{groupSearch['state']}">
                                 <option value="">State...</option>
-                                <option th:each="st : ${T(onlinemarket.model.State).values()}"
-                                        th:value="${st}" th:text="${st.state}"></option>
+                                <option th:each="state : ${T(onlinemarket.model.State).values()}"
+                                        th:value="${state}" th:text="${state.state}"></option>
                             </select>
                         </div>
                     </div>
                     <div class="col-sm-3">
                         <div class="input-group input-group-sm">
-                            <select class="form-control" th:field="*{filterForm.searchBy}">
+                            <select class="form-control" th:field="*{searchBy}">
                                 <option value="">Search by</option>
                                 <option value="firstName">First name</option>
                                 <option value="lastName">Last name</option>
@@ -58,14 +68,14 @@
                     <div class="col-sm-3">
                         <div class="input-group input-group-sm">
                             <input class="form-control" placeholder="Search" type="text"
-                                   th:field="*{filterForm.search}">
+                                   th:field="*{search}">
                             <span class="input-group-btn">
 									<button class="btn b-a white" type="submit">Go!</button>
 								</span>
                         </div>
-                        <input type="hidden" th:field="*{filterForm.size}"/>
-                        <input type="hidden" th:field="*{filterForm.order}"/>
-                        <input type="hidden" th:field="*{filterForm.orderBy}"/>
+                        <input type="hidden" th:field="*{size}"/>
+                        <input type="hidden" th:field="*{order}"/>
+                        <input type="hidden" th:field="*{orderBy}"/>
                     </div>
                 </form>
             </div>

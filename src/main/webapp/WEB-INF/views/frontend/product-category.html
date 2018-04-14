@@ -12,7 +12,7 @@
 <!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
 <!--/*@thymesVar id="relativePath" type="java.lang.String"*/-->
 <!--/*@thymesVar id="result" type="onlinemarket.result.ResultObject<onlinemarket.model.Product>"*/-->
-<!--/*@thymesVar id="filterProduct" type="onlinemarket.form.filter.FilterProduct"*/-->
+<!--/*@thymesVar id="filterForm" type="onlinemarket.form.filter.FilterForm"*/-->
 <head>
 </head>
 <body th:inline="text">
@@ -39,8 +39,8 @@
             <div id="content" class="col-sm-9">
                 <h1 class="title">All product</h1>
                 <h3 class="subtitle">Brand</h3>
-                <div class="category-list-thumb row">
-                    <div th:each="brand : ${brandList}" class="col-lg-2 col-md-2 col-sm-2 col-xs-4">
+                <div class="category-list-thumb owl-carousel latest_brands_carousel">
+                    <div th:each="brand : ${brandList}" class=".owl-carousel.latest_brands_carousel">
                         <div class="box-image"><a th:href="@{${relativePath}+'/'+${brand.slug}}"><img
                                 th:src="@{${brand.imagePath}}" th:alt="${brand.name}+' ('+${brand.products.size()}+')'"></a>
                         </div>
@@ -48,7 +48,7 @@
                            th:text="${brand.name}+' ('+${brand.products.size()}+')'"></a></div>
                 </div>
                 <div class="product-filter">
-                    <form th:object="${filterProduct}" th:action="${relativePath}" method="POST">
+                    <form th:object="${filterForm}" th:action="${relativePath}" method="POST">
                     <div class="row">
                             <div class="col-md-3 col-sm-4">
                                 <div class="btn-group">
@@ -62,16 +62,16 @@
                                 <label class="control-label" for="input-sort">Sort By:</label>
                             </div>
                             <div class="col-md-3 col-sm-2 text-right">
-                                <select id="input-sort" class="form-control col-sm-3" th:field="*{orderBy}">
-                                    <option value="" selected="selected">Default</option>
-                                    <option value="name-a-z">Name (A - Z)</option>
-                                    <option value="name-z-a">Name (Z - A)</option>
-                                    <option value="price-low-high">Price (Low &gt; High)</option>
-                                    <option value="price-high-low">Price (High &gt; Low)</option>
-                                    <option value="rating-highest">Rating (Highest)</option>
-                                    <option value="rating-lowest">Rating (Lowest)</option>
-                                    <option value="model-a-z">Model (A - Z)</option>
-                                    <option value="model-z-a">Model (Z - A)</option>
+                                <select id="input-sort" class="form-control col-sm-3" th:field="*{groupSearch[orderBy]}">
+                                    <option value="">Default</option>
+                                    <option value="name.asc">Name (A - Z)</option>
+                                    <option value="name.desc">Name (Z - A)</option>
+                                    <option value="price.asc">Price (Low &gt; High)</option>
+                                    <option value="price.desc">Price (High &gt; Low)</option>
+                                    <option value="rate.desc">Rating (Highest)</option>
+                                    <option value="rate.asc">Rating (Lowest)</option>
+                                    <option value="model.asc">Model (A - Z)</option>
+                                    <option value="model.desc">Model (Z - A)</option>
                                 </select>
                             </div>
                             <div class="col-sm-1 text-right">
@@ -79,10 +79,11 @@
                             </div>
                             <div class="col-sm-2 text-right">
                                 <select id="input-limit" class="form-control" th:field="*{size}">
-                                    <option value="10">10</option>
-                                    <option value="20">20</option>
-                                    <option value="25">25</option>
-                                    <option value="50">50</option>
+                                    <option th:value="10">10 rows</option>
+                                    <option th:value="20"
+                                            th:if="${result.totalPages * filterForm.size} > 10">20 rows</option>
+                                    <option th:value="50"
+                                            th:if="${result.totalPages * filterForm.size} > 50">50 rows</option>
                                 </select>
                             </div>
                             <div class="col-sm-1">
@@ -123,7 +124,7 @@
                                            filter:totalPages="${result.totalPages}"
                                            filter:uri="@{${relativePath}}"></filter:pagination>
                     </div>
-                    <div class="col-sm-6 text-right" th:with="productFrom=${result.getCurrentPage()*filterProduct.filterForm.size +1 - filterProduct.filterForm.size},productTo=${result.getCurrentPage()*filterProduct.filterForm.size}" th:text="${'Showing '+ productFrom +' to '+ productTo +' ('+result.totalPages+' pages)'}">Showing 1 to 12 of 15 (2 Pages)</div>
+                    <div class="col-sm-6 text-right" th:with="productFrom=${result.getCurrentPage()*filterForm.size +1 - filterForm.size},productTo=${result.getCurrentPage()*filterForm.size}" th:text="${'Showing '+ productFrom +' to '+ productTo +' ('+result.totalPages+' pages)'}">Showing 1 to 12 of 15 (2 Pages)</div>
                 </div>
             </div>
         </div>

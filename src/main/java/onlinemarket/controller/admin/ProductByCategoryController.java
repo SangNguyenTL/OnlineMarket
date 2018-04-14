@@ -1,9 +1,7 @@
 package onlinemarket.controller.admin;
 
-import javax.validation.Valid;
 import javax.validation.groups.Default;
 
-import onlinemarket.form.filter.FilterProduct;
 import onlinemarket.model.other.AdvancedValidation;
 import onlinemarket.util.exception.product.ProductHasCommentException;
 import onlinemarket.util.exception.product.ProductNotFoundException;
@@ -45,8 +43,6 @@ public class ProductByCategoryController extends MainController {
 
 	private FilterForm filterForm;
 
-	private FilterProduct filterProduct;
-
 	@ModelAttribute
 	public ModelMap populateAttribute(@PathVariable("productCategoryId") Integer productCategoryId, ModelMap model) {
 
@@ -60,12 +56,10 @@ public class ProductByCategoryController extends MainController {
 		breadcrumbs.add(new String[]{ relativePath, "Product"});
 
 		filterForm = new FilterForm();
-		filterProduct = new FilterProduct(filterForm);
 		model.put("productPage", true);
 		model.put("path", productCategory.getSlug() + "-product");
 		model.put("productCategory", productCategory);
 		model.put("filterForm", filterForm);
-		model.put("filterProduct", filterProduct);
 		model.put("relativePath", relativePath);
 		model.put("pathAdd", relativePath + "/add");
 		model.put("pageType", "product");
@@ -74,17 +68,11 @@ public class ProductByCategoryController extends MainController {
 	}
 
 	@RequestMapping(value = "", method = {RequestMethod.GET, RequestMethod.POST})
-	public String mainPage(@ModelAttribute("filterProduct") FilterProduct filterProduct, ModelMap model, RedirectAttributes redirectAttributes) {
+	public String mainPage(@ModelAttribute("filterForm") FilterForm filterForm, ModelMap model, RedirectAttributes redirectAttributes) {
 
 		try{
-			filterProduct.setFilterForm(filterForm);
-			if(filterProduct.getState() != null){
-				filterForm.getGroupSearch().put("state", filterProduct.getState());
-			}
-
 			model.put("result", productService.listByProductCategory(productCategory, filterForm));
 			model.put("pageTitle", "Product manager for " + productCategory.getName());
-			model.put("filterProduct", filterProduct);
 			model.put("filterForm", filterForm);
 
 			return "backend/product";
@@ -96,18 +84,13 @@ public class ProductByCategoryController extends MainController {
 	}
 
 	@RequestMapping(value = "/page/{page:^\\d+}", method = {RequestMethod.GET, RequestMethod.POST})
-	public String mainPagePagination(@ModelAttribute("filterProduct") FilterProduct filterProduct, @PathVariable("page") Integer page, ModelMap model,
+	public String mainPagePagination(@ModelAttribute("filterForm") FilterForm filterForm, @PathVariable("page") Integer page, ModelMap model,
 			RedirectAttributes redirectAttributes) {
 
 		try{
 			filterForm.setCurrentPage(page);
-			if(filterProduct.getState() != null){
-				filterForm.getGroupSearch().put("state", filterProduct.getState());
-			}
-
 			model.put("result", productService.listByProductCategory(productCategory, filterForm));
 			model.put("pageTitle", "Product manager for " + productCategory.getName());
-			model.put("filterProduct", filterProduct);
 			model.put("filterForm", filterForm);
 
 			return "backend/product";

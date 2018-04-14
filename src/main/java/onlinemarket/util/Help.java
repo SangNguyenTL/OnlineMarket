@@ -7,7 +7,7 @@ import java.util.TreeMap;
 public class Help {
 
     public static boolean isInteger(String s) {
-        if(s.isEmpty()) return false;
+        if(s == null || s.isEmpty()) return false;
         s = s.trim();
         for(int i = 0; i < s.length(); i++) {
             if(i == 0 && s.charAt(i) == '-') {

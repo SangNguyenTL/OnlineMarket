@@ -3,6 +3,14 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	xmlns:filter="http://thymeleafexamples"
 	layout:decorate="templates/backend">
+<!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
+<!--/*@thymesVar id="relativePath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="pageTitle" type="java.lang.String"*/-->
+<!--/*@thymesVar id="error" type="java.lang.String"*/-->
+<!--/*@thymesVar id="success" type="java.lang.Boolean"*/-->
+<!--/*@thymesVar id="filterForm" type="onlinemarket.form.filter.FilterForm"*/-->
+<!--/*@thymesVar id="state" type="onlinemarket.model.NumState"*/-->
+<!--/*@thymesVar id="result" type="onlinemarket.result.ResultObject<onlinemarket.model.Product>"*/-->
 <head>
 </head>
 <body>
@@ -25,10 +33,10 @@
 					<strong>Obbs!</strong> [[${error}]].
 				</div>
 				<div class="row p-a">
-					<form th:object="${filterProduct}" th:action="@{${relativePath}}" method="POST">
+					<form th:object="${filterForm}" th:action="@{${relativePath}}" method="POST">
 						<div class="col-sm-3">
 							<div class="input-group input-group-sm">
-								<select class="form-control" th:field="*{state}">
+								<select class="form-control" th:field="*{groupSearch['state']}">
 									<option value="">State...</option>
 									<option th:each="state : ${T(onlinemarket.model.NumState).values()}"
 											th:value="${state.id}" th:text="${state.name}"></option>
@@ -38,7 +46,7 @@
 						<div class="col-sm-3"></div>
 						<div class="col-sm-3">
 							<div class="input-group input-group-sm">
-								 <select class="form-control" th:field="*{filterForm.searchBy}">
+								 <select class="form-control" th:field="*{searchBy}">
 									<option value="">Search by</option>
 									<option value="name">Name</option>
 									<option value="brand.name">Brand name</option>
@@ -48,14 +56,14 @@
 						</div>
 						<div class="col-sm-3">
 							<div class="input-group input-group-sm">
-								<input class="form-control" placeholder="Search" type="text" th:field="*{filterForm.search}">
+								<input class="form-control" placeholder="Search" type="text" th:field="*{search}">
 								<span class="input-group-btn">
 									<button class="btn b-a white" type="submit">Go!</button>
 								</span>
 							</div>
-							<input type="hidden" th:field="*{filterForm.size}" />
-							<input type="hidden" th:field="*{filterForm.order}" />
-							<input type="hidden" th:field="*{filterForm.orderBy}" />
+							<input type="hidden" th:field="*{size}" />
+							<input type="hidden" th:field="*{order}" />
+							<input type="hidden" th:field="*{orderBy}" />
 						</div>
 					</form>
 				</div>

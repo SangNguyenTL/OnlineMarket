@@ -158,11 +158,12 @@ public abstract class AbstractDao<PK extends Serializable, T> {
                 criteria.createAlias(keyArr[0], key);
                 key = key + "." + keyArr[1];
             }
-            if (Help.isInteger(value) && key.equals("state"))
-                criteria.add(Restrictions.eq(key, Byte.parseByte(value)));
-            else if(Help.isInteger(value) )  criteria.add(Restrictions.eq(key, Integer.parseInt(value)));
-            else
-                criteria.add(Restrictions.eq(key, value));
+            if(StringUtils.isNotBlank(value))
+                if (Help.isInteger(value) && key.equals("state"))
+                    criteria.add(Restrictions.eq(key, Byte.parseByte(value)));
+                    else if(Help.isInteger(value))  criteria.add(Restrictions.eq(key, Integer.parseInt(value)));
+                        else
+                            criteria.add(Restrictions.eq(key, value));
         }
 
         criteria.setProjection(Projections.rowCount());

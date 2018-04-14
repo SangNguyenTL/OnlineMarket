@@ -157,12 +157,14 @@ public class PaginationElementTagProcessor extends AbstractElementTagProcessor{
 					Iterator<Map.Entry<String, String>> valueI = values.entrySet().iterator();
 					while (valueI.hasNext()) {
 						Map.Entry<String, String> valueE = valueI.next();
-						sb.append(valueE.getKey()).append("=").append(URLEncoder.encode(valueE.getValue(), "UTF-8"));
+						if(StringUtils.isNotBlank(valueE.getValue()))
+							sb.append("groupSearch["+valueE.getKey()+"]").append("=").append(URLEncoder.encode(valueE.getValue(), "UTF-8"));
 					}
 
 				} else {
 					value = value == null ? new String("") : value;
-					sb.append(URLEncoder.encode(field.getName(), "UTF-8")).append('=').append(URLEncoder.encode(value.toString(), "UTF-8"));
+					if(StringUtils.isNotBlank(String.valueOf(value)))
+						sb.append(URLEncoder.encode(field.getName(), "UTF-8")).append('=').append(URLEncoder.encode(value.toString(), "UTF-8"));
 				}
 			} catch (UnsupportedEncodingException | IllegalArgumentException | IllegalAccessException e) {
 				continue;
