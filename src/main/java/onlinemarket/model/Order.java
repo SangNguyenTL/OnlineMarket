@@ -10,8 +10,6 @@ import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -35,7 +33,6 @@ public class Order implements java.io.Serializable {
 	private Date createDate;
 	private Date updateDate;
 	private Set<OrderDetail> orderDetails = new HashSet<>(0);
-	private Set<Event> events = new HashSet<>(0);
 
 	public Order() {
 	}
@@ -158,18 +155,6 @@ public class Order implements java.io.Serializable {
 
 	public void setOrderDetails(Set<OrderDetail> orderDetails) {
 		this.orderDetails = orderDetails;
-	}
-
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "tb_event_order", schema = "dbo", catalog = "SmartMarket", joinColumns = {
-			@JoinColumn(name = "order_id", nullable = false, updatable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "event_id", nullable = false, updatable = false) })
-	public Set<Event> getEvents() {
-		return this.events;
-	}
-
-	public void setEvents(Set<Event> events) {
-		this.events = events;
 	}
 
 }

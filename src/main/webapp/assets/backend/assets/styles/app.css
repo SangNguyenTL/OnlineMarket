@@ -5829,6 +5829,6 @@ fieldset[disabled] .md-switch input + i:after {
 }
 
 #gallery-container .box-body img{
-  width: 100%;
-  height: auto;
+  object-fit: contain;
+  height: 90%;
 }

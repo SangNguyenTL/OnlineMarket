@@ -169,11 +169,11 @@
                                                   th:errorclass="parsley-error" class="form-control hide"
                                                   th:field="*{description}" data-parsley-length="[50, 1000000]"
                                                   data-parsley-id="description"></textarea>
-                                        <ul class="parsley-errors-list filled" id="parsley-id-description"
-                                            th:if="${#fields.hasErrors('description')}">
-                                            <li th:errors="*{description}"></li>
-                                        </ul>
                                     </div>
+                                    <ul class="parsley-errors-list filled" id="parsley-id-description"
+                                        th:if="${#fields.hasErrors('description')}">
+                                        <li th:errors="*{description}"></li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>

@@ -6,7 +6,10 @@ import java.util.List;
 
 import onlinemarket.dao.AttributeValuesDao;
 import onlinemarket.dao.CommentDao;
+import onlinemarket.form.filter.SearchSelect;
 import onlinemarket.model.*;
+import onlinemarket.result.api.Pagination;
+import onlinemarket.result.api.ResultProduct;
 import onlinemarket.util.exception.product.ProductHasCommentException;
 import onlinemarket.util.exception.product.ProductNotFoundException;
 import onlinemarket.util.exception.productCategory.ProductCategoryNotFoundException;
@@ -96,6 +99,23 @@ public class ProductServiceImpl implements ProductService {
     public ResultObject<Product> listByProductCategory(ProductCategory productCategory, FilterForm filterForm) throws ProductCategoryNotFoundException {
         if (productCategory == null) throw new ProductCategoryNotFoundException();
         return productDao.listByDeclaration("productCategory", productCategory, filterForm);
+    }
+
+    @Override
+    public ResultObject<Product> list(FilterForm filterForm) {
+        return productDao.list(filterForm);
+    }
+
+    @Override
+    public ResultProduct searchSelect(SearchSelect searchSelect) {
+        FilterForm filterForm = new FilterForm();
+        filterForm.setSearch(searchSelect.getQ());
+        filterForm.setCurrentPage(searchSelect.getPage());
+        ResultObject<Product> productResultObject = productDao.list(filterForm);
+        ResultProduct resultProduct = new ResultProduct();
+        resultProduct.setResults(productResultObject.getList());
+        resultProduct.setPagination(new Pagination(productResultObject.getCurrentPage() < productResultObject.getTotalPages()));
+        return resultProduct;
     }
 
 }

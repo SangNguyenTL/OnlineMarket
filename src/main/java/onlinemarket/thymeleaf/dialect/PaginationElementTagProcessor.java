@@ -83,7 +83,7 @@ public class PaginationElementTagProcessor extends AbstractElementTagProcessor{
         int step = (int) Math.floor(Float.valueOf(displayedPages / 2));
         
         if(currentPage >= displayedPages) {
-    		for(int itr = currentPage - step; itr <= displayedPages + step; itr+=1) {
+    		for(int itr = currentPage - step; itr <= displayedPages; itr+=1) {
     			if(itr == currentPage)
 	        		constructLink(modelFactory, model, itr, String.valueOf(itr), "active", false);
 	        	else

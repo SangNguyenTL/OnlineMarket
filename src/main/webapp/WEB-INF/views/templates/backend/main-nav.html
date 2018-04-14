@@ -155,9 +155,35 @@
                             class="nav-text">Add new menu group</span></a></li>
                 </ul>
             </li>
+            <li th:class="${provincePage} ? 'active'" >
+                <a>
+                   <span class="nav-caret">
+                   <i class="fa fa-caret-down"></i>
+                 </span>
+                    <span class="nav-icon">
+                   <i class="material-icons">&#xe39e;
+                     <span th:attr="ui-include='\''+ @{/assets/backend/assets/images/i_6.svg} +'\''"></span>
+                   </i>
+                 </span>
+                    <span class="nav-text">Province</span>
+                </a>
+                <ul class="nav-sub nav-mega">
+                    <li th:class="${path} == 'province' ? 'active'"><a th:href="@{/admin/province}"><span class="nav-text">List</span></a></li>
+                    <li th:class="${path} == 'province-add' ? 'active'"><a th:href="@{/admin/province/add}"><span class="nav-text">Add new</span></a></li>
+                </ul>
+            </li>
+            <li th:class="${mediaPage} ? 'active'">
+                <a th:href="@{/admin/media}" >
+                 <span class="nav-icon">
+                   <i class="material-icons">&#xe8f0;
+                     <span th:attr="ui-include='\''+ @{/assets/backend/assets/images/i_2.svg} +'\''"></span>
+                   </i>
+                 </span>
+                    <span class="nav-text">Multimedia</span>
+                </a>
+            </li>
 
-
-            <!--li th:class="${eventPage} ? 'active'" >
+            <li th:class="${eventPage} ? 'active'" >
                <a>
                    <span class="nav-caret">
                    <i class="fa fa-caret-down"></i>
@@ -174,33 +200,6 @@
                  <li th:class="${path} == 'event-add' ? 'active'"><a th:href="@{/admin/event/add}"><span class="nav-text">Add new</span></a></li>
              </ul>
             </li>
-            <li th:class="${provincePage} ? 'active'" >
-               <a>
-                   <span class="nav-caret">
-                   <i class="fa fa-caret-down"></i>
-                 </span>
-                 <span class="nav-icon">
-                   <i class="material-icons">&#xe39e;
-                     <span th:attr="ui-include='\''+ @{/assets/backend/assets/images/i_6.svg} +'\''"></span>
-                   </i>
-                 </span>
-                 <span class="nav-text">Province</span>
-               </a>
-               <ul class="nav-sub nav-mega">
-                 <li th:class="${path} == 'province' ? 'active'"><a th:href="@{/admin/province}"><span class="nav-text">List</span></a></li>
-                 <li th:class="${path} == 'province-add' ? 'active'"><a th:href="@{/admin/province/add}"><span class="nav-text">Add new</span></a></li>
-             </ul>
-            </li>
-             <li th:class="${mediaPage} ? 'active'">
-               <a th:href="@{/admin/media}" >
-                 <span class="nav-icon">
-                   <i class="material-icons">&#xe8f0;
-                     <span th:attr="ui-include='\''+ @{/assets/backend/assets/images/i_2.svg} +'\''"></span>
-                   </i>
-                 </span>
-                 <span class="nav-text">Multimedia</span>
-               </a>
-            </li -->
             <li th:class="${configPage} ? 'active'"><a> <span
                     class="nav-caret"> <i class="fa fa-caret-down"></i>
 					</span> <span class="nav-icon"> <i class="material-icons">&#xe429;

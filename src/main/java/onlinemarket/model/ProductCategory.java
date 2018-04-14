@@ -11,6 +11,9 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import onlinemarket.model.other.AdvancedValidation;
@@ -38,7 +41,6 @@ public class ProductCategory implements java.io.Serializable {
 	private Date updateDate;
 	private Set<AttributeGroup> attributeGroups = new HashSet<>(0);
 	private Set<Product> products = new HashSet<>(0);
-	private Set<Event> events = new HashSet<>(0);
 
 	public ProductCategory() {
 	}
@@ -98,6 +100,7 @@ public class ProductCategory implements java.io.Serializable {
 
 	@Column(name = "description")
 	@Size(min = 50, max = 1000)
+	@JsonIgnore
 	public String getDescription() {
 		return this.description;
 	}
@@ -130,6 +133,7 @@ public class ProductCategory implements java.io.Serializable {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "productCategory")
 	@OrderBy("priority")
+	@JsonIgnore
 	public Set<AttributeGroup> getAttributeGroups() {
 		return this.attributeGroups;
 	}
@@ -139,24 +143,14 @@ public class ProductCategory implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "productCategory")
+	@LazyCollection(LazyCollectionOption.EXTRA)
+	@JsonIgnore
 	public Set<Product> getProducts() {
 		return this.products;
 	}
 
 	public void setProducts(Set<Product> products) {
 		this.products = products;
-	}
-
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "tb_event_category", schema = "dbo", catalog = "SmartMarket", joinColumns = {
-			@JoinColumn(name = "product_category_id", nullable = false, updatable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "event_id", nullable = false, updatable = false) })
-	public Set<Event> getEvents() {
-		return this.events;
-	}
-
-	public void setEvents(Set<Event> events) {
-		this.events = events;
 	}
 
 	@Override

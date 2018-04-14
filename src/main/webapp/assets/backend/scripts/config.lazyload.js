@@ -1,3 +1,31 @@
+window.searchProduct = {
+    width: "100%",
+    placeholder: '--Choice Product--',
+    minimumInputLength: 3,
+    ajax: {
+        delay: 250,
+        url: PATH+'api/product/search',
+        dataType: 'json',
+        data: function (params) {
+            var query = {
+                q: params.term,
+                type: 'public',
+                page: params.page || 1
+            };
+
+            // Query parameters will be ?search=[term]&type=public
+            return query;
+        },
+        processResults: function (data) {
+            return $.map(data, function (obj) {
+                obj.text = obj.name;
+                return obj;
+            });
+        },
+        cache: true
+    }
+};
+
 window.sendFile = function(files){
     var data = new FormData();
     for(var i = 0; i < files.length; i++){

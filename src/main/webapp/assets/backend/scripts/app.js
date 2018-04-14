@@ -142,4 +142,15 @@
     $(document).ajaxSend(function(e, xhr, options) {
         xhr.setRequestHeader(header, token);
     });
+
+    $('.generateCode').on('click', function (e) {
+       var codeElement = $("#code"),
+        text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for (var i = 0; i < 12; i++)
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        codeElement.val(text);
+    });
 })(jQuery);

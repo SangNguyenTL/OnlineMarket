@@ -2,7 +2,6 @@ package onlinemarket.model;
 // default package
 // Generated Jan 2, 2018 4:57:38 PM by Hibernate Tools 4.3.5.Final
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,6 +21,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
+import onlinemarket.model.other.AdvancedValidation;
+import onlinemarket.validation.EventValidate;
+import org.hibernate.annotations.FilterDef;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -30,6 +32,8 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @Entity
 @Table(name = "tb_event", schema = "dbo", catalog = "SmartMarket")
+@FilterDef(name = "active", defaultCondition = "status == 0")
+@EventValidate(groups =  AdvancedValidation.class)
 public class Event implements java.io.Serializable {
 
 	/**
@@ -42,64 +46,37 @@ public class Event implements java.io.Serializable {
 	private String content;
 	private Integer status;
 	private Byte percentValue;
-	private BigDecimal value;
+	private Long value;
 	private String code;
 	private Date createDate;
 	private Date updateDate;
 	private Date dateFrom;
 	private Date dateTo;
-	private BigDecimal maxPrice;
-	private BigDecimal minPrice;
-	private Set<Order> orders = new HashSet<Order>(0);
-	private Set<Product> products = new HashSet<Product>(0);
-	private Set<ProductCategory> productCategories = new HashSet<ProductCategory>(0);
-	private Set<Brand> brands = new HashSet<Brand>(0);
+	private Long maxPrice;
+	private Long minPrice;
+	private Set<Product> products = new HashSet<>(0);
 
 	public Event() {
 	}
 
-	
-	
-	public Event(User publisher, String name, Integer status, Date createDate, Date dateFrom, Date dateTo,
-			BigDecimal maxPrice, BigDecimal minPrice) {
-		super();
-		this.publisher = publisher;
-		this.name = name;
-		this.status = status;
-		this.createDate = createDate;
-		this.dateFrom = dateFrom;
-		this.dateTo = dateTo;
-		this.maxPrice = maxPrice;
-		this.minPrice = minPrice;
-	}
-
-
-	public Event(User publisher, String name, String content, Integer status, Byte percentValue,
-			BigDecimal value, String code, Date createDate, Date updateDate, Date dateFrom, Date dateTo,
-			BigDecimal maxPrice, BigDecimal minPrice, Set<Order> orders, Set<Product> products,
-			Set<ProductCategory> productCategories, Set<Brand> brands) {
-		this.publisher = publisher;
-		this.name = name;
-		this.content = content;
-		this.status = status;
-		this.percentValue = percentValue;
-		this.value = value;
-		this.code = code;
-		this.createDate = createDate;
-		this.updateDate = updateDate;
-		this.dateFrom = dateFrom;
-		this.dateTo = dateTo;
-		this.maxPrice = maxPrice;
-		this.minPrice = minPrice;
-		this.orders = orders;
-		this.products = products;
-		this.productCategories = productCategories;
-		this.brands = brands;
+	public void updateEvent(Event event){
+		publisher = event.publisher;
+		name = event.name;
+		code = event.code;
+		content = event.content;
+		status = event.status;
+		percentValue = event.percentValue;
+		value = event.value;
+		updateDate = new Date();
+		dateFrom = event.dateFrom;
+		dateTo = event.dateTo;
+		maxPrice = event.maxPrice;
+		minPrice = event.minPrice;
+		products.addAll(event.products);
 	}
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-
 	@Column(name = "_id", unique = true, nullable = false)
 	public Integer getId() {
 		return this.id;
@@ -119,7 +96,7 @@ public class Event implements java.io.Serializable {
 		this.publisher = publisher;
 	}
 
-	@Column(name = "[name]", nullable = false)
+	@Column(name = "name", nullable = false)
 	@Size(min = 6, max = 255)
 	public String getName() {
 		return this.name;
@@ -130,7 +107,7 @@ public class Event implements java.io.Serializable {
 	}
 
 	@Column(name = "content")
-	@Size(max = 4000)
+	@Size(max = 1000000)
 	public String getContent() {
 		return this.content;
 	}
@@ -139,7 +116,7 @@ public class Event implements java.io.Serializable {
 		this.content = content;
 	}
 
-	@Column(name = "[status]", nullable = false)
+	@Column(name = "status", nullable = false )
 	@Range(min = 0, max = 1)
 	public Integer getStatus() {
 		return this.status;
@@ -161,11 +138,11 @@ public class Event implements java.io.Serializable {
 
 	@Column(name = "value", precision = 13)
 	@Range(max = 1000000000)
-	public BigDecimal getValue() {
+	public Long getValue() {
 		return this.value;
 	}
 
-	public void setValue(BigDecimal value) {
+	public void setValue(Long value) {
 		this.value = value;
 	}
 
@@ -201,7 +178,7 @@ public class Event implements java.io.Serializable {
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "date_from", nullable = false, length = 23)
-	@DateTimeFormat(pattern = "DD-MM-YYYY")
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	public Date getDateFrom() {
 		return this.dateFrom;
 	}
@@ -211,7 +188,7 @@ public class Event implements java.io.Serializable {
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@DateTimeFormat(pattern = "DD-MM-YYYY")
+	@DateTimeFormat(pattern = "dd-MM-yyyy")
 	@Column(name = "date_to", nullable = false, length = 23)
 	public Date getDateTo() {
 		return this.dateTo;
@@ -223,34 +200,22 @@ public class Event implements java.io.Serializable {
 
 	@Column(name = "max_price", nullable = false, precision = 13)
 	@Range(max = 1000000000)
-	public BigDecimal getMaxPrice() {
+	public Long getMaxPrice() {
 		return this.maxPrice;
 	}
 
-	public void setMaxPrice(BigDecimal maxPrice) {
+	public void setMaxPrice(Long maxPrice) {
 		this.maxPrice = maxPrice;
 	}
 
 	@Column(name = "min_price", nullable = false, precision = 13)
 	@Range(max = 1000000000)
-	public BigDecimal getMinPrice() {
+	public Long getMinPrice() {
 		return this.minPrice;
 	}
 
-	public void setMinPrice(BigDecimal minPrice) {
+	public void setMinPrice(Long minPrice) {
 		this.minPrice = minPrice;
-	}
-
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "tb_event_order", schema = "dbo", catalog = "SmartMarket", joinColumns = {
-			@JoinColumn(name = "event_id", nullable = false, updatable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "order_id", nullable = false, updatable = false) })
-	public Set<Order> getOrders() {
-		return this.orders;
-	}
-
-	public void setOrders(Set<Order> orders) {
-		this.orders = orders;
 	}
 
 	@ManyToMany(fetch = FetchType.LAZY)
@@ -263,30 +228,6 @@ public class Event implements java.io.Serializable {
 
 	public void setProducts(Set<Product> products) {
 		this.products = products;
-	}
-
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "tb_event_category", schema = "dbo", catalog = "SmartMarket", joinColumns = {
-			@JoinColumn(name = "event_id", nullable = false, updatable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "product_category_id", nullable = false, updatable = false) })
-	public Set<ProductCategory> getProductCategories() {
-		return this.productCategories;
-	}
-
-	public void setProductCategories(Set<ProductCategory> productCategories) {
-		this.productCategories = productCategories;
-	}
-
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "tb_event_brand", schema = "dbo", catalog = "SmartMarket", joinColumns = {
-			@JoinColumn(name = "event_id", nullable = false, updatable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "brand_id", nullable = false, updatable = false) })
-	public Set<Brand> getBrands() {
-		return this.brands;
-	}
-
-	public void setBrands(Set<Brand> brands) {
-		this.brands = brands;
 	}
 
 }

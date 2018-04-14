@@ -1,6 +1,6 @@
 package onlinemarket.model.other;
 
-public class AdvancedValidation {
+public interface AdvancedValidation {
 	
 	public interface Advanced{};
 	

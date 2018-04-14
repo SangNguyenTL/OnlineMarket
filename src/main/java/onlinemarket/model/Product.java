@@ -23,6 +23,10 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import onlinemarket.util.Help;
+import org.hibernate.annotations.Filter;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -51,6 +55,7 @@ public class Product implements java.io.Serializable {
 	private String beforeSlug;
 	private String description;
 	private long price;
+	private String priceStr;
 	private int quantity;
 	private Byte state;
 	private Integer weight;
@@ -72,7 +77,11 @@ public class Product implements java.io.Serializable {
 	public Product() {
 	}
 
-	public void updateProduct(Product product){
+    public Product(Integer id) {
+		this.id = id;
+    }
+
+    public void updateProduct(Product product){
 		brand = product.brand;
 		productCategory = product.productCategory;
 		user = product.user;
@@ -103,6 +112,7 @@ public class Product implements java.io.Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@NotNull
 	@JoinColumn(name = "brand_id", nullable = false)
+	@JsonBackReference
 	public Brand getBrand() {
 		return this.brand;
 	}
@@ -123,6 +133,7 @@ public class Product implements java.io.Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "publisher_id", nullable = false)
+	@JsonIgnore
 	public User getUser() {
 		return this.user;
 	}
@@ -164,6 +175,7 @@ public class Product implements java.io.Serializable {
 
 	@Column(name = "description")
 	@Size(max = 1000000)
+	@JsonIgnore
 	public String getDescription() {
 		return this.description;
 	}
@@ -269,6 +281,7 @@ public class Product implements java.io.Serializable {
 
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.REMOVE)
+	@JsonIgnore
 	public Set<Rating> getRatings() {
 		return this.ratings;
 	}
@@ -278,6 +291,7 @@ public class Product implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.REMOVE)
+	@JsonIgnore
 	public Set<RatingStatistic> getRatingStatistics() {
 		return this.ratingStatistics;
 	}
@@ -287,9 +301,11 @@ public class Product implements java.io.Serializable {
 	}
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	@Filter(name = "active")
 	@JoinTable(name = "tb_event_product", schema = "dbo", catalog = "SmartMarket", joinColumns = {
 			@JoinColumn(name = "product_id", nullable = false, updatable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "event_id", nullable = false, updatable = false) })
+	@JsonIgnore
 	public Set<Event> getEvents() {
 		return this.events;
 	}
@@ -299,6 +315,7 @@ public class Product implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
 	public List<ProductAttributeValues> getProductAttributeValues() {
 		return productAttributeValues;
 	}
@@ -308,6 +325,7 @@ public class Product implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.REMOVE)
+	@JsonIgnore
 	public Set<ProductViews> getProductViewses() {
 		return this.productViewses;
 	}
@@ -317,6 +335,7 @@ public class Product implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.REMOVE)
+	@JsonIgnore
 	public Set<ProductViewsStatistc> getProductViewsStatistcs() {
 		return this.productViewsStatistcs;
 	}
@@ -329,6 +348,7 @@ public class Product implements java.io.Serializable {
 	@JoinTable(name = "tb_comment_product", schema = "dbo", catalog = "SmartMarket", joinColumns = {
 			@JoinColumn(name = "product_id", nullable = false, updatable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "comment_id", nullable = false, updatable = false) })
+	@JsonIgnore
 	public Set<Comment> getComments() {
 		return this.comments;
 	}
@@ -338,6 +358,7 @@ public class Product implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.REMOVE)
+	@JsonIgnore
 	public Set<Cart> getCarts() {
 		return this.carts;
 	}
@@ -379,5 +400,10 @@ public class Product implements java.io.Serializable {
 		productAttributeValue.setAttributeValuesId(attributeValues.getId());
 		productAttributeValue.setProductId(this.getId());
 		return productAttributeValues.contains(productAttributeValue);
+	}
+
+	@Transient
+	public String getPriceStr() {
+		return Help.format(price);
 	}
 }

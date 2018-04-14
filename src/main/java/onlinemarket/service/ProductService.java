@@ -1,8 +1,10 @@
 package onlinemarket.service;
 
 import onlinemarket.form.filter.FilterForm;
+import onlinemarket.form.filter.SearchSelect;
 import onlinemarket.model.*;
 import onlinemarket.result.ResultObject;
+import onlinemarket.result.api.ResultProduct;
 import onlinemarket.util.exception.product.ProductHasCommentException;
 import onlinemarket.util.exception.product.ProductNotFoundException;
 import onlinemarket.util.exception.productCategory.ProductCategoryNotFoundException;
@@ -21,4 +23,7 @@ public interface ProductService {
 
     ResultObject<Product> listByProductCategory(ProductCategory productCategory, FilterForm filterForm) throws ProductCategoryNotFoundException;
 
+    ResultObject<Product> list(FilterForm filterForm);
+
+    ResultProduct searchSelect(SearchSelect searchSelect);
 }

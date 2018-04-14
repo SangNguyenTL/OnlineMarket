@@ -22,7 +22,7 @@ public class FilterFormDialect extends AbstractProcessorDialect{
 		processors.add(new PaginationElementTagProcessor(dialectPrefix));
 		processors.add(new CurrentPageAttributeTagProcessor(dialectPrefix));
 		processors.add(new TotalPageAttributeTagProcessor(dialectPrefix));
-		processors.add(new UriAttibuteTagProcessor(dialectPrefix));
+		processors.add(new UriAttributeTagProcessor(dialectPrefix));
 		processors.add(new OrderHeadElementProcessor(dialectPrefix));
 		processors.add(new SpringObjectTagProcessor(dialectPrefix));
 		return processors;

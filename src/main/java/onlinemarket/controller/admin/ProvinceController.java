@@ -39,15 +39,20 @@ public class ProvinceController extends MainController {
     @ModelAttribute
     public ModelMap populateAttribute(ModelMap model) {
         filterForm = new FilterForm();
+        relativePath = "/admin/province";
         model.put("filterForm", filterForm);
+        model.put("relativePath", relativePath);
         model.put("provincePage", true);
-        model.put("pathAdd", "/admin/province/add");
+        model.put("pathAdd", relativePath + "/add");
+        generateBreadcrumbs();
+        breadcrumbs.add(new String[]{ relativePath, "Province"});
+        
         return model;
 
     }
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
-    public String mainPage(ModelMap model) {
+    @RequestMapping(value = "", method = { RequestMethod.GET, RequestMethod.POST})
+    public String mainPage(@ModelAttribute("filterForm") FilterForm filterForm, ModelMap model) {
 
         model.put("pageTitle", "Province Manager");
         model.put("path", "province");
@@ -57,8 +62,8 @@ public class ProvinceController extends MainController {
         return "backend/province";
     }
 
-    @RequestMapping(value = "/page/{page:^\\d+}", method = RequestMethod.GET)
-    public String mainPagePagination(@PathVariable("page") Integer page,
+    @RequestMapping(value = "/page/{page:^\\d+}", method ={ RequestMethod.GET, RequestMethod.POST})
+    public String mainPagePagination(@ModelAttribute("filterForm") FilterForm filterForm, @PathVariable("page") Integer page,
                                      ModelMap model) {
 
         filterForm.setCurrentPage(page);
@@ -83,7 +88,7 @@ public class ProvinceController extends MainController {
         model.put("provincePage", true);
         model.put("path", "province-add");
         model.put("action", "add");
-        model.put("pathAction", "/admin/province/add");
+        model.put("pathAction", relativePath + "/add");
         model.put("province", new Province());
 
         return "backend/province-add";
@@ -103,7 +108,7 @@ public class ProvinceController extends MainController {
         model.put("pageTitle", "Add new province");
         model.put("path", "province-add");
         model.put("action", "add");
-        model.put("pathAction", "/admin/province/add");
+        model.put("pathAction", relativePath + "/add");
         model.put("province", province);
 
         return "backend/province-add";

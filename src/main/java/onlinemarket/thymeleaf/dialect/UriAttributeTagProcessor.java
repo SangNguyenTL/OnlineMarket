@@ -11,12 +11,12 @@ import org.thymeleaf.standard.expression.IStandardExpressionParser;
 import org.thymeleaf.standard.expression.StandardExpressions;
 import org.thymeleaf.templatemode.TemplateMode;
 
-public class UriAttibuteTagProcessor extends AbstractAttributeTagProcessor{
+public class UriAttributeTagProcessor extends AbstractAttributeTagProcessor{
 	
 	private static final String ATTR_NAME = "uri";
     private static final int PRECEDENCE = 900;
     
-	protected UriAttibuteTagProcessor(final String dialectPrefix) {
+	protected UriAttributeTagProcessor(final String dialectPrefix) {
         super(
                 TemplateMode.HTML, // This processor will apply only to HTML mode
                 dialectPrefix,     // Prefix to be applied to name for matching
@@ -33,7 +33,7 @@ public class UriAttibuteTagProcessor extends AbstractAttributeTagProcessor{
 			String attributeValue, IElementTagStructureHandler structureHandler) {
 
         final IEngineConfiguration configuration = context.getConfiguration();
-		
+
         /*
          * Obtain the Thymeleaf Standard Expression parser
          */
@@ -50,7 +50,7 @@ public class UriAttibuteTagProcessor extends AbstractAttributeTagProcessor{
         /*
          * Execute the expression just parsed
          */
-        final String uri =  (String) expression.execute(context);
+        final String uri = (String) expression.execute(context);
         
         /*
          * If no remark is to be applied, just set an empty body to this tag

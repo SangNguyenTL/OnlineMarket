@@ -46,6 +46,9 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 	ConfigurationService configurationService;
 
 	@Autowired
+	ProductFormatter productFormatter;
+
+	@Autowired
 	SessionFactory sessionFactory;
 
 	@Override
@@ -73,7 +76,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 	@Bean
 	public SpringTemplateEngine templateEngine() {
 
-		Set<IDialect> dialects = new LinkedHashSet<IDialect>();
+		Set<IDialect> dialects = new LinkedHashSet<>();
 		dialects.add(new SpringSecurityDialect());
 		dialects.add(new LayoutDialect());
 		dialects.add(new FilterFormDialect());
@@ -142,6 +145,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 	@Override
 	public void addFormatters(FormatterRegistry registry) {
 		registry.addFormatter(new ProvinceFormatter());
+		registry.addFormatter(productFormatter);
 		registry.addFormatter(new RoleFormatter());
 		registry.addFormatter(new AttributeValuesFormatter());
 	}

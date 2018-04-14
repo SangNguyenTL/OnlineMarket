@@ -12,17 +12,17 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import static javax.persistence.GenerationType.IDENTITY;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import onlinemarket.model.other.AdvancedValidation;
@@ -46,8 +46,6 @@ public class Brand implements java.io.Serializable {
 	private Date createDate;
 	private Date updateDate;
 	private Set<Product> products = new HashSet<Product>(0);
-	private Set<Event> events = new HashSet<Event>(0);
-
 	public Brand() {
 	}
 
@@ -55,18 +53,6 @@ public class Brand implements java.io.Serializable {
 		this.name = name;
 		this.slug = slug;
 		this.createDate = createDate;
-	}
-
-	public Brand(String name, String slug, String imagePath, String description, Date createDate,
-			Date updateDate, Set<Product> products, Set<Event> events) {
-		this.name = name;
-		this.slug = slug;
-		this.imagePath = imagePath;
-		this.description = description;
-		this.createDate = createDate;
-		this.updateDate = updateDate;
-		this.products = products;
-		this.events = events;
 	}
 
     public Brand(Integer id) {
@@ -128,6 +114,7 @@ public class Brand implements java.io.Serializable {
 
 	@Column(name = "description")
 	@Size(max = 1000, min = 50)
+	@JsonIgnore
 	public String getDescription() {
 		return this.description;
 	}
@@ -157,24 +144,14 @@ public class Brand implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "brand")
+	@LazyCollection(LazyCollectionOption.EXTRA)
+	@JsonManagedReference
 	public Set<Product> getProducts() {
 		return this.products;
 	}
 
 	public void setProducts(Set<Product> products) {
 		this.products = products;
-	}
-
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "tb_event_brand", schema = "dbo", catalog = "SmartMarket", joinColumns = {
-			@JoinColumn(name = "brand_id", nullable = false, updatable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "event_id", nullable = false, updatable = false) })
-	public Set<Event> getEvents() {
-		return this.events;
-	}
-
-	public void setEvents(Set<Event> events) {
-		this.events = events;
 	}
 
 	@Override
