@@ -9,6 +9,8 @@ import onlinemarket.util.exception.product.ProductHasCommentException;
 import onlinemarket.util.exception.product.ProductNotFoundException;
 import onlinemarket.util.exception.productCategory.ProductCategoryNotFoundException;
 
+import java.util.List;
+
 public interface ProductService {
 
     Product getByKey(Integer key);
@@ -26,4 +28,6 @@ public interface ProductService {
     ResultObject<Product> list(FilterForm filterForm);
 
     ResultProduct searchSelect(SearchSelect searchSelect);
+
+    List<Product> getRelatedProduct(ProductCategory productCategory, Brand brand);
 }

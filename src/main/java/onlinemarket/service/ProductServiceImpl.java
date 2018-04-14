@@ -118,4 +118,9 @@ public class ProductServiceImpl implements ProductService {
         return resultProduct;
     }
 
+    @Override
+    public List<Product> getRelatedProduct(ProductCategory productCategory, Brand brand) {
+        return productDao.getRelatedProduct(productCategory,brand);
+    }
+
 }

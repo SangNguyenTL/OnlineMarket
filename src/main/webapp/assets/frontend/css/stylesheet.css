@@ -7,7 +7,7 @@
 ===================================================================================
  Table of Contents
 ===================================================================================
- 
+
 1. General Styles
 2.  Layout
 3.  Header
@@ -25,7 +25,7 @@
      7.4. Grid Product
      7.5. List Product
      7.6. Rating Star
-     7.7. Pagination 
+     7.7. Pagination
 8.  Product Page
 9.  Product Item for Left and Right Panel
 10. Category Accordion
@@ -1012,7 +1012,7 @@ a:focus { outline:none; }
 /*===================================================================================*/
 /*  8. Product Page
 /*===================================================================================*/
-.product-info { margin-bottom: 20px; }
+.product-info { margin-bottom: 50px; }
 .product-info .image {
 	position:relative;
 	text-align:center;
