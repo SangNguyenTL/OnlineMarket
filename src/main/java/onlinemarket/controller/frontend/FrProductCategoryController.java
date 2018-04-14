@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -46,10 +47,25 @@ public class FrProductCategoryController extends MainController {
         return model;
     }
 
-    @RequestMapping( value = "", method = RequestMethod.GET)
+    @RequestMapping( value = "", method = {RequestMethod.GET, RequestMethod.POST})
     public String mainPage(@ModelAttribute("filterProduct") FilterProduct filterProduct, ModelMap modelMap){
 
-        modelMap.put("result", productService.list(filterForm));
+        modelMap.put("result", productService.list(filterProduct.getFilterForm()));
+        modelMap.put("filterProduct", filterProduct);
+        modelMap.put("filterForm", filterProduct.getFilterForm());
+
+        return "frontend/product-category";
+    }
+
+
+    @RequestMapping( value = "/page/{page:^\\d+}", method = {RequestMethod.GET, RequestMethod.POST})
+    public String mainPagePagination(@PathVariable("page") Integer page, @ModelAttribute("filterProduct") FilterProduct filterProduct, ModelMap modelMap){
+
+        filterForm.setCurrentPage(page);
+
+        modelMap.put("result", productService.list(filterProduct.getFilterForm()));
+        modelMap.put("filterProduct", filterProduct);
+        modelMap.put("filterForm", filterProduct.getFilterForm());
 
         return "frontend/product-category";
     }

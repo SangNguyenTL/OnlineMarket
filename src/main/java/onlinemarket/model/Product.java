@@ -27,6 +27,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import onlinemarket.util.Help;
 import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -56,6 +58,7 @@ public class Product implements java.io.Serializable {
 	private String description;
 	private long price;
 	private String priceStr;
+	private String newPriceStr;
 	private int quantity;
 	private Byte state;
 	private Integer weight;
@@ -73,8 +76,12 @@ public class Product implements java.io.Serializable {
 	private Set<Comment> comments = new HashSet<>(0);
 	private Set<Cart> carts = new HashSet<>(0);
 	private Integer countAttribute = -1;
+    private String sale;
+    private boolean saleProcess = false;
+    private long newPrice;
 
 	public Product() {
+	    newPrice = price;
 	}
 
     public Product(Integer id) {
@@ -305,6 +312,7 @@ public class Product implements java.io.Serializable {
 	@JoinTable(name = "tb_event_product", schema = "dbo", catalog = "SmartMarket", joinColumns = {
 			@JoinColumn(name = "product_id", nullable = false, updatable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "event_id", nullable = false, updatable = false) })
+	@LazyCollection(LazyCollectionOption.EXTRA)
 	@JsonIgnore
 	public Set<Event> getEvents() {
 		return this.events;
@@ -383,6 +391,7 @@ public class Product implements java.io.Serializable {
 	}
 
     @Transient
+    @JsonIgnore
     public Integer getCountAttribute() {
         return countAttribute;
     }
@@ -403,7 +412,51 @@ public class Product implements java.io.Serializable {
 	}
 
 	@Transient
+    @JsonIgnore
 	public String getPriceStr() {
 		return Help.format(price);
 	}
+
+	@Transient
+    @JsonIgnore
+	public String getNewPriceStr() {
+        Integer perSale = 0;
+        long value = 0;
+        if(!saleProcess){
+            for (Event event : events){
+                if(event.getPercentValue() != null && event.getMaxPrice() > price && event.getMinPrice() < price){
+                    perSale += event.getPercentValue();
+                }
+                if(event.getValue() != null  && event.getMaxPrice() > price && event.getMinPrice() < price)
+                    value += event.getValue();
+            }
+            Double number = Math.ceil(price - (price * perSale/100d) - value);
+            newPrice = number.longValue();
+
+            if(perSale != 0)
+                sale = "-"+perSale.toString()+"%";
+            else if(value != 0) sale = "-"+Help.format(value);
+            else sale = "";
+            saleProcess = true;
+        }
+		return Help.format(newPrice);
+	}
+
+    @Transient
+    @JsonIgnore
+    public String getSale() {
+	    return  sale;
+    }
+
+    @Transient
+    @JsonIgnore
+    public boolean isSaleProcess() {
+        return saleProcess;
+    }
+
+    @Transient
+    @JsonIgnore
+    public long getNewPrice() {
+        return newPrice;
+    }
 }

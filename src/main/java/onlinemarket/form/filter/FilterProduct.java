@@ -1,6 +1,11 @@
 package onlinemarket.form.filter;
 
+import onlinemarket.validation.StringContain;
+
 public class FilterProduct {
+
+    @StringContain(acceptedValues = {"name-a-z", "name-z-a", "price-low-high", "price-high-low", "rating-lowest", "rating-highest", "model-a-z", "model-z-a"})
+    private String orderBy;
 
     private FilterForm filterForm;
 
@@ -24,5 +29,13 @@ public class FilterProduct {
 
     public FilterProduct(FilterForm filterForm) {
         this.filterForm = filterForm;
+    }
+
+    public String getOrderBy() {
+        return orderBy;
+    }
+
+    public void setOrderBy(String orderBy) {
+        this.orderBy = orderBy;
     }
 }

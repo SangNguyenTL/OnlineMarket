@@ -60,7 +60,8 @@ public class PaginationElementTagProcessor extends AbstractElementTagProcessor{
 			IProcessableElementTag tag,
 			IElementTagStructureHandler structureHandler) {
 		
-		filterForm = (FilterForm) context.getVariable("filterForm");
+		filterForm = (FilterForm) context.getVariable("filter");
+		if(filterForm == null) filterForm = (FilterForm) context.getVariable("filterForm");
 		
 		if(filterForm == null) filterForm = new FilterForm();
 		

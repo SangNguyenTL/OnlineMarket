@@ -35,7 +35,7 @@ public class EventValidateValidator implements ConstraintValidator<EventValidate
 
         if(StringUtils.isBlank(event.getCode()) && event.getProducts().isEmpty()){
             if(!hasError) context.disableDefaultConstraintViolation();
-            else hasError = true;
+            hasError = true;
             context.buildConstraintViolationWithTemplate( "Code or product must be fill." )
                     .addPropertyNode( "code" ).addConstraintViolation();
             context.buildConstraintViolationWithTemplate( "Code or product must be fill." )
@@ -54,7 +54,7 @@ public class EventValidateValidator implements ConstraintValidator<EventValidate
 
         if(event.getPercentValue() != null && event.getValue() != null){
             if(!hasError) context.disableDefaultConstraintViolation();
-            else hasError = true;
+            hasError = true;
             context.buildConstraintViolationWithTemplate( "Only accept percentages or decreases by value." )
                     .addPropertyNode( "value" ).addConstraintViolation();
             context.buildConstraintViolationWithTemplate( "Only accept percentages or decreases by value." )
@@ -63,16 +63,16 @@ public class EventValidateValidator implements ConstraintValidator<EventValidate
 
         if(event.getPercentValue() == null && event.getValue() == null){
             if(!hasError) context.disableDefaultConstraintViolation();
-            else hasError = true;
+            hasError = true;
             context.buildConstraintViolationWithTemplate( "Please enter sale or percent discount." )
                     .addPropertyNode( "value" ).addConstraintViolation();
             context.buildConstraintViolationWithTemplate( "Please enter sale or percent discount." )
                     .addPropertyNode( "percentValue" ).addConstraintViolation();
         }
 
-        if(event.getMaxPrice() < event.getMinPrice()){
+        if(event.getMaxPrice() <= event.getMinPrice()){
             if(!hasError) context.disableDefaultConstraintViolation();
-            else hasError = true;
+            hasError = true;
             context.buildConstraintViolationWithTemplate( "The max price must be lager than the min price." )
                     .addPropertyNode( "maxPrice" ).addConstraintViolation();
             context.buildConstraintViolationWithTemplate( "The min price must be smaller than the max price." )
