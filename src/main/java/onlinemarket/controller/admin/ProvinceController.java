@@ -169,19 +169,19 @@ public class ProvinceController extends MainController {
     public String processDeleteProvince(@RequestParam(value = "id", required = true) Integer id, RedirectAttributes redirectAttributes) {
 
         if (id == null) {
-            redirectAttributes.addAttribute("error", "Program isn't get province id!");
+            redirectAttributes.addFlashAttribute("error", "Program isn't get province id!");
             return "redirect:/admin/province";
         }
         Province provinceCheck = provinceService.getByKey(id);
         if (provinceCheck == null) {
-            redirectAttributes.addAttribute("error", "The province isn't exist!");
+            redirectAttributes.addFlashAttribute("error", "The province isn't exist!");
         } else {
             Address address = addressService.getByProvince(provinceCheck);
             if (address != null)
-                redirectAttributes.addAttribute("error", "The province has already had address!");
+                redirectAttributes.addFlashAttribute("error", "The province has already had address!");
             else {
                 provinceService.delete(provinceCheck);
-                redirectAttributes.addAttribute("success", "");
+                redirectAttributes.addFlashAttribute("success", "");
             }
         }
         return "redirect:/admin/province";
