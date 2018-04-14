@@ -128,6 +128,7 @@ public class OrderHeadElementProcessor extends AbstractElementTagProcessor {
 					Iterator<Map.Entry<String, String>> valueI = values.entrySet().iterator();
 					while (valueI.hasNext()) {
 						Map.Entry<String, String> valueE = valueI.next();
+						if(StringUtils.isNotBlank(valueE.getValue()))
 						sb.append(valueE.getKey()).append("=").append(URLEncoder.encode(valueE.getValue(), "UTF-8"));
 					}
 
@@ -142,7 +143,7 @@ public class OrderHeadElementProcessor extends AbstractElementTagProcessor {
 							&& StringUtils.equals(field.getName(), "order")) {
 						value = ((String) value).toLowerCase().equals("asc") ? "desc" : "asc";
 					}
-
+					if(StringUtils.isNotBlank(String.valueOf(value)))
 					sb.append(URLEncoder.encode(field.getName(), "UTF-8")).append('=')
 							.append(URLEncoder.encode(String.valueOf(value), "UTF-8"));
 				}

@@ -33,8 +33,9 @@ public class EventServiceImpl implements EventService{
 
 	@Override
 	public void update(Event event, User user) throws EventNotFoundException {
-		Event event1 = eventDao.getByKey(user.getId());
+		Event event1 = eventDao.getByKey(event.getId());
 		if(event1 == null) throw new EventNotFoundException();
+		event.setPublisher(user);
 		event1.updateEvent(event);
 		eventDao.update(event1);
 	}

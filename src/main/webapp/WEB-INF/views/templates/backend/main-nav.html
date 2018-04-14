@@ -1,5 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<!--/*@thymesVar id="productCategoryList" type="java.util.List<onlinemarket.model.ProductCategory>"*/-->
+<!--/*@thymesVar id="path" type="java.lang.String"*/-->
+<!--/*@thymesVar id="userPage" type="java.lang.Boolean"*/-->
+<!--/*@thymesVar id="brandPage" type="java.lang.Boolean"*/-->
+<!--/*@thymesVar id="productCategoryPage" type="java.lang.Boolean"*/-->
+<!--/*@thymesVar id="productPage" type="java.lang.Boolean"*/-->
+<!--/*@thymesVar id="postCategoryPage" type="java.lang.Boolean"*/-->
+<!--/*@thymesVar id="postPage" type="java.lang.Boolean"*/-->
+<!--/*@thymesVar id="pagePage" type="java.lang.Boolean"*/-->
+<!--/*@thymesVar id="menuGroupPage" type="java.lang.Boolean"*/-->
+<!--/*@thymesVar id="mediaPage" type="java.lang.Boolean"*/-->
+<!--/*@thymesVar id="eventPage" type="java.lang.Boolean"*/-->
+<!--/*@thymesVar id="provincePage" type="java.lang.Boolean"*/-->
+<!--/*@thymesVar id="configPage" type="java.lang.Boolean"*/-->
 <head>
     <meta charset="UTF-8">
     <title>Insert title here</title>
@@ -20,9 +34,9 @@
 					</span> <span class="nav-text">User</span>
             </a>
                 <ul class="nav-sub nav-mega">
-                    <li th:class="${path} == 'user' ? 'active'"><a
+                    <li th:class="${path}   == 'user' ? 'active' : ''"><a
                             th:href="@{/admin/user}"><span class="nav-text">List</span></a></li>
-                    <li th:class="${path} == 'user-add' ? 'active'"><a
+                    <li th:class="${path} == 'user-add' ? 'active' : ''"><a
                             th:href="@{/admin/user/add}"><span class="nav-text">Add
 									new user</span></a></li>
                 </ul>
@@ -34,15 +48,15 @@
                     </span>
                     <span class="nav-icon">
                       <i class="material-icons">&#xe5c3;
-                        <span th:attr="ui-include='\''+ @{/assets/backend/assets/images/i_1.svg} +'\''"></span>
+                        <span th:attr="ui-include='\''+@{/assets/backend/assets/images/i_1.svg} +'\''"></span>
                       </i>
                     </span>
                     <span class="nav-text">Brand</span>
                 </a>
                 <ul class="nav-sub nav-mega">
-                    <li th:class="${path} == 'brand' ? 'active'"><a th:href="@{/admin/brand}"><span class="nav-text">List</span></a>
+                    <li th:class="${path} == 'brand' ? 'active' : ''"><a th:href="@{/admin/brand}"><span class="nav-text">List</span></a>
                     </li>
-                    <li th:class="${path} == 'brand-add' ? 'active'"><a th:href="@{/admin/brand/add}"><span
+                    <li th:class="${path} == 'brand-add' ? 'active' : ''"><a th:href="@{/admin/brand/add}"><span
                             class="nav-text">Add new</span></a></li>
                 </ul>
             </li>
@@ -59,9 +73,9 @@
                     <span class="nav-text">Product Category</span>
                 </a>
                 <ul class="nav-sub nav-mega">
-                    <li th:class="${path} == 'product-category' ? 'active'"><a
+                    <li th:class="${path} == 'product-category' ? 'active' : ''"><a
                             th:href="@{/admin/product-category}"><span class="nav-text">List</span></a></li>
-                    <li th:class="${path} == 'product-category-add' ? 'active'"><a
+                    <li th:class="${path} == 'product-category-add' ? 'active' : ''"><a
                             th:href="@{/admin/product-category/add}"><span class="nav-text">Add new</span></a></li>
                 </ul>
             </li>
@@ -79,9 +93,9 @@
                 </a>
                 <ul class="nav-sub nav-mega">
                     <li th:each="productCategory : ${productCategoryList}"
-                        th:class="${path} == ${productCategory.slug}+'-product' ? 'active'"><a
+                        th:class="${path} == ${productCategory.slug}+'-product' ? 'active' : ''"><a
                             th:href="@{'/admin/product-category/' + ${productCategory.id}+'/product'}"><span
-                            class="nav-text" th:text="${productCategory.name}"></span></a></li>
+                            class="nav-text" th:text="${productCategory.name}+' ('+${productCategory.products.size()+')'}"></span></a></li>
                 </ul>
             </li>
             <li th:class="${postCategoryPage} ? 'active'">
@@ -96,9 +110,9 @@
                     <span class="nav-text">Post Category</span>
                 </a>
                 <ul class="nav-sub nav-mega">
-                    <li th:class="${path} == 'post-category' ? 'active'"><a th:href="@{/admin/post-category}"><span
+                    <li th:class="${path} == 'post-category' ? 'active' : ''"><a th:href="@{/admin/post-category}"><span
                             class="nav-text">List</span></a></li>
-                    <li th:class="${path} == 'post-category-add' ? 'active'"><a
+                    <li th:class="${path} == 'post-category-add' ? 'active' : ''"><a
                             th:href="@{/admin/post-category/add}"><span class="nav-text">Add new</span></a></li>
                 </ul>
             </li>
@@ -113,9 +127,9 @@
                     <span class="nav-text">Post</span>
                 </a>
                 <ul class="nav-sub nav-mega">
-                    <li th:class="${path} == 'post' ? 'active'"><a th:href="@{/admin/post}"><span
+                    <li th:class="${path} == 'post' ? 'active' : ''"><a th:href="@{/admin/post}"><span
                             class="nav-text">List</span></a></li>
-                    <li th:class="${path} == 'post-add' ? 'active'"><a th:href="@{/admin/post/add}"><span
+                    <li th:class="${path} == 'post-add' ? 'active' : ''"><a th:href="@{/admin/post/add}"><span
                             class="nav-text">Add new</span></a></li>
                 </ul>
             </li>
@@ -130,9 +144,9 @@
                     <span class="nav-text">Page</span>
                 </a>
                 <ul class="nav-sub nav-mega">
-                    <li th:class="${path} == 'page' ? 'active'"><a th:href="@{/admin/page}"><span
+                    <li th:class="${path} == 'page' ? 'active' : ''"><a th:href="@{/admin/page}"><span
                             class="nav-text">List</span></a></li>
-                    <li th:class="${path} == 'page-add' ? 'active'"><a th:href="@{/admin/page/add}"><span
+                    <li th:class="${path} == 'page-add' ? 'active' : ''"><a th:href="@{/admin/page/add}"><span
                             class="nav-text">Add new</span></a></li>
                 </ul>
             </li>
@@ -149,9 +163,9 @@
                     <span class="nav-text">Menu</span>
                 </a>
                 <ul class="nav-sub nav-mega">
-                    <li th:class="${path} == 'menu-group' ? 'active'"><a th:href="@{/admin/menu-group}"><span
+                    <li th:class="${path} == 'menu-group' ? 'active' : ''"><a th:href="@{/admin/menu-group}"><span
                             class="nav-text">List</span></a></li>
-                    <li th:class="${path} == 'menu-group-add' ? 'active'"><a th:href="@{/admin/menu-group/add}"><span
+                    <li th:class="${path} == 'menu-group-add' ? 'active' : ''"><a th:href="@{/admin/menu-group/add}"><span
                             class="nav-text">Add new menu group</span></a></li>
                 </ul>
             </li>
@@ -168,8 +182,8 @@
                     <span class="nav-text">Province</span>
                 </a>
                 <ul class="nav-sub nav-mega">
-                    <li th:class="${path} == 'province' ? 'active'"><a th:href="@{/admin/province}"><span class="nav-text">List</span></a></li>
-                    <li th:class="${path} == 'province-add' ? 'active'"><a th:href="@{/admin/province/add}"><span class="nav-text">Add new</span></a></li>
+                    <li th:class="${path} == 'province' ? 'active' : ''"><a th:href="@{/admin/province}"><span class="nav-text">List</span></a></li>
+                    <li th:class="${path} == 'province-add' ? 'active' : ''"><a th:href="@{/admin/province/add}"><span class="nav-text">Add new</span></a></li>
                 </ul>
             </li>
             <li th:class="${mediaPage} ? 'active'">
@@ -209,25 +223,25 @@
 					</span> <span class="nav-text">Setting</span>
             </a>
                 <ul class="nav-sub nav-mega">
-                    <li th:class="${path} == 'general' ? 'active'"><a
+                    <li th:class="${path} == 'general' ? 'active' : ''"><a
                             th:href="@{/admin/config}"><span class="nav-text">Basic
 									Setup</span></a></li>
-                    <li th:class="${path} == 'logo' ? 'active'"><a
+                    <li th:class="${path} == 'logo' ? 'active' : ''"><a
                             th:href="@{/admin/config/logo}"><span class="nav-text">Logo</span></a></li>
-                    <li th:class="${path} == 'menuPosition' ? 'active'"><a
+                    <li th:class="${path} == 'menuPosition' ? 'active' : ''"><a
                             th:href="@{/admin/config/menu-position}"><span class="nav-text">Menu Position</span></a></li>
-                    <li th:class="${path} == 'socialble' ? 'active'"><a
+                    <li th:class="${path} == 'socialble' ? 'active' : ''"><a
                             th:href="@{/admin/config/social}"><span class="nav-text">Social
 									Network</span></a></li>
-                    <li th:class="${path} == 'upload' ? 'active'"><a
+                    <li th:class="${path} == 'upload' ? 'active' : ''"><a
                             th:href="@{/admin/config/upload}"><span class="nav-text">Upload
 									Photo</span></a></li>
-                    <li th:class="${path} == 'emailSystem' ? 'active'"><a
+                    <li th:class="${path} == 'emailSystem' ? 'active' : ''"><a
                             th:href="@{/admin/config/email-system}"><span class="nav-text">Email
 									System</span></a></li>
-                    <li th:class="${path} == 'contact' ? 'active'"><a
+                    <li th:class="${path} == 'contact' ? 'active' : ''"><a
                             th:href="@{/admin/config/contact}"><span class="nav-text">Contact</span></a></li>
-                    <li th:class="${path} == 'api' ? 'active'"><a
+                    <li th:class="${path} == 'api' ? 'active' : ''"><a
                             th:href="@{/admin/config/api}"><span class="nav-text">Api</span></a></li>
                 </ul>
             </li>

@@ -47,32 +47,6 @@ public class Post implements java.io.Serializable {
     public Post() {
     }
 
-    public Post(PostCategory postCategory, User user, String title, String content, Date createDate,
-                byte status, String postType, String featureImage) {
-        this.postCategory = postCategory;
-        this.user = user;
-        this.title = title;
-        this.content = content;
-        this.createDate = createDate;
-        this.status = status;
-        this.postType = postType;
-        this.featureImage = featureImage;
-    }
-
-    public Post(PostCategory postCategory, User user, String title, String content, Date createDate,
-                Date updateDate, byte status, String postType, String featureImage, Set<Comment> comments) {
-        this.postCategory = postCategory;
-        this.user = user;
-        this.title = title;
-        this.content = content;
-        this.createDate = createDate;
-        this.updateDate = updateDate;
-        this.status = status;
-        this.postType = postType;
-        this.featureImage = featureImage;
-        this.comments = comments;
-    }
-
     @Id
     @GeneratedValue(strategy = IDENTITY)
 

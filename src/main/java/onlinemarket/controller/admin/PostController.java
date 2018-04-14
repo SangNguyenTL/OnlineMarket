@@ -26,8 +26,6 @@ public class PostController extends MainController {
 
     private FilterForm filterForm;
 
-    private FilterPost filterPost;
-
     private String postType;
 
     @Autowired
@@ -42,14 +40,12 @@ public class PostController extends MainController {
         this.postType = postType;
         title = "Post";
         filterForm.getGroupSearch().put("postType", postType);
-        filterPost = new FilterPost(filterForm);
         relativePath = "/admin/post";
         generateBreadcrumbs();
         breadcrumbs.add(new String[]{"/admin", "Admin"});
         breadcrumbs.add(new String[]{relativePath, title+" manager"});
         model.put("relativePath", relativePath);
         model.put("filterForm", filterForm);
-        model.put("filterPost", filterPost);
         model.put("pathAdd", relativePath + "/add");
         model.put("postPage", true);
         model.put("uploadType", "post");
@@ -60,20 +56,11 @@ public class PostController extends MainController {
 
     @RequestMapping(value = "", method = {RequestMethod.GET, RequestMethod.POST})
     public String mainPage(
-            @ModelAttribute("filterPost") FilterPost filterPost, ModelMap modelMap) {
-
-        filterPost.setFilterForm(filterForm);
-        if (filterPost.getStatus() != null) {
-            filterForm.getGroupSearch().put("status", filterPost.getStatus());
-        }
-        if (filterPost.getPostCategory() != null) {
-            filterForm.getGroupSearch().put("postCategory.name", filterPost.getPostCategory().getName());
-        }
+            @ModelAttribute("filterForm") FilterForm filterForm, ModelMap modelMap) {
 
         modelMap.put("result", postService.list(filterForm));
         modelMap.put("pageTitle", title + " manager");
         modelMap.put("path", "post");
-        modelMap.put("filterPost", filterPost);
         modelMap.put("filterForm", filterForm);
 
         return "backend/post";
@@ -82,16 +69,7 @@ public class PostController extends MainController {
     @RequestMapping(value = "/page/{page:^\\d+}", method = {RequestMethod.GET, RequestMethod.POST})
     public String mainPagePagination(
             @ModelAttribute("filterPost") FilterPost filterPost,
-            @PathVariable("page") Integer page, ModelMap modelMap) {
-
-        filterForm.setCurrentPage(page);
-        filterPost.setFilterForm(filterForm);
-        if (filterPost.getStatus() != null) {
-            filterForm.getGroupSearch().put("status", filterPost.getStatus());
-        }
-        if (filterPost.getPostCategory() != null) {
-            filterForm.getGroupSearch().put("postCategory.name", filterPost.getPostCategory().getName());
-        }
+            @ModelAttribute("filterForm") FilterForm filterForm,  ModelMap modelMap) {
 
         modelMap.put("result", postService.list(filterForm));
         modelMap.put("pageTitle", title + " manager");
