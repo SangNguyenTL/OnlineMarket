@@ -6,8 +6,184 @@
 </head>
 <body>
 
-  <div id="container" layout:fragment="container">
-  
+  <div id="container" class="container" layout:fragment="container">
+    <div class="row">
+        <aside id="column-left" class="col-sm-3 hidden-xs">
+            <h3 class="subtitle"><a th:href="@{${relativePath}}">Categories</a></h3>
+            <div class="box-category">
+                <ul id="cat_accordion">
+                    <li class="cutom-parent-li" th:each="productCate : ${productCategoryList}">
+                        <a th:href="@{${productPath}+'/'+${productCate.slug}}"
+                           th:classappend="${productCategory != null && productCate.slug == productCategory.slug ? 'active' : ''}"
+                           class="cutom-parent"
+                           th:text="${productCate.name}+' ('+${productCate.products.size()}+')'"></a></span>
+                    </li>
+                </ul>
+            </div>
+            <h3>Best seller</h3>
+            <div class="side-item">
+                <div class="product-thumb clearfix" th:each="productBest : ${productBestSellerList}">
+                    <div class="image"><a th:href="@{'/product/'+${productBest.slug}}"><img
+                            th:src="@{${productBest.featureImage}}" class="img-responsive"/></a></div>
+                    <div class="caption">
+                        <h4><a th:href="@{'/product/'+${productBest.slug}}" th:alt="${productBest.name}" th:text="${productBest.name}"></a></h4>
+                        <p class="price"><span class="price-new" th:text="${productBest.newPriceStr}"></span>
+                            <span class="price-old" th:if="${productBest.sale != ''}"
+                                  th:text="${productBest.priceStr}"></span> <span th:if="${productBest.sale != ''}"
+                                                                                  class="saving"
+                                                                                  th:text="${productBest.sale}"></span>
+                        <div class="rating">
+                                            <span class="fa fa-stack" th:each="number : ${#numbers.sequence(1, 5)}">
+                                                <i th:if="${productBest.ratingStatistic != null && productBest.ratingStatistic.averageScore > number}" class="fa fa-star fa-stack-2x"></i>
+                                                <i class="fa fa-star-o fa-stack-2x"></i>
+                                            </span>
+                        </div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <h3>Best viewing</h3>
+            <div class="side-item">
+                <div class="product-thumb clearfix" th:each="productBest : ${productBestViewing}">
+                    <div class="image"><a th:href="@{'/product/'+${productBest.slug}}"><img
+                            th:src="@{${productBest.featureImage}}" class="img-responsive"/></a></div>
+                    <div class="caption">
+                        <h4><a th:href="@{'/product/'+${productBest.slug}}" th:alt="${productBest.name}" th:text="${productBest.name}"></a></h4>
+                        <p class="price"><span class="price-new" th:text="${productBest.newPriceStr}"></span>
+                            <span class="price-old" th:if="${productBest.sale != ''}"
+                                  th:text="${productBest.priceStr}"></span> <span th:if="${productBest.sale != ''}"
+                                                                                  class="saving"
+                                                                                  th:text="${productBest.sale}"></span>
+                        <div class="rating">
+                                            <span class="fa fa-stack" th:each="number : ${#numbers.sequence(1, 5)}">
+                                                <i th:if="${productBest.ratingStatistic != null && productBest.ratingStatistic.averageScore > number}" class="fa fa-star fa-stack-2x"></i>
+                                                <i class="fa fa-star-o fa-stack-2x"></i>
+                                            </span>
+                        </div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <h3>Best Rating</h3>
+            <div class="side-item">
+                <div class="product-thumb clearfix" th:each="productBest : ${productBestRating}">
+                    <div class="image"><a th:href="@{'/product/'+${productBest.slug}}"><img
+                            th:src="@{${productBest.featureImage}}" class="img-responsive"/></a></div>
+                    <div class="caption">
+                        <h4><a th:href="@{'/product/'+${productBest.slug}}" th:alt="${productBest.name}" th:text="${productBest.name}"></a></h4>
+                        <p class="price"><span class="price-new" th:text="${productBest.newPriceStr}"></span>
+                            <span class="price-old" th:if="${productBest.sale != ''}"
+                                  th:text="${productBest.priceStr}"></span> <span th:if="${productBest.sale != ''}"
+                                                                                  class="saving"
+                                                                                  th:text="${productBest.sale}"></span>
+                        <div class="rating">
+                                            <span class="fa fa-stack" th:each="number : ${#numbers.sequence(1, 5)}">
+                                                <i th:if="${productBest.ratingStatistic != null && productBest.ratingStatistic.averageScore > number}" class="fa fa-star fa-stack-2x"></i>
+                                                <i class="fa fa-star-o fa-stack-2x"></i>
+                                            </span>
+                        </div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <div id="content" class="col-sm-9">
+            <!-- Featured Product Start-->
+            <h3 class="subtitle">Featured</h3>
+            <div class="owl-carousel product_carousel">
+                <div class="product-thumb clearfix">
+                    <div class="image"><a href="product.html"><img src="image/product/apple_cinema_30-200x200.jpg" alt="Brand Fashion Cotton T-Shirt" title="Brand Fashion Cotton T-Shirt" class="img-responsive" /></a></div>
+                    <div class="caption">
+                        <h4><a href="product.html">Brand Fashion Cotton T-Shirt</a></h4>
+                        <p class="price"><span class="price-new">$110.00</span><span class="price-old">$122.00</span><span class="saving">-10%</span></p>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn-primary" type="button" onClick="cart.add('42');"><span>Add to Cart</span></button>
+                        <div class="add-to-links">
+                            <button type="button" data-toggle="tooltip" title="Add to Wish List" onClick=""><i class="fa fa-heart"></i></button>
+                            <button type="button" data-toggle="tooltip" title="Compare this Product" onClick=""><i class="fa fa-exchange"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-thumb clearfix">
+                    <div class="image"><a href="product.html"><img src="image/product/samsung_tab_1-200x200.jpg" alt="Aspire Ultrabook Laptop" title="Aspire Ultrabook Laptop" class="img-responsive" /></a></div>
+                    <div class="caption">
+                        <h4><a href="product.html">Aspire Ultrabook Laptop</a></h4>
+                        <p class="price"> <span class="price-new">$230.00</span> <span class="price-old">$241.99</span> <span class="saving">-5%</span> </p>
+                        <div class="rating"> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span> </div>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn-primary" type="button" onClick="cart.add('49');"><span>Add to Cart</span></button>
+                        <div class="add-to-links">
+                            <button type="button" data-toggle="tooltip" title="Add to Wish List" onClick=""><i class="fa fa-heart"></i></button>
+                            <button type="button" data-toggle="tooltip" title="Compare this Product" onClick=""><i class="fa fa-exchange"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-thumb clearfix">
+                    <div class="image"><a href="product.html"><img src="image/product/sony_vaio_1-200x200.jpg" alt="Xitefun Causal Wear Fancy Shoes" title="Xitefun Causal Wear Fancy Shoes" class="img-responsive" /></a></div>
+                    <div class="caption">
+                        <h4><a href="product.html">Xitefun Causal Wear Fancy Shoes</a></h4>
+                        <p class="price"> <span class="price-new">$902.00</span> <span class="price-old">$1,202.00</span> <span class="saving">-25%</span> </p>
+                        <div class="rating"> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span> </div>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn-primary" type="button" onClick="cart.add('46');"><span>Add to Cart</span></button>
+                        <div class="add-to-links">
+                            <button type="button" data-toggle="tooltip" title="Add to Wish List" onClick=""><i class="fa fa-heart"></i></button>
+                            <button type="button" data-toggle="tooltip" title="Compare this Product" onClick=""><i class="fa fa-exchange"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-thumb clearfix">
+                    <div class="image"><a href="product.html"><img src="image/product/macbook_1-200x200.jpg" alt="Ideapad Yoga 13-59341124 Laptop" title="Ideapad Yoga 13-59341124 Laptop" class="img-responsive" /></a></div>
+                    <div class="caption">
+                        <h4><a href="product.html">Ideapad Yoga 13-59341124 Laptop</a></h4>
+                        <p class="price"> $2.00 </p>
+                        <div class="rating"> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span> </div>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn-primary" type="button" onClick="cart.add('43');"><span>Add to Cart</span></button>
+                        <div class="add-to-links">
+                            <button type="button" data-toggle="tooltip" title="Add to Wish List" onClick=""><i class="fa fa-heart"></i></button>
+                            <button type="button" data-toggle="tooltip" title="Compare this Product" onClick=""><i class="fa fa-exchange"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-thumb clearfix">
+                    <div class="image"><a href="product.html"><img src="image/product/iphone_1-200x200.jpg" alt="iPhone5" title="iPhone5" class="img-responsive" /></a></div>
+                    <div class="caption">
+                        <h4><a href="product.html">iPhone5</a></h4>
+                        <p class="price"> $123.20 </p>
+                        <div class="rating"> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span> <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span> </div>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn-primary" type="button" onClick=""><span>Add to Cart</span></button>
+                        <div class="add-to-links">
+                            <button type="button" data-toggle="tooltip" title="Add to Wish List" onClick=""><i class="fa fa-heart"></i></button>
+                            <button type="button" data-toggle="tooltip" title="Compare this Product" onClick=""><i class="fa fa-exchange"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-thumb clearfix">
+                    <div class="image"><a href="product.html"><img src="image/product/canon_eos_5d_1-200x200.jpg" alt="Long Sleeve Shirt Fashion Men" title="Long Sleeve Shirt Fashion Men" class="img-responsive" /></a></div>
+                    <div class="caption">
+                        <h4><a href="product.html">Long Sleeve Shirt Fashion Men</a></h4>
+                        <p class="price"> <span class="price-new">$98.00</span> <span class="price-old">$122.00</span> <span class="saving">-20%</span> </p>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn-primary" type="button" onClick=""><span>Add to Cart</span></button>
+                        <div class="add-to-links">
+                            <button type="button" data-toggle="tooltip" title="Add to Wish List" onClick=""><i class="fa fa-heart"></i></button>
+                            <button type="button" data-toggle="tooltip" title="Compare this Product" onClick=""><i class="fa fa-exchange"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Featured Product End-->
+
+        </div>
+    </div>
   </div>
 
 </body>

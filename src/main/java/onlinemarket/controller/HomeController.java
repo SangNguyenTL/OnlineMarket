@@ -3,7 +3,9 @@ package onlinemarket.controller;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.groups.Default;
 
+import onlinemarket.form.filter.FilterForm;
 import onlinemarket.model.User;
+import onlinemarket.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -26,10 +28,32 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class HomeController extends MainController {
 
 	@Autowired
+	ProductService productService;
+
+	@Autowired
 	ProvinceService provinceService;
 
 	@RequestMapping(value = { "/" }, method = RequestMethod.GET)
 	public String homePage(ModelMap model) {
+
+		FilterForm filterForm1 = new FilterForm();
+		filterForm1.setSize(5);
+		filterForm1.setOrder("desc");
+		filterForm1.setOrderBy("numberOrder");
+		model.put("productBestSellerList",productService.list(filterForm1).getList());
+
+		FilterForm filterForm2 = new FilterForm();
+		filterForm2.setSize(5);
+		filterForm2.setOrder("desc");
+		filterForm2.setOrderBy("productViewsStatistic.total");
+		model.put("productBestViewing",productService.list(filterForm2).getList());
+
+		FilterForm filterForm3 = new FilterForm();
+		filterForm3.setSize(5);
+		filterForm3.setOrder("desc");
+		filterForm3.setOrderBy("ratingStatistic.totalScore");
+		model.put("productBestRating",productService.list(filterForm3).getList());
+
 
 		model.put("pageTitle", "Home");
 		return "frontend/index";

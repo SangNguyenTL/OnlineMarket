@@ -38,7 +38,7 @@ public class ErrorController {
 		errorPage.addObject("titlePage", httpErrorCode + " Error");
 		errorPage.addObject("errorMsg", ex.getLocalizedMessage());
 		errorPage.addObject("code", httpErrorCode);
-//		errorPage.addObject("exception", ex);
+		ex.printStackTrace();
 
 		return errorPage;
 	}
