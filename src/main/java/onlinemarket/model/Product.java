@@ -42,7 +42,7 @@ public class Product implements java.io.Serializable {
 	private String priceStr;
 	private String newPriceStr;
 	private Integer quantity;
-	private int numberOrder;
+	private Integer numberOrder;
 	private Byte state;
 	private Integer weight;
 	private Date releaseDate;
@@ -155,11 +155,11 @@ public class Product implements java.io.Serializable {
 	}
 
     @Column(name = "number_order")
-    public int getNumberOrder() {
+    public Integer getNumberOrder() {
         return numberOrder;
     }
 
-    public void setNumberOrder(int numberOrder) {
+    public void setNumberOrder(Integer numberOrder) {
         this.numberOrder = numberOrder;
     }
 
