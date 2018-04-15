@@ -28,8 +28,8 @@ public class ProductViews implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private Product product;
-	private Date datetime;
-	private int count;
+	private Date datetime = new Date();
+	private int count = 0;
 
 	public ProductViews() {
 	}

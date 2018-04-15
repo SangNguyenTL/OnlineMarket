@@ -43,40 +43,74 @@ public class FrProductController extends MainController {
     @ModelAttribute
     public ModelMap populateAttribute(@PathVariable("slug") String slug, ModelMap model) throws NoHandlerFoundException, ProductNotFoundException {
 
-        product = productService.getByDeclaration("slug", slug);
-        relativePath = "/product/"+slug;
-        if(product == null)
-            throw new NoHandlerFoundException(null, null, null);
-            title = product.getName();
-        generateBreadcrumbs();
-        breadcrumbs.add(new String[]{"/product-category/"+product.getProductCategory().getSlug(), product.getProductCategory().getName()});
-        model.put("pageTitle", title);
-        model.put("product",product);
-        model.put("relativePath",relativePath);
+        FilterForm filterForm1 = new FilterForm();
+        filterForm1.getGroupSearch().put("state", "0");
+        filterForm1.setSize(5);
+        filterForm1.setOrder("desc");
+        filterForm1.setOrderBy("numberOrder");
+        model.put("productBestSellerList",productService.list(filterForm1).getList());
 
-        List<Product> relatedProducts = productService.getRelatedProduct(product.getProductCategory(),product.getBrand());
-        model.put("relatedProducts",relatedProducts);
+        filterForm1.setSize(5);
+        filterForm1.setOrder("desc");
+        filterForm1.setOrderBy("productViewsStatistic.total");
+        model.put("productBestViewing",productService.list(filterForm1).getList());
+
+        filterForm1.setSize(5);
+        filterForm1.setOrder("desc");
+        filterForm1.setOrderBy("ratingStatistic.totalScore");
+        model.put("productBestRating",productService.list(filterForm1).getList());
+
+        product = productService.getByDeclaration("slug", slug);
+        relativePath = "/product/" + slug;
+        if (product == null || product.getState() == 3)
+            throw new NoHandlerFoundException(null, null, null);
+        title = product.getName();
+        generateBreadcrumbs();
+        breadcrumbs.add(new String[]{"/product-category/" + product.getProductCategory().getSlug(), product.getProductCategory().getName()});
+        model.put("pageTitle", title);
+        model.put("product", product);
+        model.put("relativePath", relativePath);
+
+        List<Product> relatedProducts = productService.getRelatedProduct(product.getProductCategory(), product.getBrand());
+        model.put("relatedProducts", relatedProducts);
 
         filterForm = new FilterForm();
         filterForm.setOrderBy("createRateDate");
         filterForm.setOrder("desc");
         filterForm.getGroupSearch().put("state", "Active");
-        model.put("filterForm",filterForm);
+        model.put("filterForm", filterForm);
 
         return model;
     }
 
-    @RequestMapping( value = "", method = RequestMethod.GET)
+    @RequestMapping(value = "", method = RequestMethod.GET)
     public String mainPage(@ModelAttribute("filterForm") FilterForm filterForm, ModelMap modelMap) throws NoHandlerFoundException {
-      try{
-          modelMap.put("pathAction", relativePath + "/add-rating");
-          ResultObject<Rating> resultObject = ratingService.listByProduct(product, filterForm);
-          modelMap.put("result", resultObject);
-          modelMap.put("pageTitle", "Menu");
-          modelMap.put("rating", new Rating());
-      } catch (ProductNotFoundException e) {
+        try {
+            modelMap.put("pathAction", relativePath + "/add-rating");
+            ResultObject<Rating> resultObject = ratingService.listByProduct(product, filterForm);
+            modelMap.put("result", resultObject);
+            modelMap.put("pageTitle", "Menu");
+            modelMap.put("rating", new Rating());
+        } catch (ProductNotFoundException e) {
 
-      }
+        }
+
+        return "frontend/product";
+    }
+
+    @RequestMapping(value = "/page/{page:\\d+}", method = RequestMethod.GET)
+    public String mainPagePagination(@PathVariable("page") Integer page, @ModelAttribute("filterForm") FilterForm filterForm, ModelMap modelMap) throws NoHandlerFoundException {
+        try {
+            filterForm.setCurrentPage(page);
+
+            modelMap.put("pathAction", relativePath + "/add-rating");
+            ResultObject<Rating> resultObject = ratingService.listByProduct(product, filterForm);
+            modelMap.put("result", resultObject);
+            modelMap.put("pageTitle", "Menu");
+            modelMap.put("rating", new Rating());
+        } catch (ProductNotFoundException e) {
+
+        }
 
         return "frontend/product";
     }
@@ -85,7 +119,7 @@ public class FrProductController extends MainController {
     public String processAddRating(@Validated(value = {Default.class, AdvancedValidation.CheckSlug.class, AdvancedValidation.AddPost.class}) @ModelAttribute("rating") Rating rating, BindingResult result, ModelMap modelMap, RedirectAttributes redirectAttributes) {
         try {
             if (!result.hasErrors()) {
-                if(currentUser.getId()==null)
+                if (currentUser.getId() == null)
                     throw new CustomException("You must be login.");
                 rating.setProduct(product);
                 ratingService.save(rating, currentUser);
@@ -100,7 +134,7 @@ public class FrProductController extends MainController {
                 return "frontend/post-add";
             }
 
-        } catch (RatingNotFoundException|CustomException e) {
+        } catch (RatingNotFoundException | CustomException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
 

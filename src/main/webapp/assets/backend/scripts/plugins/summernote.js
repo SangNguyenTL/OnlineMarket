@@ -4,6 +4,6 @@
         var element = $(we.currentTarget);
         contents = contents == "<p><br></p>" ? "" : contents;
         element.html(contents);
-        element.find("form").parsley().reset();
+        element.closest("form").parsley().reset();
     });
 })(jQuery);
