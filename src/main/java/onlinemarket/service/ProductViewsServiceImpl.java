@@ -8,6 +8,8 @@ import onlinemarket.model.ProductViewsStatistic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Calendar;
+
 @Service("productViewsService")
 public class ProductViewsServiceImpl implements ProductViewsService{
 
@@ -31,6 +33,13 @@ public class ProductViewsServiceImpl implements ProductViewsService{
 
         ProductViewsStatistic productViewsStatistic = productViewsStatisticDao.getByDeclaration("product", product);
         if(productViewsStatistic == null) productViewsStatistic = new ProductViewsStatistic();
+
+        Calendar calendar = Calendar.getInstance();
+
+        productViewsStatistic.setTotal(productViewsStatistic.getTotal()+1);
+        productViewsStatistic.setMonth(productViewsStatistic.getMonth()+1);
+        productViewsStatistic.setWeek(productViewsStatistic.getWeek()+1);
+        productViewsStatistic.setYear(productViewsStatistic.getYear()+1);
 
         productViewsDao.update(productViews);
     }
