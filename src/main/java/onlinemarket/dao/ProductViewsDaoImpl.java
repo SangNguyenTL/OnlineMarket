@@ -16,11 +16,16 @@ public class ProductViewsDaoImpl extends AbstractDao<Integer, ProductViews> impl
 
         Criteria criteria = createEntityCriteria();
         criteria.add(Restrictions.eq("product", product));
-        Calendar c = Calendar.getInstance();
-        c.add(Calendar.DATE, +1);
-        criteria.add(Restrictions.le("datetime", c.getTime()));
-        c.add(Calendar.DATE, -1);
-        criteria.add(Restrictions.ge("datetime", c.getTime()));
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0); // ! clear would not reset the hour of day !
+        cal.clear(Calendar.MINUTE);
+        cal.clear(Calendar.SECOND);
+        cal.clear(Calendar.MILLISECOND);
+
+        cal.add(Calendar.DATE, +1);
+        criteria.add(Restrictions.le("datetime", cal.getTime()));
+        cal.add(Calendar.DATE, -1);
+        criteria.add(Restrictions.ge("datetime", cal.getTime()));
 
         return (ProductViews) criteria.uniqueResult();
     }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
+import java.util.Date;
 
 @Service("productViewsService")
 public class ProductViewsServiceImpl implements ProductViewsService{
@@ -35,6 +36,14 @@ public class ProductViewsServiceImpl implements ProductViewsService{
         if(productViewsStatistic == null) productViewsStatistic = new ProductViewsStatistic();
 
         Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0); // ! clear would not reset the hour of day !
+        calendar.clear(Calendar.MINUTE);
+        calendar.clear(Calendar.SECOND);
+        calendar.clear(Calendar.MILLISECOND);
+
+        Date currentDate = new Date();
+
+
 
         productViewsStatistic.setTotal(productViewsStatistic.getTotal()+1);
         productViewsStatistic.setMonth(productViewsStatistic.getMonth()+1);
