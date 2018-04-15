@@ -92,7 +92,7 @@
                                    name="Create Date">Create Date</filter:th>
                         <filter:th order="asc" orderBy="updateDate"
                                    filter:uri="@{${relativePath}}" filter:currentPage="${page}"
-                                   name="Create Date">Update Date</filter:th>
+                                   name="Update Date">Update Date</filter:th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -113,7 +113,8 @@
                         <td>
                             <form class="form-confirm"
                                   th:action="@{${relativePath} + '/delete'}" method="POST">
-                                <a th:href="@{${relativePath} + '/update/'+${post.id}}" class="btn btn-outline b-info text-success btn-sm">Update</a>
+                                <a th:href="@{${relativePath} + '/update/'+${post.id}}" class="btn btn-outline b-success text-success btn-sm">Update</a>
+                                <a th:href="@{${postType}+'/'+${post.slug}}" class="btn btn-outline b-info text-info btn-sm">Update</a>
                                 <input type="hidden" th:name="id" th:value="${post.id}">
                                 <button type="submit"
                                         class="btn btn-outline b-info text-danger btn-sm">Delete</button>

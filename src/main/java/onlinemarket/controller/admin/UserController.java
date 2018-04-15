@@ -4,15 +4,13 @@ import onlinemarket.model.other.AdvancedValidation;
 import onlinemarket.service.RoleService;
 import onlinemarket.service.UserService;
 import onlinemarket.util.exception.CustomException;
+import onlinemarket.util.exception.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import onlinemarket.controller.MainController;
 import onlinemarket.form.filter.FilterForm;
@@ -156,5 +154,21 @@ public class UserController extends MainController {
             redirectAttributes.addFlashAttribute("error", ex.getMessage());
             return "redirect:"+relativePath;
         }
+    }
+
+
+    @RequestMapping(value = "/delete", method = {RequestMethod.POST, RequestMethod.GET})
+    public String processDeleteProvince(
+            @RequestParam(value = "id") Integer userId,
+            RedirectAttributes redirectAttributes) {
+
+        try {
+            userService.delete(userId);
+            redirectAttributes.addFlashAttribute("success", "success");
+        } catch (UserHasPostException|UserHasEventException|UserNotFoundException|UserHasProductException|UserIsSuperAdminException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        }
+
+        return "redirect:" + relativePath;
     }
 }

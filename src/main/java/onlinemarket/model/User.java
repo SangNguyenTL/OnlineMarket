@@ -223,7 +223,7 @@ public class User implements java.io.Serializable {
 	}
 	
 	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
 	public List<Address> getAddresses() {
 		return addresses;
 	}
@@ -233,7 +233,7 @@ public class User implements java.io.Serializable {
 	}
 
 	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
 	public Set<Notification> getNotifications() {
 		return this.notifications;
 	}
@@ -243,7 +243,7 @@ public class User implements java.io.Serializable {
 	}
 
 	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
 	public Set<Cart> getCarts() {
 		return this.carts;
 	}

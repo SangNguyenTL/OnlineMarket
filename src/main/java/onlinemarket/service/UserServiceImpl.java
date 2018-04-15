@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import onlinemarket.util.exception.CustomException;
+import onlinemarket.util.exception.user.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -107,6 +108,21 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public ResultObject<User> list(FilterForm filterForm) {
 		return userDao.list(filterForm);
+	}
+
+	@Override
+	public void delete(Integer id) throws UserNotFoundException, UserHasEventException, UserHasPostException, UserHasProductException, UserIsSuperAdminException {
+		User user = userDao.getByKey(id);
+		if(user == null) throw new UserNotFoundException();
+		if(user.getId() == 1) throw new UserIsSuperAdminException();
+		User user1 = userDao.getUniqueResultBy("posts.user", user);
+		if(user1 !=null) throw new UserHasPostException("User has post "+user1.getPosts().iterator().next().getTitle());
+		User user2 = userDao.getUniqueResultBy("events.user", user);
+		if(user2 != null) throw new UserHasEventException("User has event "+user2.getEvents().iterator().next().getName());
+		User user3 = userDao.getUniqueResultBy("products.user", user);
+		if(user3 != null) throw new UserHasProductException("User has product "+user3.getProducts().iterator().next().getName());
+
+		userDao.delete(user);
 	}
 
 }
