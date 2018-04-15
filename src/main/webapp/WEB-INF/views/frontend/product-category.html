@@ -180,7 +180,7 @@
                                     th:src="@{${product.featureImage}}" class="img-responsive"/></a></div>
                             <div>
                                 <div class="caption">
-                                    <h4><a th:href="@{'/product/'+${product.slug}}" th:text="${product.name}"></a></h4>
+                                    <h4 data-toggle="tooltip" th:title="${product.name}"><a th:href="@{'/product/'+${product.slug}}" th:text="${product.name}"></a></h4>
                                     <p th:if="${product.events.size() > 0}" class="description">
                                         <b>Sales</b><br>
                                         <th:block th:each="event : ${product.events}">

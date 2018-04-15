@@ -44,25 +44,24 @@ public class FrGeneralGroup extends MainController {
         filterForm = new FilterForm();
 
         FilterForm filterForm1 = new FilterForm();
+        filterForm1.getGroupSearch().put("state", "0");
         filterForm1.setSize(5);
         filterForm1.setOrder("desc");
         filterForm1.setOrderBy("numberOrder");
         model.put("productBestSellerList",productService.list(filterForm1).getList());
 
-        FilterForm filterForm2 = new FilterForm();
-        filterForm2.setSize(5);
-        filterForm2.setOrder("desc");
-        filterForm2.setOrderBy("productViewsStatistic.total");
-        model.put("productBestViewing",productService.list(filterForm2).getList());
+        filterForm1.setSize(5);
+        filterForm1.setOrder("desc");
+        filterForm1.setOrderBy("productViewsStatistic.total");
+        model.put("productBestViewing",productService.list(filterForm1).getList());
 
-        FilterForm filterForm3 = new FilterForm();
-        filterForm3.setSize(5);
-        filterForm3.setOrder("desc");
-        filterForm3.setOrderBy("ratingStatistic.totalScore");
-        model.put("productBestRating",productService.list(filterForm3).getList());
+        filterForm1.setSize(5);
+        filterForm1.setOrder("desc");
+        filterForm1.setOrderBy("ratingStatistic.totalScore");
+        model.put("productBestRating",productService.list(filterForm1).getList());
 
         filterForm.getPrivateGroupSearch().put("state", "0");
-        filterForm.setOrderBy("createDate");
+        filterForm.setOrderBy("releaseDate");
         filterForm.setOrder("desc");
 
         generateBreadcrumbs();

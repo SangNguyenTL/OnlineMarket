@@ -2,6 +2,7 @@ package onlinemarket.controller;
 
 import javax.annotation.PostConstruct;
 
+import onlinemarket.model.ProductCategory;
 import onlinemarket.service.MenuSiteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
@@ -54,8 +55,11 @@ public abstract class MainController {
 
     protected List<String[]> breadcrumbs;
 
+    protected List<ProductCategory> productCategoryList;
+
     @ModelAttribute
     public void populateMetaPage(ModelMap model) {
+        productCategoryList = productCategoryService.list();
         model.put("general", configurationService.getGeneral());
         model.put("logo", configurationService.getLogo());
         model.put("upload", configurationService.getUpload());
@@ -63,7 +67,7 @@ public abstract class MainController {
         model.put("api", configurationService.getApiConfig());
         model.put("social", configurationService.getSocial());
         model.put("menuPosition", configurationService.getMenuPositionConfig());
-        model.put("productCategoryList", productCategoryService.list());
+        model.put("productCategoryList", productCategoryList);
         model.put("brandList", brandService.list());
         model.put("menuSite", menuSiteService.generateMenu());
     }

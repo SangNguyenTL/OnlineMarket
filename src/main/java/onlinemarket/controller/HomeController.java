@@ -4,8 +4,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.groups.Default;
 
 import onlinemarket.form.filter.FilterForm;
+import onlinemarket.model.Product;
+import onlinemarket.model.ProductCategory;
 import onlinemarket.model.User;
+import onlinemarket.result.ResultObject;
 import onlinemarket.service.ProductService;
+import onlinemarket.util.exception.productCategory.ProductCategoryNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -23,6 +27,11 @@ import onlinemarket.service.ProvinceService;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Controller
 @RequestMapping("")
 public class HomeController extends MainController {
@@ -36,25 +45,31 @@ public class HomeController extends MainController {
 	@RequestMapping(value = { "/" }, method = RequestMethod.GET)
 	public String homePage(ModelMap model) {
 
-		FilterForm filterForm1 = new FilterForm();
-		filterForm1.setSize(5);
-		filterForm1.setOrder("desc");
-		filterForm1.setOrderBy("numberOrder");
-		model.put("productBestSellerList",productService.list(filterForm1).getList());
+		FilterForm filterForm = new FilterForm();
+		filterForm.getGroupSearch().put("state", "0");
+		filterForm.setSize(10);
+		filterForm.setOrder("desc");
+		filterForm.setOrderBy("numberOrder");
+		model.put("productBestSellerList",productService.list(filterForm).getList());
 
-		FilterForm filterForm2 = new FilterForm();
-		filterForm2.setSize(5);
-		filterForm2.setOrder("desc");
-		filterForm2.setOrderBy("productViewsStatistic.total");
-		model.put("productBestViewing",productService.list(filterForm2).getList());
+		filterForm.setOrderBy("productViewsStatistic.total");
+		model.put("productBestViewing",productService.list(filterForm).getList());
 
-		FilterForm filterForm3 = new FilterForm();
-		filterForm3.setSize(5);
-		filterForm3.setOrder("desc");
-		filterForm3.setOrderBy("ratingStatistic.totalScore");
-		model.put("productBestRating",productService.list(filterForm3).getList());
+		filterForm.setOrderBy("ratingStatistic.totalScore");
+		model.put("productBestRating",productService.list(filterForm).getList());
 
+		Map<ProductCategory,ResultObject<Product>> resultObjectList = new HashMap<>();
+		filterForm.setOrderBy("releaseDate");
+		for(ProductCategory productCategory : productCategoryList){
+			try {
+				ResultObject<Product> resultObject = productService.listByProductCategory(productCategory,filterForm);
+				if(!resultObject.getList().isEmpty())
+					resultObjectList.put(productCategory, resultObject);
+			} catch (ProductCategoryNotFoundException e) {
 
+			}
+		}
+		model.put("resultObjectList", resultObjectList);
 		model.put("pageTitle", "Home");
 		return "frontend/index";
 	}

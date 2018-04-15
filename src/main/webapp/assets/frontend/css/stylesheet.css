@@ -850,7 +850,7 @@ a:focus { outline:none; }
 	font-size:13px;
 	line-height:18px;
 	text-decoration: none;
-	display:inline-block;
+	display: inline-block;
 	margin:0 auto;
 	padding:0;
 	color:#333;
@@ -935,7 +935,7 @@ a:focus { outline:none; }
 }
 .product-grid:hover .product-thumb .button-group .add-to-links, .owl-carousel .product-thumb:hover .button-group .add-to-links { visibility:visible; }
 .product-grid .product-thumb .button-group .add-to-links button span { display:none; }
-.product-grid .image {
+.owl-item .image, .product-grid .image {
 	width: 100%;
 	padding-top: 140%; /* 1:1 Aspect Ratio */
 	position: relative; /* If you want text inside of it */
@@ -944,7 +944,7 @@ a:focus { outline:none; }
 	justify-content: center;
 }
 
-.product-grid .image a{
+.owl-item .image a, .product-grid .image a{
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -955,11 +955,9 @@ a:focus { outline:none; }
 	flex-direction: column;
 	justify-content: center;
 }
-.product-grid .caption h4{
+.owl-item .caption h4, .product-grid .caption h4{
 	height: 50px;
 	display: flex;
-	flex-direction: column;
-	justify-content: center;
 	overflow: hidden;
 }
 /**======= 7.5. List Product =======**/
