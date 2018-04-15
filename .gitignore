@@ -33,3 +33,4 @@ hs_err_pid*
 .settings/.jsdtscope
 OnlineMarket.iml
 .settings/.jsdtscope
+src/main/resources/application.properties
