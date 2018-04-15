@@ -52,6 +52,7 @@ public class FrProductController extends MainController {
         breadcrumbs.add(new String[]{"/product-category/"+product.getProductCategory().getSlug(), product.getProductCategory().getName()});
         model.put("pageTitle", title);
         model.put("product",product);
+        model.put("relativePath",relativePath);
 
         List<Product> relatedProducts = productService.getRelatedProduct(product.getProductCategory(),product.getBrand());
         model.put("relatedProducts",relatedProducts);
@@ -69,8 +70,8 @@ public class FrProductController extends MainController {
     public String mainPage(@ModelAttribute("filterForm") FilterForm filterForm, ModelMap modelMap) throws NoHandlerFoundException {
       try{
           modelMap.put("pathAction", relativePath + "/add-rating");
-          ResultObject<Rating> resultObject = ratingService.listByProduct(product,filterForm);
-              modelMap.put("result", resultObject);
+          ResultObject<Rating> resultObject = ratingService.listByProduct(product, filterForm);
+          modelMap.put("result", resultObject);
           modelMap.put("pageTitle", "Menu");
           modelMap.put("rating", new Rating());
       } catch (ProductNotFoundException e) {

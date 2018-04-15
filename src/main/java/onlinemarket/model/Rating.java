@@ -28,7 +28,6 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "tb_rating", schema = "dbo", catalog = "SmartMarket")
-@FilterDef(name="filterByStateActive",defaultCondition = "State =  'Active'"  )
 public class Rating implements java.io.Serializable {
 
 	/**
