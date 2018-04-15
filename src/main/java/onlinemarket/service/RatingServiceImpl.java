@@ -64,10 +64,12 @@ public class RatingServiceImpl implements RatingService{
             ratingfStatistic.setTotalScore(ratingfStatistic.getTotalScore() + ratingCheck.getScore());
             ratingfStatistic.setUserCount(ratingfStatistic.getUserCount() + 1);
             ratingfStatistic.setAverageScore(ratingfStatistic.getTotalScore() / ratingfStatistic.getUserCount());
+            ratingfStatistic.setProduct(ratingCheck.getProduct());
         }else{
             ratingfStatistic.setTotalScore(ratingfStatistic.getTotalScore() - ratingCheck.getScore());
             ratingfStatistic.setUserCount(ratingfStatistic.getUserCount() - 1);
             ratingfStatistic.setAverageScore(ratingfStatistic.getTotalScore() / ratingfStatistic.getUserCount());
+            ratingfStatistic.setProduct(ratingCheck.getProduct());
         }
         ratingStatisticDao.update(ratingfStatistic);
     }

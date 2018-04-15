@@ -233,6 +233,17 @@
                 </ul>
             </li>
 
+            <li th:class="${ratingStatisticPage} ? 'active'">
+                <a th:href="@{/admin/rating-statistic}" >
+                 <span class="nav-icon">
+                   <i class="material-icons">&#xe8f0;
+                     <span th:attr="ui-include='\''+ @{/assets/backend/assets/images/i_2.svg} +'\''"></span>
+                   </i>
+                 </span>
+                    <span class="nav-text">Rating Statistic</span>
+                </a>
+            </li>
+
             <li th:class="${configPage} ? 'active'"><a> <span
                     class="nav-caret"> <i class="fa fa-caret-down"></i>
 					</span> <span class="nav-icon"> <i class="material-icons">&#xe429;
