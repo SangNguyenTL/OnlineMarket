@@ -12,4 +12,8 @@ import onlinemarket.util.exception.rating.RatingNotFoundException;
 public interface RatingService {
     ResultObject<Rating> listByProduct(Product product, FilterForm filterForm) throws ProductNotFoundException;
     void save(Rating rating, User user) throws RatingNotFoundException;
+    Rating getByKey(Integer key);
+    ResultObject<Rating> list(FilterForm filterForm);
+    void update(Rating entity) throws RatingNotFoundException;
+    void delete(Integer id) throws RatingNotFoundException;
 }

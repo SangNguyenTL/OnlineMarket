@@ -3,6 +3,7 @@ package onlinemarket.model;
 // Generated Jan 2, 2018 4:57:38 PM by Hibernate Tools 4.3.5.Final
 
 import onlinemarket.validation.StringContain;
+import org.hibernate.annotations.FilterDef;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
 
@@ -27,6 +28,7 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "tb_rating", schema = "dbo", catalog = "SmartMarket")
+@FilterDef(name="filterByStateActive",defaultCondition = "State =  'Active'"  )
 public class Rating implements java.io.Serializable {
 
 	/**

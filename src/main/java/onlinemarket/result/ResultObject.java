@@ -1,5 +1,6 @@
 package onlinemarket.result;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ResultObject<T> {
@@ -8,7 +9,7 @@ public class ResultObject<T> {
 	
 	private int currentPage;
 	
-	private List<T> list;
+	private List<T> list = new ArrayList<>();
 
 	public int getTotalPages() {
 		return totalPages;

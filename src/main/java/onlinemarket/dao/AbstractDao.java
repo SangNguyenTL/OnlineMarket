@@ -3,6 +3,7 @@ package onlinemarket.dao;
 import java.io.Serializable;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -194,7 +195,8 @@ public abstract class AbstractDao<PK extends Serializable, T> {
         }
 
         result.setList(criteria.list());
-
+        if(result.getList() == null)
+            result.setList(new ArrayList<T>());
         result.setCurrentPage(filterForm.getCurrentPage());
 
         return result;

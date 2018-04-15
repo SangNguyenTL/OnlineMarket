@@ -1,7 +1,7 @@
 package onlinemarket.dao;
 
-import onlinemarket.model.User;
+import onlinemarket.model.RatingStatistic;
 
-public interface RatingStatisticDao extends InterfaceDao<Integer, User> {
+public interface RatingStatisticDao extends InterfaceDao<Integer, RatingStatistic> {
 
 }

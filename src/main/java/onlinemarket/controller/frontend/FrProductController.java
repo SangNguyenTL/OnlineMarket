@@ -60,7 +60,7 @@ public class FrProductController extends MainController {
         filterForm.setOrderBy("createRateDate");
         filterForm.setOrder("desc");
         filterForm.getGroupSearch().put("state", "Active");
-
+        model.put("filterForm",filterForm);
 
         return model;
     }
@@ -70,7 +70,6 @@ public class FrProductController extends MainController {
       try{
           modelMap.put("pathAction", relativePath + "/add-rating");
           ResultObject<Rating> resultObject = ratingService.listByProduct(product,filterForm);
-          if(!resultObject.getList().isEmpty())
               modelMap.put("result", resultObject);
           modelMap.put("pageTitle", "Menu");
           modelMap.put("rating", new Rating());

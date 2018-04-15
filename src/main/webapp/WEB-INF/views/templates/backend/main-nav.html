@@ -214,6 +214,25 @@
                  <li th:class="${path} == 'event-add' ? 'active'"><a th:href="@{/admin/event/add}"><span class="nav-text">Add new</span></a></li>
              </ul>
             </li>
+
+            <li th:class="${ratingPage} ? 'active'" >
+                <a>
+                   <span class="nav-caret">
+                   <i class="fa fa-caret-down"></i>
+                 </span>
+                    <span class="nav-icon">
+                   <i class="material-icons">&#xe1b8;
+                     <span th:attr="ui-include='\''+ @{/assets/backend/assets/images/i_8.svg} +'\''"></span>
+                   </i>
+                 </span>
+                    <span class="nav-text">Rating Review</span>
+                </a>
+                <ul class="nav-sub nav-mega">
+                    <li th:class="${path} == 'rating' ? 'active'"><a th:href="@{/admin/rating}"><span class="nav-text">List Rating</span></a></li>
+                    <li th:class="${path} == 'rating-add' ? 'active'"><a th:href="@{/admin/rating/add}"><span class="nav-text">Add new</span></a></li>
+                </ul>
+            </li>
+
             <li th:class="${configPage} ? 'active'"><a> <span
                     class="nav-caret"> <i class="fa fa-caret-down"></i>
 					</span> <span class="nav-icon"> <i class="material-icons">&#xe429;

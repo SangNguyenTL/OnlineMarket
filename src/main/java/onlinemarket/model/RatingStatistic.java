@@ -18,9 +18,9 @@ public class RatingStatistic implements java.io.Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Product product;
-	private double averageScore;
-	private int totalScore;
-	private int userCount;
+	private double averageScore = 0;
+	private int totalScore = 0;
+	private int userCount = 0;
 
 	public RatingStatistic() {
 	}
