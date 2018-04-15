@@ -272,7 +272,7 @@ public class Product implements java.io.Serializable {
 	@LazyCollection(LazyCollectionOption.EXTRA)
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.REMOVE)
 	@JsonIgnore
-	@Filter(name="filterByStateActive")
+	@Filter(name ="ratingActive" ,condition = "state = 'Active'")
 	public Set<Rating> getRatings() {
 		return this.ratings;
 	}

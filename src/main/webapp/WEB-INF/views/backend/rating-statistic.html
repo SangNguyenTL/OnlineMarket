@@ -61,16 +61,9 @@
                     <tr th:each="rating : ${result.list}">
                         <td th:text="${rating.id}"></td>
                         <td th:text="${rating.product.name}"></td>
-                        <td th:text="${rating.}"></td>
-                        <td th:text="${rating.score}"></td>
-                        <td>
-                            <form class="form-confirm" th:action="@{${relativePath} + '/delete'}" method="POST">
-                                <a th:href="@{${relativePath} + '/update/' + ${rating.id}}" class="btn btn-outline b-info text-info btn-sm">View Rating Detail</a>
-                                <a th:href="@{${relativePath} + '/update/'+${rating.id}}" class="btn btn-outline b-info text-success btn-sm">Update Status</a>
-                                <input type="hidden" th:name="id" th:value="${rating.id}">
-                                <button type="submit" class="btn btn-outline b-info text-danger btn-sm">Delete</button>
-                            </form>
-                        </td>
+                        <td th:text="${rating.totalScore}"></td>
+                        <td th:text="${rating.averageScore}"></td>
+                        <td th:text="${rating.userCount}"></td>
                     </tr>
                     </tbody>
                 </table>
