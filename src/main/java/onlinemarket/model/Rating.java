@@ -4,6 +4,7 @@ package onlinemarket.model;
 
 import onlinemarket.validation.StringContain;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.Range;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -18,6 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -38,19 +40,19 @@ public class Rating implements java.io.Serializable {
 	private String state = State.ACTIVE.toString();
 	private String content;
 	private Date createRateDate;
-	private byte score;
+	private Integer score = 5;
 
 	public Rating() {
 	}
 
-	public Rating(Product product, User user, Date createRateDate, byte score) {
+	public Rating(Product product, User user, Date createRateDate, Integer score) {
 		this.product = product;
 		this.user = user;
 		this.createRateDate = createRateDate;
 		this.score = score;
 	}
 
-	public Rating(Product product, User user, Date rateDate, String content, Date createRateDate, byte score) {
+	public Rating(Product product, User user, Date rateDate, String content, Date createRateDate, Integer score) {
 		this.product = product;
 		this.user = user;
 		this.rateDate = rateDate;
@@ -135,13 +137,14 @@ public class Rating implements java.io.Serializable {
 		this.createRateDate = createRateDate;
 	}
 
+	@NotNull
 	@Column(name = "score", nullable = false)
-	@Size(min = 1, max = 5)
-	public byte getScore() {
+	@Range(min = 1, max = 5)
+	public Integer getScore() {
 		return this.score;
 	}
 
-	public void setScore(byte score) {
+	public void setScore(Integer score) {
 		this.score = score;
 	}
 

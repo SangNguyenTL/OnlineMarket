@@ -24,7 +24,7 @@ public class ProductDaoImpl extends AbstractDao<Integer, Product> implements Pro
         criteria.add(Restrictions.eq("productCategory", productCategory));
         criteria.add(Restrictions.eq("brand", brand));
         criteria.add(Restrictions.in("state", new Byte[]{0,1,2} ));
-        criteria.setMaxResults(6);
+        criteria.setMaxResults(10);
         return (List<Product>) criteria.list();
     }
 }

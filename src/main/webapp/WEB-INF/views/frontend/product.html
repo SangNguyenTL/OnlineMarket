@@ -45,8 +45,12 @@
                                                                                                         th:text="${product.brand.name}"></span></a>
                                 </li>
                                 <li><b>Size:</b> <span itemprop="mpn" th:text="${product.size}"></span></li>
-                                <li><b>Weight:</b><a th:text="${product.weight}"></a></li>
-                                <li><b>Availability:</b> <span class="instock" th:text="${product.state}"></span></li>
+                                <li><b>Weight:</b><a th:text="${product.weight + 'g'}"></a></li>
+                                <li th:switch="${product.state}"><b>Availability:</b>
+                                    <span class="instock" th:case=0>In stock</span>
+                                    <span class="nostock" th:case=1>Out of stock</span>
+                                    <span class="nostock" th:case=2>Stop selling</span>
+                                </li>
                             </ul>
                             <ul class="price-box">
                                 <li class="price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
@@ -122,9 +126,10 @@
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#tab-description" data-toggle="tab">Description</a></li>
                         <li><a href="#tab-specification" data-toggle="tab">Specification</a></li>
-                        <li><a href="#tab-review" data-toggle="tab">Reviews (2)</a></li>
+                        <li><a href="#tab-review" data-toggle="tab" th:text="'Review(' + ${product.ratings.size()} + ')'"></a></li>
                     </ul>
                     <div class="tab-content">
+
                         <div itemprop="description" id="tab-description" class="tab-pane active">
                             <div  th:utext="${product.description}">
                             </div>
@@ -158,20 +163,28 @@
                             </table>
                         </div>
                         <div id="tab-review" class="tab-pane">
-                            <form class="form-horizontal">
+                            <div class="alert alert-success m-x-lg" th:if="${success} != null">
+                                <strong>Congratulation!</strong> Process completed.
+                            </div>
+                            <div class="alert alert-danger m-x-lg" th:if="${error} != null">
+                                <strong>Obbs!</strong> [[${error}]].
+                            </div>
+                            <form class="form-horizontal" th:object="${rating}" th:action="@{${pathAction}}" method="POST">
                                 <div id="review">
-                                    <div>
+                                    <div th:each="rating : ${result.list}">
                                         <table class="table table-striped table-bordered">
                                             <tbody>
-                                            <tr th:each="rating : ${result.list}">
-                                                <td style="width: 50%;"><strong><span th:text="${rating.user.name}"></span></strong></td>
+                                            <tr>
+                                                <td style="width: 50%;"><strong><span th:text="${rating.user.firstName + ' ' + rating.user.lastName}"></span></strong></td>
                                                 <td class="text-right"><span th:text="${rating.createRateDate}"></span></td>
                                             </tr>
                                             <tr>
                                                 <td colspan="2"><p th:text="${rating.content}"></p>
-                                                    <div class="rating"><span class="fa fa-stack"><i
-                                                            class="fa fa-star fa-stack-2x"></i><i
-                                                            class="fa fa-star-o fa-stack-2x"></i></span>
+                                                    <div class="rating">
+                                                        <span class="fa fa-stack" th:each="ada : ${#numbers.sequence(1, rating.score)}">
+                                                            <i class="fa fa-star fa-stack-2x"></i>
+                                                            <i class="fa fa-star-o fa-stack-2x"></i>
+                                                        </span>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -183,16 +196,9 @@
                                 <h2>Write a review</h2>
                                 <div class="form-group required">
                                     <div class="col-sm-12">
-                                        <label for="input-name" class="control-label">Your Name</label>
-                                        <input class="form-control" id="input-name" value="" name="name"
-                                               type="text">
-                                    </div>
-                                </div>
-                                <div class="form-group required">
-                                    <div class="col-sm-12">
                                         <label for="input-review" class="control-label">Your Review</label>
                                         <textarea class="form-control" id="input-review" rows="5"
-                                                  name="text"></textarea>
+                                                  name="text" th:field="*{content}" required data-parsley-length="[3, 500]"></textarea>
                                         <div class="help-block"><span class="text-danger">Note:</span> HTML is not
                                             translated!
                                         </div>
@@ -202,21 +208,22 @@
                                     <div class="col-sm-12">
                                         <label class="control-label">Rating</label>
                                         &nbsp;&nbsp;&nbsp; Bad&nbsp;
-                                        <input value="1" name="rating" type="radio">
+                                        <input value="1" name="rating" type="radio"  th:field="*{score}">
                                         &nbsp;
-                                        <input value="2" name="rating" type="radio">
+                                        <input value="2" name="rating" type="radio" th:field="*{score}">
                                         &nbsp;
-                                        <input value="3" name="rating" type="radio">
+                                        <input value="3" name="rating" type="radio" th:field="*{score}">
                                         &nbsp;
-                                        <input value="4" name="rating" type="radio">
+                                        <input value="4" name="rating" type="radio" th:field="*{score}">
                                         &nbsp;
-                                        <input value="5" name="rating" type="radio">
+                                        <input value="5" name="rating" type="radio" th:field="*{score}">
                                         &nbsp;Good
                                     </div>
                                 </div>
                                 <div class="buttons">
                                     <div class="pull-right">
-                                        <button class="btn btn-primary" id="button-review" type="button">Continue
+                                        <button class="btn btn-primary" id="button-review" type="submit">
+                                            Continue
                                         </button>
                                     </div>
                                 </div>

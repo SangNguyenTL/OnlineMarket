@@ -269,7 +269,7 @@ public class Product implements java.io.Serializable {
 		this.size = size;
 	}
 
-
+	@LazyCollection(LazyCollectionOption.EXTRA)
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "product", cascade = CascadeType.REMOVE)
 	@JsonIgnore
 	public Set<Rating> getRatings() {
