@@ -3,6 +3,8 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	xmlns:filter="http://thymeleafexamples"
 	layout:decorate="templates/backend">
+<!--/*@thymesVar id="result" type="onlinemarket.result.ResultObject<onlinemarket.model.ProductCategory>"*/-->
+<!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
 <head>
 </head>
 <body>
@@ -53,8 +55,8 @@
       				<th>Action</th>
       			</tr>
       		</thead>
-      		<tbody th:object="${result}">
-      			<tr th:each="productCategory : *{list}">
+      		<tbody>
+      			<tr th:each="productCategory : ${result.list}">
       				<td th:text="${productCategory.id}"></td>
       				<td th:text="${productCategory.name}"></td>
       				<td th:text="${#dates.format(productCategory.createDate, 'dd-MM-yyyy hh:mm:ss a')}"></td>

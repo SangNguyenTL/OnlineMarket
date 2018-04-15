@@ -1,7 +1,10 @@
 package onlinemarket.controller.frontend;
 
 import onlinemarket.controller.MainController;
+<<<<<<< HEAD
 import onlinemarket.form.filter.FilterForm;
+=======
+>>>>>>> 3ca3b943464b6b3755008f3bde0f3f46a476f870
 import onlinemarket.model.Product;
 import onlinemarket.model.Rating;
 import onlinemarket.result.ResultObject;

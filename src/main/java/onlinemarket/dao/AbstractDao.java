@@ -152,6 +152,7 @@ public abstract class AbstractDao<PK extends Serializable, T> {
         for (Entry<String, String> entry : filterForm.getGroupSearch().entrySet()) {
             String key = entry.getKey(),
                     value = entry.getValue();
+            if(key.equals("orderBy")) continue;
             String[] keyArr = key.split("\\.");
             if (keyArr.length == 2) {
                 key = keyArr[0] + "Alias";

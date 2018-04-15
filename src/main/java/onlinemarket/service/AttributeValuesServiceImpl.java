@@ -67,7 +67,8 @@ public class AttributeValuesServiceImpl implements AttributeValuesService{
     public void delete(Integer id) throws AttributeValuesNotFoundException, AttributeValuesHasProductException {
         AttributeValues attributeValues = attributeValuesDao.getByKey(id);
         if(attributeValues == null) throw new AttributeValuesNotFoundException();
-        if(attributeValuesDao.getUniqueResultBy("productAttributeValues.attributeValues", attributeValues) != null) throw new AttributeValuesHasProductException();
+        AttributeValues attributeValues1 = attributeValuesDao.getUniqueResultBy("productAttributeValues.attributeValues", attributeValues);
+        if(attributeValues1 != null) throw new AttributeValuesHasProductException("Product "+ attributeValues1.getProductAttributeValues().iterator().next().getProduct().getName() +" has this attribute");
         attributeValuesDao.delete(attributeValues);
     }
 

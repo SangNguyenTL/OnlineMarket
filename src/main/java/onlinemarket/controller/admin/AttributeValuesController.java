@@ -323,7 +323,7 @@ public class AttributeValuesController extends MainController {
             attributeValuesService.delete(attributeValuesId);
             redirectAttributes.addFlashAttribute("success", "success");
         } catch (AttributeValuesHasProductException|AttributeValuesNotFoundException e) {
-            redirectAttributes.addAttribute("error", e.getMessage());
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
 
         return "redirect:" + relativePath;
