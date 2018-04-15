@@ -186,11 +186,11 @@ public class Product implements java.io.Serializable {
 
 	@Column(name = "quantity", nullable = false)
 	@Range(max = 10000)
-	public int getQuantity() {
+	public Integer getQuantity() {
 		return this.quantity;
 	}
 
-	public void setQuantity(int quantity) {
+	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
 

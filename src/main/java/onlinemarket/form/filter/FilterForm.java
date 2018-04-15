@@ -5,7 +5,9 @@ import java.util.TreeMap;
 
 public class FilterForm {
 	
-	private Map<String, String> groupSearch;
+	private Map<String, String> groupSearch = new TreeMap<>();
+
+	private Map<String, String> privateGroupSearch = new TreeMap<>();
 
 	private String search = "";
 	
@@ -18,10 +20,6 @@ public class FilterForm {
 	private Integer size = 10;
 	
 	private int currentPage = 1;
-	
-	public FilterForm() {
-		groupSearch = new TreeMap<>();
-	}
 
 	public int getCurrentPage() {
 		return currentPage;
@@ -78,5 +76,12 @@ public class FilterForm {
 	public void setGroupSearch(Map<String, String> groupSearch) {
 		this.groupSearch = groupSearch;
 	}
-	
+
+	public Map<String, String> getPrivateGroupSearch() {
+		return privateGroupSearch;
+	}
+
+	public void setPrivateGroupSearch(Map<String, String> privateGroupSearch) {
+		this.privateGroupSearch = privateGroupSearch;
+	}
 }

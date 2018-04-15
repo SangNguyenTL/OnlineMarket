@@ -7,10 +7,12 @@
 <th:object layout:fragment="head">
 
 </th:object>
-<!--/*@thymesVar id="productCategoryList" type="java.util.List<onlinemarket.model.ProductCategory>"*/-->
+<!--/*@thymesVar id="productCategoryList" type="java.util.List<onlinemarket.model.productCategory>"*/-->
 <!--/*@thymesVar id="brandList" type="java.util.List<onlinemarket.model.Brand>"*/-->
+<!--/*@thymesVar id="productCategory" type="onlinemarket.model.productCategory"*/-->
 <!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
 <!--/*@thymesVar id="relativePath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="subTitle" type="java.lang.String"*/-->
 <!--/*@thymesVar id="result" type="onlinemarket.result.ResultObject<onlinemarket.model.Product>"*/-->
 <!--/*@thymesVar id="filterForm" type="onlinemarket.form.filter.FilterForm"*/-->
 <head>
@@ -28,28 +30,39 @@
                 <h3 class="subtitle">Categories</h3>
                 <div class="box-category">
                     <ul id="cat_accordion">
-                        <li class="cutom-parent-li" th:each="productCateogry : ${productCategoryList}">
-                            <a th:href="@{${relativePath}+'/'+${productCateogry.slug}}" class="cutom-parent"
-                               th:text="${productCateogry.name}+' ('+${productCateogry.products.size()}+')'"></a></span>
+                        <li class="cutom-parent-li" th:each="productCate : ${productCategoryList}">
+                            <a th:href="@{${relativePath}+'/'+${productCate.slug}}"
+                               th:classappend="${productCategory != null && productCate.slug == productCategory.slug ? 'active' : ''}"
+                               class="cutom-parent"
+                               th:text="${productCate.name}+' ('+${productCate.products.size()}+')'"></a></span>
                         </li>
                     </ul>
                 </div>
-
             </aside>
             <div id="content" class="col-sm-9">
-                <h1 class="title">All product</h1>
+                <h1 class="title" th:text="${subTitle}">All product</h1>
                 <h3 class="subtitle">Brand</h3>
                 <div class="category-list-thumb owl-carousel latest_brands_carousel">
                     <div th:each="brand : ${brandList}" class=".owl-carousel.latest_brands_carousel">
-                        <div class="box-image"><a th:href="@{${relativePath}+'/'+${brand.slug}}"><img
-                                th:src="@{${brand.imagePath}}" th:alt="${brand.name}+' ('+${brand.products.size()}+')'"></a>
+                        <div class="box-image">
+                            <a th:if="${productCategory == null}" th:href="@{${relativePath}+'/'+${brand.slug}}"><img
+                                    th:src="@{${brand.imagePath}}"
+                                    th:alt="${brand.name}+' ('+${brand.products.size()}+')'"></a>
+                            <a th:unless="${productCategory == null}"
+                               th:href="@{${relativePath}+'/'+${productCategory.slug}+'/'+${brand.slug}}"><img
+                                    th:src="@{${brand.imagePath}}"
+                                    th:alt="${brand.name}+' ('+${brand.products.size()}+')'"></a>
                         </div>
-                        <a th:href="@{${relativePath}+'/'+${brand.slug}}"
-                           th:text="${brand.name}+' ('+${brand.products.size()}+')'"></a></div>
+                        <a th:if="${productCategory == null}" th:href="@{${relativePath}+'/'+${brand.slug}}"
+                           th:text="${brand.name}+' ('+${brand.products.size()}+')'"></a>
+                        <a th:unless="${productCategory == null}"
+                           th:href="@{${relativePath}+'/'+${productCategory.slug}+'/'+${brand.slug}}"
+                           th:text="${brand.name}+' ('+${brand.products.size()}+')'"></a>
+                    </div>
                 </div>
                 <div class="product-filter">
                     <form th:object="${filterForm}" th:action="${relativePath}" method="POST">
-                    <div class="row">
+                        <div class="row">
                             <div class="col-md-3 col-sm-4">
                                 <div class="btn-group">
                                     <button type="button" id="list-view" class="btn btn-default" data-toggle="tooltip"
@@ -62,7 +75,8 @@
                                 <label class="control-label" for="input-sort">Sort By:</label>
                             </div>
                             <div class="col-md-3 col-sm-2 text-right">
-                                <select id="input-sort" class="form-control col-sm-3" th:field="*{groupSearch[orderBy]}">
+                                <select id="input-sort" class="form-control col-sm-3"
+                                        th:field="*{groupSearch[orderBy]}">
                                     <option value="">Default</option>
                                     <option value="name.asc">Name (A - Z)</option>
                                     <option value="name.desc">Name (Z - A)</option>
@@ -81,9 +95,11 @@
                                 <select id="input-limit" class="form-control" th:field="*{size}">
                                     <option th:value="10">10 rows</option>
                                     <option th:value="20"
-                                            th:if="${result.totalPages * filterForm.size} > 10">20 rows</option>
+                                            th:if="${result.totalPages * filterForm.size} > 10">20 rows
+                                    </option>
                                     <option th:value="50"
-                                            th:if="${result.totalPages * filterForm.size} > 50">50 rows</option>
+                                            th:if="${result.totalPages * filterForm.size} > 50">50 rows
+                                    </option>
                                 </select>
                             </div>
                             <div class="col-sm-1">
@@ -96,22 +112,38 @@
                 <div class="row products-category">
                     <div th:each="product : ${result.list}" class="product-layout product-list col-xs-12">
                         <div class="product-thumb">
-                            <div class="image"><a th:href="@{'/product/'+${product.slug}}"><img th:src="@{${product.featureImage}}" class="img-responsive" /></a></div>
+                            <div class="image"><a th:href="@{'/product/'+${product.slug}}"><img
+                                    th:src="@{${product.featureImage}}" class="img-responsive"/></a></div>
                             <div>
                                 <div class="caption">
                                     <h4><a th:href="@{'/product/'+${product.slug}}" th:text="${product.name}"></a></h4>
                                     <p th:if="${product.events.size() > 0}" class="description">
                                         <b>Sales</b><br>
-                                        <th:block  th:each="event : ${product.events}" >
-                                            <a th:if="${event.maxPrice > product.price && event.getMinPrice() < product.price}" th:href="@{'/event/'+${event.id}}" th:text="${event.name}"></a><br>
+                                        <th:block th:each="event : ${product.events}">
+                                            <a th:if="${event.maxPrice > product.price && event.getMinPrice() < product.price}"
+                                               th:href="@{'/event/'+${event.id}}" th:text="${event.name}"></a><br>
                                         </th:block>
                                     </p>
-                                    <p class="price"> <span class="price-new" th:text="${product.newPriceStr}"></span> <span class="price-old" th:if="${product.sale != ''}" th:text="${product.priceStr}"></span> <span th:if="${product.sale != ''}" class="saving" th:text="${product.sale}"></span> </p>
+                                    <p class="price"><span class="price-new" th:text="${product.newPriceStr}"></span>
+                                        <span class="price-old" th:if="${product.sale != ''}"
+                                              th:text="${product.priceStr}"></span> <span th:if="${product.sale != ''}"
+                                                                                          class="saving"
+                                                                                          th:text="${product.sale}"></span>
+                                    </p>
+                                    <div class="rating">
+                                        <span class="fa fa-stack" th:each="number : ${#numbers.sequence(1, 5)}">
+                                            <i th:if="${product.ratingStatistic != null && product.ratingStatistic.averageScore > number}" class="fa fa-star fa-stack-2x"></i>
+                                            <i class="fa fa-star-o fa-stack-2x"></i>
+                                        </span>
+                                    </div>
                                 </div>
                                 <div class="button-group">
-                                    <button class="btn-primary" type="button" onClick=""><span>Add to Cart</span></button>
+                                    <button class="btn-primary" type="button" onClick=""><span>Add to Cart</span>
+                                    </button>
                                     <div class="add-to-links">
-                                        <button type="button" data-toggle="tooltip" title="Compare this Product" onClick=""><i class="fa fa-exchange"></i> <span>Compare this Product</span></button>
+                                        <button type="button" data-toggle="tooltip" title="Compare this Product"
+                                                onClick=""><i class="fa fa-exchange"></i>
+                                            <span>Compare this Product</span></button>
                                     </div>
                                 </div>
                             </div>
@@ -124,7 +156,11 @@
                                            filter:totalPages="${result.totalPages}"
                                            filter:uri="@{${relativePath}}"></filter:pagination>
                     </div>
-                    <div class="col-sm-6 text-right" th:with="productFrom=${result.getCurrentPage()*filterForm.size +1 - filterForm.size},productTo=${result.getCurrentPage()*filterForm.size}" th:text="${'Showing '+ productFrom +' to '+ productTo +' ('+result.totalPages+' pages)'}">Showing 1 to 12 of 15 (2 Pages)</div>
+                    <div class="col-sm-6 text-right"
+                         th:with="productFrom=${result.getCurrentPage()*filterForm.size +1 - filterForm.size},productTo=${result.getCurrentPage()*filterForm.size}"
+                         th:text="${'Showing '+ productFrom +' to '+ productTo +' ('+result.totalPages+' pages)'}">
+                        Showing 1 to 12 of 15 (2 Pages)
+                    </div>
                 </div>
             </div>
         </div>

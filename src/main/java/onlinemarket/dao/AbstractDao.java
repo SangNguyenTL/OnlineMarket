@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import onlinemarket.util.Help;
@@ -33,6 +34,26 @@ public abstract class AbstractDao<PK extends Serializable, T> {
 
     protected Session getSession() {
         return sessionFactory.getCurrentSession();
+    }
+
+    private void addAll(Criteria criteria ,Map<String, String> map){
+        for (Entry<String, String> entry : map.entrySet()) {
+            String key = entry.getKey(),
+                    value = entry.getValue();
+            if(key.equals("orderBy")) continue;
+            String[] keyArr = key.split("\\.");
+            if (keyArr.length == 2) {
+                key = keyArr[0] + "Alias";
+                criteria.createAlias(keyArr[0], key);
+                key = key + "." + keyArr[1];
+            }
+            if(StringUtils.isNotBlank(value))
+                if (Help.isInteger(value) && key.equals("state"))
+                    criteria.add(Restrictions.eq(key, Byte.parseByte(value)));
+                else if(Help.isInteger(value))  criteria.add(Restrictions.eq(key, Integer.parseInt(value)));
+                else
+                    criteria.add(Restrictions.eq(key, value));
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -149,23 +170,9 @@ public abstract class AbstractDao<PK extends Serializable, T> {
             criteria.add(Restrictions.ilike(key, "%" + filterForm.getSearch() + "%"));
         }
 
-        for (Entry<String, String> entry : filterForm.getGroupSearch().entrySet()) {
-            String key = entry.getKey(),
-                    value = entry.getValue();
-            if(key.equals("orderBy")) continue;
-            String[] keyArr = key.split("\\.");
-            if (keyArr.length == 2) {
-                key = keyArr[0] + "Alias";
-                criteria.createAlias(keyArr[0], key);
-                key = key + "." + keyArr[1];
-            }
-            if(StringUtils.isNotBlank(value))
-                if (Help.isInteger(value) && key.equals("state"))
-                    criteria.add(Restrictions.eq(key, Byte.parseByte(value)));
-                    else if(Help.isInteger(value))  criteria.add(Restrictions.eq(key, Integer.parseInt(value)));
-                        else
-                            criteria.add(Restrictions.eq(key, value));
-        }
+        addAll(criteria, filterForm.getGroupSearch());
+
+        addAll(criteria, filterForm.getPrivateGroupSearch());
 
         criteria.setProjection(Projections.rowCount());
         Long count = (Long) criteria.uniqueResult();
