@@ -13,7 +13,7 @@
             <div class="box-category">
                 <ul id="cat_accordion">
                     <li class="cutom-parent-li" th:each="productCate : ${productCategoryList}">
-                        <a th:href="@{${productPath}+'/'+${productCate.slug}}"
+                        <a th:href="@{'/product-category/'+${productCate.slug}}"
                            th:classappend="${productCategory != null && productCate.slug == productCategory.slug ? 'active' : ''}"
                            class="cutom-parent"
                            th:text="${productCate.name}+' ('+${productCate.products.size()}+')'"></a></span>

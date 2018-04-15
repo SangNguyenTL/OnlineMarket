@@ -42,6 +42,36 @@ public class HomeController extends MainController {
 	@Autowired
 	ProvinceService provinceService;
 
+	@ModelAttribute
+	public ModelMap populateAttribute(ModelMap model) {
+		FilterForm filterForm = new FilterForm();
+
+		FilterForm filterForm1 = new FilterForm();
+		filterForm1.getGroupSearch().put("state", "0");
+		filterForm1.setSize(5);
+		filterForm1.setOrder("desc");
+		filterForm1.setOrderBy("numberOrder");
+		model.put("productBestSellerList",productService.list(filterForm1).getList());
+
+		filterForm1.setSize(5);
+		filterForm1.setOrder("desc");
+		filterForm1.setOrderBy("productViewsStatistic.total");
+		model.put("productBestViewing",productService.list(filterForm1).getList());
+
+		filterForm1.setSize(5);
+		filterForm1.setOrder("desc");
+		filterForm1.setOrderBy("ratingStatistic.totalScore");
+		model.put("productBestRating",productService.list(filterForm1).getList());
+
+		filterForm.getPrivateGroupSearch().put("state", "0");
+		filterForm.setOrderBy("releaseDate");
+		filterForm.setOrder("desc");
+
+		generateBreadcrumbs();
+
+		return model;
+	}
+
 	@RequestMapping(value = { "/" }, method = RequestMethod.GET)
 	public String homePage(ModelMap model) {
 
@@ -76,6 +106,7 @@ public class HomeController extends MainController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String loginPage(ModelMap model) {
+		breadcrumbs.add(new String[]{"/login", "Login"});
 
 		if (currentUser.getId() != null)
 			return "redirect:/";
@@ -86,6 +117,7 @@ public class HomeController extends MainController {
 
 	@RequestMapping(value = { "/register" }, method = RequestMethod.GET)
 	public String registerPage(ModelMap model) {
+		breadcrumbs.add(new String[]{"/register", "Register"});
 
 		if (currentUser.getId() != null)
 			return "redirect:/";
@@ -108,12 +140,17 @@ public class HomeController extends MainController {
 			redirectAttributes.addFlashAttribute("success", true);
 			return "redirect:/login";
 		}
-
+		breadcrumbs.add(new String[]{"/login", "Login"});
 		model.put("pageTitle", "Register");
 		model.put("provinceList", provinceService.list());
 
 		return "frontend/register";
 
+	}
+
+	@RequestMapping(value = "/about-us", method = RequestMethod.GET)
+	public String contactPage(){
+		return "frontend/about-us";
 	}
 
 	@RequestMapping(value = "/error", method = RequestMethod.GET)

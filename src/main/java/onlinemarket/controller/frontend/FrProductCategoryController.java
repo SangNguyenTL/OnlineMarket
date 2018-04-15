@@ -15,6 +15,7 @@ public class FrProductCategoryController extends FrGeneralGroup {
 
     private void initValue(){
         title = "Product";
+        subTitle = "All product";
         relativePath = "/product-category";
         productPath = relativePath;
         brandPath = "/brand";
@@ -42,8 +43,7 @@ public class FrProductCategoryController extends FrGeneralGroup {
         if(productCategory == null) throw new NoHandlerFoundException(null, null, null);
         filterForm.getPrivateGroupSearch().put("productCategory.slug", productCategory.getSlug());
 
-        modelMap.put("title", title + "|" + productCategory.getName());
-        modelMap.put("subTitle", productCategory.getName());
+        subTitle = productCategory.getName();
         brandPath = relativePath + "/" + productCategorySlug;
         relativePath = brandPath;
         breadcrumbs.add(new String[]{relativePath, productCategory.getName()});
@@ -58,8 +58,7 @@ public class FrProductCategoryController extends FrGeneralGroup {
         if(productCategory == null) throw new NoHandlerFoundException(null, null, null);
         filterForm.getPrivateGroupSearch().put("productCategory.slug", productCategory.getSlug());
 
-        modelMap.put("title", title + "|" + productCategory.getName());
-        modelMap.put("subTitle", productCategory.getName());
+        subTitle = productCategory.getName();
         brandPath = relativePath + "/" + productCategorySlug;
         relativePath = brandPath;
         breadcrumbs.add(new String[]{relativePath, productCategory.getName()});
@@ -79,8 +78,8 @@ public class FrProductCategoryController extends FrGeneralGroup {
         filterForm.getPrivateGroupSearch().put("productCategory.slug", productCategory.getSlug());
         filterForm.getPrivateGroupSearch().put("brand.slug", brand.getSlug());
 
-        modelMap.put("title", title + "|" + productCategory.getName()+"|"+brand.getSlug()) ;
-        modelMap.put("subTitle", brand.getName());
+        subTitle = productCategory.getName()  + " - "+ brand.getName();
+
         brandPath = relativePath + "/" + productCategorySlug;
         relativePath = brandPath + "/" + brand.getSlug();
         breadcrumbs.add(new String[]{brandPath, productCategory.getName()});
@@ -99,8 +98,8 @@ public class FrProductCategoryController extends FrGeneralGroup {
         filterForm.getPrivateGroupSearch().put("productCategory.slug", productCategory.getSlug());
         filterForm.getPrivateGroupSearch().put("brand.slug", brand.getSlug());
 
-        modelMap.put("title", title + "|" + productCategory.getName()+"|"+brand.getSlug()) ;
-        modelMap.put("subTitle", brand.getName());
+        subTitle = productCategory.getName()  + " - "+ brand.getName();
+
         brandPath = relativePath + "/" + productCategorySlug;
         relativePath = brandPath + "/" + brand.getSlug();
         breadcrumbs.add(new String[]{brandPath, productCategory.getName()});

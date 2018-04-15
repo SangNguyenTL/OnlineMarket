@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+         layout:decorate="templates/frontend">
+<head>
+</head>
+<body>
+<div id="container" class="container" layout:fragment="container">
+    <div class="row">
+            <h1 class="title">Contact Us</h1>
+            <h3 class="subtitle">Our Location</h3>
+            <div class="row">
+                <div class="col-sm-3"><img th:src="@{${logo.logo}}" th:alt="${general.title}" th:title="${general.title}" class="img-thumbnail"></div>
+                <div class="col-sm-3"><strong th:title="${general.title + 'Template'}"></strong><br>
+                    <address th:text="${contact.address}">
+                        Central Square,<br>
+                        22 Hoi Wing Road,<br>
+                        New Delhi,<br>
+                        India
+                    </address>
+                </div>
+                <div class="col-sm-3"><strong>Telephone</strong><br>
+                    <span th:text="contact.phoneNumber"></span><br>
+                </div>
+                <div class="col-sm-3"> <strong>Opening Times</strong><br>
+                    24X7 Customer Care<br>
+                    <br>
+                    <strong>Comments</strong><br>
+                    This field is for any special notes you would like to tell the customer i.e. Store does not accept cheques. </div>
+            </div>
+            <h3 class="subtitle">My position</h3>
+            <div id="myMap" style="position: relative;overflow: hidden;height: 400px;"></div>
+        </div>
+</div>
+
+<div layout:fragment="customScript" th:remove="tag">
+    <script type="text/javascript" th:inline="javascript">
+        /*[+
+        var map;
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('myMap'), {
+
+                center: {lat: parseFloat([[${contact.latitude}]]), lng: parseFloat([[${contact.longitude}]])},
+                zoom: 13,
+                mapTypeId : google.maps.MapTypeId.ROADMAP
+            });
+            new google.maps.Marker({
+                map : map,
+                draggable : false,
+                position : {lat: parseFloat([[${contact.latitude}]]), lng: parseFloat([[${contact.longitude}]])}
+            })
+        }
+        +]*/
+    </script>
+    <script type="text/javascript" th:src="@{'https://maps.googleapis.com/maps/api/js?key='+${api.apiGoogle}+'&callback=initMap'}"></script>
+
+
+</div>
+</body>
+</html>

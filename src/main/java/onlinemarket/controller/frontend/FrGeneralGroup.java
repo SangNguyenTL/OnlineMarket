@@ -37,6 +37,8 @@ public class FrGeneralGroup extends MainController {
 
     protected String title;
 
+    protected String subTitle;
+
     protected String relativePath;
 
     @ModelAttribute
@@ -88,7 +90,8 @@ public class FrGeneralGroup extends MainController {
         modelMap.put("productPath", productPath);
         modelMap.put("relativePath", relativePath);
 
-        modelMap.put("pageTitle", title);
+        modelMap.put("title", title);
+        modelMap.put("subTitle", subTitle);
         modelMap.put("filterForm", filterForm);
 
         return template;

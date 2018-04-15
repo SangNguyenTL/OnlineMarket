@@ -8,13 +8,12 @@
 
 <div id="container" layout:fragment="container">
     <div class="container">
-      <!-- Breadcrumb Start-->
-      <ul class="breadcrumb">
-        <li><a href="index.html"><i class="fa fa-home"></i></a></li>
-        <li><a href="login.html">Account</a></li>
-        <li><a href="login.html">Login</a></li>
-      </ul>
-      <!-- Breadcrumb End-->
+        <!-- Breadcrumb Start-->
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item" th:each="breadcrumb : ${breadcrumbs}"><a th:href="@{${breadcrumb[0]}}"
+                                                                                 th:text="${breadcrumb[1]}"></a></li>
+        </ul>
+        <!-- Breadcrumb End-->
       <div class="row">
         <!--Middle Part Start-->
         <div id="content" class="col-sm-9">
@@ -63,26 +62,85 @@
         </div>
         <!--Middle Part End -->
         <!--Right Part Start -->
-        <aside id="column-right" class="col-sm-3 hidden-xs">
-          <h3 class="subtitle">Account</h3>
-          <div class="list-group">
-            <ul class="list-item">
-              <li><a href="login.html">Login</a></li>
-              <li><a href="register.html">Register</a></li>
-              <li><a href="#">Forgotten Password</a></li>
-              <li><a href="#">My Account</a></li>
-              <li><a href="#">Address Books</a></li>
-              <li><a href="wishlist.html">Wish List</a></li>
-              <li><a href="#">Order History</a></li>
-              <li><a href="#">Downloads</a></li>
-              <li><a href="#">Reward Points</a></li>
-              <li><a href="#">Returns</a></li>
-              <li><a href="#">Transactions</a></li>
-              <li><a href="#">Newsletter</a></li>
-              <li><a href="#">Recurring payments</a></li>
-            </ul>
-          </div>
-        </aside>
+          <aside id="column-right" class="col-sm-3 hidden-xs">
+              <h3 class="subtitle"><a th:href="@{${relativePath}}">Categories</a></h3>
+              <div class="box-category">
+                  <ul id="cat_accordion">
+                      <li class="cutom-parent-li" th:each="productCate : ${productCategoryList}">
+                          <a th:href="@{'/product-category/'+${productCate.slug}}"
+                             th:classappend="${productCategory != null && productCate.slug == productCategory.slug ? 'active' : ''}"
+                             class="cutom-parent"
+                             th:text="${productCate.name}+' ('+${productCate.products.size()}+')'"></a></span>
+                      </li>
+                  </ul>
+              </div>
+              <h3>Best seller</h3>
+              <div class="side-item">
+                  <div class="product-thumb clearfix" th:each="productBest : ${productBestSellerList}">
+                      <div class="image"><a th:href="@{'/product/'+${productBest.slug}}"><img
+                              th:src="@{${productBest.featureImage}}" class="img-responsive"/></a></div>
+                      <div class="caption">
+                          <h4><a th:href="@{'/product/'+${productBest.slug}}" th:alt="${productBest.name}" th:text="${productBest.name}"></a></h4>
+                          <p class="price"><span class="price-new" th:text="${productBest.newPriceStr}"></span>
+                              <span class="price-old" th:if="${productBest.sale != ''}"
+                                    th:text="${productBest.priceStr}"></span> <span th:if="${productBest.sale != ''}"
+                                                                                    class="saving"
+                                                                                    th:text="${productBest.sale}"></span>
+                          <div class="rating">
+                                            <span class="fa fa-stack" th:each="number : ${#numbers.sequence(1, 5)}">
+                                                <i th:if="${productBest.ratingStatistic != null && productBest.ratingStatistic.averageScore > number}" class="fa fa-star fa-stack-2x"></i>
+                                                <i class="fa fa-star-o fa-stack-2x"></i>
+                                            </span>
+                          </div>
+                          </p>
+                      </div>
+                  </div>
+              </div>
+              <h3>Best viewing</h3>
+              <div class="side-item">
+                  <div class="product-thumb clearfix" th:each="productBest : ${productBestViewing}">
+                      <div class="image"><a th:href="@{'/product/'+${productBest.slug}}"><img
+                              th:src="@{${productBest.featureImage}}" class="img-responsive"/></a></div>
+                      <div class="caption">
+                          <h4><a th:href="@{'/product/'+${productBest.slug}}" th:alt="${productBest.name}" th:text="${productBest.name}"></a></h4>
+                          <p class="price"><span class="price-new" th:text="${productBest.newPriceStr}"></span>
+                              <span class="price-old" th:if="${productBest.sale != ''}"
+                                    th:text="${productBest.priceStr}"></span> <span th:if="${productBest.sale != ''}"
+                                                                                    class="saving"
+                                                                                    th:text="${productBest.sale}"></span>
+                          <div class="rating">
+                                            <span class="fa fa-stack" th:each="number : ${#numbers.sequence(1, 5)}">
+                                                <i th:if="${productBest.ratingStatistic != null && productBest.ratingStatistic.averageScore > number}" class="fa fa-star fa-stack-2x"></i>
+                                                <i class="fa fa-star-o fa-stack-2x"></i>
+                                            </span>
+                          </div>
+                          </p>
+                      </div>
+                  </div>
+              </div>
+              <h3>Best Rating</h3>
+              <div class="side-item">
+                  <div class="product-thumb clearfix" th:each="productBest : ${productBestRating}">
+                      <div class="image"><a th:href="@{'/product/'+${productBest.slug}}"><img
+                              th:src="@{${productBest.featureImage}}" class="img-responsive"/></a></div>
+                      <div class="caption">
+                          <h4><a th:href="@{'/product/'+${productBest.slug}}" th:alt="${productBest.name}" th:text="${productBest.name}"></a></h4>
+                          <p class="price"><span class="price-new" th:text="${productBest.newPriceStr}"></span>
+                              <span class="price-old" th:if="${productBest.sale != ''}"
+                                    th:text="${productBest.priceStr}"></span> <span th:if="${productBest.sale != ''}"
+                                                                                    class="saving"
+                                                                                    th:text="${productBest.sale}"></span>
+                          <div class="rating">
+                                            <span class="fa fa-stack" th:each="number : ${#numbers.sequence(1, 5)}">
+                                                <i th:if="${productBest.ratingStatistic != null && productBest.ratingStatistic.averageScore > number}" class="fa fa-star fa-stack-2x"></i>
+                                                <i class="fa fa-star-o fa-stack-2x"></i>
+                                            </span>
+                          </div>
+                          </p>
+                      </div>
+                  </div>
+              </div>
+          </aside>
         <!--Right Part End -->
       </div>
     </div>
