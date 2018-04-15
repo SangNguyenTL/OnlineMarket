@@ -410,6 +410,7 @@ public class Product implements java.io.Serializable {
         long value = 0;
         if(!saleProcess){
             for (Event event : events){
+                if(!event.getDateFrom().before(new Date()) && !event.getDateTo().after(new Date())) continue;
                 if(event.getPercentValue() != null && event.getMaxPrice() > price && event.getMinPrice() < price){
                     perSale += event.getPercentValue();
                 }

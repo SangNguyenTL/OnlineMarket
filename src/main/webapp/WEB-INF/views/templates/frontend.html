@@ -186,11 +186,14 @@
                     <!-- Mini Cart End-->
                     <!-- Search Start-->
                     <div class="col-table-cell col-lg-3 col-md-3 col-sm-6 col-xs-12 inner">
+                        <form method="GET" th:action="@{/search}">
                         <div id="search" class="input-group">
-                            <input id="filter_name" type="text" name="search" value="" placeholder="Search"
+                            <input type="text"  placeholder="Search"
+                                   name="search" id="filter_name"
                                    class="form-control input-lg"/>
-                            <button type="button" class="button-search"><i class="fa fa-search"></i></button>
+                            <button type="submit" class="button-search"><i class="fa fa-search"></i></button>
                         </div>
+                        </form>
                     </div>
                     <!-- Search End-->
                 </div>

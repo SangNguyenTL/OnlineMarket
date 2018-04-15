@@ -31,20 +31,7 @@
                                                                                  th:text="${breadcrumb[1]}"></a></li>
         </ul>
         <div class="row">
-            <aside id="column-left" class="col-sm-3 hidden-xs">
-                <h3 class="subtitle"><a th:href="@{${relativePath}}">Categories</a></h3>
-                <div class="box-category">
-                    <ul id="cat_accordion">
-                        <li class="cutom-parent-li" th:each="productCate : ${productCategoryList}">
-                            <a th:href="@{${productPath}+'/'+${productCate.slug}}"
-                               th:classappend="${productCategory != null && productCate.slug == productCategory.slug ? 'active' : ''}"
-                               class="cutom-parent"
-                               th:text="${productCate.name}+' ('+${productCate.products.size()}+')'"></a></span>
-                        </li>
-                    </ul>
-                </div>
-            </aside>
-            <div id="content" class="col-sm-9">
+            <div id="content" class="col-sm-12">
                 <form th:object="${filterForm}" th:action="${relativePath}" method="POST">
                     <h1 class="title">Search</h1>
                     <h3 class="subtitle" th:text="*{search}"></h3>
@@ -130,7 +117,7 @@
                                     <p th:if="${product.events.size() > 0}" class="description">
                                         <b>Sales</b><br>
                                         <th:block th:each="event : ${product.events}">
-                                            <a th:if="${event.maxPrice > product.price && event.getMinPrice() < product.price}"
+                                            <a th:if="${event.maxPrice > product.price && event.getMinPrice() < product.price && #dates.createNow().before(event.getDateTo()) && #dates.createNow().after(event.dateFrom)}"
                                                th:href="@{'/event/'+${event.id}}" th:text="${event.name}"></a><br>
                                         </th:block>
                                     </p>
@@ -176,7 +163,6 @@
             </div>
         </div>
     </div>
-</div>
 </div>
 
 </body>
