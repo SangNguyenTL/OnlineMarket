@@ -7,6 +7,7 @@ import onlinemarket.model.Rating;
 import onlinemarket.model.other.AdvancedValidation;
 import onlinemarket.result.ResultObject;
 import onlinemarket.service.ProductService;
+import onlinemarket.service.ProductViewsService;
 import onlinemarket.service.RatingService;
 import onlinemarket.util.exception.CustomException;
 import onlinemarket.util.exception.product.ProductNotFoundException;
@@ -36,6 +37,9 @@ public class FrProductController extends MainController {
     @Autowired
     RatingService ratingService;
 
+    @Autowired
+    ProductViewsService productViewsService;
+
     FilterForm filterForm;
 
     private Product product;
@@ -64,6 +68,8 @@ public class FrProductController extends MainController {
         relativePath = "/product/" + slug;
         if (product == null || product.getState() == 3)
             throw new NoHandlerFoundException(null, null, null);
+        productViewsService.save(product);
+
         title = product.getName();
         generateBreadcrumbs();
         breadcrumbs.add(new String[]{"/product-category/" + product.getProductCategory().getSlug(), product.getProductCategory().getName()});

@@ -10,6 +10,7 @@ import onlinemarket.form.filter.SearchSelect;
 import onlinemarket.model.*;
 import onlinemarket.result.api.Pagination;
 import onlinemarket.result.api.ResultProduct;
+import onlinemarket.util.Slugify;
 import onlinemarket.util.exception.product.ProductHasCommentException;
 import onlinemarket.util.exception.product.ProductNotFoundException;
 import onlinemarket.util.exception.productCategory.ProductCategoryNotFoundException;
@@ -33,6 +34,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     AttributeValuesDao attributeValuesDao;
+
+    @Autowired
+    Slugify slugify;
 
     @Override
     public Product getByKey(Integer key) {
@@ -67,6 +71,7 @@ public class ProductServiceImpl implements ProductService {
         product.setCreateDate(new Date());
         product.setUser(user);
         product.setProductCategory(productCategory);
+        product.setSlug(slugify.slugify(product.getSlug()));
         List<ProductAttributeValues> productAttributeValuesList = new ArrayList<>(product.getProductAttributeValues());
         product.getProductAttributeValues().clear();
         productDao.persist(product);
@@ -81,6 +86,7 @@ public class ProductServiceImpl implements ProductService {
         if (product1 == null) throw new ProductNotFoundException();
         product.setUser(user);
         product.setProductCategory(productCategory);
+        product.setSlug(slugify.slugify(product.getSlug()));
         product1.getProductAttributeValues().clear();
         product1.updateProduct(product);
         product1.getProductAttributeValues().addAll(makeListProductAttributeValues(product1, product.getProductAttributeValues()));

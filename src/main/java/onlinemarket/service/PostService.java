@@ -18,7 +18,7 @@ public interface PostService {
 
     void update(Post post, User user, String postType) throws PostCategoryNotFoundException, PostNotFoundException;
 
-    void delete(Integer id) throws PostNotFoundException, PostHasCommentException;
+    void delete(Integer id) throws PostNotFoundException;
 
     ResultObject<Post> list(FilterForm filterForm);
 

@@ -185,7 +185,8 @@ public class PageController extends MainController {
 
         try {
             postService.delete(postId);
-        } catch (PostNotFoundException | PostHasCommentException e) {
+            redirectAttributes.addFlashAttribute("success", true);
+        } catch (PostNotFoundException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
 
