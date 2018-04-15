@@ -36,7 +36,6 @@
                 <strong>Obbs!</strong> [[${error}]].
             </div>
             <div class="row p-a form-group">
-                <!--/*@thymesVar id="filterPost" type="onlinemarket.form.filter.FilterPost"*/-->
                 <form th:object="${filterForm}" th:action="@{${relativePath}}" method="POST">
                     <div class="col-sm-3">
                         <select class="form-control" th:field="*{groupSearch['status']}">
@@ -114,7 +113,7 @@
                             <form class="form-confirm"
                                   th:action="@{${relativePath} + '/delete'}" method="POST">
                                 <a th:href="@{${relativePath} + '/update/'+${post.id}}" class="btn btn-outline b-success text-success btn-sm">Update</a>
-                                <a th:href="@{${postType}+'/'+${post.slug}}" class="btn btn-outline b-info text-info btn-sm">Update</a>
+                                <a th:href="@{'/'+${postType}+'/'+${post.slug}}" class="btn btn-outline b-info text-info btn-sm">View</a>
                                 <input type="hidden" th:name="id" th:value="${post.id}">
                                 <button type="submit"
                                         class="btn btn-outline b-info text-danger btn-sm">Delete</button>

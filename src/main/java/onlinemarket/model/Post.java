@@ -39,7 +39,7 @@ public class Post implements java.io.Serializable {
     private String content;
     private Date createDate;
     private Date updateDate;
-    private Byte status;
+    private Integer status;
     private String postType;
     private String featureImage;
     private Set<Comment> comments = new HashSet<>(0);
@@ -143,11 +143,11 @@ public class Post implements java.io.Serializable {
 
     @Column(name = "status", nullable = false)
     @Range(min = 0, max = 3)
-    public Byte getStatus() {
+    public Integer getStatus() {
         return this.status;
     }
 
-    public void setStatus(Byte status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 

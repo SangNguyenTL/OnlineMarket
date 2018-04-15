@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:filter="http://thymeleafexamples"
+      layout:decorate="templates/frontend">
+
+<th:object layout:fragment="head">
+
+</th:object>
+<!--/*@thymesVar id="productCategoryList" type="java.util.List<onlinemarket.model.ProductCategory>"*/-->
+<!--/*@thymesVar id="brandList" type="java.util.List<onlinemarket.model.Brand>"*/-->
+<!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
+<!--/*@thymesVar id="relativePath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="product" type="onlinemarket.model.Product"*/-->
+<head>
+</head>
+<body th:inline="text">
+
+<div id="container" layout:fragment="container">
+    <div class="container">
+        <!-- Breadcrumb Start-->
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item" th:each="breadcrumb : ${breadcrumbs}"><a th:href="@{${breadcrumb[0]}}"
+                                                                                 th:text="${breadcrumb[1]}"></a></li>
+        </ul>
+        <!-- Breadcrumb End-->
+        <div class="row" th:object="${post}">
+            <!--Middle Part Start-->
+            <div id="content" class="col-sm-12">
+                <h1 class="title" th:text="*{title}">About Us</h1>
+                <p class="lead">
+                    by
+                    <a href="#" th:text="*{user.firstName}">Start Bootstrap</a>
+                </p>
+                <p th:text="${#dates.format(post.createDate, 'MMMM dd, yyyy - hh:mm a')}">Posted on January 1, 2018 at 12:00 PM</p>
+                <th:block th:utext="*{content}"></th:block>
+            </div>
+            <!--Middle Part End -->
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

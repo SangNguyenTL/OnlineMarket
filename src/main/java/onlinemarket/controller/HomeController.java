@@ -4,10 +4,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.groups.Default;
 
 import onlinemarket.form.filter.FilterForm;
+import onlinemarket.model.Post;
 import onlinemarket.model.Product;
 import onlinemarket.model.ProductCategory;
 import onlinemarket.model.User;
 import onlinemarket.result.ResultObject;
+import onlinemarket.service.PostService;
 import onlinemarket.service.ProductService;
 import onlinemarket.util.exception.productCategory.ProductCategoryNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import onlinemarket.model.other.AdvancedValidation;
@@ -41,6 +40,9 @@ public class HomeController extends MainController {
 
 	@Autowired
 	ProvinceService provinceService;
+
+	@Autowired
+	PostService postService;
 
 	@ModelAttribute
 	public ModelMap populateAttribute(ModelMap model) {
@@ -102,6 +104,27 @@ public class HomeController extends MainController {
 		model.put("resultObjectList", resultObjectList);
 		model.put("pageTitle", "Home");
 		return "frontend/index";
+	}
+
+	@RequestMapping(value = "/{postType:(?:post|page)}/{slug:[\\d\\w-]+}", method = RequestMethod.GET)
+	public String postPage(@PathVariable("postType") String postType, @PathVariable("slug") String slug
+			, ModelMap model) throws NoHandlerFoundException {
+		relativePath = "/"+postType+"/"+slug;
+		Post post = postService.getByDeclaration("slug", slug);
+		if(post == null || post.getStatus() != 0) throw new NoHandlerFoundException(null,null,null);
+
+		if(postType.equals("post"))
+			breadcrumbs.add(new String[]{"/post-category", "List post"});
+
+		breadcrumbs.add(new String[]{ relativePath, post.getTitle()});
+
+		model.put("pageTile", post.getTitle());
+		model.put("postTYpe", postType);
+		model.put("post", post);
+
+
+		return "frontend/post";
+
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)

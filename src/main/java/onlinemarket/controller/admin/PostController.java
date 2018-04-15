@@ -68,14 +68,14 @@ public class PostController extends MainController {
 
     @RequestMapping(value = "/page/{page:^\\d+}", method = {RequestMethod.GET, RequestMethod.POST})
     public String mainPagePagination(
-            @ModelAttribute("filterPost") FilterPost filterPost,
+            @PathVariable("page") Integer page,
             @ModelAttribute("filterForm") FilterForm filterForm,  ModelMap modelMap) {
 
+        filterForm.setCurrentPage(page);
         modelMap.put("result", postService.list(filterForm));
         modelMap.put("pageTitle", title + " manager");
-        modelMap.put("filterPost", filterPost);
+        modelMap.put("filterPost", filterForm);
         modelMap.put("path", "post");
-        modelMap.put("filterForm", filterForm);
 
         return "backend/post";
     }

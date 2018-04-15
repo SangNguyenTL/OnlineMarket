@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:filter="http://thymeleafexamples"
+      layout:decorate="templates/frontend">
+
+<th:object layout:fragment="head">
+
+</th:object>
+<!--/*@thymesVar id="postCategoryList" type="java.util.List<onlinemarket.model.PostCategory>"*/-->
+<!--/*@thymesVar id="postCategory" type="onlinemarket.model.PostCategory"*/-->
+<!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
+<!--/*@thymesVar id="relativePath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="subTitle" type="java.lang.String"*/-->
+<!--/*@thymesVar id="result" type="onlinemarket.result.ResultObject<onlinemarket.model.Post>"*/-->
+<!--/*@thymesVar id="filterForm" type="onlinemarket.form.filter.FilterForm"*/-->
+<head>
+</head>
+<body th:inline="text">
+
+<div id="container" layout:fragment="container">
+    <div class="container">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item" th:each="breadcrumb : ${breadcrumbs}"><a th:href="@{${breadcrumb[0]}}"
+                                                                                 th:text="${breadcrumb[1]}"></a></li>
+        </ul>
+        <div class="row">
+            <aside id="column-left" class="col-sm-3 hidden-xs">
+                <h3 class="subtitle"><a th:href="@{${relativePath}}">Categories</a></h3>
+                <div class="box-category">
+                    <ul id="cat_accordion">
+                        <li class="cutom-parent-li" th:each="postCate : ${postCategoryList}">
+                            <a th:href="@{'/post-category/'+${postCate.slug}}"
+                               th:classappend="${postCategory != null && postCate.slug == postCategory.slug ? 'active' : ''}"
+                               class="cutom-parent"
+                               th:text="${postCate.name}+' ('+${postCate.posts.size()}+')'"></a></span>
+                        </li>
+                    </ul>
+                </div>
+            </aside>
+            <div id="content" class="col-sm-9">
+                <h1 class="title" th:text="${title}">All product</h1>
+                <h3 class="subtitle" th:text="${subTitle}"></h3>
+
+                <div class="row" th:each="post : ${result.list}">
+                    <div class="span8">
+                        <div class="row">
+                            <div class="span8">
+                                <h4><strong><a th:href="@{'/post/'+${post.slug}}" th:title="${post.title}" th:text="${post.title}">Title of the post</a></strong></h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="span2">
+                                <a th:href="@{'/post/'+${post.slug}}" class="thumbnail">
+                                    <img th:if="${post.featureImage != null}" th:src="@{${post.featureImage}}" alt="">
+                                    <img th:if="${post.featureImage == null}" th:src="@{/assets/images/defaultImage.jpg}" alt="">
+                                </a>
+                            </div>
+                            <div class="span6">
+                                <p><a class="btn" th:href="@{'/post/'+${post.slug}}" >Read more</a></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="span8">
+                                <p></p>
+                                <p>
+                                    <i class="icon-user"></i> by <a href="#" th:text="${post.user.firstName}">John</a>
+                                    <th:block th:text="${#dates.format(post.createDate, 'MMMM dd, yyyy - hh:mm a')}">Posted on January 1, 2018 at 12:00 PM</th:block>
+                                    | <i class="icon-tags"></i> Tags : <a href="#"><span class="label label-info">Snipp</span></a>
+                                    <a th:href="@{'/post-category/'+${post.postCategory.slug}}"><span class="label label-info" th:text="${post.postCategory.name}">Bootstrap</span></a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+
+                <div class="row">
+                    <div class="col-sm-6 text-left">
+                        <filter:pagination filter:currentPage="${page}"
+                                           filter:totalPages="${result.totalPages}"
+                                           filter:uri="@{${relativePath}}"></filter:pagination>
+                    </div>
+                    <div class="col-sm-6 text-right"
+                         th:with="productFrom=${result.getCurrentPage()*filterForm.size +1 - filterForm.size},productTo=${result.getCurrentPage()*filterForm.size}"
+                         th:text="${'Showing '+ productFrom +' to '+ productTo +' ('+result.totalPages+' pages)'}">
+                        Showing 1 to 12 of 15 (2 Pages)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+</body>
+</html>
