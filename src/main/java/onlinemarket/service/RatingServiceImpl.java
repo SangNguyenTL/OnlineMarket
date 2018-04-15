@@ -29,7 +29,6 @@ public class RatingServiceImpl implements RatingService{
     @Override
     public ResultObject<Rating> listByProduct(Product product, FilterForm filterForm) throws  ProductNotFoundException {
         if (product == null) throw new ProductNotFoundException();
-        filterForm.getPrivateGroupSearch().put("state", "Inactive");
         return ratingDao.listByDeclaration("product", product, filterForm);
     }
 

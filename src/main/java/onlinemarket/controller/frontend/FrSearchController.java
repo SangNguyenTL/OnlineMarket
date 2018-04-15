@@ -4,6 +4,7 @@ package onlinemarket.controller.frontend;
 import onlinemarket.controller.MainController;
 import onlinemarket.form.filter.FilterForm;
 import onlinemarket.service.ProductService;
+import onlinemarket.util.Help;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;

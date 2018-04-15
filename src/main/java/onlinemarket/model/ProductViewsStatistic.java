@@ -15,6 +15,7 @@ public class ProductViewsStatistic implements java.io.Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private int id;
 	private Product product;
 	private Integer week;
 	private Integer month;
@@ -24,7 +25,31 @@ public class ProductViewsStatistic implements java.io.Serializable {
 	public ProductViewsStatistic() {
 	}
 
+	public ProductViewsStatistic(int id, Product product) {
+		this.id = id;
+		this.product = product;
+	}
+
+	public ProductViewsStatistic(int id, Product product, Integer week, Integer month, Integer year, Integer total) {
+		this.id = id;
+		this.product = product;
+		this.week = week;
+		this.month = month;
+		this.year = year;
+		this.total = total;
+	}
+
 	@Id
+
+	@Column(name = "_id", unique = true, nullable = false)
+	public int getId() {
+		return this.id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "product_id", nullable = false)
 	public Product getProduct() {
@@ -35,7 +60,7 @@ public class ProductViewsStatistic implements java.io.Serializable {
 		this.product = product;
 	}
 
-	@Column(name = "week")
+	@Column(name = "[week]")
 	public Integer getWeek() {
 		return this.week;
 	}
@@ -44,7 +69,7 @@ public class ProductViewsStatistic implements java.io.Serializable {
 		this.week = week;
 	}
 
-	@Column(name = "month")
+	@Column(name = "[month]")
 	public Integer getMonth() {
 		return this.month;
 	}
@@ -53,7 +78,7 @@ public class ProductViewsStatistic implements java.io.Serializable {
 		this.month = month;
 	}
 
-	@Column(name = "year")
+	@Column(name = "[year]")
 	public Integer getYear() {
 		return this.year;
 	}
