@@ -3,6 +3,7 @@ package onlinemarket.controller.frontend;
 import onlinemarket.controller.MainController;
 import onlinemarket.form.filter.FilterForm;
 import onlinemarket.service.ProductService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -45,7 +46,14 @@ public class FrProductCategoryController extends MainController {
     @RequestMapping( value = "", method = {RequestMethod.GET, RequestMethod.POST})
     public String mainPage(@ModelAttribute("filterForm") FilterForm filterForm, ModelMap modelMap){
 
-        filterForm.getGroupSearch().remove("orderBy");
+        String orderBy = filterForm.getGroupSearch().get("orderBy");
+        if(StringUtils.isNotBlank(orderBy)){
+            String arrayOrderBy[] = orderBy.split("\\.");
+            if(arrayOrderBy.length == 2){
+                filterForm.setOrderBy(arrayOrderBy[0]);
+                filterForm.setOrder(StringUtils.equalsIgnoreCase(arrayOrderBy[1], "asc") ? "asc" : "desc");
+            }
+        }
 
         modelMap.put("result", productService.list(filterForm));
         modelMap.put("filterForm", filterForm);

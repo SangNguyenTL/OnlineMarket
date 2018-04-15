@@ -33,7 +33,7 @@
 								<div class="form-group row">
 									<label class="col-sm-3 form-control-label">Name</label>
 									<div class="col-sm-9">
-										<input th:errorclass="parsley-error" class="form-control" type="text" th:field="*{name}" required data-parsley-length="[6, 128]" data-parsley-id="1"/>
+										<input th:errorclass="parsley-error" class="form-control" type="text" th:field="*{name}" required data-parsley-length="[2, 128]" data-parsley-id="1"/>
 										<ul class="parsley-errors-list filled" id="parsley-id-1" th:if="${#fields.hasErrors('name')}"><li th:errors="*{name}"> </li></ul>
 									</div>
 								</div>

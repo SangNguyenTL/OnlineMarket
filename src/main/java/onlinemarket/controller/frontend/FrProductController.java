@@ -1,8 +1,6 @@
 package onlinemarket.controller.frontend;
 
 import onlinemarket.controller.MainController;
-import onlinemarket.form.filter.FilterForm;
-import onlinemarket.form.filter.FilterProduct;
 import onlinemarket.model.Product;
 import onlinemarket.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
