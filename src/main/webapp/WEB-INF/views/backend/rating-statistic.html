@@ -59,7 +59,7 @@
                     </thead>
                     <tbody>
                     <tr th:each="rating : ${result.list}">
-                        <td th:text="${rating.id}"></td>
+                        <td th:text="${rating.product.id}"></td>
                         <td th:text="${rating.product.name}"></td>
                         <td th:text="${rating.totalScore}"></td>
                         <td th:text="${rating.averageScore}"></td>

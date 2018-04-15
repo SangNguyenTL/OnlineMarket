@@ -3,6 +3,8 @@ package onlinemarket.controller.admin;
 
 import onlinemarket.controller.MainController;
 import onlinemarket.form.filter.FilterForm;
+import onlinemarket.model.RatingStatistic;
+import onlinemarket.result.ResultObject;
 import onlinemarket.service.RatingStatisticService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,6 +25,9 @@ public class RatingStatisticController  extends MainController{
     @ModelAttribute
     private ModelMap populateAttribute(ModelMap model){
         filterForm = new FilterForm();
+        filterForm.setOrderBy("averageScore");
+        filterForm.setOrder("desc");
+
         relativePath = "/admin/rating-statistic";
         model.put("filterForm", filterForm);
         model.put("relativePath", relativePath);
@@ -38,7 +43,8 @@ public class RatingStatisticController  extends MainController{
 
         model.put("pageTitle", "Rating Statistic Manager");
         model.put("path", "rating-statistic");
-        model.put("result", ratingStatisticService.list());
+        ResultObject<RatingStatistic> ratingStatisticResultObject = ratingStatisticService.list(filterForm);
+        model.put("result", ratingStatisticResultObject);
         model.put("filterForm", filterForm);
         return "backend/rating-statistic";
     }
