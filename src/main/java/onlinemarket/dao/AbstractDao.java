@@ -188,10 +188,19 @@ public abstract class AbstractDao<PK extends Serializable, T> {
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
         if (StringUtils.isNotBlank(filterForm.getOrderBy()) && StringUtils.isNotBlank(filterForm.getOrder())) {
+
+            String key = filterForm.getOrderBy();
+            String[] keyArr = key.split("\\.");
+            if (keyArr.length == 2) {
+                key = keyArr[0] + "Alias";
+                criteria.createAlias(keyArr[0], key);
+                key = key + "." + keyArr[1];
+            }
+
             if (filterForm.getOrder().equals("asc"))
-                criteria.addOrder(Order.asc(filterForm.getOrderBy()));
+                criteria.addOrder(Order.asc(key));
             else
-                criteria.addOrder(Order.desc(filterForm.getOrderBy()));
+                criteria.addOrder(Order.desc(key));
         }
 
         result.setList(criteria.list());

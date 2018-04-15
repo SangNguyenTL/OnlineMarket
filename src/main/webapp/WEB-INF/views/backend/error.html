@@ -48,13 +48,9 @@
             </h1>
             <h2 class="h1 m-y-lg text-black">OOPS!</h2>
             <p class="h5 m-y-lg text-u-c font-bold text-black" th:text="${errorMsg}"></p>
-            <pre class="container black text-left" th:if="${exception}">
-    	<th:block th:each="ste : ${exception.stackTrace}">
-    		[[${ste}]]
-    	</th:block>
-    </pre>
+
             <a th:href="@{/}" class="md-btn amber-700 md-raised p-x-md">
-                <span class="text-white">Trở về trang chủ</span>
+                <span class="text-white">Go home!</span>
             </a>
         </div>
     </div>

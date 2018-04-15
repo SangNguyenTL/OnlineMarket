@@ -330,11 +330,11 @@ public class Product implements java.io.Serializable {
 
     @OneToOne(fetch = FetchType.EAGER, mappedBy = "product", cascade = CascadeType.REMOVE)
     @JsonIgnore
-    public ProductViewsStatistic getProductViewsStatistc() {
+    public ProductViewsStatistic getProductViewsStatistic() {
         return productViewsStatistic;
     }
 
-    public void setProductViewsStatistc(ProductViewsStatistic productViewsStatistc) {
+    public void setProductViewsStatistic(ProductViewsStatistic productViewsStatistc) {
         this.productViewsStatistic = productViewsStatistc;
     }
 
