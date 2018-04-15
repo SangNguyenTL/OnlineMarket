@@ -102,10 +102,12 @@
                         <td th:text="${post.title}"></td>
                         <td th:text="${post.user.firstName}"></td>
                         <td th:if="${postType} == 'post'" th:text="${post.postCategory.name}"></td>
-                        <th:block th:each="state : ${T(onlinemarket.model.NumStatePost).values()}">
-                            <td th:if="${state.id} == ${post.status}" th:text="${state.name}"></td>
-                        </th:block>
-                        <td th:if="${post.status} == null">NULL</td>
+                        <td th:switch="${post.status}">
+                            <th:block th:case="0">Active</th:block>
+                            <th:block th:case="1">In Active</th:block>
+                            <th:block th:case="2">Deleted</th:block>
+                            <th:block th:case="3">Lock</th:block>
+                        </td>
                         <td th:text="${#dates.format(post.createDate, 'dd-MM-yyyy hh:mm:ss a')}"></td>
                         <td th:text="${#dates.format(post.updateDate, 'dd-MM-yyyy hh:mm:ss a')}"></td>
                         <td>

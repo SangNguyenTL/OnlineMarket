@@ -51,6 +51,7 @@ public class PostServiceImpl implements PostService {
         post.setPostType(postType);
         if(post.getPostType().equals("post") && postCategory == null) throw new PostCategoryNotFoundException();
         post.setSlug(slugify.slugify(post.getSlug()));
+        post.setUser(user);
         post.setPostType(postType);
         postDao.save(post);
     }
@@ -61,14 +62,15 @@ public class PostServiceImpl implements PostService {
         post.setPostType(postType);
         if(post.getPostType().equals("post") && (post.getPostCategory() == null || postDao.getByKey(post.getPostCategory().getId()) == null)) throw new PostCategoryNotFoundException();
         post.setUpdateDate(new Date());
+        post.setUser(user);
+        post.setSlug(slugify.slugify(post.getSlug()));
         postDao.update(post);
     }
 
     @Override
-    public void delete(Integer id) throws PostNotFoundException, PostHasCommentException {
+    public void delete(Integer id) throws PostNotFoundException {
         Post post = postDao.getByKey(id);
         if(post == null) throw new PostNotFoundException();
-        if(commentDao.getUniqueResultBy("post", post) != null) throw new PostHasCommentException();
         postDao.delete(post);
     }
 
