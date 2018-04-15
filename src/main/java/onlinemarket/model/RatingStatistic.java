@@ -17,16 +17,34 @@ public class RatingStatistic implements java.io.Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private Integer id;
 	private Product product;
-	private double averageScore = 0;
-	private int totalScore = 0;
-	private int userCount = 0;
+	private double averageScore;
+	private int totalScore;
+	private int userCount;
 
 	public RatingStatistic() {
 	}
 
+	public RatingStatistic(Product product, double averageScore, int totalScore, int userCount) {
+		this.product = product;
+		this.averageScore = averageScore;
+		this.totalScore = totalScore;
+		this.userCount = userCount;
+	}
+
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
+
+	@Column(name = "_id", unique = true, nullable = false)
+	public Integer getId() {
+		return this.id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "product_id", nullable = false)
 	public Product getProduct() {
