@@ -150,6 +150,9 @@ public class PaginationElementTagProcessor extends AbstractElementTagProcessor{
 	    		if(sb.length() > 0){
 	  	          sb.append('&');
 	  	      	}
+	  	      	
+	  	      	if(StringUtils.equals(field.getName(), "privateGroupSearch")) continue;
+
 	    		if (StringUtils.equals(field.getName(), "groupSearch")) {
 
 					@SuppressWarnings("unchecked")
