@@ -47,9 +47,11 @@ public class PostServiceImpl implements PostService {
     @Override
     public void save(Post post, User user, String postType) throws PostCategoryNotFoundException{
         post.setCreateDate(new Date());
-        PostCategory postCategory = postCategoryDao.getByKey(post.getPostCategory().getId());
-        post.setPostType(postType);
-        if(post.getPostType().equals("post") && postCategory == null) throw new PostCategoryNotFoundException();
+        if(postType.equals("post")){
+            PostCategory postCategory = postCategoryDao.getByKey(post.getPostCategory().getId());
+            if(post.getPostType().equals("post") && postCategory == null) throw new PostCategoryNotFoundException();
+            post.setPostCategory(postCategory);
+        }
         post.setSlug(slugify.slugify(post.getSlug()));
         post.setUser(user);
         post.setPostType(postType);
@@ -60,7 +62,12 @@ public class PostServiceImpl implements PostService {
     public void update(Post post, User user, String postType) throws PostCategoryNotFoundException, PostNotFoundException {
         if(postDao.getByKey(post.getId()) == null) throw new PostNotFoundException();
         post.setPostType(postType);
-        if(post.getPostType().equals("post") && (post.getPostCategory() == null || postDao.getByKey(post.getPostCategory().getId()) == null)) throw new PostCategoryNotFoundException();
+        if(post.getPostType().equals("post")){
+            PostCategory postCategory = postCategoryDao.getByKey(post.getPostCategory().getId());
+            if( (postCategory == null))
+                throw new PostCategoryNotFoundException();
+            post.setPostCategory(postCategory);
+        }
         post.setUpdateDate(new Date());
         post.setUser(user);
         post.setSlug(slugify.slugify(post.getSlug()));

@@ -34,3 +34,6 @@ hs_err_pid*
 OnlineMarket.iml
 .settings/.jsdtscope
 src/main/resources/application.properties
+src/main/webapp/WEB-INF/classes/application.properties
+src/main/resources/application.properties
+src/main/resources/application.properties
