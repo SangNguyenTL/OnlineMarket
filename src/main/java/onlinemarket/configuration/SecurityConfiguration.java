@@ -74,7 +74,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         .addFilterBefore(filter,CsrfFilter.class)
         .authorizeRequests()
 				.antMatchers("/admin/**", "/api/image/delete/**", "/api/image/load", "/api/menu/**").hasRole("ADMIN")
-				.antMatchers("/api/image/**").authenticated()
+				.antMatchers("/api/image/**", "/check-out").authenticated()
 				.anyRequest().permitAll()
 		        .and()
 			.logout()

@@ -492,4 +492,43 @@
             $.cookie("compareList", cart)
         }
     });
+    simpleCart.currency({
+        code: "VND" ,
+        symbol: "₫" ,
+        name: "Viet nam dong"
+    });
+
+    simpleCart({
+        // array representing the format and columns of the cart,
+        // see the cart columns documentation
+        cartColumns: [
+            { attr: "image", label: "Image", view: 'image'},
+            { attr: "name", label: "Name"},
+            { attr: "quantity", label: "Qty"},
+            { view: "currency", attr: "total", label: "SubTotal" },
+            { view: "remove", text: "Remove", label: false}
+        ],
+        // "div" or "table" - builds the cart as a
+        // table or collection of divs
+        cartStyle: "table",
+        // how simpleCart should checkout, see the
+        // checkout reference for more info
+        checkout: {
+            type: "SendForm" ,
+
+            url: PATH+"check-out",
+
+            // http method for form, "POST" or "GET", default is "POST"
+            method: "POST"
+        },
+        // set the currency, see the currency
+        // reference for more info
+        currency: "VND",
+        // collection of arbitrary data you may want to store
+        // with the cart, such as customer info
+        data: {},
+        // set the cart langauge
+        // (may be used for checkout)
+        language: "english-us"
+    });
 })(jQuery);

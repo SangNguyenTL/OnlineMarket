@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:filter="http://thymeleafexamples"
+      layout:decorate="templates/frontend">
+
+<th:object layout:fragment="head">
+
+</th:object>
+<!--/*@thymesVar id="productCategory" type="onlinemarket.model.ProductCategory"*/-->
+<!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
+<!--/*@thymesVar id="relativePath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="result" type="onlinemarket.result.ResultObject<onlinemarket.model.Product>"*/-->
+
+<head>
+</head>
+<body th:inline="text">
+
+<div id="container" layout:fragment="container">
+    <div class="container">
+        <!-- Breadcrumb Start-->
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item" th:each="breadcrumb : ${breadcrumbs}"><a th:href="@{${breadcrumb[0]}}"
+                                                                                 th:text="${breadcrumb[1]}"></a></li>
+        </ul>
+        <!-- Breadcrumb End-->
+        <h1 class="title" th:text="${title}">Product Comparison</h1>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title"><i class="fa fa-ticket"></i> Use Coupon Code</h4>
+                    </div>
+                    <div class="panel-body">
+                        <label for="input-coupon" class="col-sm-3 control-label">Enter coupon code</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="input-coupon"
+                                   placeholder="Enter your coupon here" value="" name="coupon">
+                            <span class="input-group-btn">
+                          <input type="button" class="btn btn-primary" data-loading-text="Loading..." id="button-coupon"
+                                 value="Apply Coupon">
+                          </span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title"><i class="fa fa-shopping-cart"></i> Shopping cart</h4>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive simpleCart_items">
+
+                        </div>
+                        <table class="table table-bordered">
+                            <tbody>
+                            <tr>
+                                <td class="text-right"><strong>Total</strong></td>
+                                <td class="text-right simpleCart_total">$1,132.00</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div class="buttons">
+                            <div class="pull-right">
+                                <input type="button" class="btn btn-primary" id="button-confirm" value="Confirm Order">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

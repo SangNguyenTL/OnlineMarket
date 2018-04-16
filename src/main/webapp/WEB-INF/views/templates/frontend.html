@@ -39,6 +39,13 @@
     <th:block layout:fragment="head">
 
     </th:block>
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+        var PATH = [[@{/}]],
+            PATH_IMAGE = PATH.substring(0, PATH.length -1),
+                googleApiKey  = [[${api.apiGoogle}]];
+        /*]]>*/
+    </script>
 </head>
 <body th:inline="text">
 <div class="wrapper-wide">
@@ -112,71 +119,27 @@
                     <div class="col-table-cell col-lg-3 col-md-3 col-sm-6 col-xs-12">
                         <div id="cart">
                             <button type="button" data-toggle="dropdown" data-loading-text="Loading..."
-                                    class="heading dropdown-toggle">
+                                    class="heading">
                                 <span class="cart-icon pull-left flip"></span>
-                                <span id="cart-total">2 item(s) - $1,132.00</span></button>
+                                <span id="cart-total"><span class="simpleCart_quantity"></span> item(s) - <span class="simpleCart_total"></span></span></button>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <table class="table">
-                                        <tbody>
-                                        <tr>
-                                            <td class="text-center"><a href="product.html"><img class="img-thumbnail"
-                                                                                                title="Xitefun Causal Wear Fancy Shoes"
-                                                                                                alt="Xitefun Causal Wear Fancy Shoes"
-                                                                                                th:src="@{/assets/image/product/sony_vaio_1-50x50.jpg}"></a>
-                                            </td>
-                                            <td class="text-left"><a href="product.html">Xitefun Causal Wear Fancy
-                                                Shoes</a></td>
-                                            <td class="text-right">x 1</td>
-                                            <td class="text-right">$902.00</td>
-                                            <td class="text-center">
-                                                <button class="btn btn-danger btn-xs remove" title="Remove" onClick=""
-                                                        type="button"><i class="fa fa-times"></i></button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center"><a href="product.html"><img class="img-thumbnail"
-                                                                                                title="Aspire Ultrabook Laptop"
-                                                                                                alt="Aspire Ultrabook Laptop"
-                                                                                                th:src="@{/assets/image/product/samsung_tab_1-50x50.jpg}"></a>
-                                            </td>
-                                            <td class="text-left"><a href="product.html">Aspire Ultrabook Laptop</a>
-                                            </td>
-                                            <td class="text-right">x 1</td>
-                                            <td class="text-right">$230.00</td>
-                                            <td class="text-center">
-                                                <button class="btn btn-danger btn-xs remove" title="Remove" onClick=""
-                                                        type="button"><i class="fa fa-times"></i></button>
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
+                                    <div class="simpleCart_items table">
+
+                                    </div>
                                 </li>
                                 <li>
                                     <div>
                                         <table class="table table-bordered">
                                             <tbody>
-                                            <tr>
-                                                <td class="text-right"><strong>Sub-Total</strong></td>
-                                                <td class="text-right">$940.00</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-right"><strong>Eco Tax (-2.00)</strong></td>
-                                                <td class="text-right">$4.00</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-right"><strong>VAT (20%)</strong></td>
-                                                <td class="text-right">$188.00</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="text-right"><strong>Total</strong></td>
-                                                <td class="text-right">$1,132.00</td>
-                                            </tr>
+                                                <tr>
+                                                    <td class="text-right"><strong>Total</strong></td>
+                                                    <td class="text-right simpleCart_total">$1,132.00</td>
+                                                </tr>
                                             </tbody>
                                         </table>
-                                        <p class="checkout"><a href="cart.html" class="btn btn-primary"><i
-                                                class="fa fa-shopping-cart"></i> View Cart</a>&nbsp;&nbsp;&nbsp;<a
-                                                href="checkout.html" class="btn btn-primary"><i class="fa fa-share"></i>
+                                        <p class="checkout">
+                                            <a th:href="@{/check-out}" class="btn btn-primary simpleCart_checkout"><i class="fa fa-share"></i>
                                             Checkout</a></p>
                                     </div>
                                 </li>

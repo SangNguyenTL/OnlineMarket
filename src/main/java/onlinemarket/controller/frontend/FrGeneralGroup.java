@@ -80,6 +80,10 @@ public class FrGeneralGroup extends MainController {
                 filterForm.setOrderBy(arrayOrderBy[0]);
                 filterForm.setOrder(StringUtils.equalsIgnoreCase(arrayOrderBy[1], "asc") ? "asc" : "desc");
             }
+            if(arrayOrderBy.length == 3){
+                filterForm.setOrderBy(arrayOrderBy[0]+"."+arrayOrderBy[1]);
+                filterForm.setOrder(StringUtils.equalsIgnoreCase(arrayOrderBy[1], "asc") ? "asc" : "desc");
+            }
         }
 
 

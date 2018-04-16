@@ -5,6 +5,7 @@ import onlinemarket.controller.MainController;
 import onlinemarket.form.filter.FilterForm;
 import onlinemarket.service.ProductService;
 import onlinemarket.util.Help;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -36,6 +37,18 @@ public class FrSearchController extends MainController {
 
         generateBreadcrumbs();
         breadcrumbs.add(new String[]{relativePath, "Search"});
+        String orderBy = filterForm.getGroupSearch().get("orderBy");
+        if(StringUtils.isNotBlank(orderBy)){
+            String arrayOrderBy[] = orderBy.split("\\.");
+            if(arrayOrderBy.length == 2){
+                filterForm.setOrderBy(arrayOrderBy[0]);
+                filterForm.setOrder(StringUtils.equalsIgnoreCase(arrayOrderBy[1], "asc") ? "asc" : "desc");
+            }else
+            if(arrayOrderBy.length == 3){
+                filterForm.setOrderBy(arrayOrderBy[0]+"."+arrayOrderBy[1]);
+                filterForm.setOrder(StringUtils.equalsIgnoreCase(arrayOrderBy[1], "asc") ? "asc" : "desc");
+            }
+        }
 
         return model;
     }

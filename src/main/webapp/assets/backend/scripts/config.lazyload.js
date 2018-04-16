@@ -1,7 +1,7 @@
 window.searchProduct = {
     width: "100%",
     placeholder: '--Choice Product--',
-    minimumInputLength: 3,
+    minimumInputLength: 2,
     ajax: {
         delay: 250,
         url: PATH+'api/product/search',

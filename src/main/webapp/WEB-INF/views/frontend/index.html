@@ -108,19 +108,21 @@
                 <h3 class="subtitle"><a th:href="@{'/product-category/'+${instance.key.slug}}"
                                         th:text="${instance.key.name}"></a></h3>
                 <div class="owl-carousel product_carousel">
-                    <div class="product-thumb clearfix" th:each="product : ${instance.value.list}">
+                    <div class="simpleCart_shelfItem product-thumb clearfix" th:each="product : ${instance.value.list}">
                         <div class="image"><a th:href="@{'/product/'+${product.slug}}"><img
-                                th:src="@{${product.featureImage}}" class="img-responsive"/></a></div>
+                                th:src="@{${product.featureImage}}" class="img-responsive item_image"/></a></div>
                         <div>
                             <div class="caption">
                                 <h4><a th:href="@{'/product/'+${product.slug}}" data-toggle="tooltip"
-                                       th:title="${product.name}" th:text="${product.name}"></a></h4>
+                                       th:title="${product.name}" th:text="${product.name}" class="item_name"></a></h4>
                                 <p class="price"><span class="price-new" th:text="${product.newPriceStr}"></span>
                                     <span class="price-old" th:if="${product.sale != ''}"
                                           th:text="${product.priceStr}"></span> <span th:if="${product.sale != ''}"
                                                                                       class="saving"
                                                                                       th:text="${product.sale}"></span>
                                 </p>
+                                <p class="hidden" th:class="item_price" th:text="${product.newPrice}"></p>
+                                <p class="hidden" th:class="item_id" th:text="${product.id}"></p>
                                 <div class="rating">
                                         <span class="fa fa-stack" th:each="number : ${#numbers.sequence(1, 5)}">
                                             <i th:if="${product.ratingStatistic != null && product.ratingStatistic.averageScore > number}"
@@ -130,7 +132,7 @@
                                 </div>
                             </div>
                             <div class="button-group">
-                                <button class="btn-primary add-cart" th:attr="data-id=${product.id}" type="button" onClick=""><span>Add to Cart</span>
+                                <button class="btn-primary item_add" type="button" onClick=""><span>Add to Cart</span>
                                 </button>
                                 <div class="add-to-links">
                                     <button type="button" data-toggle="tooltip"
@@ -141,6 +143,7 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>

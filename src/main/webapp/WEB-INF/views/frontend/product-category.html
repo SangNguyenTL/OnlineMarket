@@ -148,6 +148,16 @@
                                     <option value="price.desc">Price (High &gt; Low)</option>
                                     <option value="ratingStatistics.totalScore.desc">Rating (Highest)</option>
                                     <option value="ratingStatistics.totalScore.asc">Rating (Lowest)</option>
+                                    <option value="productViewsStatistic.day.asc">View in day (Lowest)</option>
+                                    <option value="productViewsStatistic.day.desc">View on day (Highest)</option>
+                                    <option value="productViewsStatistic.week.asc">View on week (Lowest)</option>
+                                    <option value="productViewsStatistic.week.desc">View on week (Highest)</option>
+                                    <option value="productViewsStatistic.month.asc">View on month (Lowest)</option>
+                                    <option value="productViewsStatistic.month.desc">View on month (Highest)</option>
+                                    <option value="productViewsStatistic.year.asc">View on year (Lowest)</option>
+                                    <option value="productViewsStatistic.year.desc">View on year (Highest)</option>
+                                    <option value="productViewsStatistic.total.asc">View on total (Lowest)</option>
+                                    <option value="productViewsStatistic.total.desc">View on total (Highest)</option>
                                     <option value="releaseDate.asc">Model oldest</option>
                                     <option value="releaseDate.desc">Model newest</option>
                                 </select>
@@ -175,12 +185,13 @@
                 <br>
                 <div class="row products-category">
                     <div th:each="product : ${result.list}" class="product-layout product-list col-xs-12">
-                        <div class="product-thumb">
+                        <div class="simpleCart_shelfItem product-thumb clearfix">
                             <div class="image"><a th:href="@{'/product/'+${product.slug}}"><img
-                                    th:src="@{${product.featureImage}}" class="img-responsive"/></a></div>
+                                    th:src="@{${product.featureImage}}" class="img-responsive item_image"/></a></div>
                             <div>
                                 <div class="caption">
-                                    <h4 data-toggle="tooltip" th:title="${product.name}"><a th:href="@{'/product/'+${product.slug}}" th:text="${product.name}"></a></h4>
+                                    <h4><a th:href="@{'/product/'+${product.slug}}" data-toggle="tooltip"
+                                           th:title="${product.name}" th:text="${product.name}" class="item_name"></a></h4>
                                     <p th:if="${product.events.size() > 0}" class="description">
                                         <b>Sales</b><br>
                                         <th:block th:each="event : ${product.events}">
@@ -194,21 +205,29 @@
                                                                                           class="saving"
                                                                                           th:text="${product.sale}"></span>
                                     </p>
+                                    <p class="hidden" th:class="item_price" th:text="${product.newPrice}"></p>
+                                    <p class="hidden" th:class="item_id" th:text="${product.id}"></p>
                                     <div class="rating">
                                         <span class="fa fa-stack" th:each="number : ${#numbers.sequence(1, 5)}">
-                                            <i th:if="${product.ratingStatistic != null && product.ratingStatistic.averageScore > number}" class="fa fa-star fa-stack-2x"></i>
+                                            <i th:if="${product.ratingStatistic != null && product.ratingStatistic.averageScore > number}"
+                                               class="fa fa-star fa-stack-2x"></i>
                                             <i class="fa fa-star-o fa-stack-2x"></i>
                                         </span>
                                     </div>
                                 </div>
                                 <div class="button-group">
-                                    <button class="btn-primary add-cart" th:attr="data-id=${product.id}" type="button"><span>Add to Cart</span></button>
+                                    <button class="btn-primary item_add" type="button" onClick=""><span>Add to Cart</span>
+                                    </button>
                                     <div class="add-to-links">
-                                        <button type="button" data-toggle="tooltip" title="Compare this Product" th:attr="data-cate-id=${product.productCategory.id},data-id=${product.id}" class="compare-product"><i class="fa fa-exchange"></i>
+                                        <button type="button" data-toggle="tooltip"
+                                                th:attr="data-cate-id=${product.productCategory.id},data-id=${product.id}"
+                                                title="Compare this Product" class="compare-product"><i
+                                                class="fa fa-exchange"></i>
                                             <span>Compare this Product</span></button>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
