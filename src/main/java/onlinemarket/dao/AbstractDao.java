@@ -131,6 +131,13 @@ public abstract class AbstractDao<PK extends Serializable, T> {
         return (List<T>) criteria.list();
     }
 
+    @SuppressWarnings("unchecked")
+    public ResultObject<T> listByInList(String key, List<Object> listValue, FilterForm filterForm) {
+        Criteria criteria = createEntityCriteria();
+        criteria.add(Restrictions.in(key, listValue));
+        return childFilterFrom(criteria, filterForm);
+    }
+
     protected Criteria createEntityCriteria() {
         return getSession().createCriteria(persistentClass);
     }

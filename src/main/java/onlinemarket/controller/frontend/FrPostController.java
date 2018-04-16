@@ -38,12 +38,14 @@ public class FrPostController extends MainController {
         filterForm.getPrivateGroupSearch().put("status", "0");
         filterForm.setOrderBy("createDate");
         filterForm.setOrder("desc");
-
+        title = "Post list";
         generateBreadcrumbs();
         relativePath = "/post-category";
+        model.put("title", title);
         breadcrumbs.add(new String[]{relativePath, "Post"});
 
         model.put("filterForm", filterForm);
+        model.put("relativePath", relativePath);
         model.put("postCategoryList", postCategoryService.list());
 
         return model;
@@ -65,26 +67,29 @@ public class FrPostController extends MainController {
     }
 
     @RequestMapping( value = "/{postCategorySlug:[\\w\\d-]+}", method = {RequestMethod.GET, RequestMethod.POST})
-    public String mainPageProductCategory(@PathVariable("postCategorySlug") String postCategorySlug,  @ModelAttribute("filterForm") FilterForm filterForm, ModelMap modelMap) throws NoHandlerFoundException {
+    public String mainPagePostCategory(@PathVariable("postCategorySlug") String postCategorySlug,  @ModelAttribute("filterForm") FilterForm filterForm, ModelMap modelMap) throws NoHandlerFoundException {
 
         postCategory = postCategoryService.getByDeclaration("slug", postCategorySlug);
         if(postCategory == null) throw new NoHandlerFoundException(null, null, null);
-        filterForm.getPrivateGroupSearch().put("productCategory.slug", postCategory.getSlug());
+        filterForm.getPrivateGroupSearch().put("postCategory.slug", postCategory.getSlug());
 
         subTitle = postCategory.getName();
         relativePath = relativePath + "/" + postCategorySlug;
         breadcrumbs.add(new String[]{relativePath, postCategory.getName()});
 
         modelMap.put("result", postService.list(filterForm));
+        modelMap.put("relativePath", relativePath);
+        modelMap.put("title", title);
+        modelMap.put("subTitle", subTitle);
         return "frontend/post-list";
     }
 
     @RequestMapping( value = "/{postCategorySlug:[\\w\\d-]+}/page/{page:^\\d+}", method = {RequestMethod.GET, RequestMethod.POST})
-    public String mainPagePaginationProductCategory(@PathVariable("postCategorySlug") String postCategorySlug, @PathVariable("page") Integer page, @ModelAttribute("filterForm") FilterForm filterForm, ModelMap modelMap) throws NoHandlerFoundException {
+    public String mainPagePaginationPostCategory(@PathVariable("postCategorySlug") String postCategorySlug, @PathVariable("page") Integer page, @ModelAttribute("filterForm") FilterForm filterForm, ModelMap modelMap) throws NoHandlerFoundException {
 
         postCategory = postCategoryService.getByDeclaration("slug", postCategorySlug);
         if(postCategory == null) throw new NoHandlerFoundException(null, null, null);
-        filterForm.getPrivateGroupSearch().put("productCategory.slug", postCategory.getSlug());
+        filterForm.getPrivateGroupSearch().put("postCategory.slug", postCategory.getSlug());
 
         subTitle = postCategory.getName();
         relativePath = relativePath + "/" + postCategorySlug;
@@ -94,6 +99,9 @@ public class FrPostController extends MainController {
 
         filterForm.setCurrentPage(page);
         modelMap.put("result", postService.list(filterForm));
+        modelMap.put("relativePath", relativePath);
+        modelMap.put("title", title);
+        modelMap.put("subTitle", subTitle);
         return "frontend/post-list";
 
     }

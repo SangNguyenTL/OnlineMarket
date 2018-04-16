@@ -113,6 +113,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public ResultObject<Product> listByInList(String key, List<Object> listValue, FilterForm filterForm) {
+        return productDao.listByInList(key, listValue, filterForm);
+    }
+
+    @Override
     public ResultProduct searchSelect(SearchSelect searchSelect) {
         FilterForm filterForm = new FilterForm();
         filterForm.setSearch(searchSelect.getQ());

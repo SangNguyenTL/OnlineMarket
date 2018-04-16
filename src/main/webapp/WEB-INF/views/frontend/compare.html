@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:filter="http://thymeleafexamples"
+      layout:decorate="templates/frontend">
+
+<th:object layout:fragment="head">
+
+</th:object>
+<!--/*@thymesVar id="productCategory" type="onlinemarket.model.ProductCategory"*/-->
+<!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
+<!--/*@thymesVar id="relativePath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="result" type="onlinemarket.result.ResultObject<onlinemarket.model.Product>"*/-->
+
+<head>
+</head>
+<body th:inline="text">
+
+<div id="container" layout:fragment="container">
+    <div class="container">
+        <!-- Breadcrumb Start-->
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item" th:each="breadcrumb : ${breadcrumbs}"><a th:href="@{${breadcrumb[0]}}"
+                                                                                 th:text="${breadcrumb[1]}"></a></li>
+        </ul>
+        <!-- Breadcrumb End-->
+        <h1 class="title" th:text="${title}">Product Comparison</h1>
+        <p>Comparative limit is 3 products, the older the product will be eliminated.qs</p>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <td colspan="5"><strong>Product Details</strong></td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td colspan="2" >Product</td>
+                    <td class="col-sm-3" th:each="product : ${result.list}"><a th:href="@{'/product/'+${product.slug}}"><strong th:text="${product.name}">Laptop Silver black</strong></a></td>
+                </tr>
+                <tr>
+                    <td colspan="2">Price</td>
+                    <td th:each="product : ${result.list}"><span class="price-new" th:text="${product.newPriceStr}"></span> <span class="price-old" th:if="${product.sale != ''}" th:text="${product.priceStr}"></span></td>
+                </tr>
+                <tr>
+                    <td colspan="2" >Release date</td>
+                    <td th:each="product : ${result.list}" th:text="${#dates.format(product.releaseDate, 'MM-yyyy')}"></td>
+                </tr>
+                <tr>
+                    <td colspan="2" >Brand</td>
+                    <td th:each="product : ${result.list}" th:text="${product.brand.name}">Apple</td>
+                </tr>
+                <tr>
+                    <td colspan="2">Availability</td>
+                    <td th:each="product : ${result.list}" th:switch="${product.state}" >
+                        <th:block th:case="0">In Stock</th:block>
+                        <th:block th:case="1">Out Stock</th:block>
+                        <th:block th:case="2">Stop selling</th:block>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" >Rating</td>
+                    <td th:each="product : ${result.list}" class="rating">
+                        <span class="fa fa-stack" th:each="number : ${#numbers.sequence(1, 5)}">
+                            <i th:if="${product.ratingStatistic != null && product.ratingStatistic.averageScore > number}" class="fa fa-star fa-stack-2x"></i>
+                            <i class="fa fa-star-o fa-stack-2x"></i>
+                        </span>
+                        <th:block th:if="${product.ratingStatistic != null}" th:text="${'Based on '+product.ratingStatistic.userCount+' reviews.'}"></th:block>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" >Weight</td>
+                    <td th:each="product : ${result.list}" th:text="${product.weight+'g'}">1.50kg</td>
+                </tr>
+                <tr>
+                    <td colspan="2" >Dimensions (L x W x H)</td>
+                    <td th:each="product : ${result.list}" th:text="${product.size}"></td>
+                </tr>
+                <th:block th:each="attributeGroup : ${productCategory.attributeGroups}">
+                    <tr th:each="attribute : ${attributeGroup.attributes}">
+                        <td th:if="${attributeStat.first}" th:rowspan="${attributeGroup.attributes.size()}" th:text="${attributeGroup.name}">Dimensions (L x W x H)</td>
+                        <td th:text="${attribute.name}"></td>
+                        <td th:each="product : ${result.list}">
+                            <th:block th:each="attributeValues : ${attribute.attributeValues}" th:if="${product.checkProductAttributes(attributeValues)}" th:text="${attributeValues.value+ ' - '}"></th:block>
+                        </td>
+                    </tr>
+                </th:block>
+
+                </tbody>
+                <tbody>
+                <tr>
+                    <td colspan="2"></td>
+                    <td th:each="product : ${result.list}">
+                        <button type="button" class="btn btn-primary btn-block">Add to Cart</button>
+                        <button class="btn btn-danger btn-block remove-compare" th:attr="data-id=${product.id}">Remove</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

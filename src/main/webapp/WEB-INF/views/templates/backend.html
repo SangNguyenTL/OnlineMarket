@@ -44,7 +44,7 @@
   <script type="text/javascript" th:inline="javascript">
   /*<![CDATA[*/
   var PATH = [[@{/}]],
-    PATH_IMAGE = [[@{''}]],
+    PATH_IMAGE = PATH.substring(0, PATH.length -1),
 	googleApiKey  = [[${api.apiGoogle}]],
     uploadType = [[${pageType}]] || "product",
         PATH_ICON = [[@{/assets/backend/scripts/FontAwesome-JSON/FontAwesome.json}]];

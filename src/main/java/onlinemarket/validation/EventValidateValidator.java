@@ -70,7 +70,7 @@ public class EventValidateValidator implements ConstraintValidator<EventValidate
                     .addPropertyNode( "percentValue" ).addConstraintViolation();
         }
 
-        if(event.getMaxPrice() <= event.getMinPrice()){
+        if(event.getMinPrice() != null && event.getMaxPrice() != null && event.getMaxPrice() <= event.getMinPrice()){
             if(!hasError) context.disableDefaultConstraintViolation();
             hasError = true;
             context.buildConstraintViolationWithTemplate( "The max price must be lager than the min price." )

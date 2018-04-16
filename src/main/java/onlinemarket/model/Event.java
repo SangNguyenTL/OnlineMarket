@@ -19,6 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import onlinemarket.model.other.AdvancedValidation;
@@ -54,6 +55,7 @@ public class Event implements java.io.Serializable {
 	private Date dateTo;
 	private Long maxPrice;
 	private Long minPrice;
+	private String featureImage;
 	private Set<Product> products = new HashSet<>(0);
 
 	public Event() {
@@ -63,6 +65,7 @@ public class Event implements java.io.Serializable {
 		publisher = event.publisher;
 		name = event.name;
 		code = event.code;
+		featureImage = event.featureImage;
 		content = event.content;
 		status = event.status;
 		percentValue = event.percentValue;
@@ -200,6 +203,7 @@ public class Event implements java.io.Serializable {
 
 	@Column(name = "max_price", nullable = false, precision = 13)
 	@Range(max = 1000000000)
+    @NotNull
 	public Long getMaxPrice() {
 		return this.maxPrice;
 	}
@@ -210,6 +214,7 @@ public class Event implements java.io.Serializable {
 
 	@Column(name = "min_price", nullable = false, precision = 13)
 	@Range(max = 1000000000)
+    @NotNull
 	public Long getMinPrice() {
 		return this.minPrice;
 	}
@@ -229,5 +234,15 @@ public class Event implements java.io.Serializable {
 	public void setProducts(Set<Product> products) {
 		this.products = products;
 	}
+
+	@Column(name = "feature_image", length = 2088)
+	@Size(max = 2088)
+	public String getFeatureImage() {
+		return this.featureImage;
+	}
+
+	public void setFeatureImage(String featureImage) {
+		this.featureImage = featureImage;
+}
 
 }

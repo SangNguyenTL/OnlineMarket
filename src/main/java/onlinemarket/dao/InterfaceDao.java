@@ -24,6 +24,8 @@ interface InterfaceDao<PK extends Serializable,T> {
 	List<T> list(Integer offset, Integer maxResults);
 	
 	List<T> listByInList(String key, List<String> listValue);
+
+	ResultObject<T> listByInList(String key, List<Object> listValue, FilterForm filterForm);
 	
 	void delete(T entity);
 	

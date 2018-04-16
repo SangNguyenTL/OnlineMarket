@@ -9,6 +9,7 @@ import onlinemarket.model.Product;
 import onlinemarket.model.ProductCategory;
 import onlinemarket.model.User;
 import onlinemarket.result.ResultObject;
+import onlinemarket.service.EventService;
 import onlinemarket.service.PostService;
 import onlinemarket.service.ProductService;
 import onlinemarket.util.exception.productCategory.ProductCategoryNotFoundException;
@@ -42,10 +43,22 @@ public class HomeController extends MainController {
 	ProvinceService provinceService;
 
 	@Autowired
+	EventService eventService;
+
+	@Autowired
 	PostService postService;
 
 	@ModelAttribute
 	public ModelMap populateAttribute(ModelMap model) {
+
+		generateBreadcrumbs();
+
+		return model;
+	}
+
+	@RequestMapping(value = { "/" }, method = RequestMethod.GET)
+	public String homePage(ModelMap model) {
+
 		FilterForm filterForm = new FilterForm();
 
 		FilterForm filterForm1 = new FilterForm();
@@ -65,20 +78,9 @@ public class HomeController extends MainController {
 		filterForm1.setOrderBy("ratingStatistic.totalScore");
 		model.put("productBestRating",productService.list(filterForm1).getList());
 
-		filterForm.getPrivateGroupSearch().put("state", "0");
 		filterForm.setOrderBy("releaseDate");
 		filterForm.setOrder("desc");
 
-		generateBreadcrumbs();
-
-		return model;
-	}
-
-	@RequestMapping(value = { "/" }, method = RequestMethod.GET)
-	public String homePage(ModelMap model) {
-
-		FilterForm filterForm = new FilterForm();
-		filterForm.getGroupSearch().put("state", "0");
 		filterForm.setSize(10);
 		filterForm.setOrder("desc");
 		filterForm.setOrderBy("numberOrder");
@@ -101,6 +103,12 @@ public class HomeController extends MainController {
 
 			}
 		}
+		filterForm.getGroupSearch().remove("state");
+		filterForm.getGroupSearch().put("status", "0");
+		filterForm.setSize(3);
+		filterForm.setOrderBy("createDate");
+
+		model.put("eventList", eventService.list(filterForm).getList());
 		model.put("resultObjectList", resultObjectList);
 		model.put("pageTitle", "Home");
 		return "frontend/index";

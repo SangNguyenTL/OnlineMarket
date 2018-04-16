@@ -5,6 +5,7 @@ import onlinemarket.form.filter.FilterForm;
 import onlinemarket.model.Event;
 import onlinemarket.model.Post;
 import onlinemarket.service.EventService;
+import onlinemarket.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -19,6 +20,9 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 public class FrEventController extends MainController {
 
     @Autowired
+    ProductService productService;
+
+    @Autowired
     EventService eventService;
 
     FilterForm filterForm;
@@ -26,28 +30,61 @@ public class FrEventController extends MainController {
     @ModelAttribute
     public ModelMap populateAttribute(ModelMap model) {
 
+
+        FilterForm filterForm1 = new FilterForm();
+        filterForm1.getGroupSearch().put("state", "0");
+        filterForm1.setSize(5);
+        filterForm1.setOrder("desc");
+        filterForm1.setOrderBy("numberOrder");
+        model.put("productBestSellerList",productService.list(filterForm1).getList());
+
+        filterForm1.setSize(5);
+        filterForm1.setOrder("desc");
+        filterForm1.setOrderBy("productViewsStatistic.total");
+        model.put("productBestViewing",productService.list(filterForm1).getList());
+
+        filterForm1.setSize(5);
+        filterForm1.setOrder("desc");
+        filterForm1.setOrderBy("ratingStatistic.totalScore");
+        model.put("productBestRating",productService.list(filterForm1).getList());
+
         filterForm = new FilterForm();
         filterForm.getGroupSearch();
         filterForm.setOrderBy("createDate");
         filterForm.setOrder("desc");
         filterForm.getPrivateGroupSearch().put("status", "0");
-
+        title="Event list";
         generateBreadcrumbs();
         relativePath = "/event";
         breadcrumbs.add(new String[]{relativePath, "Event"});
 
         model.put("filterForm", filterForm);
+        model.put("title", title);
 
         return model;
     }
 
+    @RequestMapping( value = "", method = {RequestMethod.GET, RequestMethod.POST})
+    public String mainPage(@ModelAttribute("filterForm") FilterForm filterForm, ModelMap modelMap){
+        modelMap.put("result", eventService.list(filterForm));
+        return "frontend/event-list";
+    }
+
+
+    @RequestMapping( value = "/page/{page:^\\d+}", method = {RequestMethod.GET, RequestMethod.POST})
+    public String mainPagePagination(@PathVariable("page") Integer page, @ModelAttribute("filterForm") FilterForm filterForm, ModelMap modelMap){
+
+        filterForm.setCurrentPage(page);
+        modelMap.put("result", eventService.list(filterForm));
+        return "frontend/post-list";
+    }
 
 
     @RequestMapping(value = "/{id:\\d+}", method = RequestMethod.GET)
     public String postPage(@PathVariable("id") Integer id,  ModelMap model) throws NoHandlerFoundException {
 
         Event event = eventService.getByKey(id);
-        if(event != null) throw new NoHandlerFoundException(null,null,null);
+        if(event == null) throw new NoHandlerFoundException(null,null,null);
 
         breadcrumbs.add(new String[]{ relativePath, event.getName()});
 
@@ -55,7 +92,7 @@ public class FrEventController extends MainController {
         model.put("event", event);
 
 
-        return "frontend/post";
+        return "frontend/event";
 
     }
 

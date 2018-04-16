@@ -27,6 +27,8 @@ public interface ProductService {
 
     ResultObject<Product> list(FilterForm filterForm);
 
+    ResultObject<Product> listByInList(String key, List<Object> listValue, FilterForm filterForm);
+
     ResultProduct searchSelect(SearchSelect searchSelect);
 
     List<Product> getRelatedProduct(ProductCategory productCategory, Brand brand);
