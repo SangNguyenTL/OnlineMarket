@@ -46,7 +46,7 @@ public class FrCompareProduct extends MainController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        if(productCompareList.isEmpty()) throw new NoHandlerFoundException(null,null,null);
         filterForm = new FilterForm();
         List<Object> listValue = new ArrayList<>();
 

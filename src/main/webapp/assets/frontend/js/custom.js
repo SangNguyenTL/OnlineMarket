@@ -519,7 +519,7 @@
             url: PATH+"check-out",
 
             // http method for form, "POST" or "GET", default is "POST"
-            method: "POST"
+            method: "GET"
         },
         // set the currency, see the currency
         // reference for more info

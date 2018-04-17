@@ -282,7 +282,7 @@ public class Product implements java.io.Serializable {
 	}
 
 
-    @OneToOne(fetch = FetchType.EAGER, mappedBy = "product", cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "product", cascade = CascadeType.REMOVE)
     @JsonIgnore
     public RatingStatistic getRatingStatistic() {
         return ratingStatistic;
@@ -330,7 +330,7 @@ public class Product implements java.io.Serializable {
 	}
 
 
-    @OneToOne(fetch = FetchType.EAGER, mappedBy = "product", cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "product", cascade = CascadeType.REMOVE)
     @JsonIgnore
     public ProductViewsStatistic getProductViewsStatistic() {
         return productViewsStatistic;

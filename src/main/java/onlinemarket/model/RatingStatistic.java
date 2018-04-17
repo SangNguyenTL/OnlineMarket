@@ -45,7 +45,7 @@ public class RatingStatistic implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne
 	@JoinColumn(name = "product_id", nullable = false)
 	public Product getProduct() {
 		return this.product;

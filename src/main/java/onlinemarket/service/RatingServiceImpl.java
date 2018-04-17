@@ -57,7 +57,7 @@ public class RatingServiceImpl implements RatingService{
         ratingCheck.setScore(entity.getScore());
         ratingCheck.setRateDate(new Date());
         ratingDao.update(ratingCheck);
-        RatingStatistic ratingfStatistic = ratingStatisticDao.getByKey(ratingCheck.getProduct().getId());
+        RatingStatistic ratingfStatistic = ratingStatisticDao.getByDeclaration("product", ratingCheck.getProduct());
         if(ratingCheck.getState().equals("Active")){
             if(ratingfStatistic == null)  ratingfStatistic = new RatingStatistic();
             ratingfStatistic.setTotalScore(ratingfStatistic.getTotalScore() + ratingCheck.getScore());
