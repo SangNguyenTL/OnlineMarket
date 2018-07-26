@@ -103,7 +103,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         ProductCategory productCategory = productCategoryDao.getByKey(id);
         if(productCategory == null) throw new ProductCategoryNotFoundException();
         if(productDao.getUniqueResultBy("productCategory", productCategory) != null) throw new ProductCategoryHasProductException();
-        if(eventDao.getUniqueResultBy("productCategory", productCategory) != null) throw new ProductCategoryHasEventException();
+//        if(eventDao.getUniqueResultBy("productCategory", productCategory) != null) throw new ProductCategoryHasEventException();
         if(attributeGroupDao.getUniqueResultBy("productCategory", productCategory) != null) throw new ProductCategoryHasAttributeGroupException();
         productCategoryDao.delete(productCategory);
 

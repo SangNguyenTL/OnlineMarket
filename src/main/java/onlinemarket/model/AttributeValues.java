@@ -104,4 +104,9 @@ public class AttributeValues {
     public void setProductAttributeValues(Collection<ProductAttributeValues> productAttributeValuesById) {
         this.productAttributeValues = productAttributeValuesById;
     }
+
+    @Override
+    public String toString() {
+        return value;
+    }
 }

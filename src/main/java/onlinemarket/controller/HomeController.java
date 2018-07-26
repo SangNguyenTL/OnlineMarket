@@ -13,6 +13,7 @@ import onlinemarket.service.EventService;
 import onlinemarket.service.PostService;
 import onlinemarket.service.ProductService;
 import onlinemarket.util.exception.productCategory.ProductCategoryNotFoundException;
+import onlinemarket.view.FrontendProduct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -59,44 +60,27 @@ public class HomeController extends MainController {
 	@RequestMapping(value = { "/" }, method = RequestMethod.GET)
 	public String homePage(ModelMap model) {
 
+		FilterForm filterFormTopList = new FilterForm();
+		filterFormTopList.getGroupSearch().put("state", "0");
+		filterFormTopList.setSize(5);
+		filterFormTopList.setOrder("desc");
+		filterFormTopList.setOrderBy("numberOrder");
+		model.put("productBestSellerList", productService.convertProductToFrProduct(productService.list(filterFormTopList).getList()));
+		
+		filterFormTopList.setOrderBy("productViewsStatistic.total");
+		model.put("productBestViewing", productService.convertProductToFrProduct(productService.list(filterFormTopList).getList()));
+
+		filterFormTopList.setOrderBy("ratingStatistic.totalScore");
+		model.put("productBestRating",productService.convertProductToFrProduct(productService.list(filterFormTopList).getList()));
+
+
 		FilterForm filterForm = new FilterForm();
-
-		FilterForm filterForm1 = new FilterForm();
-		filterForm1.getGroupSearch().put("state", "0");
-		filterForm1.setSize(5);
-		filterForm1.setOrder("desc");
-		filterForm1.setOrderBy("numberOrder");
-		model.put("productBestSellerList",productService.list(filterForm1).getList());
-
-		filterForm1.setSize(5);
-		filterForm1.setOrder("desc");
-		filterForm1.setOrderBy("productViewsStatistic.total");
-		model.put("productBestViewing",productService.list(filterForm1).getList());
-
-		filterForm1.setSize(5);
-		filterForm1.setOrder("desc");
-		filterForm1.setOrderBy("ratingStatistic.totalScore");
-		model.put("productBestRating",productService.list(filterForm1).getList());
-
+		Map<ProductCategory,ResultObject<FrontendProduct>> resultObjectList = new HashMap<>();
 		filterForm.setOrderBy("releaseDate");
 		filterForm.setOrder("desc");
-
-		filterForm.setSize(10);
-		filterForm.setOrder("desc");
-		filterForm.setOrderBy("numberOrder");
-		model.put("productBestSellerList",productService.list(filterForm).getList());
-
-		filterForm.setOrderBy("productViewsStatistic.total");
-		model.put("productBestViewing",productService.list(filterForm).getList());
-
-		filterForm.setOrderBy("ratingStatistic.totalScore");
-		model.put("productBestRating",productService.list(filterForm).getList());
-
-		Map<ProductCategory,ResultObject<Product>> resultObjectList = new HashMap<>();
-		filterForm.setOrderBy("releaseDate");
 		for(ProductCategory productCategory : productCategoryList){
 			try {
-				ResultObject<Product> resultObject = productService.listByProductCategory(productCategory,filterForm);
+				ResultObject<FrontendProduct> resultObject = productService.frontendProductResultObject(productService.listByProductCategory(productCategory,filterForm));
 				if(!resultObject.getList().isEmpty())
 					resultObjectList.put(productCategory, resultObject);
 			} catch (ProductCategoryNotFoundException e) {

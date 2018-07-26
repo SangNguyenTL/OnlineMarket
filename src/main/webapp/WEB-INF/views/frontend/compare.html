@@ -4,13 +4,13 @@
       xmlns:filter="http://thymeleafexamples"
       layout:decorate="templates/frontend">
 
-<th:object layout:fragment="head">
+<th:block layout:fragment="head">
 
-</th:object>
+</th:block>
 <!--/*@thymesVar id="productCategory" type="onlinemarket.model.ProductCategory"*/-->
 <!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
 <!--/*@thymesVar id="relativePath" type="java.lang.String"*/-->
-<!--/*@thymesVar id="result" type="onlinemarket.result.ResultObject<onlinemarket.model.Product>"*/-->
+<!--/*@thymesVar id="result" type="onlinemarket.result.ResultObject<onlinemarket.view.FrontendProduct>"*/-->
 
 <head>
 </head>
@@ -25,8 +25,9 @@
         </ul>
         <!-- Breadcrumb End-->
         <h1 class="title" th:text="${title}">Product Comparison</h1>
-        <p>Comparative limit is 3 products, the older the product will be eliminated.qs</p>
-        <div class="table-responsive">
+        <p>Comparative limit is 3 products, the older the product will be eliminated.</p>
+        <div th:if="${result} == null"  class="alert alert-warning h5"><i class="fa fa-warning"></i> No products to compare</div>
+        <div th:if="${result} != null" class="table-responsive">
             <table class="table table-bordered table-hover">
                 <thead>
                 <tr>
@@ -35,12 +36,16 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <td colspan="2" >Product</td>
+                    <td colspan="2" class="col-sm-3">Product</td>
                     <td class="col-sm-3" th:each="product : ${result.list}"><a th:href="@{'/product/'+${product.slug}}"><strong th:text="${product.name}">Laptop Silver black</strong></a></td>
                 </tr>
                 <tr>
+                    <td colspan="2" >Image</td>
+                    <td class="col-sm-3" th:each="product : ${result.list}"><div class="image"><a th:href="@{'/product/'+${product.slug}}"><img class="img-thumbnail" th:src="@{${product.featureImage}}"></a></div></td>
+                </tr>
+                <tr>
                     <td colspan="2">Price</td>
-                    <td th:each="product : ${result.list}"><span class="price-new" th:text="${product.newPriceStr}"></span> <span class="price-old" th:if="${product.sale != ''}" th:text="${product.priceStr}"></span></td>
+                    <td th:each="product : ${result.list}"><span class="price-new" th:text="${product.newPriceStr}"></span> <span class="price-old" th:if="${!product.newPriceStr.equals('') && !product.sale.equals('')}" th:text="${product.priceStr}"></span></td>
                 </tr>
                 <tr>
                     <td colspan="2" >Release date</td>
@@ -81,7 +86,9 @@
                         <td th:if="${attributeStat.first}" th:rowspan="${attributeGroup.attributes.size()}" th:text="${attributeGroup.name}">Dimensions (L x W x H)</td>
                         <td th:text="${attribute.name}"></td>
                         <td th:each="product : ${result.list}">
-                            <th:block th:each="attributeValues : ${attribute.attributeValues}" th:if="${product.checkProductAttributes(attributeValues)}" th:text="${attributeValues.value+ ' - '}"></th:block>
+                            <th:block th:each="attributeValues : ${attribute.attributeValues}" th:if="${product.checkProductAttributes(attributeValues)}">
+                                <p th:text="${'- ' + #strings.listJoin(attributeValues, '\n')}"></p>
+                            </th:block>
                         </td>
                     </tr>
                 </th:block>
@@ -92,12 +99,13 @@
                     <td colspan="2"></td>
                     <td th:each="product : ${result.list}">
                         <button type="button" class="btn btn-primary btn-block">Add to Cart</button>
-                        <button class="btn btn-danger btn-block remove-compare" th:attr="data-id=${product.id}">Remove</button>
+                        <button class="btn btn-danger btn-block remove-compare" th:attr="data-cate-id=${product.productCategory.id},data-id=${product.id}">Remove</button>
                     </td>
                 </tr>
                 </tbody>
             </table>
         </div>
+        <div class="text-center"><a class="fa-2x" th:href="@{/}">Back Home</a></div>
     </div>
 </div>
 </body>

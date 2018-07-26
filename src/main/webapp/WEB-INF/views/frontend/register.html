@@ -3,10 +3,10 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="templates/frontend">
 
-<th:object layout:fragment="head">
+<th:block layout:fragment="head">
 <link rel="stylesheet" type="text/css"
 	th:href="@{/assets/frontend/js/bootstrap/css/bootstrap-datetimepicker.min.css}" />
-</th:object>
+</th:block>
 
 <head>
 </head>
@@ -204,7 +204,7 @@
 								<div class="caption">
 									<h4><a th:href="@{'/product/'+${productBest.slug}}" th:alt="${productBest.name}" th:text="${productBest.name}"></a></h4>
 									<p class="price"><span class="price-new" th:text="${productBest.newPriceStr}"></span>
-										<span class="price-old" th:if="${productBest.sale != ''}"
+										<span class="price-old" th:if="${productBest.newPriceStr != '' && productBest.sale != ''}"
 											  th:text="${productBest.priceStr}"></span> <span th:if="${productBest.sale != ''}"
 																							  class="saving"
 																							  th:text="${productBest.sale}"></span>
@@ -226,7 +226,7 @@
 								<div class="caption">
 									<h4><a th:href="@{'/product/'+${productBest.slug}}" th:alt="${productBest.name}" th:text="${productBest.name}"></a></h4>
 									<p class="price"><span class="price-new" th:text="${productBest.newPriceStr}"></span>
-										<span class="price-old" th:if="${productBest.sale != ''}"
+										<span class="price-old" th:if="${productBest.newPriceStr != '' && productBest.sale != ''}"
 											  th:text="${productBest.priceStr}"></span> <span th:if="${productBest.sale != ''}"
 																							  class="saving"
 																							  th:text="${productBest.sale}"></span>
@@ -248,7 +248,7 @@
 								<div class="caption">
 									<h4><a th:href="@{'/product/'+${productBest.slug}}" th:alt="${productBest.name}" th:text="${productBest.name}"></a></h4>
 									<p class="price"><span class="price-new" th:text="${productBest.newPriceStr}"></span>
-										<span class="price-old" th:if="${productBest.sale != ''}"
+										<span class="price-old" th:if="${productBest.newPriceStr != '' && productBest.sale != ''}"
 											  th:text="${productBest.priceStr}"></span> <span th:if="${productBest.sale != ''}"
 																							  class="saving"
 																							  th:text="${productBest.sale}"></span>

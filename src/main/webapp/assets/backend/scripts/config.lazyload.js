@@ -17,10 +17,11 @@ window.searchProduct = {
             return query;
         },
         processResults: function (data) {
-            return $.map(data, function (obj) {
+            data.results =  $.map(data.results, function (obj) {
                 obj.text = obj.name;
                 return obj;
             });
+            return data;
         },
         cache: true
     }

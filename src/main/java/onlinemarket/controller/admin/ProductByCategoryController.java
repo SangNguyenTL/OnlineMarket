@@ -2,6 +2,8 @@ package onlinemarket.controller.admin;
 
 import javax.validation.groups.Default;
 
+import onlinemarket.form.product.ProductForm;
+import onlinemarket.model.Product;
 import onlinemarket.model.other.AdvancedValidation;
 import onlinemarket.util.exception.product.ProductHasCommentException;
 import onlinemarket.util.exception.product.ProductNotFoundException;
@@ -20,7 +22,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import onlinemarket.controller.MainController;
 import onlinemarket.form.filter.FilterForm;
-import onlinemarket.model.Product;
 import onlinemarket.model.ProductCategory;
 import onlinemarket.service.AttributeGroupService;
 import onlinemarket.service.ProductService;
@@ -111,7 +112,7 @@ public class ProductByCategoryController extends MainController {
 			 modelMap.put("pageTitle", "Add new product");
 			 modelMap.put("action", "add");
 			 modelMap.put("pathAction", relativePath + "/add");
-			 modelMap.put("product", new Product());
+			 modelMap.put("product", new ProductForm());
 
 		} catch (ProductCategoryNotFoundException e) {
 			redirectAttributes.addFlashAttribute("error", e.getMessage());
@@ -122,7 +123,7 @@ public class ProductByCategoryController extends MainController {
 	}
 
 	@RequestMapping( value = "/add", method = RequestMethod.POST)
-	public String processAddPage(@Validated(value = {AdvancedValidation.CheckSlug.class, Default.class}) @ModelAttribute("product") Product product,BindingResult result , ModelMap modelMap, RedirectAttributes redirectAttributes){
+	public String processAddPage(@Validated(value = {AdvancedValidation.CheckSlug.class, Default.class}) @ModelAttribute("product") ProductForm product,BindingResult result , ModelMap modelMap, RedirectAttributes redirectAttributes){
 		try{
 
 			if(!result.hasErrors()){
@@ -152,14 +153,43 @@ public class ProductByCategoryController extends MainController {
 		try {
 			if(productCategory == null) throw new ProductCategoryNotFoundException();
 			Product product = productService.getByKey(productId);
+
 			if(product == null) throw new ProductNotFoundException();
+
+			ProductForm productForm = new ProductForm(
+					product.getId(),
+					product.getBrand(),
+					product.getProductCategory(),
+					product.getUser(),
+					product.getName(),
+					product.getSlug(),
+					product.getDescription(),
+					product.getPrice(),
+					product.getQuantity(),
+					product.getNumberOrder(),
+					product.getState(),
+					product.getWeight(),
+					product.getReleaseDate(),
+					product.getSize(),
+					product.getCreateDate(),
+					product.getUpdateDate(),
+					product.getFeatureImage(),
+					product.getRatingStatistic(),
+					product.getProductViewsStatistic(),
+					product.getRatings(),
+					product.getEvents(),
+					product.getProductAttributeValues(),
+					product.getProductViewses(),
+					product.getComments(),
+					product.getCarts()
+			);
 
 			modelMap.put("subPageTitle", "Update new product");
 			modelMap.put("description", "Update product for " + productCategory.getName());
 			modelMap.put("pageTitle", "Update new product");
 			modelMap.put("action", "update");
 			modelMap.put("pathAction", relativePath + "/update");
-			modelMap.put("product", product);
+			modelMap.put("product", productForm);
 
 		} catch (ProductCategoryNotFoundException e) {
 			redirectAttributes.addFlashAttribute("error", e.getMessage());
@@ -174,7 +204,7 @@ public class ProductByCategoryController extends MainController {
 	}
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String processUpdatePage(@ModelAttribute("product") Product product, BindingResult result, ModelMap modelMap,RedirectAttributes redirectAttributes) {
+	public String processUpdatePage(@ModelAttribute("product") ProductForm product, BindingResult result, ModelMap modelMap,RedirectAttributes redirectAttributes) {
 
 		try {
 			if(!result.hasErrors()){

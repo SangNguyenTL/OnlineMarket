@@ -170,6 +170,7 @@ public class PostController extends MainController {
 
         try {
             postService.delete(postId);
+            redirectAttributes.addFlashAttribute("success", true);
         } catch (PostNotFoundException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
         }

@@ -3,6 +3,7 @@ package onlinemarket.validation;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+import onlinemarket.form.product.ProductForm;
 import onlinemarket.model.Product;
 import onlinemarket.service.ProductService;
 import org.apache.commons.lang3.StringUtils;
@@ -23,11 +24,11 @@ public class UniqueProductSlugValidator implements ConstraintValidator<UniquePro
 
 	@Override
 	public boolean isValid(Object candidate, ConstraintValidatorContext context) {
-		
-		Product product = (Product) candidate;
-		Product product1 = productService.getByDeclaration("slug", product.getSlug());
+
+		ProductForm productForm = (ProductForm) candidate;
+		Product product = productService.getByDeclaration("slug", productForm.getSlug());
 		boolean isValid = false;
-		if(product1 == null || StringUtils.equals(product1.getSlug(), product.getBeforeSlug())) isValid = true;
+		if(product == null || StringUtils.equals(product.getSlug(), productForm.getBeforeSlug())) isValid = true;
 		else isValid = false;
         if ( !isValid ) {
         	context.disableDefaultConstraintViolation();
