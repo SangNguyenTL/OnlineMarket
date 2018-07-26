@@ -98,7 +98,7 @@
 								<td th:text="${product.id}"></td>
 								<td>
 									<span class="w-40">
-										<img th:src="${product.featureImage}" class="w-full" alt="...">
+										<img th:src="@{${product.featureImage}}" class="w-full" alt="...">
 									</span>
 								</td>
 								<td th:text="${product.name}"></td>

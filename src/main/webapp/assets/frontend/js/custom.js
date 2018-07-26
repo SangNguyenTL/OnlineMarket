@@ -428,33 +428,38 @@
     }
     $.cookie.json = true;
     $(".compare-product").on("click", function(e){
-        var element = $(e.currentTarget), data = {
-            id: element.data("id"),
-            cateId: element.data("cateId")
-        }, compareList = $.cookie("compareList") || [];
-        if(typeof compareList != "object") compareList = [];
-        if(data.id != null && data.cateId !=null){
-            if(compareList.filter(item => item.id == data.id).length > 0){
-                compareList = compareList.filter(item => item.id != data.id);
-                alert("Removed product to compare factory")
+        var element = $(e.currentTarget),
+            compareList = $.cookie("compareList") || {},
+            id= element.data("id"),
+            cateId= element.data("cateId");
+        if(typeof id == "number"  && typeof cateId == "number"){
+            if(typeof compareList[cateId] == "object" && compareList[cateId].filter(function(item){return item == id}).length > 0){
+                compareList[cateId] = compareList[cateId].filter(function(item){return item != id});
+                if(compareList[cateId].length == 0) delete (compareList[cateId]);
+                alert("Removed product to compare factory", "warning")
             }else{
-                compareList.push(data);
-                if(compareList.length > 3)
-                    compareList = compareList.slice(-3);
+                compareList[cateId] = compareList[cateId] || [];
+                compareList[cateId].push(id);
+                if(compareList[cateId].length > 3)
+                    compareList[cateId] = compareList[cateId].slice(-3);
                 alert("Added product to compare factory")
             }
-            $.cookie("compareList", compareList)
+            $.cookie("compareList", compareList);
         }
     });
     $(".remove-compare").on("click", function (e) {
-        var element = $(e.currentTarget), data = {
-            id: element.data("id")
-        }, compareList = $.cookie("compareList") || [];
-        if(compareList.filter(item => item.id == data.id).length > 0){
-            compareList = compareList.filter(item => item.id != data.id);
-            alert("Removed product to compare factory")
+        var element = $(e.currentTarget),
+            compareList = $.cookie("compareList") || {},
+            id= element.data("id"),
+            cateId= element.data("cateId");
+        if(typeof id == "number" && typeof cateId == "number"){
+            if(typeof compareList[cateId] == "object" && compareList[cateId].filter(function(item){return item == id}).length > 0){
+                compareList[cateId] = compareList[cateId].filter(function(item){return item != id});
+                if(compareList[cateId].length == 0) delete (compareList[cateId]);
+                alert("Removed product to compare factory", "warning")
+            }
+            $.cookie("compareList", compareList);
         }
-        $.cookie("compareList", compareList);
         location.reload();
     });
 

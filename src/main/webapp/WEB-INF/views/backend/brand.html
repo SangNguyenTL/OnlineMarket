@@ -64,7 +64,7 @@
                             </td>
                             <td th:text="${brand.name}"></td>
                             <td>
-                                <form class="form-confirm" th:action="@{${relativePath}/delete}" method="POST">
+                                <form class="form-confirm" th:action="@{${relativePath + '/delete'}}" method="POST">
                                     <a th:href="@{${relativePath}+'/update/'+${brand.id}}"
                                        class="btn btn-outline b-info text-success btn-sm">Update</a>
                                     <input type="hidden" th:name="id" th:value="${brand.id}">

@@ -13,7 +13,6 @@ import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import onlinemarket.util.Help;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -21,70 +20,70 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import onlinemarket.model.other.AdvancedValidation;
-import onlinemarket.validation.UniqueProductSlug;
-
 @Entity
 @Table(name = "tb_product", schema = "dbo", catalog = "SmartMarket")
-@UniqueProductSlug(groups = {AdvancedValidation.CheckSlug.class})
 public class Product implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private Integer id;
-	private Brand brand;
-	private ProductCategory productCategory;
-	private User user;
-	private String name;
-	private String slug;
-	private String beforeSlug;
-	private String description;
-	private long price;
-	private String priceStr;
-	private String newPriceStr;
-	private Integer quantity;
-	private Integer numberOrder;
-	private Byte state;
-	private Integer weight;
-	private Date releaseDate;
-	private String size;
-	private Date createDate;
-	private Date updateDate;
-	private String featureImage;
-	private RatingStatistic ratingStatistic;
-    private ProductViewsStatistic productViewsStatistic;
-	private Set<Rating> ratings = new HashSet<>(0);
-	private Set<Event> events = new HashSet<>(0);
-	private List<ProductAttributeValues> productAttributeValues = new ArrayList<>();
-	private Set<ProductViews> productViewses = new HashSet<>(0);
-	private Set<Comment> comments = new HashSet<>(0);
-	private Set<Cart> carts = new HashSet<>(0);
-	private Integer countAttribute = -1;
-    private String sale;
-    private boolean saleProcess = false;
-    private long newPrice;
+	protected Integer id;
+	protected Brand brand;
+	protected ProductCategory productCategory;
+	protected User user;
+	protected String name;
+	protected String slug;
+	protected String description;
+	protected long price;
+	protected Integer quantity;
+	protected Integer numberOrder;
+	protected Byte state;
+	protected Integer weight;
+	protected Date releaseDate;
+	protected String size;
+	protected Date createDate;
+	protected Date updateDate;
+	protected String featureImage;
+	protected RatingStatistic ratingStatistic;
+    protected ProductViewsStatistic productViewsStatistic;
+	protected Set<Rating> ratings = new HashSet<>(0);
+	protected Set<Event> events = new HashSet<>(0);
+	protected List<ProductAttributeValues> productAttributeValues = new ArrayList<>();
+	protected Set<ProductViews> productViewses = new HashSet<>(0);
+	protected Set<Comment> comments = new HashSet<>(0);
+	protected Set<Cart> carts = new HashSet<>(0);
 
-	public Product() {
-	    newPrice = price;
-	}
+
+	public Product() {}
 
     public Product(Integer id) {
 		this.id = id;
     }
 
-    public void updateProduct(Product product){
-		brand = product.brand;
-		productCategory = product.productCategory;
-		user = product.user;
-		name = product.name;
-		slug = product.slug;
-		description = product.description;
-		price = product.price;
-		quantity = product.quantity;
-		state = product.state;
-		weight = product.weight;
-		size = product.size;
-		updateDate = new Date();
-		featureImage = product.featureImage;
+	public Product(Integer id, Brand brand, ProductCategory productCategory, User user, String name, String slug, String description, long price, Integer quantity, Integer numberOrder, Byte state, Integer weight, Date releaseDate, String size, Date createDate, Date updateDate, String featureImage, RatingStatistic ratingStatistic, ProductViewsStatistic productViewsStatistic, Set<Rating> ratings, Set<Event> events, List<ProductAttributeValues> productAttributeValues, Set<ProductViews> productViewses, Set<Comment> comments, Set<Cart> carts) {
+		this.id = id;
+		this.brand = brand;
+		this.productCategory = productCategory;
+		this.user = user;
+		this.name = name;
+		this.slug = slug;
+		this.description = description;
+		this.price = price;
+		this.quantity = quantity;
+		this.numberOrder = numberOrder;
+		this.state = state;
+		this.weight = weight;
+		this.releaseDate = releaseDate;
+		this.size = size;
+		this.createDate = createDate;
+		this.updateDate = updateDate;
+		this.featureImage = featureImage;
+		this.ratingStatistic = ratingStatistic;
+		this.productViewsStatistic = productViewsStatistic;
+		this.ratings = ratings;
+		this.events = events;
+		this.productAttributeValues = productAttributeValues;
+		this.productViewses = productViewses;
+		this.comments = comments;
+		this.carts = carts;
 	}
 
 	@Id
@@ -374,88 +373,7 @@ public class Product implements java.io.Serializable {
 
 	@Override
 	public int hashCode() {
-
 		return Objects.hash(id, slug);
 	}
 
-	@Transient
-    @JsonIgnore
-    public Integer getCountAttribute() {
-        return countAttribute;
-    }
-
-    public void setCountAttribute(Integer countAttribute) {
-        this.countAttribute = countAttribute;
-    }
-
-    public Integer processCount(){
-	    return countAttribute++;
-    }
-
-    public boolean checkProductAttributes(AttributeValues attributeValues){
-		ProductAttributeValues productAttributeValue = new ProductAttributeValues();
-		productAttributeValue.setAttributeValuesId(attributeValues.getId());
-		productAttributeValue.setProductId(this.getId());
-		return productAttributeValues.contains(productAttributeValue);
-	}
-
-	@Transient
-    @JsonIgnore
-	public String getPriceStr() {
-		return Help.format(price);
-	}
-
-	@Transient
-    @JsonIgnore
-	public String getNewPriceStr() {
-        Integer perSale = 0;
-        long value = 0;
-        if(!saleProcess){
-            for (Event event : events){
-                if(!event.getDateFrom().before(new Date()) && !event.getDateTo().after(new Date())) continue;
-                if(event.getPercentValue() != null && event.getMaxPrice() > price && event.getMinPrice() < price){
-                    perSale += event.getPercentValue();
-                }
-                if(event.getValue() != null  && event.getMaxPrice() > price && event.getMinPrice() < price)
-                    value += event.getValue();
-            }
-            Double number = Math.ceil(price - (price * perSale/100d) - value);
-            newPrice = number.longValue();
-
-            if(perSale != 0)
-                sale = "-"+perSale.toString()+"%";
-            else if(value != 0) sale = "-"+Help.format(value);
-            else sale = "";
-            saleProcess = true;
-        }
-		return Help.format(newPrice);
-	}
-
-    @Transient
-    @JsonIgnore
-    public String getSale() {
-	    return  sale;
-    }
-
-    @Transient
-    @JsonIgnore
-    public boolean isSaleProcess() {
-        return saleProcess;
-    }
-
-    @Transient
-    @JsonIgnore
-    public long getNewPrice() {
-        return newPrice;
-    }
-
-    @Transient
-    @JsonIgnore
-    public String getBeforeSlug() {
-        return beforeSlug;
-    }
-
-    public void setBeforeSlug(String beforeSlug) {
-        this.beforeSlug = beforeSlug;
-    }
 }

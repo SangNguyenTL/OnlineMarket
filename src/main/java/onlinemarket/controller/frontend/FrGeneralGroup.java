@@ -45,22 +45,18 @@ public class FrGeneralGroup extends MainController {
     public ModelMap populateAttribute(ModelMap model) {
         filterForm = new FilterForm();
 
-        FilterForm filterForm1 = new FilterForm();
-        filterForm1.getGroupSearch().put("state", "0");
-        filterForm1.setSize(5);
-        filterForm1.setOrder("desc");
-        filterForm1.setOrderBy("numberOrder");
-        model.put("productBestSellerList",productService.list(filterForm1).getList());
+        FilterForm filterFormTopList = new FilterForm();
+        filterFormTopList.getGroupSearch().put("state", "0");
+        filterFormTopList.setSize(5);
+        filterFormTopList.setOrder("desc");
+        filterFormTopList.setOrderBy("numberOrder");
+        model.put("productBestSellerList", productService.convertProductToFrProduct(productService.list(filterFormTopList).getList()));
 
-        filterForm1.setSize(5);
-        filterForm1.setOrder("desc");
-        filterForm1.setOrderBy("productViewsStatistic.total");
-        model.put("productBestViewing",productService.list(filterForm1).getList());
+        filterFormTopList.setOrderBy("productViewsStatistic.total");
+        model.put("productBestViewing", productService.convertProductToFrProduct(productService.list(filterFormTopList).getList()));
 
-        filterForm1.setSize(5);
-        filterForm1.setOrder("desc");
-        filterForm1.setOrderBy("ratingStatistic.totalScore");
-        model.put("productBestRating",productService.list(filterForm1).getList());
+        filterFormTopList.setOrderBy("ratingStatistic.totalScore");
+        model.put("productBestRating",productService.convertProductToFrProduct(productService.list(filterFormTopList).getList()));
 
         filterForm.getPrivateGroupSearch().put("state", "0");
         filterForm.setOrderBy("releaseDate");
@@ -87,7 +83,7 @@ public class FrGeneralGroup extends MainController {
         }
 
 
-        modelMap.put("result", productService.list(filterForm));
+        modelMap.put("result", productService.frontendProductResultObject( productService.list(filterForm)));
         modelMap.put("productCategory", productCategory);
         modelMap.put("brand", brand);
         modelMap.put("brandPath", brandPath);

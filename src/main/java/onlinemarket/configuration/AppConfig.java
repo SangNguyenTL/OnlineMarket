@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.core.env.Environment;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -50,6 +51,9 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 
 	@Autowired
 	SessionFactory sessionFactory;
+
+	@Autowired
+	private Environment environment;
 
 	@Override
 	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
@@ -92,7 +96,8 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 	public SpringResourceTemplateResolver templateResolver() {
 		SpringResourceTemplateResolver templateResolver = new SpringResourceTemplateResolver();
 		templateResolver.setApplicationContext(this.applicationContext);
-		templateResolver.setCharacterEncoding("UTF-8");
+		templateResolver.setCharacterEncoding(environment.getProperty("spring.thymeleaf.characterEncoding"));
+		templateResolver.setCacheable(Boolean.parseBoolean(environment.getProperty("spring.thymeleaf.cache")));
 		templateResolver.setPrefix("/WEB-INF/views/");
 		templateResolver.setSuffix(".html");
 		return templateResolver;
@@ -102,8 +107,8 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 	public ViewResolver viewResolver() {
 		ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();
 		viewResolver.setTemplateEngine(templateEngine());
-		viewResolver.setCharacterEncoding("UTF-8");
-		viewResolver.setContentType("text/html; charset=UTF-8");
+		viewResolver.setCharacterEncoding(environment.getProperty("spring.thymeleaf.characterEncoding"));
+		viewResolver.setContentType(environment.getProperty("spring.thymeleaf.contentType"));
 		return viewResolver;
 	}
 

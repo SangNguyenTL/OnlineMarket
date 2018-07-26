@@ -33,7 +33,7 @@ public class EventValidateValidator implements ConstraintValidator<EventValidate
         }
 
 
-        if(StringUtils.isBlank(event.getCode()) && event.getProducts().isEmpty()){
+        if(StringUtils.isBlank(event.getCode()) && (event.getProducts() == null || event.getProducts().isEmpty())){
             if(!hasError) context.disableDefaultConstraintViolation();
             hasError = true;
             context.buildConstraintViolationWithTemplate( "Code or product must be fill." )
