@@ -4,9 +4,9 @@
       xmlns:filter="http://thymeleafexamples"
       layout:decorate="templates/frontend">
 
-<th:block layout:fragment="head">
+<th:object layout:fragment="head">
 
-</th:block>
+</th:object>
 <!--/*@thymesVar id="productCategoryList" type="java.util.List<onlinemarket.model.ProductCategory>"*/-->
 <!--/*@thymesVar id="productBestSellerList" type="java.util.List<onlinemarket.model.Product>"*/-->
 <!--/*@thymesVar id="productBestViewing" type="java.util.List<onlinemarket.model.Product>"*/-->
@@ -32,48 +32,110 @@
         </ul>
         <div class="row">
             <aside id="column-left" class="col-sm-3 hidden-xs">
-                <th:block th:replace="/templates/aside::aside"></th:block>
+
+                <h3>Best seller</h3>
+                <div class="side-item">
+                    <div class="product-thumb clearfix" th:each="productBest : ${productBestSellerList}">
+                        <div class="image"><a th:href="@{'/product/'+${productBest.slug}}"><img
+                                th:src="@{${productBest.featureImage}}" class="img-responsive"/></a></div>
+                        <div class="caption">
+                            <h4><a th:href="@{'/product/'+${productBest.slug}}" th:alt="${productBest.name}" th:text="${productBest.name}"></a></h4>
+                            <p class="price"><span class="price-new" th:text="${productBest.newPriceStr}"></span>
+                                <span class="price-old" th:if="${productBest.sale != ''}"
+                                      th:text="${productBest.priceStr}"></span> <span th:if="${productBest.sale != ''}"
+                                                                                      class="saving"
+                                                                                      th:text="${productBest.sale}"></span>
+                            <div class="rating">
+                                            <span class="fa fa-stack" th:each="number : ${#numbers.sequence(1, 5)}">
+                                                <i th:if="${productBest.ratingStatistic != null && productBest.ratingStatistic.averageScore > number}" class="fa fa-star fa-stack-2x"></i>
+                                                <i class="fa fa-star-o fa-stack-2x"></i>
+                                            </span>
+                            </div>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <h3>Best viewing</h3>
+                <div class="side-item">
+                    <div class="product-thumb clearfix" th:each="productBest : ${productBestViewing}">
+                        <div class="image"><a th:href="@{'/product/'+${productBest.slug}}"><img
+                                th:src="@{${productBest.featureImage}}" class="img-responsive"/></a></div>
+                        <div class="caption">
+                            <h4><a th:href="@{'/product/'+${productBest.slug}}" th:alt="${productBest.name}" th:text="${productBest.name}"></a></h4>
+                            <p class="price"><span class="price-new" th:text="${productBest.newPriceStr}"></span>
+                                <span class="price-old" th:if="${productBest.sale != ''}"
+                                      th:text="${productBest.priceStr}"></span> <span th:if="${productBest.sale != ''}"
+                                                                                      class="saving"
+                                                                                      th:text="${productBest.sale}"></span>
+                            <div class="rating">
+                                            <span class="fa fa-stack" th:each="number : ${#numbers.sequence(1, 5)}">
+                                                <i th:if="${productBest.ratingStatistic != null && productBest.ratingStatistic.averageScore > number}" class="fa fa-star fa-stack-2x"></i>
+                                                <i class="fa fa-star-o fa-stack-2x"></i>
+                                            </span>
+                            </div>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <h3>Best Rating</h3>
+                <div class="side-item">
+                    <div class="product-thumb clearfix" th:each="productBest : ${productBestRating}">
+                        <div class="image"><a th:href="@{'/product/'+${productBest.slug}}"><img
+                                th:src="@{${productBest.featureImage}}" class="img-responsive"/></a></div>
+                        <div class="caption">
+                            <h4><a th:href="@{'/product/'+${productBest.slug}}" th:alt="${productBest.name}" th:text="${productBest.name}"></a></h4>
+                            <p class="price"><span class="price-new" th:text="${productBest.newPriceStr}"></span>
+                                <span class="price-old" th:if="${productBest.sale != ''}"
+                                      th:text="${productBest.priceStr}"></span> <span th:if="${productBest.sale != ''}"
+                                                                                      class="saving"
+                                                                                      th:text="${productBest.sale}"></span>
+                            <div class="rating">
+                                            <span class="fa fa-stack" th:each="number : ${#numbers.sequence(1, 5)}">
+                                                <i th:if="${productBest.ratingStatistic != null && productBest.ratingStatistic.averageScore > number}" class="fa fa-star fa-stack-2x"></i>
+                                                <i class="fa fa-star-o fa-stack-2x"></i>
+                                            </span>
+                            </div>
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </aside>
             <div id="content" class="col-sm-9">
                 <h1 class="title" th:text="${title}">All product</h1>
                 <h3 class="subtitle" th:text="${subTitle}"></h3>
-                <div th:each="event : ${result.list}" class="row">
-                    <div class="col-md-12 post">
+
+                <div class="row" th:each="event : ${result.list}">
+                    <div class="span8">
                         <div class="row">
-                            <div class="col-md-12"><h4><strong><a th:href="@{'/event/'+${event.id}}"
-                                                                  th:title="${event.name}" th:text="${event.name}">Title
-                                of the post</a></strong></h4></div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 post-header-line">
-                                <span class="glyphicon glyphicon-user"></span>by <a href="#"
-                                                                                    th:text="${event.publisher.firstName}">Bhaumik</a>
-                                | <span class="glyphicon glyphicon-calendar">
-                            </span>
-                                <th:block th:text="${#dates.format(event.createDate, 'MMMM dd, yyyy - hh:mm a')}">
-                                    Posted on January 1, 2018 at 12:00 PM
-                                </th:block>
+                            <div class="span8">
+                                <h4><strong><a th:href="@{'/eveny/'+${event.id}}" th:title="${event.name}" th:text="${event.name}">Title of the post</a></strong></h4>
                             </div>
                         </div>
-                        <div class="row post-content">
-                            <div class="col-md-5">
+                        <div class="row">
+                            <div class="span2">
                                 <a th:href="@{'/event/'+${event.id}}" class="thumbnail">
-                                    <img th:if="${event.featureImage != null}" th:src="@{${event.featureImage}}"
-                                         alt="" class="img-responsive">
-                                    <img th:if="${event.featureImage == null}"
-                                         th:src="@{/assets/images/defaultImage.jpg}" alt="" class="img-responsive">
+                                    <img th:if="${event.featureImage != null}" th:src="@{${event.featureImage}}" alt="">
+                                    <img th:if="${event.featureImage == null}" th:src="@{/assets/images/defaultImage.jpg}" alt="">
                                 </a>
                             </div>
-                            <div class="col-md-7">
-                                <p th:utext="${#strings.abbreviate(T(org.jsoup.Jsoup).parse(event.content).text(),150)}"></p>
-                                <p><a class="btn btn-read-more" th:href="@{'/event/'+${event.id}}">Read more</a></p>
+                            <div class="span6">
+                                <p><a class="btn" th:href="@{'/event/'+${event.id}}" >Read more</a></p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="span8">
+                                <p></p>
+                                <p>
+                                    <i class="icon-user"></i> by <a href="#" th:text="${event.publisher.firstName}">John</a>
+                                    <th:block th:text="${#dates.format(event.createDate, 'MMMM dd, yyyy - hh:mm a')}">Posted on January 1, 2018 at 12:00 PM</th:block>
+                                </p>
                             </div>
                         </div>
                     </div>
-
                 </div>
+                <hr>
 
-                <div class="row padding">
+                <div class="row">
                     <div class="col-sm-6 text-left">
                         <filter:pagination filter:currentPage="${page}"
                                            filter:totalPages="${result.totalPages}"
@@ -82,12 +144,13 @@
                     <div class="col-sm-6 text-right"
                          th:with="productFrom=${result.getCurrentPage()*filterForm.size +1 - filterForm.size},productTo=${result.getCurrentPage()*filterForm.size}"
                          th:text="${'Showing '+ productFrom +' to '+ productTo +' ('+result.totalPages+' pages)'}">
-
+                        Showing 1 to 12 of 15 (2 Pages)
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 
 </body>

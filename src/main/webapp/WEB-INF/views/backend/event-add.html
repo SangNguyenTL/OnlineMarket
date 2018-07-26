@@ -131,8 +131,8 @@
                                 </div>
                                 <label class="col-sm-2 form-control-label">Code</label>
                                 <div class="col-sm-4">
-                                    <div class="input-group">
-                                        <input th:errorclass="parsley-error" class="form-control"
+                                    <div th:classappend="${#fields.hasErrors('code')} ? 'parsley-error'" class="input-group">
+                                        <input class="form-control"
                                                type="text" th:field="*{code}"
                                                 maxlength="32"/>
                                         <span class="input-group-btn">
@@ -197,7 +197,7 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 form-control-label">Products</label>
                                 <div class="col-sm-10">
-                                    <select th:errorclass="parsley-error" class="form-control" th:field="*{products}" ui-jp="select2" multiple ui-options="window.searchProduct">
+                                    <select class="form-control" th:field="*{products}" ui-jp="select2" multiple ui-options="window.searchProduct">
                                         <option th:each="product : *{products}" th:value="${{product}}" th:text="${product.name}"></option>
                                     </select>
                                 </div>

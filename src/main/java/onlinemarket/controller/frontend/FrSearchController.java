@@ -34,33 +34,9 @@ public class FrSearchController extends MainController {
 
         model.put("relativePath", relativePath);
         model.put("filterForm", filterForm);
-        model.put("pageTitle", "Search");
 
         generateBreadcrumbs();
         breadcrumbs.add(new String[]{relativePath, "Search"});
-
-
-        return model;
-    }
-    @RequestMapping( value = "", method = {RequestMethod.GET, RequestMethod.POST})
-    public String mainPage(@ModelAttribute("filterForm") FilterForm filterForm, ModelMap modelMap){
-        processFilterForm(filterForm);
-        modelMap.put("result", productService.frontendProductResultObject(productService.list(filterForm)));
-        return "frontend/search";
-    }
-
-
-    @RequestMapping( value = "/page/{page:^\\d+}", method = {RequestMethod.GET, RequestMethod.POST})
-    public String mainPagePagination(@PathVariable("page") Integer page, @ModelAttribute("filterForm") FilterForm filterForm, ModelMap modelMap){
-        processFilterForm(filterForm);
-        filterForm.setCurrentPage(page);
-        modelMap.put("pageTitle", "Pages "+page+" | Search");
-        modelMap.put("result", productService.frontendProductResultObject(productService.list(filterForm)));
-
-        return "frontend/search";
-    }
-
-    void processFilterForm(FilterForm filterForm){
         String orderBy = filterForm.getGroupSearch().get("orderBy");
         if(StringUtils.isNotBlank(orderBy)){
             String arrayOrderBy[] = orderBy.split("\\.");
@@ -73,6 +49,26 @@ public class FrSearchController extends MainController {
                 filterForm.setOrder(StringUtils.equalsIgnoreCase(arrayOrderBy[1], "asc") ? "asc" : "desc");
             }
         }
+
+        return model;
     }
+    @RequestMapping( value = "", method = {RequestMethod.GET, RequestMethod.POST})
+    public String mainPage(@ModelAttribute("filterForm") FilterForm filterForm, ModelMap modelMap){
+
+        modelMap.put("result", productService.list(filterForm));
+
+        return "frontend/search";
+    }
+
+
+    @RequestMapping( value = "/page/{page:^\\d+}", method = {RequestMethod.GET, RequestMethod.POST})
+    public String mainPagePagination(@PathVariable("page") Integer page, @ModelAttribute("filterForm") FilterForm filterForm, ModelMap modelMap){
+
+        filterForm.setCurrentPage(page);
+        modelMap.put("result", productService.list(filterForm));
+
+        return "frontend/search";
+    }
+
 }
 

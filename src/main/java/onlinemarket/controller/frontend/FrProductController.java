@@ -47,18 +47,22 @@ public class FrProductController extends MainController {
     @ModelAttribute
     public ModelMap populateAttribute(@PathVariable("slug") String slug, ModelMap model) throws NoHandlerFoundException, ProductNotFoundException {
 
-        FilterForm filterFormTopList = new FilterForm();
-        filterFormTopList.getGroupSearch().put("state", "0");
-        filterFormTopList.setSize(5);
-        filterFormTopList.setOrder("desc");
-        filterFormTopList.setOrderBy("numberOrder");
-        model.put("productBestSellerList", productService.convertProductToFrProduct(productService.list(filterFormTopList).getList()));
+        FilterForm filterForm1 = new FilterForm();
+        filterForm1.getGroupSearch().put("state", "0");
+        filterForm1.setSize(5);
+        filterForm1.setOrder("desc");
+        filterForm1.setOrderBy("numberOrder");
+        model.put("productBestSellerList",productService.list(filterForm1).getList());
 
-        filterFormTopList.setOrderBy("productViewsStatistic.total");
-        model.put("productBestViewing", productService.convertProductToFrProduct(productService.list(filterFormTopList).getList()));
+        filterForm1.setSize(5);
+        filterForm1.setOrder("desc");
+        filterForm1.setOrderBy("productViewsStatistic.total");
+        model.put("productBestViewing",productService.list(filterForm1).getList());
 
-        filterFormTopList.setOrderBy("ratingStatistic.totalScore");
-        model.put("productBestRating",productService.convertProductToFrProduct(productService.list(filterFormTopList).getList()));
+        filterForm1.setSize(5);
+        filterForm1.setOrder("desc");
+        filterForm1.setOrderBy("ratingStatistic.totalScore");
+        model.put("productBestRating",productService.list(filterForm1).getList());
 
         product = productService.getByDeclaration("slug", slug);
         relativePath = "/product/" + slug;
@@ -70,10 +74,11 @@ public class FrProductController extends MainController {
         generateBreadcrumbs();
         breadcrumbs.add(new String[]{"/product-category/" + product.getProductCategory().getSlug(), product.getProductCategory().getName()});
         model.put("pageTitle", title);
-        model.put("product", productService.convertProductToFrProduct(product));
+        model.put("product", product);
         model.put("relativePath", relativePath);
 
-        model.put("relatedProducts", productService.convertProductToFrProduct(productService.getRelatedProduct(product.getProductCategory(), product.getBrand(), product)));
+        List<Product> relatedProducts = productService.getRelatedProduct(product.getProductCategory(), product.getBrand());
+        model.put("relatedProducts", relatedProducts);
 
         filterForm = new FilterForm();
         filterForm.setOrderBy("createRateDate");
@@ -90,6 +95,7 @@ public class FrProductController extends MainController {
             modelMap.put("pathAction", relativePath + "/add-rating");
             ResultObject<Rating> resultObject = ratingService.listByProduct(product, filterForm);
             modelMap.put("result", resultObject);
+            modelMap.put("pageTitle", "Menu");
             modelMap.put("rating", new Rating());
         } catch (ProductNotFoundException e) {
 
@@ -106,11 +112,12 @@ public class FrProductController extends MainController {
             modelMap.put("pathAction", relativePath + "/add-rating");
             ResultObject<Rating> resultObject = ratingService.listByProduct(product, filterForm);
             modelMap.put("result", resultObject);
-            modelMap.put("pageTitle", "Pages "+page+" | "+product.getName());
+            modelMap.put("pageTitle", "Menu");
             modelMap.put("rating", new Rating());
         } catch (ProductNotFoundException e) {
 
         }
+
         return "frontend/product";
     }
 

@@ -66,11 +66,7 @@ public abstract class AbstractDao<PK extends Serializable, T> {
     public T getByDeclaration(String key, Object value) {
         Criteria criteria = createEntityCriteria();
         criteria.add(Restrictions.eq(key, value));
-        List<T> list =  criteria.list();
-        if(list.size() > 0) {
-            return  list.get(0);
-        }else
-            return null;
+        return (T) criteria.uniqueResult();
     }
 
     public void persist(T entity) {
@@ -125,11 +121,7 @@ public abstract class AbstractDao<PK extends Serializable, T> {
             key = key + "." + arrayKey[1];
         }
         criteria.add(Restrictions.eq(key, value));
-        List<T> list =  criteria.list();
-        if(list.size() > 0) {
-            return  list.get(0);
-        }else
-            return null;
+        return (T) criteria.uniqueResult();
     }
 
     @SuppressWarnings("unchecked")

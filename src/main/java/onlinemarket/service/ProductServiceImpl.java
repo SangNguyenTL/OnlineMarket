@@ -1,6 +1,5 @@
 package onlinemarket.service;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,12 +10,10 @@ import onlinemarket.form.filter.SearchSelect;
 import onlinemarket.model.*;
 import onlinemarket.result.api.Pagination;
 import onlinemarket.result.api.ResultProduct;
-import onlinemarket.util.Help;
 import onlinemarket.util.Slugify;
 import onlinemarket.util.exception.product.ProductHasCommentException;
 import onlinemarket.util.exception.product.ProductNotFoundException;
 import onlinemarket.util.exception.productCategory.ProductCategoryNotFoundException;
-import onlinemarket.view.FrontendProduct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -91,7 +88,7 @@ public class ProductServiceImpl implements ProductService {
         product.setProductCategory(productCategory);
         product.setSlug(slugify.slugify(product.getSlug()));
         product1.getProductAttributeValues().clear();
-        updateProduct(product1,product);
+        product1.updateProduct(product);
         product1.getProductAttributeValues().addAll(makeListProductAttributeValues(product1, product.getProductAttributeValues()));
         productDao.update(product1);
     }
@@ -108,17 +105,6 @@ public class ProductServiceImpl implements ProductService {
     public ResultObject<Product> listByProductCategory(ProductCategory productCategory, FilterForm filterForm) throws ProductCategoryNotFoundException {
         if (productCategory == null) throw new ProductCategoryNotFoundException();
         return productDao.listByDeclaration("productCategory", productCategory, filterForm);
-    }
-
-    @Override
-    public ResultObject<FrontendProduct> frontendProductResultObject(ResultObject<Product> productResultObject) {
-
-        ResultObject<FrontendProduct> frontendProductResultObject = new ResultObject<>();
-        frontendProductResultObject.setTotalPages(productResultObject.getTotalPages());
-        frontendProductResultObject.setCurrentPage(productResultObject.getCurrentPage());
-        frontendProductResultObject.setList(convertProductToFrProduct(productResultObject.getList()));
-
-        return frontendProductResultObject;
     }
 
     @Override
@@ -144,89 +130,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> getRelatedProduct(ProductCategory productCategory, Brand brand, Product product) {
-        return productDao.getRelatedProduct(productCategory,brand, product);
+    public List<Product> getRelatedProduct(ProductCategory productCategory, Brand brand) {
+        return productDao.getRelatedProduct(productCategory,brand);
     }
 
-    public void updateProduct(Product oldProduct, Product newProduct){
-        oldProduct.setBrand(newProduct.getBrand());
-        oldProduct.setProductCategory(newProduct.getProductCategory());
-        oldProduct.setUser(newProduct.getUser());
-        oldProduct.setName(newProduct.getName());
-        oldProduct.setSlug(newProduct.getSlug());
-        oldProduct.setDescription(newProduct.getDescription());
-        oldProduct.setPrice(newProduct.getPrice());
-        oldProduct.setQuantity(newProduct.getQuantity());
-        oldProduct.setState(newProduct.getState());
-        oldProduct.setWeight(newProduct.getWeight());
-        oldProduct.setSize(newProduct.getSize());
-        oldProduct.setUpdateDate(newProduct.getUpdateDate());
-        oldProduct.setFeatureImage(newProduct.getFeatureImage());
-    }
-
-    @Override
-    public List<FrontendProduct> convertProductToFrProduct(List<Product> productList) {
-        List<FrontendProduct> frontendProductList = new ArrayList<>();
-        for(Product product : productList){
-            frontendProductList.add(convertProductToFrProduct(product));
-        }
-        return frontendProductList;
-    }
-
-    public FrontendProduct convertProductToFrProduct(Product product){
-
-        FrontendProduct frontendProduct =
-                new FrontendProduct(
-                        product.getId(),
-                        product.getBrand(),
-                        product.getProductCategory(),
-                        product.getUser(),
-                        product.getName(),
-                        product.getSlug(),
-                        product.getDescription(),
-                        product.getPrice(),
-                        product.getQuantity(),
-                        product.getNumberOrder(),
-                        product.getState(),
-                        product.getWeight(),
-                        product.getReleaseDate(),
-                        product.getSize(),
-                        product.getCreateDate(),
-                        product.getUpdateDate(),
-                        product.getFeatureImage(),
-                        product.getRatingStatistic(),
-                        product.getProductViewsStatistic(),
-                        product.getRatings(),
-                        product.getEvents(),
-                        product.getProductAttributeValues(),
-                        product.getProductViewses(),
-                        product.getComments(),
-                        product.getCarts()
-                );
-
-        frontendProduct.setNewPrice(product.getPrice());
-        frontendProduct.setPriceStr(Help.format(product.getPrice()));
-
-        Integer perSale = 0;
-        long value = 0;
-
-        for (Event event : frontendProduct.getEvents()){
-            if(!event.getDateFrom().before(new Date()) && !event.getDateTo().after(new Date())) continue;
-            if(event.getPercentValue() != null && event.getMaxPrice() > frontendProduct.getPrice() && event.getMinPrice() < frontendProduct.getPrice()){
-                perSale += event.getPercentValue();
-            }
-            if(event.getValue() != null  && event.getMaxPrice() > frontendProduct.getPrice() && event.getMinPrice() < frontendProduct.getPrice())
-                value += event.getValue();
-        }
-        Double number = Math.ceil(frontendProduct.getPrice() - (frontendProduct.getPrice() * perSale/100d) - value);
-
-        frontendProduct.setNewPrice(number.longValue());
-        frontendProduct.setNewPriceStr(Help.format(frontendProduct.getNewPrice()));
-
-        if(perSale != 0)
-            frontendProduct.setSale("-"+perSale.toString()+"%");
-        else if(value != 0) frontendProduct.setSale("-"+Help.format(value));
-
-        return frontendProduct;
-    }
 }

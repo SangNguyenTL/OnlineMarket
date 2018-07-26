@@ -117,6 +117,8 @@ public class UserServiceImpl implements UserService {
 		if(user.getId() == 1) throw new UserIsSuperAdminException();
 		User user1 = userDao.getUniqueResultBy("posts.user", user);
 		if(user1 !=null) throw new UserHasPostException("User has post "+user1.getPosts().iterator().next().getTitle());
+		User user2 = userDao.getUniqueResultBy("events.user", user);
+		if(user2 != null) throw new UserHasEventException("User has event "+user2.getEvents().iterator().next().getName());
 		User user3 = userDao.getUniqueResultBy("products.user", user);
 		if(user3 != null) throw new UserHasProductException("User has product "+user3.getProducts().iterator().next().getName());
 

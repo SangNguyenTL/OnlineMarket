@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import onlinemarket.controller.MainController;
 import onlinemarket.form.filter.FilterForm;
+import onlinemarket.form.filter.ProductCompare;
 import onlinemarket.model.ProductCategory;
 import onlinemarket.service.ProductCategoryService;
 import onlinemarket.service.ProductService;
@@ -14,8 +15,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/compare-product/{productCategorySlug:[\\d\\w-]+}")
@@ -30,7 +32,7 @@ public class FrCompareProduct extends MainController {
     private FilterForm filterForm;
 
     @RequestMapping( value = "", method = {RequestMethod.GET, RequestMethod.POST})
-    public String mainPage(@PathVariable("productCategorySlug") String productCategorySlug, @CookieValue(value = "compareList", required = false)String listCompare, ModelMap modelMap) throws NoHandlerFoundException {
+    public String mainPage(@PathVariable("productCategorySlug") String productCategorySlug, @CookieValue("compareList")String listCompare, ModelMap modelMap) throws NoHandlerFoundException {
 
 
         ProductCategory productCategory = productCategoryService.getByDeclaration("slug", productCategorySlug);
@@ -38,16 +40,19 @@ public class FrCompareProduct extends MainController {
 
         ObjectMapper objectMapper = new ObjectMapper();
         TypeFactory typeFactory = objectMapper.getTypeFactory();
-        HashMap<String,List<Object>> productCompareList = new HashMap<>();
+        List<ProductCompare> productCompareList = new ArrayList<>();
         try {
-            if(listCompare != null)
-                productCompareList = objectMapper.readValue(listCompare, HashMap.class);
+            productCompareList = objectMapper.readValue(listCompare, typeFactory.constructCollectionType(List.class, ProductCompare.class));
         } catch (IOException e) {
-
+            e.printStackTrace();
         }
-
+        if(productCompareList.isEmpty()) throw new NoHandlerFoundException(null,null,null);
         filterForm = new FilterForm();
-        List<Object> listValue = productCompareList.get(productCategory.getId().toString());
+        List<Object> listValue = new ArrayList<>();
+
+        for(ProductCompare productCompare : productCompareList){
+            if(productCompare.getCateId().equals(productCategory.getId()))listValue.add(productCompare.getId());
+        }
 
         filterForm.getPrivateGroupSearch().put("state", "0");
         filterForm.setOrderBy("createDate");
@@ -60,10 +65,9 @@ public class FrCompareProduct extends MainController {
         breadcrumbs.add(new String[]{"/product-category/"+productCategorySlug, productCategory.getName()});
         breadcrumbs.add(new String[]{relativePath, "Compare"});
         modelMap.put("relativePath", relativePath);
-
         modelMap.put("productCategory", productCategory);
-        if(listValue instanceof List && !listValue.isEmpty())
-            modelMap.put("result", productService.frontendProductResultObject(productService.listByInList("id", listValue, filterForm)));
+
+        modelMap.put("result", productService.listByInList("id", listValue, filterForm));
 
         return "frontend/compare";
     }

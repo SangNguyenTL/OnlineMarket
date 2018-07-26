@@ -44,9 +44,10 @@ public class BrandServiceImpl implements BrandService{
 	}
 
 	@Override
-	public void delete(Integer id) throws BrandNotFoundException, BrandHasProductException {
+	public void delete(Integer id) throws BrandNotFoundException, BrandHasEventException, BrandHasProductException {
 		Brand brand = brandDao.getByKey(id);
 		if(brand == null) throw new BrandNotFoundException();
+		if(eventDao.getUniqueResultBy("brand", brand) != null) throw new BrandHasEventException();
 		if(productDao.getByDeclaration("brand", brand) != null) throw new BrandHasProductException();
 		brandDao.delete(brand);
 	}

@@ -18,7 +18,7 @@
         <div class="row">
             <div class="col-md-9">
 
-                <!--/*@thymesVar id="product" type="onlinemarket.form.product.ProductForm"*/-->
+                <!--/*@thymesVar id="product" type="onlinemarket.model.Product"*/-->
                 <form id="formProduct" ui-jp="parsley" role="form" th:object="${product}" th:action="@{${pathAction}}" method="POST">
                     <input th:if="${action} == 'update'" type="hidden" th:field="*{id}"/>
                     <input th:if="${action} == 'update'" type="hidden" id="beforeSlug" name="beforeSlug"

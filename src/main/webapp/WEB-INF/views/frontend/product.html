@@ -4,9 +4,9 @@
       xmlns:filter="http://thymeleafexamples"
       layout:decorate="templates/frontend">
 
-<th:block layout:fragment="head">
+<th:object layout:fragment="head">
 
-</th:block>
+</th:object>
 <!--/*@thymesVar id="productCategoryList" type="java.util.List<onlinemarket.model.ProductCategory>"*/-->
 <!--/*@thymesVar id="brandList" type="java.util.List<onlinemarket.model.Brand>"*/-->
 <!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
@@ -27,9 +27,9 @@
         <div class="row">
             <!--Middle Part Start-->
             <div id="content" class="col-sm-9">
-                <div itemscope="" itemtype="http://schema.org/Product">
-                    <h1 class="title" itemprop="name" th:text="${product.name}"></h1>
-                    <div class="row product-info simpleCart_shelfItem">
+                <div class="simpleCart_shelfItem" itemscope="" itemtype="http://schema.org/Product">
+                    <h1 class="title item_name" itemprop="name" th:text="${product.name}"></h1>
+                    <div class="row product-info ">
                         <div class="col-sm-6">
                             <div class="image">
                                 <img class="img-responsive item_image" itemprop="image" id="zoom_01"
@@ -42,8 +42,7 @@
                                                                                                         th:text="${product.brand.name}"></span></a>
                                 </li>
                                 <li><b>Size:</b> <span itemprop="mpn" th:text="${product.size}"></span></li>
-                                <li class="item_name hidden" th:text="${product.name}"></li>
-                                <li><b>Weight:</b><th:block th:text="${product.weight + 'g'}"></th:block></li>
+                                <li><b>Weight:</b><a th:text="${product.weight + 'g'}"></a></li>
                                 <li th:switch="${product.state}"><b>Availability:</b>
                                     <span class="instock" th:case=0>In stock</span>
                                     <span class="nostock" th:case=1>Out of stock</span>
@@ -57,14 +56,14 @@
                             </ul>
                             <ul class="price-box">
                                 <li class="price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-                                    <span class="price-old" th:if="${!product.newPriceStr.equals('') && !product.sale.equals('')}"
+                                    <span class="price-old" th:if="${product.sale != '' && product.newPriceStr != ''}"
                                           th:text="${product.priceStr+'₫'}"></span>
-                                    <span class="price"
+                                    <span th:if="${product.sale != ''}" class="price"
                                           th:text="${#numbers.formatInteger(product.newPrice, 3, 'POINT')+'₫'}"></span>
                                 </li>
                             </ul>
-                            <p class="item_price hidden" th:text="${product.newPrice}"></p>
-                            <p class="item_id hidden" th:text="${product.id}"></p>
+                            <p class="hidden" th:class="item_price" th:text="${product.newPrice}"></p>
+                            <p class="hidden" th:class="item_id" th:text="${product.id}"></p>
                             <div id="product">
                                 <h3 class="subtitle">Available Options</h3>
 
@@ -208,9 +207,43 @@
                     </div>
                     <h3 class="subtitle">Related Products</h3>
                     <div class="owl-carousel related_pro">
-                        <th:block th:each="productRelative : ${relatedProducts}">
-                            <div th:replace="/templates/item::productGrid (${productRelative})"></div>
-                        </th:block>
+                        <div class="simpleCart_shelfItem product-thumb clearfix">
+                            <div class="image"><a th:href="@{'/product/'+${product.slug}}"><img
+                                    th:src="@{${product.featureImage}}" class="img-responsive item_image"/></a></div>
+                            <div>
+                                <div class="caption">
+                                    <h4><a th:href="@{'/product/'+${product.slug}}" data-toggle="tooltip"
+                                           th:title="${product.name}" th:text="${product.name}" class="item_name"></a></h4>
+                                    <p class="price"><span class="price-new" th:text="${product.newPriceStr}"></span>
+                                        <span class="price-old" th:if="${product.sale != ''}"
+                                              th:text="${product.priceStr}"></span> <span th:if="${product.sale != ''}"
+                                                                                          class="saving"
+                                                                                          th:text="${product.sale}"></span>
+                                    </p>
+                                    <p class="hidden" th:class="item_price" th:text="${product.newPrice}"></p>
+                                    <p class="hidden" th:class="item_id" th:text="${product.id}"></p>
+                                    <div class="rating">
+                                        <span class="fa fa-stack" th:each="number : ${#numbers.sequence(1, 5)}">
+                                            <i th:if="${product.ratingStatistic != null && product.ratingStatistic.averageScore > number}"
+                                               class="fa fa-star fa-stack-2x"></i>
+                                            <i class="fa fa-star-o fa-stack-2x"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="button-group">
+                                    <button class="btn-primary item_add" type="button" onClick=""><span>Add to Cart</span>
+                                    </button>
+                                    <div class="add-to-links">
+                                        <button type="button" data-toggle="tooltip"
+                                                th:attr="data-cate-id=${product.productCategory.id},data-id=${product.id}"
+                                                title="Compare this Product" class="compare-product"><i
+                                                class="fa fa-exchange"></i>
+                                            <span>Compare this Product</span></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -228,7 +261,78 @@
                         </li>
                     </ul>
                 </div>
-                <th:block th:include="/templates/aside::aside"></th:block>
+                <h3>Best seller</h3>
+                <div class="side-item">
+                    <div class="product-thumb clearfix" th:each="productBest : ${productBestSellerList}">
+                        <div class="image"><a th:href="@{'/product/'+${productBest.slug}}"><img
+                                th:src="@{${productBest.featureImage}}" class="img-responsive"/></a></div>
+                        <div class="caption">
+                            <h4><a th:href="@{'/product/'+${productBest.slug}}" th:alt="${productBest.name}"
+                                   th:text="${productBest.name}"></a></h4>
+                            <p class="price"><span class="price-new" th:text="${productBest.newPriceStr}"></span>
+                                <span class="price-old" th:if="${productBest.sale != ''}"
+                                      th:text="${productBest.priceStr}"></span> <span th:if="${productBest.sale != ''}"
+                                                                                      class="saving"
+                                                                                      th:text="${productBest.sale}"></span>
+                            <div class="rating">
+                                            <span class="fa fa-stack" th:each="number : ${#numbers.sequence(1, 5)}">
+                                                <i th:if="${productBest.ratingStatistic != null && productBest.ratingStatistic.averageScore > number}"
+                                                   class="fa fa-star fa-stack-2x"></i>
+                                                <i class="fa fa-star-o fa-stack-2x"></i>
+                                            </span>
+                            </div>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <h3>Best viewing</h3>
+                <div class="side-item">
+                    <div class="product-thumb clearfix" th:each="productBest : ${productBestViewing}">
+                        <div class="image"><a th:href="@{'/product/'+${productBest.slug}}"><img
+                                th:src="@{${productBest.featureImage}}" class="img-responsive"/></a></div>
+                        <div class="caption">
+                            <h4><a th:href="@{'/product/'+${productBest.slug}}" th:alt="${productBest.name}"
+                                   th:text="${productBest.name}"></a></h4>
+                            <p class="price"><span class="price-new" th:text="${productBest.newPriceStr}"></span>
+                                <span class="price-old" th:if="${productBest.sale != ''}"
+                                      th:text="${productBest.priceStr}"></span> <span th:if="${productBest.sale != ''}"
+                                                                                      class="saving"
+                                                                                      th:text="${productBest.sale}"></span>
+                            <div class="rating">
+                                            <span class="fa fa-stack" th:each="number : ${#numbers.sequence(1, 5)}">
+                                                <i th:if="${productBest.ratingStatistic != null && productBest.ratingStatistic.averageScore > number}"
+                                                   class="fa fa-star fa-stack-2x"></i>
+                                                <i class="fa fa-star-o fa-stack-2x"></i>
+                                            </span>
+                            </div>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <h3>Best Rating</h3>
+                <div class="side-item">
+                    <div class="product-thumb clearfix" th:each="productBest : ${productBestRating}">
+                        <div class="image"><a th:href="@{'/product/'+${productBest.slug}}"><img
+                                th:src="@{${productBest.featureImage}}" class="img-responsive"/></a></div>
+                        <div class="caption">
+                            <h4><a th:href="@{'/product/'+${productBest.slug}}" th:alt="${productBest.name}"
+                                   th:text="${productBest.name}"></a></h4>
+                            <p class="price"><span class="price-new" th:text="${productBest.newPriceStr}"></span>
+                                <span class="price-old" th:if="${productBest.sale != ''}"
+                                      th:text="${productBest.priceStr}"></span> <span th:if="${productBest.sale != ''}"
+                                                                                      class="saving"
+                                                                                      th:text="${productBest.sale}"></span>
+                            <div class="rating">
+                                            <span class="fa fa-stack" th:each="number : ${#numbers.sequence(1, 5)}">
+                                                <i th:if="${productBest.ratingStatistic != null && productBest.ratingStatistic.averageScore > number}"
+                                                   class="fa fa-star fa-stack-2x"></i>
+                                                <i class="fa fa-star-o fa-stack-2x"></i>
+                                            </span>
+                            </div>
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </aside>
             <!--Right Part End -->
         </div>
