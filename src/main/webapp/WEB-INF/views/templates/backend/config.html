@@ -227,10 +227,10 @@
     <form ui-jp="parsley" role="form" th:object="${contactConfig}" th:action="@{/admin/config/contact}" method="POST">
         <div class="form-group row">
             <label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Address</label>
-            <div class="col-sm-12 col-md-8 col-lg-9">
-                <input th:errorclass="parsley-error" class="form-control" type="text" th:field="*{address}"
+            <div class="col-sm-12 col-md-8 col-lg-9 select2-bootstrap-append">
+                <select th:errorclass="parsley-error" class="form-control select2" type="text" th:field="*{address}"
                        placeholder="371/50/2 Truong Chinh, District Tan Binh, HCM" required data-parsley-id="address"
-                       data-parsley-length="[10, 255]"/>
+                        data-parsley-length="[10, 255]" ui-options="{theme: 'bootstrap'}"></select>
                 <ul class="parsley-errors-list filled" id="parsley-id-address" th:if="${#fields.hasErrors('address')}">
                     <li th:errors="*{address}"></li>
                 </ul>

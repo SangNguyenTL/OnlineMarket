@@ -1,4 +1,4 @@
-;(function(root, factory) {
+;(function (root, factory) {
     if (typeof define === 'function' && define.amd) {
         define(['jquery'], factory);
     } else if (typeof exports === 'object') {
@@ -6,7 +6,7 @@
     } else {
         root.MyMenu = factory(root.jQuery);
     }
-}(this, function($) {
+}(this, function ($) {
     var pluginName = "myMenu";
 
     function MyMenu(element, options) {
@@ -38,6 +38,10 @@
 
         this.equalDataItem = this.equalDataItem.bind(this);
 
+        this.beforeSend = this.beforeSend.bind(this);
+
+        this.complete = this.complete.bind(this);
+
         this.form.on("submit", this.onSubmitForm);
 
         this.form.btnReset.on("click", this.onResetForm);
@@ -46,13 +50,15 @@
 
     }
 
-    MyMenu.prototype.onChangeItem = function(e, b) {
+    MyMenu.prototype.onChangeItem = function (e, b) {
         if (e.currentTarget.id != b.id)
             return;
         var _this = this
             , item = $(e.currentTarget)
             , ol = item.parent('.dd-list')
-            , parent = ol.parent(".dd-item"), array = [];
+            , parent = ol.parent(".dd-item"), array = [],
+            promise = false,
+            deferred = new $.Deferred();
         _this.oldData = Object.assign({}, item.data());
         if (_this.pending) {
             alert("Processing...");
@@ -64,28 +70,36 @@
         else
             item.data("parentId", null);
 
-        ol.children().each(function(i, v) {
+        ol.children().each(function (i, v) {
             v = $(v);
             v.data("priority", i);
         });
         if (_this.equalDataItem(item.data()))
             return;
-        ol.children().each(function(i, v) {
+        _this.beforeSend();
+        ol.children().each(function (i, v) {
             v = $(v);
-            array.push(_this.request("api/menu/update", JSON.stringify(v.data())));
+            if(!promise) promise = deferred.promise();
+            promise = _this.request("api/menu/update", JSON.stringify(v.data())).then(
+
+            );
+            deferred.resolve();
+            return promise;
+
         });
-        $.when(array).then(function(){
+        $.when(array).then(function () {
+            _this.complete();
             _this.generateListItem();
         })
     }
     ;
 
-    MyMenu.prototype.equalDataItem = function(data) {
+    MyMenu.prototype.equalDataItem = function (data) {
         var _this = this, flag = true;
         if (!this.oldData)
             return flag;
-        $.each(_this.oldData, function(i, v) {
-            if (data[i] != _this.oldData[i]){
+        $.each(_this.oldData, function (i, v) {
+            if (data[i] != _this.oldData[i]) {
                 flag = false;
                 return;
             }
@@ -94,11 +108,11 @@
     }
     ;
 
-    MyMenu.prototype.getFormData = function($form) {
+    MyMenu.prototype.getFormData = function ($form) {
         var unindexed_array = $form.serializeArray();
         var indexed_array = {};
 
-        $.map(unindexed_array, function(n, i) {
+        $.map(unindexed_array, function (n, i) {
             var value = n['value'];
             if (!isNaN(value))
                 value = parseInt(value);
@@ -111,7 +125,7 @@
     }
     ;
 
-    MyMenu.prototype.onSubmitForm = function(e) {
+    MyMenu.prototype.onSubmitForm = function (e) {
         e.preventDefault();
         var form = $(e.currentTarget)
             , _this = this
@@ -119,36 +133,48 @@
             , url = _this.form.id.val() != null && _this.form.id.val() > 0 ? 'api/menu/update' : 'api/menu/add';
         form.parsley().validate();
         if (form.parsley().isValid())
-            _this.request(url, JSON.stringify(data)).then(function(reuslt) {
+            _this.beforeSend();
+            _this.request(url, JSON.stringify(data)).then(function (reuslt) {
+                _this.complete();
                 _this.generateListItem()
             });
     }
     ;
 
-    MyMenu.prototype.request = function(url, data) {
+    MyMenu.prototype.beforeSend = function () {
         var _this = this;
-        if (_this.pending == true) {
-            alert("Processing...");
-        } else
-            return $.ajax({
-                url: PATH + url,
-                type: "POST",
-                data: data,
-                contentType: 'application/json',
-                error: function(xhr) {
-                    var data = JSON.parse(xhr.responseText);
-                    if (typeof data == "object" && data.fieldErrors != null) {
-                        $.each(data.fieldErrors, function(i, v) {
-                            alert(v.field + ": " + v.message)
-                        })
-                    } else if (typeof data == "string")
-                        alert(data);
-                }
-            })
-    }
-    ;
+        this.pending = true;
+        if($("#overlay-box").length == 0)
+            $("body").prepend("<div class='black-overlay item-bg item' id='overlay-box'/>");
+            $("#overlay-box").append('<div class="center text-center"><i class="fa fa-5x fa-spin fa-spinner text-white"></i></div>').css("z-index", "1200");
+    };
 
-    MyMenu.prototype.onResetForm = function(e) {
+    MyMenu.prototype.complete = function () {
+        var _this = this;
+        _this.pending = false;
+        $("#overlay-box").remove();
+    };
+
+    MyMenu.prototype.request = function (url, data) {
+        var _this = this;
+        return $.ajax({
+            url: PATH + url,
+            type: "POST",
+            data: data,
+            contentType: 'application/json',
+            error: function (xhr) {
+                var data = JSON.parse(xhr.responseText);
+                if (typeof data == "object" && data.fieldErrors != null) {
+                    $.each(data.fieldErrors, function (i, v) {
+                        alert(v.field + ": " + v.message)
+                    })
+                } else if (typeof data == "string")
+                    alert(data);
+            }
+        })
+    };
+
+    MyMenu.prototype.onResetForm = function (e) {
         var _this = this;
         _this.form.id.val(0);
         _this.form.parentId.val(0);
@@ -157,7 +183,7 @@
     }
     ;
 
-    MyMenu.prototype.buildControls = function() {
+    MyMenu.prototype.buildControls = function () {
         this.form = this._element.find("form");
         this.form.id = this.form.find("#id");
         this.form.icon = this.form.find("#icon");
@@ -173,7 +199,7 @@
     }
     ;
 
-    MyMenu.prototype.buildControlItems = function() {
+    MyMenu.prototype.buildControlItems = function () {
         this.items = this.nestableContainer.find('.list-group-item');
         this.items.updateBtn = this.items.find('.updateItem');
         this.items.removeBtn = this.items.find('.removeItem');
@@ -189,18 +215,18 @@
     }
     ;
 
-    MyMenu.prototype.removeItem = function(e) {
+    MyMenu.prototype.removeItem = function (e) {
         var _this = this
             , item = $(e.currentTarget).closest(".list-group-item")
             , data = item.data()
             , menuId = data.id;
-        _this.request("api/menu/remove/" + menuId).then(function(value) {
+        _this.request("api/menu/remove/" + menuId).then(function (value) {
             _this.generateListItem()
         });
     }
     ;
 
-    MyMenu.prototype.updateItem = function(e) {
+    MyMenu.prototype.updateItem = function (e) {
         var _this = this;
         var _this = this
             , item = $(e.currentTarget).closest('.list-group-item')
@@ -210,13 +236,13 @@
         _this.form.parentId.val(data.parentId);
         _this.form.name.val(data.name);
         _this.form.icon.val(data.icon).trigger("change");
-        _this.form.priority
+        _this.form.priority.val(data.priority);
         _this.form.path.val(data.path);
         _this.form.description.val(data.description)
     }
     ;
 
-    MyMenu.prototype.render = function(data, template, target, isAppend) {
+    MyMenu.prototype.render = function (data, template, target, isAppend) {
         if (!Array.isArray(template))
             return false;
         var resultTemplate = template.join("\n");
@@ -229,26 +255,30 @@
     }
     ;
 
-    MyMenu.prototype.generateListItem = function() {
+    MyMenu.prototype.generateListItem = function () {
         var _this = this
             , menuGroupId = this.form.menuGroupId.val();
+        if(_this.pending) alert("Processing...", "warning");
+        else
         return $.ajax({
             url: PATH + "api/menu/load/menu-group/" + menuGroupId,
             type: "POST",
             contentType: 'application/json',
-            success: function(result) {
+            beforeSend: _this.beforeSend,
+            complete: _this.complete,
+            success: function (result) {
                 _this.nestableContainer.ol.html('');
-                $.each(result, function(k, v) {
+                $.each(result, function (k, v) {
                     _this.renderItems(v, _this.nestableContainer.ol);
                 });
                 _this.generateNestable();
                 _this.buildControlItems();
                 _this.items.on("change", _this.onChangeItem);
             },
-            error: function(xhr) {
+            error: function (xhr) {
                 var data = JSON.parse(xhr.responseText);
                 if (typeof data == "object" && data.fieldErrors != null) {
-                    $.each(data.fieldErrors, function(i, v) {
+                    $.each(data.fieldErrors, function (i, v) {
                         alert(v.field + ": " + v.message)
                     })
                 } else if (typeof data == "string")
@@ -258,7 +288,7 @@
     }
     ;
 
-    MyMenu.prototype.renderItems = function(v, container) {
+    MyMenu.prototype.renderItems = function (v, container) {
         var _this = this;
         if (v.icon)
             v.iconHtml = '<i class="fa ' + v.icon + '"></i>';
@@ -269,7 +299,7 @@
             , childContainer = {};
         newItem.append('<ol class="dd-list"></ol>');
         childContainer = newItem.find(".dd-list");
-        $.each(v.menus, function(i, vC) {
+        $.each(v.menus, function (i, vC) {
             vC.parentId = v.id;
             _this.renderItems(vC, childContainer)
         })
@@ -278,7 +308,7 @@
 
     MyMenu.prototype.templateItem = ['<li id="item-{{id}}" class="m-b-sm dd-item list-group-item" data-id="{{id}}" data-name="{{name}}" data-path="{{path}}" data-description="{{description}}" data-icon="{{icon}}" data-menu-group-id="{{menuGroup.id}}" data-parent-id="{{parentId}}" data-priority="{{priority}}">', '<div class="dd-content"><div class="dd-handle"><i class="fa fa-reorder text-muted"></i></div> {{&iconHtml}} {{name}} <span class="pull-right"><button class="btn btn-icon btn-sm white updateItem"><i class="btn-success fa fa-refresh"></i></button><button class="btn btn-icon btn-sm white removeItem"><i class="btn-danger fa fa-remove"></i></button> </span></div>', '</li>'];
 
-    MyMenu.prototype.generateNestable = function() {
+    MyMenu.prototype.generateNestable = function () {
         var _this = this;
         this.nestableContainer.nestable({
             maxDepth: _this.options.maxDepth
@@ -286,25 +316,26 @@
     }
     ;
 
-    MyMenu.prototype.generateIconData = function() {
+    MyMenu.prototype.generateIconData = function () {
         return $.get(this.options.pathFontAwesome);
     }
     ;
 
-    MyMenu.prototype.buildSelectIcon = function() {
+    MyMenu.prototype.buildSelectIcon = function () {
         var _this = this;
-        this.generateIconData().done(function(result) {
+        this.generateIconData().done(function (result) {
             _this.form.icon.select2({
                 placeholder: '--Choice icon --',
+                theme: 'bootstrap',
                 allowClear: true,
                 data: result.results,
-                templateSelection: function(icon) {
+                templateSelection: function (icon) {
                     return '<i class="fa ' + icon.id + '"></i> ' + icon.text.charAt(0).toUpperCase() + icon.text.slice(1);
                 },
-                templateResult: function(icon) {
+                templateResult: function (icon) {
                     return '<i class="fa ' + icon.id + '"></i> ' + icon.text.charAt(0).toUpperCase() + icon.text.slice(1);
                 },
-                escapeMarkup: function(text) {
+                escapeMarkup: function (text) {
                     return text;
                 }
             })
@@ -312,10 +343,10 @@
     }
     ;
 
-    $.fn[pluginName] = function(options) {
-        this.each(function() {
+    $.fn[pluginName] = function (options) {
+        this.each(function () {
             if (!$.data(this, pluginName)) {
-                $.data(this, pluginName, new MyMenu(this,options));
+                $.data(this, pluginName, new MyMenu(this, options));
             }
         });
 

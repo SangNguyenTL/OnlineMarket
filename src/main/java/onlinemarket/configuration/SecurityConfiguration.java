@@ -76,6 +76,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         filter.setForceEncoding(true);
         http.addFilterBefore(filter,CsrfFilter.class);
         http.sessionManagement().maximumSessions(1);
+        http.sessionManagement().sessionAuthenticationErrorUrl("/login?error=alreadyLogin");
+        http.sessionManagement().invalidSessionUrl("/login?error=invalidSession");
 
         http
         .addFilterBefore(filter,CsrfFilter.class)

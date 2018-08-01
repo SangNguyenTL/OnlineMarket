@@ -24,8 +24,14 @@
 			<div class="alert alert-success" role="alert" th:if="${param.logout} != null">
 					<strong>Congratulations!</strong> You have successfully logged out.
 			</div>
-			<div class="alert alert-warning" th:if="${param.error} != null">
+			<div class="alert alert-warning" th:if="${#strings.equals(param.error, '')}">
 				<strong>OOPS!</strong> Email or password is invalid!
+			</div>
+			<div class="alert alert-warning" th:if="${#strings.equals(param.error, 'alreadyLogin')}">
+				<strong>OOPS!</strong> This session has been expired (possibly due to multiple concurrent logins being attempted as the same user).
+			</div>
+			<div class="alert alert-warning" th:if="${#strings.equals(param.error, 'invalidSession')}">
+				<strong>OOPS!</strong> This session is invalid.
 			</div>
           <div class="row">
             <div class="col-sm-6">

@@ -136,7 +136,11 @@ var MODULE_CONFIG = {
         PATH + 'assets/backend/libs/jquery/dropify/js/dropify.min.js'
     ],
     myMap : [
-        'https://maps.googleapis.com/maps/api/js?key=' + googleApiKey,
+        'https://maps.googleapis.com/maps/api/js?libraries=places&key=' + googleApiKey,
+        PATH + 'assets/backend/libs/jquery/select2/dist/css/select2.min.css',
+        PATH + 'assets/backend/libs/jquery/select2-bootstrap-theme/dist/select2-bootstrap.min.css',
+        PATH + 'assets/backend/libs/jquery/select2-bootstrap-theme/dist/select2-bootstrap.4.css',
+        PATH + 'assets/backend/libs/jquery/select2/dist/js/select2.min.js',
         PATH + 'assets/backend/libs/googleMap/setup.js'
     ],
     myMenu : [
