@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="templates/backend">
 <head>
@@ -12,12 +13,12 @@
             <li class="breadcrumb-item" th:each="breadcrumb : ${breadcrumbs}"><a th:href="@{${breadcrumb[0]}}" th:text="${breadcrumb[1]}"></a></li>
         </ol>
         <h5 class="_300 margin" th:text="${pageTitle}"></h5>
-        <div class="alert alert-success" th:if="${success}">
-            <strong>Congratulation!</strong> Process completed.
-        </div>
+
         <div class="row">
             <div class="col-md-9">
-
+                <div class="alert alert-success" th:if="${success}">
+                    <strong>Congratulation!</strong> Process completed.
+                </div>
                 <div class="box">
                     <div class="box-header">
                         <h2>
@@ -37,10 +38,29 @@
                             <div class="form-group row">
                                 <label class="col-sm-3 form-control-label">Email</label>
                                 <div class="col-sm-9">
-                                    <input th:errorclass="parsley-error" type="email"
+                                    <input sec:authorize="hasRole('SUPER_ADMIN')" th:if="*{id} == ${currentUser.id}" th:errorclass="parsley-error" type="email"
                                            class="form-control" placeholder="your@email"
+                                           autocomplete="off"
+                                           th:attr="data-parsley-unique-email=@{/api/user/check-email}"
+                                           data-parsley-id="1" minlength="6" maxlength="128" required readonly
+                                           th:field="*{email}">
+                                    <input sec:authorize="hasRole('SUPER_ADMIN')" th:if="*{id} != ${currentUser.id}" th:errorclass="parsley-error" type="email"
+                                           class="form-control" placeholder="your@email"
+                                           autocomplete="off"
                                            th:attr="data-parsley-unique-email=@{/api/user/check-email}"
                                            data-parsley-id="1" minlength="6" maxlength="128" required
+                                           th:field="*{email}">
+                                    <input sec:authorize="hasRole('ADMIN')" th:if="*{role.name} == 'USER'" th:errorclass="parsley-error" type="email"
+                                           class="form-control" placeholder="your@email"
+                                           autocomplete="off"
+                                           th:attr="data-parsley-unique-email=@{/api/user/check-email}"
+                                           data-parsley-id="1" minlength="6" maxlength="128" required
+                                           th:field="*{email}">
+                                    <input sec:authorize="hasRole('ADMIN')" th:if="*{role.name} == 'ADMIN'" th:errorclass="parsley-error" type="email"
+                                           class="form-control" placeholder="your@email"
+                                           autocomplete="off"
+                                           th:attr="data-parsley-unique-email=@{/api/user/check-email}"
+                                           data-parsley-id="1" minlength="6" maxlength="128" required readonly
                                            th:field="*{email}">
                                     <ul class="parsley-errors-list filled" id="parsley-id-1"
                                         th:if="${#fields.hasErrors('email')}">
@@ -141,13 +161,22 @@
                             <div class="form-group row">
                                 <label class="col-sm-3 form-control-label">Role</label>
                                 <div class="col-sm-9">
-                                    <select th:errorclass="parsley-error"  th:field="*{role}" class="form-control"
+                                    <select sec:authorize="hasRole('SUPER_ADMIN')" th:if="${currentUser.id} != *{id}" th:errorclass="parsley-error"  th:field="*{role}" class="form-control"
                                             data-parsley-id="9" required>
                                         <option value="">Please choice</option>
-                                        <option
-                                                th:each="role : ${roles}"
+                                        <option th:each="role : ${roles}"
+                                                th:if="${role.name} != 'SUPER_ADMIN'"
                                                 th:value="${{role}}" th:text="${role.name}"></option>
                                     </select>
+                                    <th:block sec:authorize="hasRole('SUPER_ADMIN')">
+                                        <input th:if="${currentUser.id} == *{id}" class="form-control" th:value="*{role.name}" type="text" readonly />
+                                        <input th:if="${currentUser.id} == *{id}" class="form-control" th:errorclass="parsley-error"  th:field="*{role}" type="hidden" />
+                                    </th:block>
+                                    <th:block sec:authorize="hasAnyRole('ADMIN', 'USER')">
+                                        <input  class="form-control"  th:value="*{role.name}" readonly />
+                                        <input  class="form-control" th:errorclass="parsley-error" th:field="*{role}" type="hidden" />
+                                    </th:block>
+
                                     <ul class="parsley-errors-list filled" id="parsley-id-9"
                                         th:if="${#fields.hasErrors('role')}">
                                         <li th:errors="*{role}"></li>

@@ -20,7 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping("/admin/user/{userId:^\\d}/address-book")
+@RequestMapping("/admin/user/{userId:^\\d+}/address-book")
 public class AddressBookController extends MainController {
 
     private FilterForm filterForm;
@@ -36,7 +36,7 @@ public class AddressBookController extends MainController {
     @Autowired
     ProvinceService provinceService;
 
-    private String userPath;
+    private String userPath, userManagementPath;
 
     @ModelAttribute
     public ModelMap populateAttribute(@PathVariable("userId") Integer userId, ModelMap model) {
@@ -44,12 +44,14 @@ public class AddressBookController extends MainController {
         user = userService.getByKey(userId);
         if (user != null) {
             title = "Address book of " + user.getFirstName();
-            userPath = "/admin/user/" + user.getId();
+            userManagementPath = "/admin/user/";
+            userPath = userManagementPath + user.getId();
             relativePath = userPath + "/address-book";
         }
         generateBreadcrumbs();
         breadcrumbs.add(new String[]{"/admin", "Admin"});
-        breadcrumbs.add(new String[]{userPath, "User management"});
+        breadcrumbs.add(new String[]{userManagementPath, "User management"});
+        breadcrumbs.add(new String[]{userPath, user.getFirstName() + " " + user.getLastName()});
         breadcrumbs.add(new String[]{relativePath, "Address book"});
 
         filterForm = new FilterForm();
@@ -179,7 +181,7 @@ public class AddressBookController extends MainController {
             if(!result.hasErrors()){
                 addressService.update(address, user);
                 redirectAttributes.addFlashAttribute("success", true);
-                return "redirect:" + relativePath;
+                return "redirect:" + relativePath + "/update/" + address.getId();
             }
 
             modelMap.put("pageTitle", "Update address for " + user.getFirstName());

@@ -36,7 +36,7 @@
                             <input th:if="${action} == 'update'" type="hidden"
                                    th:field="*{id}"/>
                             <div class="form-group row">
-                                <label class="col-sm-2 form-control-label">Name</label>
+                                <label class="col-sm-2 form-control-label">Title</label>
                                 <div class="col-sm-10">
                                     <input th:errorclass="parsley-error" class="form-control"
                                            type="text" th:field="*{name}" required
@@ -118,15 +118,16 @@
                             </div>
 
                             <div class="form-group row">
-                                <label class="col-sm-2 form-control-label">Percent
-                                    Discount</label>
+                                <label class="col-sm-2 form-control-label">State</label>
                                 <div class="col-sm-4">
-                                    <input th:errorclass="parsley-error" class="form-control"
-                                           type="number" th:field="*{percentValue}"
-                                           data-parsley-range="[1, 99]"/>
-                                    <ul class="parsley-errors-list filled"
-                                        th:if="${#fields.hasErrors('percentValue')}">
-                                        <li th:errors="*{percentValue}"></li>
+                                    <select th:field="*{status}" class="form-control" required>
+                                        <option value="">Please choice</option>
+                                        <option value="0">Active</option>
+                                        <option value="1">In Active</option>
+                                    </select>
+                                    <ul class="parsley-errors-list filled" id="parsley-id-4"
+                                        th:if="${#fields.hasErrors('status')}">
+                                        <li th:errors="*{status}"></li>
                                     </ul>
                                 </div>
                                 <label class="col-sm-2 form-control-label">Code</label>
@@ -148,16 +149,6 @@
                             </div>
 
                             <div class="form-group row">
-                                <label class="col-sm-2 form-control-label">Max price</label>
-                                <div class="col-sm-4">
-                                    <input th:errorclass="parsley-error" class="form-control"
-                                           type="number" th:field="*{maxPrice}"
-                                           data-parsley-length="[1, 1000000000]"/>
-                                    <ul class="parsley-errors-list filled"
-                                        th:if="${#fields.hasErrors('maxPrice')}">
-                                        <li th:errors="*{maxPrice}"></li>
-                                    </ul>
-                                </div>
                                 <label class="col-sm-2 form-control-label">Min price</label>
                                 <div class="col-sm-4">
                                     <input th:errorclass="parsley-error" class="form-control"
@@ -168,19 +159,28 @@
                                         <li th:errors="*{minPrice}"></li>
                                     </ul>
                                 </div>
+                                <label class="col-sm-2 form-control-label">Max price</label>
+                                <div class="col-sm-4">
+                                    <input th:errorclass="parsley-error" class="form-control"
+                                           type="number" th:field="*{maxPrice}"
+                                           data-parsley-length="[1, 1000000000]"/>
+                                    <ul class="parsley-errors-list filled"
+                                        th:if="${#fields.hasErrors('maxPrice')}">
+                                        <li th:errors="*{maxPrice}"></li>
+                                    </ul>
+                                </div>
                             </div>
 
                             <div class="form-group row">
-                                <label class="col-sm-2 form-control-label">State</label>
+                                <label class="col-sm-2 form-control-label">Percent
+                                    Discount</label>
                                 <div class="col-sm-4">
-                                    <select th:field="*{status}" class="form-control" required>
-                                        <option value="">Please choice</option>
-                                        <option value="0">Active</option>
-                                        <option value="1">In Active</option>
-                                    </select>
-                                    <ul class="parsley-errors-list filled" id="parsley-id-4"
-                                        th:if="${#fields.hasErrors('status')}">
-                                        <li th:errors="*{status}"></li>
+                                    <input th:errorclass="parsley-error" class="form-control"
+                                           type="number" th:field="*{percentValue}"
+                                           data-parsley-range="[1, 99]"/>
+                                    <ul class="parsley-errors-list filled"
+                                        th:if="${#fields.hasErrors('percentValue')}">
+                                        <li th:errors="*{percentValue}"></li>
                                     </ul>
                                 </div>
                                 <label class="col-sm-2 form-control-label">Sale</label>
@@ -200,11 +200,27 @@
                                     <select th:errorclass="parsley-error" class="form-control" th:field="*{products}" ui-jp="select2" multiple ui-options="window.searchProduct">
                                         <option th:each="product : *{products}" th:value="${{product}}" th:text="${product.name}"></option>
                                     </select>
+                                    <ul class="parsley-errors-list filled"
+                                        th:if="${#fields.hasErrors('products')}">
+                                        <li th:errors="*{products}"></li>
+                                    </ul>
                                 </div>
-                                <ul class="parsley-errors-list filled"
-                                    th:if="${#fields.hasErrors('products')}">
-                                    <li th:errors="*{products}"></li>
-                                </ul>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 form-control-label">Count</label>
+                                <div class="col-sm-4">
+                                    <input th:errorclass="parsley-error" class="form-control"
+                                           type="number" th:field="*{count}"
+                                           data-parsley-range="[0, 1000000]"/>
+                                    <ul class="parsley-errors-list filled"
+                                        th:if="${#fields.hasErrors('count')}">
+                                        <li th:errors="*{count}"></li>
+                                    </ul>
+                                </div>
+                                <label class="col-sm-2 form-control-label">Show</label>
+                                <div class="col-sm-4 p-a-sm">
+                                    <label><input type="checkbox" th:field="*{show}"/></label>
+                                </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 form-control-label">Content</label>

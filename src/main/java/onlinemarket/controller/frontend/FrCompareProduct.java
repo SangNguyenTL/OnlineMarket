@@ -38,7 +38,7 @@ public class FrCompareProduct extends MainController {
 
         ObjectMapper objectMapper = new ObjectMapper();
         TypeFactory typeFactory = objectMapper.getTypeFactory();
-        HashMap<String,List<Object>> productCompareList = new HashMap<>();
+        HashMap<String,List<Object>> productCompareList = new HashMap();
         try {
             if(listCompare != null)
                 productCompareList = objectMapper.readValue(listCompare, HashMap.class);
@@ -49,7 +49,7 @@ public class FrCompareProduct extends MainController {
         filterForm = new FilterForm();
         List<Object> listValue = productCompareList.get(productCategory.getId().toString());
 
-        filterForm.getPrivateGroupSearch().put("state", "0");
+        filterForm.getGroupSearch().put("state", "0");
         filterForm.setOrderBy("createDate");
         filterForm.setOrder("desc");
         filterForm.setSize(3);

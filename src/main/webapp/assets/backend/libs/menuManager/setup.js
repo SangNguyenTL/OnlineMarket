@@ -56,9 +56,7 @@
         var _this = this
             , item = $(e.currentTarget)
             , ol = item.parent('.dd-list')
-            , parent = ol.parent(".dd-item"), array = [],
-            promise = false,
-            deferred = new $.Deferred();
+            , parent = ol.parent(".dd-item");
         _this.oldData = Object.assign({}, item.data());
         if (_this.pending) {
             alert("Processing...");
@@ -77,22 +75,28 @@
         if (_this.equalDataItem(item.data()))
             return;
         _this.beforeSend();
-        ol.children().each(function (i, v) {
-            v = $(v);
-            if(!promise) promise = deferred.promise();
-            promise = _this.request("api/menu/update", JSON.stringify(v.data())).then(
 
-            );
+        var requestUpdate = function(){
+            var promise = false,
+                deferred = new $.Deferred();
+            ol.children().each(function (i, v) {
+                v = $(v);
+                if(!promise) promise = deferred.promise();
+                promise = promise.then(function () {
+                    for(property in v.data()){
+                        if(v.data()[property] === "") v.data()[property] = null
+                    }
+                    return _this.request("api/menu/update", JSON.stringify(v.data()))
+                });
+            });
             deferred.resolve();
             return promise;
-
-        });
-        $.when(array).then(function () {
+        };
+        requestUpdate().then(function () {
             _this.complete();
             _this.generateListItem();
         })
-    }
-    ;
+    };
 
     MyMenu.prototype.equalDataItem = function (data) {
         var _this = this, flag = true;

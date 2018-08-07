@@ -4,8 +4,7 @@
 	layout:decorate="templates/frontend">
 
 <th:block layout:fragment="head">
-<link rel="stylesheet" type="text/css"
-	th:href="@{/assets/frontend/js/bootstrap/css/bootstrap-datetimepicker.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/assets/frontend/js/bootstrap/css/bootstrap-datetimepicker.min.css}" />
 </th:block>
 
 <head>
@@ -25,7 +24,7 @@
 				<div class="col-sm-9" id="content">
 					<h1 class="title">Register Account</h1>
 					<p>
-						If you already have an account with us, please login at the Login Page. <a th:href="@{/login}">Login Page</a>.
+						If you already have an account with us, please login at the <a th:href="@{/login}">Login Page</a>.
 					</p>
 					
 					<!--/*@thymesVar id="user" type="onlinemarket.model.User"*/-->
@@ -65,22 +64,13 @@
 								</div>
 							</div>
 							<div class="form-group required"
-								th:classappend="${#fields.hasErrors('addresses[0].phoneNumber')} ? 'has-error'">
-								<label class="col-sm-2 control-label">Telephone</label>
-								<div class="col-sm-10">
-									<input type="tel" class="form-control"
-										placeholder="Telephone" th:field="*{addresses[0].phoneNumber}">
-									<span class="help-block"
-										th:if="${#fields.hasErrors('addresses[0].phoneNumber')}"
-										th:errors="*{addresses[0].phoneNumber}"></span>
-								</div>
-							</div>
-							<div class="form-group required"
 								th:classappend="${#fields.hasErrors('birthday')} ? 'has-error'">
 								<label class="col-sm-2 control-label">Birthday</label>
 								<div class="col-sm-10">
 									<div class="input-group date" id="birtdayPicker">
 										<input type='text' class="form-control"
+											   autocomplete="off"
+
 											th:field="*{birthday}" /> <span
 											class="input-group-addon"> <span
 											class="glyphicon glyphicon-calendar"></span>
@@ -109,6 +99,17 @@
 						</fieldset>
 						<fieldset id="address">
 							<legend>Your Address</legend>
+							<div class="form-group required"
+								 th:classappend="${#fields.hasErrors('addresses[0].phoneNumber')} ? 'has-error'">
+								<label class="col-sm-2 control-label">Telephone</label>
+								<div class="col-sm-10">
+									<input type="tel" class="form-control"
+										   placeholder="Telephone" th:field="*{addresses[0].phoneNumber}">
+									<span class="help-block"
+										  th:if="${#fields.hasErrors('addresses[0].phoneNumber')}"
+										  th:errors="*{addresses[0].phoneNumber}"></span>
+								</div>
+							</div>
 							<div class="form-group required"
 								th:classappend="${#fields.hasErrors('addresses[0].address')} ? 'has-error'">
 								<label class="col-sm-2 control-label">Address</label>
@@ -196,86 +197,20 @@
 								</li>
 							</ul>
 						</div>
-						<h3>Best seller</h3>
-						<div class="side-item">
-							<div class="product-thumb clearfix" th:each="productBest : ${productBestSellerList}">
-								<div class="image"><a th:href="@{'/product/'+${productBest.slug}}"><img
-										th:src="@{${productBest.featureImage}}" class="img-responsive"/></a></div>
-								<div class="caption">
-									<h4><a th:href="@{'/product/'+${productBest.slug}}" th:alt="${productBest.name}" th:text="${productBest.name}"></a></h4>
-									<p class="price"><span class="price-new" th:text="${productBest.newPriceStr}"></span>
-										<span class="price-old" th:if="${productBest.newPriceStr != '' && productBest.sale != ''}"
-											  th:text="${productBest.priceStr}"></span> <span th:if="${productBest.sale != ''}"
-																							  class="saving"
-																							  th:text="${productBest.sale}"></span>
-									<div class="rating">
-                                            <span class="fa fa-stack" th:each="number : ${#numbers.sequence(1, 5)}">
-                                                <i th:if="${productBest.ratingStatistic != null && productBest.ratingStatistic.averageScore > number}" class="fa fa-star fa-stack-2x"></i>
-                                                <i class="fa fa-star-o fa-stack-2x"></i>
-                                            </span>
-									</div>
-									</p>
-								</div>
-							</div>
-						</div>
-						<h3>Best viewing</h3>
-						<div class="side-item">
-							<div class="product-thumb clearfix" th:each="productBest : ${productBestViewing}">
-								<div class="image"><a th:href="@{'/product/'+${productBest.slug}}"><img
-										th:src="@{${productBest.featureImage}}" class="img-responsive"/></a></div>
-								<div class="caption">
-									<h4><a th:href="@{'/product/'+${productBest.slug}}" th:alt="${productBest.name}" th:text="${productBest.name}"></a></h4>
-									<p class="price"><span class="price-new" th:text="${productBest.newPriceStr}"></span>
-										<span class="price-old" th:if="${productBest.newPriceStr != '' && productBest.sale != ''}"
-											  th:text="${productBest.priceStr}"></span> <span th:if="${productBest.sale != ''}"
-																							  class="saving"
-																							  th:text="${productBest.sale}"></span>
-									<div class="rating">
-                                            <span class="fa fa-stack" th:each="number : ${#numbers.sequence(1, 5)}">
-                                                <i th:if="${productBest.ratingStatistic != null && productBest.ratingStatistic.averageScore > number}" class="fa fa-star fa-stack-2x"></i>
-                                                <i class="fa fa-star-o fa-stack-2x"></i>
-                                            </span>
-									</div>
-									</p>
-								</div>
-							</div>
-						</div>
-						<h3>Best Rating</h3>
-						<div class="side-item">
-							<div class="product-thumb clearfix" th:each="productBest : ${productBestRating}">
-								<div class="image"><a th:href="@{'/product/'+${productBest.slug}}"><img
-										th:src="@{${productBest.featureImage}}" class="img-responsive"/></a></div>
-								<div class="caption">
-									<h4><a th:href="@{'/product/'+${productBest.slug}}" th:alt="${productBest.name}" th:text="${productBest.name}"></a></h4>
-									<p class="price"><span class="price-new" th:text="${productBest.newPriceStr}"></span>
-										<span class="price-old" th:if="${productBest.newPriceStr != '' && productBest.sale != ''}"
-											  th:text="${productBest.priceStr}"></span> <span th:if="${productBest.sale != ''}"
-																							  class="saving"
-																							  th:text="${productBest.sale}"></span>
-									<div class="rating">
-                                            <span class="fa fa-stack" th:each="number : ${#numbers.sequence(1, 5)}">
-                                                <i th:if="${productBest.ratingStatistic != null && productBest.ratingStatistic.averageScore > number}" class="fa fa-star fa-stack-2x"></i>
-                                                <i class="fa fa-star-o fa-stack-2x"></i>
-                                            </span>
-									</div>
-									</p>
-								</div>
-							</div>
-						</div>
+						<th:block th:include="/templates/aside::aside"></th:block>
 					</aside>
 				<!--Right Part End -->
 			</div>
 		</div>
 	</div>
 	<div layout:fragment="customScript" th:remove="tag">
-		<script type="text/javascript"
-			th:src="@{/assets/frontend/js/moment.min.js}"></script>
-		<script type="text/javascript"
-			th:src="@{/assets/frontend/js/bootstrap/js/bootstrap-datetimepicker.min.js}"></script>
+		<script type="text/javascript" th:src="@{/assets/frontend/js/moment.min.js}"></script>
+		<script type="text/javascript" th:src="@{/assets/frontend/js/bootstrap/js/bootstrap-datetimepicker.min.js}"></script>
 		<script type="text/javascript">
 			$(function() {
 				$('#birtdayPicker').datetimepicker({
-					format : "DD/MM/YYYY"
+					format : "DD/MM/YYYY",
+                    allowInputToggle: true
 				});
 			});
 		</script>

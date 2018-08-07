@@ -75,8 +75,7 @@
                 <p th:if="${product.events.size() > 0}" class="description">
                     <b>Sales</b><br>
                     <th:block th:each="event : ${product.events}">
-                        <a th:if="${event.maxPrice > product.price && event.getMinPrice() < product.price && #dates.createNow().before(event.getDateTo()) && #dates.createNow().after(event.dateFrom)}"
-                           th:href="@{'/event/'+${event.id}}" th:text="${event.name}"></a><br>
+                        <a th:href="@{'/event/'+${event.id}}" th:text="${event.name}"></a><br>
                     </th:block>
                 </p>
                 <p class="price"><span class="price-new" th:text="${product.newPriceStr}"></span>

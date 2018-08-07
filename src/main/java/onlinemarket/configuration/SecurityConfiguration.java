@@ -10,12 +10,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
@@ -32,6 +35,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	private String [] publicUrls = new String [] {
 //            "/api/**"
     };
+
+	private static final SessionRegistry SESSION_REGISTRY = new SessionRegistryImpl();
 	
 	@Autowired
 	CustomAuthenticationSuccessHandler successHandler;
@@ -64,8 +69,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	}
 
 	@Bean
-	public HttpSessionEventPublisher httpSessionEventPublisher() {
-		return new HttpSessionEventPublisher();
+	public SessionRegistry sessionRegistry() {
+		return SESSION_REGISTRY;
+	}
+
+    @Bean
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
+    }
+
+	@Bean
+	public RegisterSessionAuthenticationStrategy registerSessionAuthStr( ) {
+		return new RegisterSessionAuthenticationStrategy( sessionRegistry( ) );
 	}
 
 	@Override
@@ -75,14 +90,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         filter.setEncoding("UTF-8");
         filter.setForceEncoding(true);
         http.addFilterBefore(filter,CsrfFilter.class);
-        http.sessionManagement().maximumSessions(1);
-        http.sessionManagement().sessionAuthenticationErrorUrl("/login?error=alreadyLogin");
-        http.sessionManagement().invalidSessionUrl("/login?error=invalidSession");
-
-        http
+        http.sessionManagement().maximumSessions(1).maxSessionsPreventsLogin(true).sessionRegistry(sessionRegistry());
+		http.sessionManagement( ).sessionFixation( ).newSession()
+				.sessionAuthenticationStrategy( registerSessionAuthStr());
+        http.sessionManagement().invalidSessionUrl("/login?error=invalidSession")
+				.and()
         .addFilterBefore(filter,CsrfFilter.class)
         .authorizeRequests()
-				.antMatchers("/admin/**", "/api/image/delete/**", "/api/image/load", "/api/menu/**").hasRole("ADMIN")
+				.antMatchers("/admin/**", "/api/image/delete/**", "/api/image/load", "/api/menu/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
 				.antMatchers("/api/image/**", "/check-out").authenticated()
 				.anyRequest().permitAll()
 		        .and()
@@ -120,5 +135,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				"remember-me", userDetailsService, tokenRepository);
 		return tokenBasedService;
 	}
+
+
 
 }

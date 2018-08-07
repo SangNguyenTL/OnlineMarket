@@ -58,7 +58,7 @@ public class FrGeneralGroup extends MainController {
         filterFormTopList.setOrderBy("ratingStatistic.totalScore");
         model.put("productBestRating",productService.convertProductToFrProduct(productService.list(filterFormTopList).getList()));
 
-        filterForm.getPrivateGroupSearch().put("state", "0");
+        filterForm.getGroupSearch().put("state", "0");
         filterForm.setOrderBy("releaseDate");
         filterForm.setOrder("desc");
 

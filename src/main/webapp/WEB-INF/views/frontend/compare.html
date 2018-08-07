@@ -87,7 +87,10 @@
                         <td th:text="${attribute.name}"></td>
                         <td th:each="product : ${result.list}">
                             <th:block th:each="attributeValues : ${attribute.attributeValues}" th:if="${product.checkProductAttributes(attributeValues)}">
-                                <p th:text="${'- ' + #strings.listJoin(attributeValues, '\n')}"></p>
+                                <p>
+                                    <a th:if="${attributeValues.link} != '' and ${attributeValues.link} != null" th:href="@{${attributeValues.link}}" th:text="${'- ' + attributeValues.value}"></a>
+                                    <th:block th:unless="${attributeValues.link} != '' and ${attributeValues.link} != null" th:text="${'- ' + attributeValues.value}"></th:block>
+                                </p>
                             </th:block>
                         </td>
                     </tr>

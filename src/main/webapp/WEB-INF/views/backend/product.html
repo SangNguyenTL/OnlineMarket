@@ -84,6 +84,9 @@
 								<filter:th order="asc" orderBy="state"
 									filter:uri="@{${relativePath}}" filter:currentPage="${page}"
 									name="State">State</filter:th>
+								<filter:th order="asc" orderBy="createDate"
+										   filter:uri="@{${relativePath}}" filter:currentPage="${page}"
+										   name="Publish Date">Publish Date</filter:th>
 								<filter:th order="asc" orderBy="price"
 									filter:uri="@{${relativePath}}" filter:currentPage="${page}"
 									name="Price">Price</filter:th>
@@ -103,11 +106,13 @@
 								</td>
 								<td th:text="${product.name}"></td>
 								<td th:text="${product.brand.name}"></td>
-								<th:block th:each="state : ${T(onlinemarket.model.NumState).values()}">
-									<td th:if="${state.id} == ${product.state}" th:text="${state.name}"></td>
-								</th:block>
-								<td th:if="${product.state} == null">NULL</td>
-								<td th:text="${product.price}"></td>
+								<td>
+									<th:block  th:each="state : ${T(onlinemarket.model.NumState).values()}">
+										<th:block th:if="${state.id} == ${product.state}" th:text="${state.name}"></th:block>
+									</th:block>
+								</td>
+								<td th:text="${product.createDate}"></td>
+								<td th:text="${#numbers.formatDecimal(product.price, 1, 'POINT', 0, 'COMMA')}"></td>
 								<td th:text="${product.quantity}"></td>
 								<td>
 									<form class="form-confirm"

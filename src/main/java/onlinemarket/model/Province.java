@@ -56,7 +56,7 @@ public class Province implements java.io.Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-	@NotNull(groups = AdvancedValidation.AddNew.class)
+	@NotNull(groups = {AdvancedValidation.Register.class, AdvancedValidation.Register.class})
 	@Column(name = "_id", unique = true, nullable = false)
 	public Integer getId() {
 		return this.id;
@@ -68,7 +68,7 @@ public class Province implements java.io.Serializable {
 
 	@Column(name = "name", nullable = false)
 	@Size(min = 3, max = 32)
-	@NotEmpty
+	@NotEmpty(groups = AdvancedValidation.AddNew.class)
 	public String getName() {
 		return this.name;
 	}

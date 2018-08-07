@@ -4,10 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.groups.Default;
 
 import onlinemarket.form.filter.FilterForm;
-import onlinemarket.model.Post;
-import onlinemarket.model.Product;
-import onlinemarket.model.ProductCategory;
-import onlinemarket.model.User;
+import onlinemarket.model.*;
 import onlinemarket.result.ResultObject;
 import onlinemarket.service.EventService;
 import onlinemarket.service.PostService;
@@ -52,6 +49,20 @@ public class HomeController extends MainController {
 	@ModelAttribute
 	public ModelMap populateAttribute(ModelMap model) {
 
+		FilterForm filterFormTopList = new FilterForm();
+		filterFormTopList.getGroupSearch().put("state", "0");
+		filterFormTopList.setSize(5);
+		filterFormTopList.setOrder("desc");
+
+		filterFormTopList.setOrderBy("numberOrder");
+		model.put("productBestSellerList", productService.convertProductToFrProduct(productService.list(filterFormTopList).getList()));
+
+		filterFormTopList.setOrderBy("productViewsStatistic.total");
+		model.put("productBestViewing", productService.convertProductToFrProduct(productService.list(filterFormTopList).getList()));
+
+		filterFormTopList.setOrderBy("ratingStatistic.totalScore");
+		model.put("productBestRating",productService.convertProductToFrProduct(productService.list(filterFormTopList).getList()));
+
 		generateBreadcrumbs();
 
 		return model;
@@ -60,33 +71,21 @@ public class HomeController extends MainController {
 	@RequestMapping(value = { "/" }, method = RequestMethod.GET)
 	public String homePage(ModelMap model) {
 
-		FilterForm filterFormTopList = new FilterForm();
-		filterFormTopList.getGroupSearch().put("state", "0");
-		filterFormTopList.setSize(5);
-		filterFormTopList.setOrder("desc");
-		filterFormTopList.setOrderBy("numberOrder");
-		model.put("productBestSellerList", productService.convertProductToFrProduct(productService.list(filterFormTopList).getList()));
-		
-		filterFormTopList.setOrderBy("productViewsStatistic.total");
-		model.put("productBestViewing", productService.convertProductToFrProduct(productService.list(filterFormTopList).getList()));
-
-		filterFormTopList.setOrderBy("ratingStatistic.totalScore");
-		model.put("productBestRating",productService.convertProductToFrProduct(productService.list(filterFormTopList).getList()));
-
 
 		FilterForm filterForm = new FilterForm();
 		Map<ProductCategory,ResultObject<FrontendProduct>> resultObjectList = new HashMap<>();
 		filterForm.setOrderBy("releaseDate");
 		filterForm.setOrder("desc");
+		filterForm.getGroupSearch().put("state", "0");
 		for(ProductCategory productCategory : productCategoryList){
 			try {
 				ResultObject<FrontendProduct> resultObject = productService.frontendProductResultObject(productService.listByProductCategory(productCategory,filterForm));
 				if(!resultObject.getList().isEmpty())
 					resultObjectList.put(productCategory, resultObject);
 			} catch (ProductCategoryNotFoundException e) {
-
 			}
 		}
+
 		filterForm.getGroupSearch().remove("state");
 		filterForm.getGroupSearch().put("status", "0");
 		filterForm.setSize(3);
@@ -120,12 +119,13 @@ public class HomeController extends MainController {
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String loginPage(ModelMap model) {
+	public String loginPage(ModelMap model, HttpServletRequest request) {
 		breadcrumbs.add(new String[]{"/login", "Login"});
 
 		if (currentUser.getId() != null)
 			return "redirect:/";
 		model.put("pageTile", "Login");
+		model.put("redirect", request.getHeader("referer"));
 		return "frontend/login";
 
 	}

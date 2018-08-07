@@ -32,18 +32,18 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     	      HttpServletResponse response, Authentication authentication)
     	      throws IOException {
     	  		
-    	        String targetUrl = determineTargetUrl(authentication);
+    	        String targetUrl = determineTargetUrl(authentication, request);
     	 
     	        if (response.isCommitted()) {
     	        	System.out.println("Response has already been committed. Unable to redirect to "
     	    	              + targetUrl);
     	            return;
     	        }  
-    	 
+
     	        redirectStrategy.sendRedirect(request, response, targetUrl);
     	    }
     	 
-    	    protected String determineTargetUrl(Authentication authentication) {
+    	    protected String determineTargetUrl(Authentication authentication, HttpServletRequest request) {
     	        boolean isUser = false;
     	        boolean isAdmin = false;
     	        Collection<? extends GrantedAuthority> authorities
@@ -52,14 +52,17 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     	            if (grantedAuthority.getAuthority().equals("ROLE_USER")) {
     	                isUser = true;
     	                break;
-    	            } else if (grantedAuthority.getAuthority().equals("ROLE_ADMIN")) {
+    	            } else if (grantedAuthority.getAuthority().contains("ADMIN")) {
     	                isAdmin = true;
     	                break;
     	            }
     	        }
-    	 
-    	        if (isUser) {
-    	            return "/";
+
+    	        String referrer = request.getParameter("redirect");
+    	        if(referrer == null) referrer = "/";
+
+				if (isUser) {
+    	            return referrer;
     	        } else if (isAdmin) {
     	            return "/admin";
     	        } else {

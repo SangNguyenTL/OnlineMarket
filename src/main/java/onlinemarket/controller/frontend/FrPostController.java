@@ -35,7 +35,7 @@ public class FrPostController extends MainController {
 
         filterForm = new FilterForm();
 
-        filterForm.getPrivateGroupSearch().put("status", "0");
+        filterForm.getGroupSearch().put("status", "0");
         filterForm.setOrderBy("createDate");
         filterForm.setOrder("desc");
         title = "Post list";
@@ -71,7 +71,7 @@ public class FrPostController extends MainController {
 
         postCategory = postCategoryService.getByDeclaration("slug", postCategorySlug);
         if(postCategory == null) throw new NoHandlerFoundException(null, null, null);
-        filterForm.getPrivateGroupSearch().put("postCategory.slug", postCategory.getSlug());
+        filterForm.getGroupSearch().put("postCategory.slug", postCategory.getSlug());
 
         subTitle = postCategory.getName();
         relativePath = relativePath + "/" + postCategorySlug;
@@ -89,7 +89,7 @@ public class FrPostController extends MainController {
 
         postCategory = postCategoryService.getByDeclaration("slug", postCategorySlug);
         if(postCategory == null) throw new NoHandlerFoundException(null, null, null);
-        filterForm.getPrivateGroupSearch().put("postCategory.slug", postCategory.getSlug());
+        filterForm.getGroupSearch().put("postCategory.slug", postCategory.getSlug());
 
         subTitle = postCategory.getName();
         relativePath = relativePath + "/" + postCategorySlug;

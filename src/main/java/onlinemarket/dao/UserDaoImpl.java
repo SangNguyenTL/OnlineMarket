@@ -1,11 +1,18 @@
 package onlinemarket.dao;
 
+import onlinemarket.form.filter.FilterForm;
+import onlinemarket.result.ResultObject;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 
 import onlinemarket.model.Event;
 import onlinemarket.model.User;
+
+import java.util.Collection;
 
 @Repository("userDao")
 public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
@@ -31,4 +38,16 @@ public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
 		return (User) criteria.uniqueResult();
 	}
 
+	@Override
+    public ResultObject<User> list(FilterForm filterForm) {
+        Criteria criteria = createEntityCriteria();
+        criteria.createAlias("role", "roleAlias");
+        Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+        if(authorities.contains(new SimpleGrantedAuthority("ROLE_SUPER_ADMIN"))) return childFilterFrom(criteria, filterForm);
+        else if(authorities.contains(new SimpleGrantedAuthority("ROLE_ADMIN"))) {
+            criteria.add(Restrictions.eq("roleAlias.name", "USER"));
+            return childFilterFrom(criteria, filterForm);
+        }
+        else return new ResultObject<>();
+	}
 }

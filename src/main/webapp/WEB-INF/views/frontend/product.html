@@ -30,20 +30,20 @@
                 <div itemscope="" itemtype="http://schema.org/Product">
                     <h1 class="title" itemprop="name" th:text="${product.name}"></h1>
                     <div class="row product-info simpleCart_shelfItem">
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <div class="image">
                                 <img class="img-responsive item_image" itemprop="image" id="zoom_01"
                                      th:src="@{${product.featureImage}}" th:title="${product.name}"
                                      th:alt="${product.name}" th:attr="data-zoom-image=${product.featureImage}"/></div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-8">
                             <ul class="list-unstyled description">
                                 <li><b>Brand:</b> <a th:href="@{'/brand/'+${product.brand.slug}}"><span itemprop="brand"
                                                                                                         th:text="${product.brand.name}"></span></a>
                                 </li>
                                 <li><b>Size:</b> <span itemprop="mpn" th:text="${product.size}"></span></li>
                                 <li class="item_name hidden" th:text="${product.name}"></li>
-                                <li><b>Weight:</b><th:block th:text="${product.weight + 'g'}"></th:block></li>
+                                <li><b>Weight:</b> <th:block th:text="${product.weight + 'g'}"></th:block></li>
                                 <li th:switch="${product.state}"><b>Availability:</b>
                                     <span class="instock" th:case=0>In stock</span>
                                     <span class="nostock" th:case=1>Out of stock</span>
@@ -116,13 +116,14 @@
                             <div class="" th:each="attributeGroup : ${product.productCategory.attributeGroups}">
                                 <h3 class="subtitle" th:text="${attributeGroup.name}"></h3>
                                 <div class="row padding" th:each="attribute : ${attributeGroup.attributes}">
-                                    <strong class="col-md-2 col-sm-3" th:text="${attribute.name}"></strong>
-                                    <div class="col-md-10 col-sm-9">
-                                        <p>
-                                            <th:block th:each="attributeValue,st : ${attribute.attributeValues}" th:if="${product.checkProductAttributes(attributeValue)}">
-                                                <span th:if="${attributeValue.link == null}" th:text="${attributeValue.value}"></span><a th:if="${attributeValue.link != null}" th:href="@{${attributeValue.link}}" th:text="${attributeValue.value}"></a> <th:block th:unless="${st.last}"> ,</th:block>
-                                            </th:block>
-                                        </p>
+                                    <strong class="col-sm-4" th:text="${attribute.name}"></strong>
+                                    <div class="col-sm-8">
+                                        <th:block th:each="attributeValues : ${attribute.attributeValues}" th:if="${product.checkProductAttributes(attributeValues)}">
+                                            <p>
+                                                <a th:if="${attributeValues.link} != '' and ${attributeValues.link} != null" th:href="@{${attributeValues.link}}" th:text="${'- ' + attributeValues.value}"></a>
+                                                <th:block th:unless="${attributeValues.link} != '' and ${attributeValues.link} != null" th:text="${'- ' + attributeValues.value}"></th:block>
+                                            </p>
+                                        </th:block>
                                     </div>
                                 </div>
                             </div>

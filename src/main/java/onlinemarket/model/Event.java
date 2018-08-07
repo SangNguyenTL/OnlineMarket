@@ -4,6 +4,7 @@ package onlinemarket.model;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -25,6 +26,7 @@ import javax.validation.constraints.Size;
 import onlinemarket.model.other.AdvancedValidation;
 import onlinemarket.validation.EventValidate;
 import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.FilterDefs;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -33,7 +35,6 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @Entity
 @Table(name = "tb_event", schema = "dbo", catalog = "SmartMarket")
-@FilterDef(name = "active", defaultCondition = "status == 0")
 @EventValidate(groups =  AdvancedValidation.class)
 public class Event implements java.io.Serializable {
 
@@ -55,6 +56,8 @@ public class Event implements java.io.Serializable {
 	private Date dateTo;
 	private Long maxPrice;
 	private Long minPrice;
+	private Integer count;
+	private boolean show = true;
 	private String featureImage;
 	private Set<Product> products = new HashSet<>(0);
 
@@ -71,11 +74,12 @@ public class Event implements java.io.Serializable {
 		percentValue = event.percentValue;
 		value = event.value;
 		updateDate = new Date();
+		count = event.getCount();
 		dateFrom = event.dateFrom;
 		dateTo = event.dateTo;
 		maxPrice = event.maxPrice;
 		minPrice = event.minPrice;
-		products.addAll(event.products);
+		products = event.products;
 	}
 
 	@Id
@@ -109,6 +113,15 @@ public class Event implements java.io.Serializable {
 		this.name = name;
 	}
 
+	@Column(name = "show")
+	public boolean isShow() {
+		return show;
+	}
+
+	public void setShow(boolean show) {
+		this.show = show;
+	}
+
 	@Column(name = "content")
 	@Size(max = 1000000)
 	public String getContent() {
@@ -127,6 +140,16 @@ public class Event implements java.io.Serializable {
 
 	public void setStatus(Integer status) {
 		this.status = status;
+	}
+
+	@Column(name = "count")
+	@Range(max = 1000000)
+	public Integer getCount() {
+		return count;
+	}
+
+	public void setCount(Integer count) {
+		this.count = count;
 	}
 
 	@Column(name = "percent_value")

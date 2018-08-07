@@ -30,9 +30,11 @@ interface InterfaceDao<PK extends Serializable,T> {
 	void delete(T entity);
 	
 	void persist(T entity);
-	
+
 	Serializable save(T entity);
-	
+
+	Object merge(T entity);
+
 	void update(T entity);
 	
 	long count();

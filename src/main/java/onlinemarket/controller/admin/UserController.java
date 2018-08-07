@@ -112,7 +112,7 @@ public class UserController extends MainController {
     @RequestMapping(value = "/update/{id:^\\d+}", method = RequestMethod.GET)
     public String updatePage(@PathVariable("id") Integer id, ModelMap model, RedirectAttributes redirectAttributes) {
 
-        User user = userService.getByKey(id);
+        User user = userService.getByKeyAndRole(id);
         if (user == null) {
             redirectAttributes.addFlashAttribute("error", "User not found.");
             return "redirect:"+relativePath;

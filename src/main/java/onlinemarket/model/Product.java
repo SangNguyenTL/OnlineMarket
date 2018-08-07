@@ -8,20 +8,23 @@ import javax.persistence.*;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.Filter;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.annotations.*;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "tb_product", schema = "dbo", catalog = "SmartMarket")
+@FilterDef(name = "eventLimit")
 public class Product implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -294,10 +297,10 @@ public class Product implements java.io.Serializable {
 
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-	@Filter(name = "active")
 	@JoinTable(name = "tb_event_product", schema = "dbo", catalog = "SmartMarket", joinColumns = {
 			@JoinColumn(name = "product_id", nullable = false, updatable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "event_id", nullable = false, updatable = false) })
+	@Where(clause = "status = 0 AND (code is null OR code = '') AND GETDATE() BETWEEN date_from AND date_to")
 	@LazyCollection(LazyCollectionOption.EXTRA)
 	@JsonIgnore
 	public Set<Event> getEvents() {

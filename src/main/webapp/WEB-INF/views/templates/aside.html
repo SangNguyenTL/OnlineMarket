@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
 </head>
 <body>
+<!--/*@thymesVar id="productBestSellerList" type="java.util.List<onlinemarket.model.Product>"*/-->
+<!--/*@thymesVar id="productBestViewing" type="java.util.List<onlinemarket.model.Product>"*/-->
+<!--/*@thymesVar id="productBestRating" type="java.util.List<onlinemarket.model.Product>"*/-->
 <th:block th:fragment="aside">
-
     <h3>Best seller</h3>
     <div class="side-item">
         <th:block th:each="product : ${productBestSellerList}">

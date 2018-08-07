@@ -11,7 +11,7 @@
             <h3 class="subtitle">Our Location</h3>
             <div class="row">
                 <div class="col-sm-3"><img th:src="@{${logo.logo}}" th:alt="${general.title}" th:title="${general.title}" class="img-thumbnail"></div>
-                <div class="col-sm-3"><strong th:title="${general.title + 'Template'}"></strong><br>
+                <div class="col-sm-3"><strong th:text="${general.title + ' Template'}"></strong><br>
                     <address th:text="${contact.address}">
                         Central Square,<br>
                         22 Hoi Wing Road,<br>
@@ -20,13 +20,13 @@
                     </address>
                 </div>
                 <div class="col-sm-3"><strong>Telephone</strong><br>
-                    <span th:text="contact.phoneNumber"></span><br>
+                    <span th:text="${contact.phoneNumber}"></span><br>
                 </div>
                 <div class="col-sm-3"> <strong>Opening Times</strong><br>
                     24X7 Customer Care<br>
                     <br>
                     <strong>Comments</strong><br>
-                    This field is for any special notes you would like to tell the customer i.e. Store does not accept cheques. </div>
+                    <th:block th:text="${general.description}"></th:block> </div>
             </div>
             <h3 class="subtitle">My position</h3>
             <div id="myMap" style="position: relative;overflow: hidden;height: 400px;"></div>

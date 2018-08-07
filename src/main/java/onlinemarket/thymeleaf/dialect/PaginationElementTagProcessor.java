@@ -151,7 +151,7 @@ public class PaginationElementTagProcessor extends AbstractElementTagProcessor{
 	  	          sb.append('&');
 	  	      	}
 	  	      	
-	  	      	if(StringUtils.equals(field.getName(), "privateGroupSearch")) continue;
+	  	      	if(StringUtils.equals(field.getName(), "where") || StringUtils.equals(field.getName(), "excludeProperties")) continue;
 
 	    		if (StringUtils.equals(field.getName(), "groupSearch")) {
 

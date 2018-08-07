@@ -27,7 +27,7 @@ public class FrSearchController extends MainController {
     public ModelMap populateAttribute(ModelMap model) {
         filterForm = new FilterForm();
 
-        filterForm.getPrivateGroupSearch().put("state", "0");
+        filterForm.getGroupSearch().put("state", "0");
         filterForm.setOrderBy("releaseDate");
         filterForm.setOrder("desc");
         relativePath = "/search";

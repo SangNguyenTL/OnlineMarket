@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import onlinemarket.dao.AttributeValuesDao;
 import onlinemarket.dao.CommentDao;
@@ -209,19 +210,21 @@ public class ProductServiceImpl implements ProductService {
 
         Integer perSale = 0;
         long value = 0;
-
-        for (Event event : frontendProduct.getEvents()){
-            if(!event.getDateFrom().before(new Date()) && !event.getDateTo().after(new Date())) continue;
-            if(event.getPercentValue() != null && event.getMaxPrice() > frontendProduct.getPrice() && event.getMinPrice() < frontendProduct.getPrice()){
-                perSale += event.getPercentValue();
-            }
-            if(event.getValue() != null  && event.getMaxPrice() > frontendProduct.getPrice() && event.getMinPrice() < frontendProduct.getPrice())
-                value += event.getValue();
+        Set<Event> events =  frontendProduct.getEvents();
+        for (Event event : events){
+            if(event.getMaxPrice() > frontendProduct.getPrice() && event.getMinPrice() < frontendProduct.getPrice()){
+                if(event.getPercentValue() != null)
+                    perSale += event.getPercentValue();
+                if(event.getValue() != null)
+                    value += event.getValue();
+            }else events.remove(event);
         }
+
         Double number = Math.ceil(frontendProduct.getPrice() - (frontendProduct.getPrice() * perSale/100d) - value);
 
         frontendProduct.setNewPrice(number.longValue());
         frontendProduct.setNewPriceStr(Help.format(frontendProduct.getNewPrice()));
+        frontendProduct.setEvents(events);
 
         if(perSale != 0)
             frontendProduct.setSale("-"+perSale.toString()+"%");

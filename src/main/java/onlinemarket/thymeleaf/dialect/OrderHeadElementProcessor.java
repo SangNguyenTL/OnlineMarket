@@ -121,7 +121,8 @@ public class OrderHeadElementProcessor extends AbstractElementTagProcessor {
 				if (value instanceof String && StringUtils.isEmpty((String) value))
 					continue;
 
-				if(StringUtils.equals(field.getName(), "privateGroupSearch")) continue;
+				if(StringUtils.equals(field.getName(), "where") || StringUtils.equals(field.getName(), "excludeProperties")) continue;
+
 				if (StringUtils.equals(field.getName(), "groupSearch")) {
 
 					@SuppressWarnings("unchecked")

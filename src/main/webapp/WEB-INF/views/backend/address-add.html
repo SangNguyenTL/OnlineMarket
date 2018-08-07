@@ -12,12 +12,11 @@
             <li class="breadcrumb-item" th:each="breadcrumb : ${breadcrumbs}"><a th:href="@{${breadcrumb[0]}}" th:text="${breadcrumb[1]}"></a></li>
         </ol>
         <h5 class="_300 margin" th:text="${pageTitle}"></h5>
-        <div class="alert alert-success" th:if="${success}">
-            <strong>Congratulation!</strong> Process completed.
-        </div>
         <div class="row">
             <div class="col-md-9">
-
+                <div class="alert alert-success" th:if="${success} != null">
+                    <strong>Congratulation!</strong> Process completed.
+                </div>
                 <div class="box">
                     <div class="box-header">
                         <h2><a th:href="@{${relativePath}}" th:text="${subPageTitle}"></a></h2>
@@ -72,7 +71,7 @@
                             <div class="form-group row">
                                 <label class="col-sm-3 form-control-label">Address</label>
                                 <div class="col-sm-9">
-                                    <input th:errorclass="parsley-error" class="form-control" type="text" th:field="*{address}" required data-parsley-length="[20, 255]" data-parsley-id="5"/>
+                                    <input th:errorclass="parsley-error" class="form-control" type="text" th:field="*{address}" required data-parsley-length="[15, 255]" data-parsley-id="5"/>
                                     <ul class="parsley-errors-list filled" id="parsley-id-5" th:if="${#fields.hasErrors('address')}"><li th:errors="*{address}"> </li></ul>
                                 </div>
                             </div>

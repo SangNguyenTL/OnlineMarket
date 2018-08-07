@@ -3,19 +3,16 @@ package onlinemarket.dao;
 import java.io.Serializable;
 
 import java.lang.reflect.ParameterizedType;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 import onlinemarket.util.Help;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import onlinemarket.form.filter.FilterForm;
@@ -37,11 +34,10 @@ public abstract class AbstractDao<PK extends Serializable, T> {
         return sessionFactory.getCurrentSession();
     }
 
-    private void addAll(Criteria criteria ,Map<String, String> map){
+    private void addAll(Criteria criteria, Map<String, String> map){
         for (Entry<String, String> entry : map.entrySet()) {
             String key = entry.getKey(),
                     value = entry.getValue();
-            if(key.equals("orderBy")) continue;
             String[] keyArr = key.split("\\.");
             if (keyArr.length == 2) {
                 key = keyArr[0] + "Alias";
@@ -82,7 +78,11 @@ public abstract class AbstractDao<PK extends Serializable, T> {
     }
 
     public void update(T entity) {
-        getSession().merge(entity);
+        getSession().update(entity);
+    }
+
+    public Object merge(T entity) {
+       return getSession().merge(entity);
     }
 
     public void delete(T entity) {
@@ -188,7 +188,7 @@ public abstract class AbstractDao<PK extends Serializable, T> {
 
         addAll(criteria, filterForm.getGroupSearch());
 
-        addAll(criteria, filterForm.getPrivateGroupSearch());
+//        map(criteria, filterForm.getWhere());
 
         criteria.setProjection(Projections.rowCount());
         Long count = (Long) criteria.uniqueResult();

@@ -2,12 +2,15 @@ package onlinemarket.controller.admin;
 
 
 import javax.validation.Valid;
+import javax.validation.groups.Default;
 
+import onlinemarket.model.other.AdvancedValidation;
 import onlinemarket.util.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -95,7 +98,7 @@ public class ProvinceController extends MainController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String processAddPage(@ModelAttribute("province") @Valid Province province,
+    public String processAddPage(@ModelAttribute("province") @Validated(value = {Default.class, AdvancedValidation.AddNew.class}) Province province,
                                  BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
 
         if (!result.hasErrors()) {
@@ -137,7 +140,7 @@ public class ProvinceController extends MainController {
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public String processUpdatePage(
-            @ModelAttribute("province") @Valid Province province,
+            @ModelAttribute("province") @Validated(value = {Default.class, AdvancedValidation.AddNew.class})  Province province,
             BindingResult result, ModelMap model, RedirectAttributes redirectAttributes) {
 
         if (!result.hasErrors()) {

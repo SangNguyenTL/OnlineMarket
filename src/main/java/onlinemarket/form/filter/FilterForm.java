@@ -1,13 +1,14 @@
 package onlinemarket.form.filter;
 
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class FilterForm {
 	
 	private Map<String, String> groupSearch = new TreeMap<>();
 
-	private Map<String, String> privateGroupSearch = new TreeMap<>();
+	private List<String> excludeProperties = new ArrayList<>();
+
+	private TreeMap<String, TreeMap<String, Object>> where = new TreeMap<>();
 
 	private String search = "";
 	
@@ -77,11 +78,19 @@ public class FilterForm {
 		this.groupSearch = groupSearch;
 	}
 
-	public Map<String, String> getPrivateGroupSearch() {
-		return privateGroupSearch;
+	public List<String> getExcludeProperties() {
+		return excludeProperties;
 	}
 
-	public void setPrivateGroupSearch(Map<String, String> privateGroupSearch) {
-		this.privateGroupSearch = privateGroupSearch;
+	public void setExcludeProperties(List<String> excludeProperties) {
+		this.excludeProperties = excludeProperties;
+	}
+
+	public TreeMap<String, TreeMap<String, Object>> getWhere() {
+		return where;
+	}
+
+	public void setWhere(TreeMap<String, TreeMap<String, Object>> where) {
+		this.where = where;
 	}
 }

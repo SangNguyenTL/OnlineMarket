@@ -74,20 +74,7 @@ public abstract class MainController {
 
     @ModelAttribute("currentUser")
     public User getCurrentUser() {
-        String userName;
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if (principal instanceof UserDetails) {
-            userName = ((UserDetails) principal).getUsername();
-        } else {
-            userName = principal.toString();
-        }
-
-        currentUser = userService.getByEmail(userName);
-        if (currentUser == null) {
-            currentUser = new User();
-            currentUser.setEmail(userName);
-        }
+        currentUser = userService.getCurrentUser();
         return currentUser;
     }
 

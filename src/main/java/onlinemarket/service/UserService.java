@@ -17,4 +17,7 @@ public interface UserService extends InterfaceService<Integer, User> {
 
     void delete(Integer id) throws UserNotFoundException, UserHasEventException, UserHasPostException, UserHasProductException, UserIsSuperAdminException;
 
+    User getCurrentUser();
+
+    User getByKeyAndRole(int key);
 }

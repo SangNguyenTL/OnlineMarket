@@ -47,7 +47,7 @@ public class FrEventController extends MainController {
         filterForm.getGroupSearch();
         filterForm.setOrderBy("createDate");
         filterForm.setOrder("desc");
-        filterForm.getPrivateGroupSearch().put("status", "0");
+        filterForm.getGroupSearch().put("status", "0");
         title="Event list";
         generateBreadcrumbs();
         relativePath = "/event";

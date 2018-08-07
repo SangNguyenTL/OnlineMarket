@@ -27,9 +27,9 @@
                 <div class="item" th:each="event : ${eventList}">
                     <a th:href="@{'/event/'+${event.id}}">
                         <img th:if="${event.featureImage}" th:src="@{${event.featureImage}}" th:alt="${event.name}"
-                             class="img-responsive">
+                             class="w-full">
                         <img th:unless="${event.featureImage}" th:src="@{/assets/images/defaultImage.jpg}"
-                             alt="..." class="img-responsive">
+                             alt="..." class="w-full">
                     </a>
                 </div>
             </div>

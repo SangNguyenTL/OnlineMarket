@@ -48,7 +48,7 @@
     </script>
 </head>
 <body th:inline="text">
-<div class="wrapper-wide">
+<div class="box-shadow-z0 wrapper-box">
     <div id="header">
         <!-- Top Bar Start-->
         <nav id="top" class="htop">
@@ -70,7 +70,7 @@
                             <button class="btn-link dropdown-toggle" data-toggle="dropdown"><span> [[${currentUser.firstName}]] <i
                                     class="fa fa-caret-down"></i></span></button>
                             <ul class="dropdown-menu">
-                                <li sec:authorize="hasRole('ROLE_ADMIN')">
+                                <li sec:authorize="hasAnyRole('ADMIN','SUPPER_ADMIN')">
                                     <a class="nav-user-select" th:href="@{/admin}">Administrator</a>
                                 </li>
                                 <li>

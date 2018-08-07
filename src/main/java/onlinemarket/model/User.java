@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -55,6 +56,11 @@ public class User implements java.io.Serializable {
 	private Set<Event> events = new HashSet<>(0);
 	
 	public User() {
+	    Role role = new Role();
+	    role.setName("GUEST");
+	    this.role = role;
+	    this.email = "guest@guest";
+	    this.firstName = "anonymous";
 	}
 
 	@Id
@@ -127,7 +133,6 @@ public class User implements java.io.Serializable {
 
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	@NotNull
 	@BeforeToday
 	@Column(name = "birthday", length = 23)
 	public Date getBirthday() {
@@ -223,6 +228,8 @@ public class User implements java.io.Serializable {
 	}
 	
 	@JsonIgnore
+	@NotEmpty(groups = AdvancedValidation.Register.class)
+    @Valid
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
 	public List<Address> getAddresses() {
 		return addresses;

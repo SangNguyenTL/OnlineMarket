@@ -31,9 +31,14 @@
                 <strong>Obbs!</strong> [[${error}]].
             </div>
             <div class="row p-a">
-                <form th:object="${filterForm}" th:action="@{${relativePath}}" method="POST">
+                <form th:object="${filterForm}" th:action="@{${relativePath}}" method="GET">
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-3">
+                        <select class="form-control" th:field="*{groupSearch['status']}">
+                            <option value="">State</option>
+                            <option value="0">Active</option>
+                            <option value="1">In Active</option>
+                        </select>
                     </div>
                     <div class="col-sm-3">
                         <select class="form-control" th:field="*{searchBy}">
@@ -42,7 +47,7 @@
                             <option value="products.name">Product name</option>
                         </select>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-sm-6">
                         <div class="input-group">
                             <input class="form-control" placeholder="Search" type="text" th:field="*{search}">
                             <span class="input-group-btn">
@@ -63,9 +68,17 @@
                         <filter:th order="asc" orderBy="id" filter:uri="@{${relativePath}}" filter:currentPage="${page}"
                                    name="#">#
                         </filter:th>
+                        <filter:th order="asc" orderBy="status" filter:uri="@{${relativePath}}"
+                                   filter:currentPage="${page}"
+                                   name="Status">Name
+                        </filter:th>
                         <filter:th order="asc" orderBy="name" filter:uri="@{${relativePath}}"
                                    filter:currentPage="${page}"
                                    name="Name">Name
+                        </filter:th>
+                        <filter:th order="asc" orderBy="count" filter:uri="@{${relativePath}}"
+                                   filter:currentPage="${page}"
+                                   name="Count">Name
                         </filter:th>
                         <filter:th order="asc" orderBy="dateForm" filter:uri="@{${relativePath}}"
                                    filter:currentPage="${page}"
@@ -90,7 +103,12 @@
                     <tbody>
                     <tr th:each="event: ${result.list}">
                         <td th:text="${event.id}"></td>
+                        <td>
+                            <th:block th:if="${event.status} == 0">Active</th:block>
+                            <th:block th:if="${event.status} == 1">In Active</th:block>
+                        </td>
                         <td th:text="${event.name}"></td>
+                        <td th:text="${event.count}"></td>
                         <td th:text="${#dates.format(event.dateFrom, 'dd-MM-yyyy')}"></td>
                         <td th:text="${#dates.format(event.dateTo, 'dd-MM-yyyy')}"></td>
                         <td th:if="${event.percentValue != null}" th:text="${event.percentValue}+' %'"></td>

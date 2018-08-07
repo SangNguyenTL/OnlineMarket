@@ -24,7 +24,7 @@ import onlinemarket.service.AttributeGroupService;
 import onlinemarket.service.AttributeService;
 
 @Controller
-@RequestMapping("/admin/product-category/{productCategoryId:^\\d++}/attribute-group")
+@RequestMapping("/admin/product-category/{productCategoryId:^\\d+}/attribute-group")
 public class AttributeGroupController extends MainController {
 
     @Autowired

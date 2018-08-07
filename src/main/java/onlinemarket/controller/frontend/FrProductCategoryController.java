@@ -41,7 +41,7 @@ public class FrProductCategoryController extends FrGeneralGroup {
         initValue();
         productCategory = productCategoryService.getByDeclaration("slug", productCategorySlug);
         if(productCategory == null) throw new NoHandlerFoundException(null, null, null);
-        filterForm.getPrivateGroupSearch().put("productCategory.slug", productCategory.getSlug());
+        filterForm.getGroupSearch().put("productCategory.slug", productCategory.getSlug());
 
         subTitle = productCategory.getName();
         brandPath = relativePath + "/" + productCategorySlug;
@@ -56,7 +56,7 @@ public class FrProductCategoryController extends FrGeneralGroup {
         initValue();
         productCategory = productCategoryService.getByDeclaration("slug", productCategorySlug);
         if(productCategory == null) throw new NoHandlerFoundException(null, null, null);
-        filterForm.getPrivateGroupSearch().put("productCategory.slug", productCategory.getSlug());
+        filterForm.getGroupSearch().put("productCategory.slug", productCategory.getSlug());
 
         subTitle = productCategory.getName();
         brandPath = relativePath + "/" + productCategorySlug;
@@ -75,8 +75,8 @@ public class FrProductCategoryController extends FrGeneralGroup {
         productCategory = productCategoryService.getByDeclaration("slug", productCategorySlug);
         brand = brandService.getByDeclaration("slug",brandSlug );
         if(brand == null) throw new NoHandlerFoundException(null, null, null);
-        filterForm.getPrivateGroupSearch().put("productCategory.slug", productCategory.getSlug());
-        filterForm.getPrivateGroupSearch().put("brand.slug", brand.getSlug());
+        filterForm.getGroupSearch().put("productCategory.slug", productCategory.getSlug());
+        filterForm.getGroupSearch().put("brand.slug", brand.getSlug());
 
         subTitle = productCategory.getName()  + " - "+ brand.getName();
 
@@ -95,8 +95,8 @@ public class FrProductCategoryController extends FrGeneralGroup {
         brand = brandService.getByDeclaration("slug",brandSlug );
         if(brand == null) throw new NoHandlerFoundException(null, null, null);
         filterForm.setCurrentPage(page);
-        filterForm.getPrivateGroupSearch().put("productCategory.slug", productCategory.getSlug());
-        filterForm.getPrivateGroupSearch().put("brand.slug", brand.getSlug());
+        filterForm.getGroupSearch().put("productCategory.slug", productCategory.getSlug());
+        filterForm.getGroupSearch().put("brand.slug", brand.getSlug());
 
         subTitle = productCategory.getName()  + " - "+ brand.getName();
 

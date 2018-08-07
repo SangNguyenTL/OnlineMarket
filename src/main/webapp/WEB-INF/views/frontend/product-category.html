@@ -3,10 +3,6 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:filter="http://thymeleafexamples"
       layout:decorate="templates/frontend">
-
-<th:block layout:fragment="head">
-
-</th:block>
 <!--/*@thymesVar id="productCategoryList" type="java.util.List<onlinemarket.model.ProductCategory>"*/-->
 <!--/*@thymesVar id="productBestSellerList" type="java.util.List<onlinemarket.model.Product>"*/-->
 <!--/*@thymesVar id="productBestViewing" type="java.util.List<onlinemarket.model.Product>"*/-->
@@ -49,11 +45,11 @@
                 <h1 class="title" th:text="${title}">All product</h1>
                 <h3 class="subtitle" th:text="${subTitle}"></h3>
                 <div class="category-list-thumb owl-carousel latest_brands_carousel">
-                    <div th:each="brand : ${brandList}" class="owl-carousel latest_brands_carousel">
+                    <div th:each="brand : ${brandList}" class="owl-item">
                         <div class="box-image">
                             <a  th:href="@{${brandPath+'/'+brand.slug}}"><img
                                     th:src="@{${brand.imagePath}}"
-                                    th:alt="${brand.name}+' ('+${brand.products.size()}+')'"></a>
+                                    th:alt="${brand.name}+' ('+${brand.products.size()}+')'" /></a>
                         </div>
                         <a th:href="@{${brandPath+'/'+brand.slug}}"
                            th:text="${brand.name}+' ('+${brand.products.size()}+')'"></a>

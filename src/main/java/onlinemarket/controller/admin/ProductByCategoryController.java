@@ -27,7 +27,7 @@ import onlinemarket.service.AttributeGroupService;
 import onlinemarket.service.ProductService;
 
 @Controller
-@RequestMapping("/admin/product-category/{productCategoryId:^\\d}/product")
+@RequestMapping("/admin/product-category/{productCategoryId:^\\d+}/product")
 public class ProductByCategoryController extends MainController {
 
 	@Autowired
@@ -57,6 +57,8 @@ public class ProductByCategoryController extends MainController {
 		breadcrumbs.add(new String[]{ relativePath, "Product"});
 
 		filterForm = new FilterForm();
+		filterForm.setOrderBy("createDate");
+		filterForm.setOrder("DESC");
 		model.put("productPage", true);
 		model.put("path", productCategory.getSlug() + "-product");
 		model.put("productCategory", productCategory);

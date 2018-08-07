@@ -13,9 +13,9 @@
 				<li class="breadcrumb-item" th:each="breadcrumb : ${breadcrumbs}"><a th:href="@{${breadcrumb[0]}}" th:text="${breadcrumb[1]}"></a></li>
 			</ol>
 			<h5 class="_300 margin" th:text="${pageTitle}"></h5>
-			<div class="alert alert-success" th:if="${param.success}"><strong>Congratulation!</strong> You changed successfully.</div>
 			<div class="row">
 				<div class="col-md-9">
+					<div class="alert alert-success" th:if="${success}"><strong>Congratulation!</strong> You changed successfully.</div>
 
 					<div class="box">
 						<div class="box-header">

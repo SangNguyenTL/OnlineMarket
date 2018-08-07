@@ -9,13 +9,15 @@ import javax.persistence.*;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import onlinemarket.model.other.AdvancedValidation;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import onlinemarket.model.other.AdvancedValidation;
+
 
 
 @Entity
@@ -62,7 +64,6 @@ public class Address implements java.io.Serializable {
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-
 	@Column(name = "_id", unique = true, nullable = false)
 	public Integer getId() {
 		return this.id;
@@ -85,6 +86,7 @@ public class Address implements java.io.Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "province_id", nullable = false)
 	@NotNull
+	@Valid
 	public Province getProvince() {
 		return this.province;
 	}
@@ -94,8 +96,8 @@ public class Address implements java.io.Serializable {
 	}
 
 	@Column(name = "first_name", nullable = false)
-	@Size(max = 64, groups = { AdvancedValidation.Advanced.class })
-	@NotEmpty(groups = { AdvancedValidation.Advanced.class })
+	@Size(max = 64)
+	@NotEmpty(groups = AdvancedValidation.AddNew.class)
 	public String getFirstName() {
 		return this.firstName;
 	}
@@ -105,8 +107,8 @@ public class Address implements java.io.Serializable {
 	}
 
 	@Column(name = "last_name", nullable = false)
-	@Size(max = 64, groups = { AdvancedValidation.Advanced.class })
-	@NotEmpty(groups = { AdvancedValidation.Advanced.class })
+	@Size(max = 64)
+	@NotEmpty(groups = AdvancedValidation.AddNew.class)
 	public String getLastName() {
 		return this.lastName;
 	}
