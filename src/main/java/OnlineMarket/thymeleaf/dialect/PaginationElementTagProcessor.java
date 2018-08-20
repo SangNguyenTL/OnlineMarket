@@ -51,9 +51,9 @@ public class PaginationElementTagProcessor extends AbstractElementTagProcessor{
 		
 		if(filterForm == null) filterForm = new FilterForm();
 
-        ResultObject resultObject = (ResultObject) context.getVariable("result");
+        ResultObject<?> resultObject = (ResultObject) context.getVariable("result");
 
-		if(resultObject == null) resultObject = new ResultObject();
+		if(resultObject == null) resultObject = new ResultObject<>();
 
         Integer currentPage = filterForm.getCurrentPage();
 

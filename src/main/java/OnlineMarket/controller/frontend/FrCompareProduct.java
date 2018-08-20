@@ -28,6 +28,7 @@ public class FrCompareProduct extends MainController {
     ProductService productService;
 
     @RequestMapping( value = "", method = {RequestMethod.GET, RequestMethod.POST})
+    @SuppressWarnings("unchecked")
     public String mainPage(@PathVariable("productCategorySlug") String productCategorySlug, @CookieValue(value = "compareList", required = false)String listCompare, ModelMap modelMap) throws NoHandlerFoundException {
 
         ProductCategory productCategory = productCategoryService.getByDeclaration("slug", productCategorySlug);

@@ -5,6 +5,8 @@ import org.springframework.context.ApplicationEvent;
 
 public class OnCommentApprovedEvent extends ApplicationEvent {
 
+    private static final long serialVersionUID = 1L;
+
     final private Comment comment;
 
     public OnCommentApprovedEvent(Comment comment) {
