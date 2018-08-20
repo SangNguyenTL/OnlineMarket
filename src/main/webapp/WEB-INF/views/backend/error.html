@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--/*@thymesVar id="pageTitle" type="java.lang.String"*/-->
+<!--/*@thymesVar id="general" type="OnlineMarket.form.config.GeneralConfig"*/-->
+<!--/*@thymesVar id="logo" type="OnlineMarket.form.config.LogoConfig"*/-->
 <head>
     <meta charset="utf-8"/>
     <title th:text="(${pageTitle} == null) ? ${general.title} : (${pageTitle} + ' | '+ ${general.title})"></title>
@@ -28,12 +31,15 @@
     <link rel="stylesheet" th:href="@{/assets/backend/assets/styles/app.css}" type="text/css"/>
     <!-- endbuild -->
     <link rel="stylesheet" th:href="@{/assets/backend/assets/styles/font.css}" type="text/css"/>
-    <script type="text/javascript" th:inline="javascript">
+    <script  th:inline="javascript">
         /*<![CDATA[*/
+        /*[+
         var PATH = [[@{/}]],
-            PATH_IMAGE = [[@{''}]],
-            googleApiKey = "AIzaSyDwgEWMLktEQnK7Cn8SBMDTV6jn1I1G3fc";
-
+            PATH_IMAGE = PATH.substring(0, PATH.length -1),
+            googleApiKey  = [[${api.apiGoogle}]],
+            uploadType = [[${pageType}]] || "product",
+            PATH_ICON = [[@{/assets/backend/scripts/FontAwesome-JSON/FontAwesome.json}]];
+        +]*/
         /*]]>*/
     </script>
 </head>
@@ -41,19 +47,7 @@
 <div class="app" id="app">
 
     <!-- ############ LAYOUT START-->
-    <div class="app-body bg-auto w-full" th:classappend="${code} < 500 ? 'amber' : 'indigo'">
-        <div class="text-center pos-rlt p-y-md">
-            <h1 class="text-shadow m-a-0 text-white text-4x">
-                <span class="text-2x font-bold block m-t-lg" th:text="${code}"></span>
-            </h1>
-            <h2 class="h1 m-y-lg text-black">OOPS!</h2>
-            <p class="h5 m-y-lg text-u-c font-bold text-black" th:text="${errorMsg}"></p>
 
-            <a th:href="@{/}" class="md-btn amber-700 md-raised p-x-md">
-                <span class="text-white">Go home!</span>
-            </a>
-        </div>
-    </div>
 
     <!-- ############ LAYOUT END-->
 

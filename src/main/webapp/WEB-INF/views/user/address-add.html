@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+         layout:decorate="templates/backend-user">
+<head>
+</head>
+<body>
+
+<div ui-view class="app-body" id="view" layout:fragment="container">
+    <div class="padding">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item" th:each="breadcrumb : ${breadcrumbs}"><a th:href="@{${breadcrumb[0]}}" th:text="${breadcrumb[1]}"></a></li>
+        </ol>
+        <h5 class="_300 margin" th:text="${pageTitle}"></h5>
+        <div class="row">
+            <div class="col-md-9">
+                <div class="alert alert-success" th:if="${success} != null">
+                    <strong>Congratulation!</strong> Process completed.
+                </div>
+                <div class="box">
+                    <div class="box-header">
+                        <h2><a th:href="@{${relativePath}}" th:text="${subPageTitle}"></a></h2>
+                        <small th:text="${description}"></small>
+                    </div>
+
+                    <div class="box-divider m-a-0"></div>
+
+                    <div class="box-body">
+
+                        <form ui-jp="parsley" role="form" th:object="${address}" th:action="@{${pathAction}}" method="POST">
+                            <input th:if="${action} == 'update'" type="hidden" th:field="*{id}" />
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">First Name</label>
+                                <div class="col-sm-9">
+                                    <input th:errorclass="parsley-error" class="form-control" type="text" th:field="*{firstName}" required maxlength="64" data-parsley-id="1"/>
+                                    <ul class="parsley-errors-list filled" id="parsley-id-1" th:if="${#fields.hasErrors('firstName')}"><li th:errors="*{firstName}"> </li></ul>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Last Name</label>
+                                <div class="col-sm-9">
+                                    <input th:errorclass="parsley-error" class="form-control" type="text" th:field="*{lastName}" required maxlength="64" data-parsley-id="2"/>
+                                    <ul class="parsley-errors-list filled" id="parsley-id-2" th:if="${#fields.hasErrors('lastName')}"><li th:errors="*{lastName}"> </li></ul>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Phone Number</label>
+                                <div class="col-sm-9">
+                                    <input th:errorclass="parsley-error" class="form-control" type="number" th:field="*{phoneNumber}" required data-parsley-length="[8, 11]" data-parsley-id="3"/>
+                                    <ul class="parsley-errors-list filled" id="parsley-id-3" th:if="${#fields.hasErrors('phoneNumber')}"><li th:errors="*{phoneNumber}"> </li></ul>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">City</label>
+                                <div class="col-sm-9">
+                                    <input th:errorclass="parsley-error" class="form-control" type="text" th:field="*{city}" required data-parsley-length="[3, 32]" data-parsley-id="5"/>
+                                    <ul class="parsley-errors-list filled" id="parsley-id-5" th:if="${#fields.hasErrors('city')}"><li th:errors="*{city}"> </li></ul>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Province</label>
+                                <div class="col-sm-9">
+                                    <select th:errorclass="parsley-error" class="form-control" th:field="*{province}" required data-parsley-id="6">
+                                        <option th:value="null"> --- Please choise --- </option>
+                                        <option th:each="province : ${provinceList}"
+                                                th:value="${{province}}" th:text="${province.name}"> --- Please choise --- </option>
+                                    </select>
+                                    <ul class="parsley-errors-list filled" id="parsley-id-6" th:if="${#fields.hasErrors('province')}"><li th:errors="*{province}"> </li></ul>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Address</label>
+                                <div class="col-sm-9">
+                                    <input th:errorclass="parsley-error" class="form-control" type="text" th:field="*{address}" required data-parsley-length="[15, 255]" data-parsley-id="5"/>
+                                    <ul class="parsley-errors-list filled" id="parsley-id-5" th:if="${#fields.hasErrors('address')}"><li th:errors="*{address}"> </li></ul>
+                                </div>
+                            </div>
+                            <div class="dker p-a text-right">
+                                <button type="submit" class="btn info">Save</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

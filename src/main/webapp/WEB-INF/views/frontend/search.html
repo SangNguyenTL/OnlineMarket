@@ -7,19 +7,19 @@
 <th:block layout:fragment="head">
 
 </th:block>
-<!--/*@thymesVar id="productCategoryList" type="java.util.List<onlinemarket.model.ProductCategory>"*/-->
-<!--/*@thymesVar id="productBestSellerList" type="java.util.List<onlinemarket.model.Product>"*/-->
-<!--/*@thymesVar id="productBestViewing" type="java.util.List<onlinemarket.model.Product>"*/-->
-<!--/*@thymesVar id="productBestRating" type="java.util.List<onlinemarket.model.Product>"*/-->
-<!--/*@thymesVar id="brandList" type="java.util.List<onlinemarket.model.Brand>"*/-->
-<!--/*@thymesVar id="productCategory" type="onlinemarket.model.ProductCategory"*/-->
+<!--/*@thymesVar id="productCategoryList" type="java.util.List<OnlineMarket.model.ProductCategory>"*/-->
+<!--/*@thymesVar id="productBestSellerList" type="java.util.List<OnlineMarket.model.Product>"*/-->
+<!--/*@thymesVar id="productBestViewing" type="java.util.List<OnlineMarket.model.Product>"*/-->
+<!--/*@thymesVar id="productBestRating" type="java.util.List<OnlineMarket.model.Product>"*/-->
+<!--/*@thymesVar id="brandList" type="java.util.List<OnlineMarket.model.Brand>"*/-->
+<!--/*@thymesVar id="productCategory" type="OnlineMarket.model.ProductCategory"*/-->
 <!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
 <!--/*@thymesVar id="relativePath" type="java.lang.String"*/-->
 <!--/*@thymesVar id="productPath" type="java.lang.String"*/-->
 <!--/*@thymesVar id="brandPath" type="java.lang.String"*/-->
 <!--/*@thymesVar id="subTitle" type="java.lang.String"*/-->
-<!--/*@thymesVar id="result" type="onlinemarket.result.ResultObject<onlinemarket.model.Product>"*/-->
-<!--/*@thymesVar id="filterForm" type="onlinemarket.form.filter.FilterForm"*/-->
+<!--/*@thymesVar id="result" type="OnlineMarket.result.ResultObject<OnlineMarket.model.Product>"*/-->
+<!--/*@thymesVar id="filterForm" type="OnlineMarket.form.filter.FilterForm"*/-->
 <head>
 </head>
 <body th:inline="text">
@@ -32,33 +32,33 @@
         </ul>
         <div class="row">
             <div id="content" class="col-sm-12">
-                <form th:object="${filterForm}" th:action="@{${relativePath}}" method="POST">
+                <form th:object="${filterForm}" th:action="@{${relativePath}}" method="GET">
                     <h1 class="title">Search</h1>
                     <h3 class="subtitle" th:text="*{search}"></h3>
                     <div class="row">
-                        <div class="col-sm-3">
+                        <div class="col-sm-3 p-a-xs text-center">
                             <input type="text" class="form-control" placeholder="Keywords" th:field="*{search}">
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-3 p-a-xs text-center">
                             <select class="form-control" th:field="*{groupSearch['productCategory.id']}">
                                 <option value="">All Categories</option>
                                 <option th:each="productCate : ${productCategoryList}" th:value="${productCate.id}" th:text="${productCate.name}"></option>
                             </select>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-3 p-a-xs text-center">
                             <select class="form-control" th:field="*{groupSearch['brand.id']}">
                                 <option value="">All Categories</option>
                                 <option th:each="brand : ${brandList}" th:value="${brand.id}" th:text="${brand.name}"></option>
                             </select>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-3 p-a-xs text-center">
                             <input type="submit" class="btn btn-primary" id="button-search" value="Search">
                         </div>
                     </div>
                     <div class="divider"></div>
                     <div class="product-filter">
                         <div class="row">
-                            <div class="col-md-3 col-sm-4">
+                            <div class="col-md-2 text-center p-a-xs">
                                 <div class="btn-group">
                                     <button type="button" id="list-view" class="btn btn-default" data-toggle="tooltip"
                                             title="List"><i class="fa fa-th-list"></i></button>
@@ -66,37 +66,31 @@
                                             title="Grid"><i class="fa fa-th"></i></button>
                                 </div>
                             </div>
-                            <div class="col-sm-2 text-right">
-                                <label class="control-label" for="input-sort">Sort By:</label>
-                            </div>
-                            <div class="col-md-3 col-sm-2 text-right">
-                                <select id="input-sort" class="form-control col-sm-3"
-                                        th:field="*{groupSearch[orderBy]}">
-                                    <option value="">Default</option>
-                                    <option value="name.asc">Name (A - Z)</option>
-                                    <option value="name.desc">Name (Z - A)</option>
-                                    <option value="price.asc">Price (Low &gt; High)</option>
-                                    <option value="price.desc">Price (High &gt; Low)</option>
-                                    <option value="ratingStatistics.totalScore.desc">Rating (Highest)</option>
-                                    <option value="ratingStatistics.totalScore.asc">Rating (Lowest)</option>
-                                    <option value="productViewsStatistic.day.asc">View in day (Lowest)</option>
-                                    <option value="productViewsStatistic.day.desc">View on day (Highest)</option>
-                                    <option value="productViewsStatistic.week.asc">View on week (Lowest)</option>
-                                    <option value="productViewsStatistic.week.desc">View on week (Highest)</option>
-                                    <option value="productViewsStatistic.month.asc">View on month (Lowest)</option>
-                                    <option value="productViewsStatistic.month.desc">View on month (Highest)</option>
-                                    <option value="productViewsStatistic.year.asc">View on year (Lowest)</option>
-                                    <option value="productViewsStatistic.year.desc">View on year (Highest)</option>
-                                    <option value="productViewsStatistic.total.asc">View on total (Lowest)</option>
-                                    <option value="productViewsStatistic.total.desc">View on total (Highest)</option>
-                                    <option value="releaseDate.asc">Model oldest</option>
-                                    <option value="releaseDate.desc">Model newest</option>
+                            <div class="col-sm-6 col-md-3 text-center p-a-xs">
+                                <select class="form-control"
+                                        th:field="*{orderBy}">
+                                    <option value="">Sort by ...</option>
+                                    <option value="name">Name</option>
+                                    <option value="price">Price</option>
+                                    <option value="ratingStatistics.totalScore">Rating (Highest)</option>
+                                    <option value="productViewsStatistic.day">View in day (Lowest)</option>
+                                    <option value="productViewsStatistic.week">View on week (Highest)</option>
+                                    <option value="productViewsStatistic.month">View on month (Highest)</option>
+                                    <option value="productViewsStatistic.year">View on year (Highest)</option>
+                                    <option value="productViewsStatistic.total">View on total (Highest)</option>
+                                    <option value="releaseDate">Model newest</option>
                                 </select>
                             </div>
-                            <div class="col-sm-1 text-right">
+                            <div class="col-sm-6 col-md-2 text-center p-a-xs">
+                                <select class="form-control" th:field="*{order}">
+                                    <option value="asc">Ascending</option>
+                                    <option value="desc">Decrease</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6 col-md-2 text-center p-a-xs">
                                 <label class="control-label" for="input-limit">Show:</label>
                             </div>
-                            <div class="col-sm-2 text-right">
+                            <div class="col-sm-6 col-md-2 text-center p-a-xs">
                                 <select id="input-limit" class="form-control" th:field="*{size}">
                                     <option th:value="10">10 rows</option>
                                     <option th:value="20"
@@ -107,7 +101,7 @@
                                     </option>
                                 </select>
                             </div>
-                            <div class="col-sm-1">
+                            <div class="col-sm-12 col-md-1 text-center p-a-xs">
                                 <button class="btn btn-default btn-sm" type="submit">Go!</button>
                             </div>
                         </div>
@@ -122,8 +116,8 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-6 text-left">
-                        <filter:pagination filter:currentPage="${page}"
-                                           filter:totalPages="${result.totalPages}"
+                        <filter:pagination
+
                                            filter:uri="@{${relativePath}}"></filter:pagination>
                     </div>
                     <div class="col-sm-6 text-right"

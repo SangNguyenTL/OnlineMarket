@@ -7,11 +7,11 @@
 <th:block layout:fragment="head">
 
 </th:block>
-<!--/*@thymesVar id="productCategory" type="onlinemarket.model.ProductCategory"*/-->
-<!--/*@thymesVar id="currentUser" type="onlinemarket.model.User"*/-->
+<!--/*@thymesVar id="productCategory" type="OnlineMarket.model.ProductCategory"*/-->
+<!--/*@thymesVar id="currentUser" type="OnlineMarket.model.User"*/-->
 <!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
 <!--/*@thymesVar id="relativePath" type="java.lang.String"*/-->
-<!--/*@thymesVar id="result" type="onlinemarket.result.ResultObject<onlinemarket.model.Product>"*/-->
+<!--/*@thymesVar id="result" type="OnlineMarket.result.ResultObject<OnlineMarket.model.Product>"*/-->
 
 <head>
 </head>
@@ -27,53 +27,18 @@
         <!-- Breadcrumb End-->
         <h1 class="title" th:text="${title}">Product Comparison</h1>
         <div class="row">
-            <form th:object="${order}" th:action="@{${relativePath}}"></form>
-            <div class="col-sm-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title"><i class="fa fa-ticket"></i> Use Coupon Code</h4>
-                    </div>
-                    <div class="panel-body">
-                        <label class="col-sm-3 control-label">Enter coupon code</label>
-                        <input type="text" class="form-control" th:field="*{coupon}"
-                               placeholder="Enter your coupon here" value="" name="coupon">
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title"><i class="fa fa-ticket"></i> Address</h4>
-                    </div>
-                    <div class="panel-body">
-                        <label class="col-sm-3 control-label">Choice address</label>
-                        <select class="form-control" th:field="*{addressId}">
-                            <option value=""></option>
-                            <option th:each="address : ${currentUser.addresses}" th:value="${address.id}" th:text="${address.address}"></option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title"><i class="fa fa-shopping-cart"></i> Shopping cart</h4>
-                    </div>
-                    <div class="panel-body">
-                        <div class="table-responsive simpleCart_items">
-
+            <div id="content" class="col-sm-12">
+                <div class="col-sm-4"></div>
+                <div class="col-sm-8">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title"><i class="fa fa-shopping-cart"></i> Shopping cart</h4>
                         </div>
-                        <table class="table table-bordered">
-                            <tbody>
-                            <tr>
-                                <td class="text-right"><strong>Total</strong></td>
-                                <td class="text-right simpleCart_total">$1,132.00</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <div class="buttons">
-                            <div class="pull-right">
-                                <input type="button" class="btn btn-primary" id="button-confirm" value="Confirm Order">
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <div class="simpleCart_items table table-responsive">
+
+                                </div>
                             </div>
                         </div>
                     </div>

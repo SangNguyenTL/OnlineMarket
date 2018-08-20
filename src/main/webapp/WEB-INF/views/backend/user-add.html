@@ -30,7 +30,7 @@
                     <div class="box-divider m-a-0"></div>
 
                     <div class="box-body">
-                        <!--/*@thymesVar id="user" type="onlinemarket.model.User"*/-->
+                        <!--/*@thymesVar id="user" type="OnlineMarket.model.User"*/-->
                         <form ui-jp="parsley" role="form" th:object="${user}"
                               th:action="@{${pathAction}}" method="POST">
                             <input th:if="${action} == 'update'" type="hidden"
@@ -133,7 +133,7 @@
                                             data-parsley-id="5" required>
                                         <option value="">Please choice</option>
                                         <option
-                                                th:each="gender : ${T(onlinemarket.model.Gender).values()}"
+                                                th:each="gender : ${T(OnlineMarket.util.other.Gender).values()}"
                                                 th:value="${gender.code}" th:text="${gender.text}"></option>
                                     </select>
                                     <ul class="parsley-errors-list filled" id="parsley-id-5"
@@ -149,7 +149,7 @@
                                             data-parsley-id="6" required>
                                         <option value="">Please choice</option>
                                         <option
-                                                th:each="st : ${T(onlinemarket.model.State).values()}"
+                                                th:each="st : ${T(OnlineMarket.util.other.State).values()}"
                                                 th:value="${st}" th:text="${st.state}"></option>
                                     </select>
                                     <ul class="parsley-errors-list filled" id="parsley-id-6"
@@ -196,6 +196,17 @@
                                         th:if="${#fields.hasErrors('password')}">
                                         <li th:errors="*{password}"></li>
                                     </ul>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Reset Session</label>
+                                <div class="col-sm-9">
+                                    <div class="check-box">
+                                        <label class="ui-check ui-check-md">
+                                            <input type="checkbox" name="flagReset" value="1">
+                                            <i class="dark"></i>
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                             <div class="dker p-a text-right">

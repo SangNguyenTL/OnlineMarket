@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:filter="http://thymeleafexamples"
       layout:decorate="templates/backend">
-<!--/*@thymesVar id="result" type="onlinemarket.result.ResultObject<onlinemarket.model.ProductCategory>"*/-->
+<!--/*@thymesVar id="result" type="OnlineMarket.result.ResultObject<OnlineMarket.model.ProductCategory>"*/-->
 <!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
 <head>
 </head>
@@ -48,11 +48,11 @@
                 <table class="table table-hover b-t">
                     <thead>
                     <tr>
-                        <filter:th order="asc" orderBy="id" filter:uri="@{${relativePath}}" filter:currentPage="${page}" name="#">#</filter:th>
-                        <filter:th order="asc" orderBy="score" filter:uri="@{${relativePath}}" filter:currentPage="${page}" name="name">Product Name</filter:th>
-                        <filter:th order="asc" orderBy="name" filter:uri="@{${relativePath}}" filter:currentPage="${page}" name="Total Score">Total Score</filter:th>
-                        <filter:th order="asc" orderBy="lastName" filter:uri="@{${relativePath}}" filter:currentPage="${page}" name="Average Score">Average Score</filter:th>
-                        <filter:th order="asc" orderBy="counter" filter:uri="@{${relativePath}}" filter:currentPage="${page}" name="Counter">Counter</filter:th>
+                        <filter:th order="asc" orderBy="id" filter:uri="@{${relativePath}}" name="#">#</filter:th>
+                        <filter:th order="asc" orderBy="score" filter:uri="@{${relativePath}}" name="name">Product Name</filter:th>
+                        <filter:th order="asc" orderBy="name" filter:uri="@{${relativePath}}" name="Total Score">Total Score</filter:th>
+                        <filter:th order="asc" orderBy="lastName" filter:uri="@{${relativePath}}" name="Average Score">Average Score</filter:th>
+                        <filter:th order="asc" orderBy="counter" filter:uri="@{${relativePath}}" name="Counter">Counter</filter:th>
                     </tr>
                     </thead>
                     <tbody>
@@ -80,12 +80,12 @@
                                 <option value="20" th:if="${result.totalPages * filterForm.size} > 10">20 rows</option>
                                 <option value="50" th:if="${result.totalPages * filterForm.size} > 50">50 rows</option>
                             </select>
-                            <button type="submit" class="btn btn-sm white">Apply</button>
+                            <button type="submit" class="btn btn-sm btn-fw white">Apply</button>
                         </form>
 
                     </div>
                     <div class="col-sm-4 pull-right text-right text-center-xs">
-                        <filter:pagination filter:currentPage="${page}" filter:totalPages="${result.totalPages}" filter:uri="@{${relativePath}}"></filter:pagination>
+                        <filter:pagination filter:uri="@{${relativePath}}"></filter:pagination>
                     </div>
                 </div>
             </footer>

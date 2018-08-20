@@ -21,7 +21,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jackson.version>2.4.0</jackson.version>
 		<jaxb-api.version>2.2.11</jaxb-api.version>
-		<commons-lang3.version>3.7</commons-lang3.version>
+		<commons-lang3.version>3.0</commons-lang3.version>
 		<war.pakage.name>OnlineMarket</war.pakage.name>
 	</properties>
 	<dependencies>
@@ -224,6 +224,12 @@
 			<artifactId>jsoup</artifactId>
 			<version>1.11.3</version>
 		</dependency>
+
+        <dependency>
+            <groupId>eu.bitwalker</groupId>
+            <artifactId>UserAgentUtils</artifactId>
+            <version>1.21</version>
+        </dependency>
 
 	</dependencies>
 	<build>

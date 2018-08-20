@@ -1,31 +1,51 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<!--/*@thymesVar id="productCategoryList" type="java.util.List<onlinemarket.model.ProductCategory>"*/-->
+<!--/*@thymesVar id="productCategoryList" type="java.util.List<OnlineMarket.model.ProductCategory>"*/-->
 <!--/*@thymesVar id="path" type="java.lang.String"*/-->
 <!--/*@thymesVar id="userPage" type="java.lang.Boolean"*/-->
 <!--/*@thymesVar id="brandPage" type="java.lang.Boolean"*/-->
 <!--/*@thymesVar id="productCategoryPage" type="java.lang.Boolean"*/-->
+<!--/*@thymesVar id="commentPage" type="java.lang.Boolean"*/-->
+<!--/*@thymesVar id="dashboardPage" type="java.lang.Boolean"*/-->
+<!--/*@thymesVar id="reviewListPage" type="java.lang.Boolean"*/-->
 <!--/*@thymesVar id="productPage" type="java.lang.Boolean"*/-->
 <!--/*@thymesVar id="postCategoryPage" type="java.lang.Boolean"*/-->
 <!--/*@thymesVar id="postPage" type="java.lang.Boolean"*/-->
 <!--/*@thymesVar id="pagePage" type="java.lang.Boolean"*/-->
+<!--/*@thymesVar id="reviewPage" type="java.lang.Boolean"*/-->
 <!--/*@thymesVar id="menuGroupPage" type="java.lang.Boolean"*/-->
 <!--/*@thymesVar id="mediaPage" type="java.lang.Boolean"*/-->
+<!--/*@thymesVar id="reviewStatisticPage" type="java.lang.Boolean"*/-->
 <!--/*@thymesVar id="eventPage" type="java.lang.Boolean"*/-->
+<!--/*@thymesVar id="profilePage" type="java.lang.Boolean"*/-->
 <!--/*@thymesVar id="provincePage" type="java.lang.Boolean"*/-->
+<!--/*@thymesVar id="ratingPage" type="java.lang.Boolean"*/-->
 <!--/*@thymesVar id="configPage" type="java.lang.Boolean"*/-->
+<!--/*@thymesVar id="settingPage" type="java.lang.Boolean"*/-->
+<!--/*@thymesVar id="addressPage" type="java.lang.Boolean"*/-->
+<!--/*@thymesVar id="user" type="OnlineMarket.model.User"*/-->
 <head>
     <meta charset="UTF-8">
     <title>Insert title here</title>
 </head>
 <body>
 
-<div th:fragment="nav">
+<div th:fragment="admin">
     <nav class="scroll nav-light">
-
+        <!-- Administrator -->
         <ul class="nav" ui-nav>
             <li class="nav-header hidden-folded">
                 <small class="text-muted">Main</small>
+            </li>
+            <li th:class="${dashboardPage} ? 'active'">
+                <a th:href="@{/admin}" >
+                    <span class="nav-icon">
+                      <i class="material-icons">&#xe3fc;
+                        <span th:attr="ui-include=@{'\'/assets/backend/assets/images/i_0.svg\''}"></span>
+                      </i>
+                    </span>
+                    <span class="nav-text">Dashboard</span>
+                </a>
             </li>
             <li th:class="${userPage} ? 'active'"><a> <span
                     class="nav-caret"> <i class="fa fa-caret-down"></i>
@@ -35,7 +55,7 @@
             </a>
                 <ul class="nav-sub nav-mega">
                     <li th:class="${path}   == 'user' ? 'active' : ''"><a
-                            th:href="@{/admin/user}"><span class="nav-text">List</span></a></li>
+                            th:href="@{/admin/user}"><span class="nav-text">User list</span></a></li>
                     <li th:class="${path} == 'user-add' ? 'active' : ''"><a
                             th:href="@{/admin/user/add}"><span class="nav-text">Add
 									new user</span></a></li>
@@ -48,13 +68,13 @@
                     </span>
                     <span class="nav-icon">
                       <i class="material-icons">&#xe5c3;
-                        <span th:attr="ui-include='\''+@{/assets/backend/assets/images/i_1.svg} +'\''"></span>
+                        <span th:attr="ui-include=@{'\'/assets/backend/assets/images/i_1.svg\''}"></span>
                       </i>
                     </span>
                     <span class="nav-text">Brand</span>
                 </a>
                 <ul class="nav-sub nav-mega">
-                    <li th:class="${path} == 'brand' ? 'active' : ''"><a th:href="@{/admin/brand}"><span class="nav-text">List</span></a>
+                    <li th:class="${path} == 'brand' ? 'active' : ''"><a th:href="@{/admin/brand}"><span class="nav-text">Brand list</span></a>
                     </li>
                     <li th:class="${path} == 'brand-add' ? 'active' : ''"><a th:href="@{/admin/brand/add}"><span
                             class="nav-text">Add new</span></a></li>
@@ -67,26 +87,26 @@
                     </span>
                     <span class="nav-icon">
                       <i class="material-icons">&#xe896;
-                        <span th:attr="ui-include='\''+ @{/assets/backend/assets/images/i_7.svg} +'\''"></span>
+                        <span th:attr="ui-include= @{'\'/assets/backend/assets/images/i_7.svg\''}"></span>
                       </i>
                     </span>
                     <span class="nav-text">Product Category</span>
                 </a>
                 <ul class="nav-sub nav-mega">
                     <li th:class="${path} == 'product-category' ? 'active' : ''"><a
-                            th:href="@{/admin/product-category}"><span class="nav-text">List</span></a></li>
+                            th:href="@{/admin/product-category}"><span class="nav-text">Product category list</span></a></li>
                     <li th:class="${path} == 'product-category-add' ? 'active' : ''"><a
                             th:href="@{/admin/product-category/add}"><span class="nav-text">Add new</span></a></li>
                 </ul>
             </li>
-            <li th:class="${productPage} ? 'active'">
+            <li th:classappend="${productPage} ? 'active'">
                 <a>
                   	<span class="nav-caret">
                       <i class="fa fa-caret-down"></i>
                     </span>
                     <span class="nav-icon">
                       <i class="material-icons">&#xe896;
-                        <span th:attr="ui-include='\''+ @{/assets/backend/assets/images/i_7.svg} +'\''"></span>
+                        <span th:attr="ui-include= @{'\'/assets/backend/assets/images/i_7.svg\''}"></span>
                       </i>
                     </span>
                     <span class="nav-text">Product</span>
@@ -111,7 +131,7 @@
                 </a>
                 <ul class="nav-sub nav-mega">
                     <li th:class="${path} == 'post-category' ? 'active' : ''"><a th:href="@{/admin/post-category}"><span
-                            class="nav-text">List</span></a></li>
+                            class="nav-text">Post category list</span></a></li>
                     <li th:class="${path} == 'post-category-add' ? 'active' : ''"><a
                             th:href="@{/admin/post-category/add}"><span class="nav-text">Add new</span></a></li>
                 </ul>
@@ -128,10 +148,18 @@
                 </a>
                 <ul class="nav-sub nav-mega">
                     <li th:class="${path} == 'post' ? 'active' : ''"><a th:href="@{/admin/post}"><span
-                            class="nav-text">List</span></a></li>
+                            class="nav-text">Post list</span></a></li>
                     <li th:class="${path} == 'post-add' ? 'active' : ''"><a th:href="@{/admin/post/add}"><span
                             class="nav-text">Add new</span></a></li>
                 </ul>
+            </li>
+            <li th:class="${commentPage} ? 'active'">
+                <a th:href="@{/admin/comment}">
+                    <span class="nav-icon">
+                      <i class="fa fa-comments"></i>
+                    </span>
+                    <span class="nav-text">Comment</span>
+                </a>
             </li>
             <li th:class="${pagePage} ? 'active'">
                 <a>
@@ -145,7 +173,7 @@
                 </a>
                 <ul class="nav-sub nav-mega">
                     <li th:class="${path} == 'page' ? 'active' : ''"><a th:href="@{/admin/page}"><span
-                            class="nav-text">List</span></a></li>
+                            class="nav-text">Page list</span></a></li>
                     <li th:class="${path} == 'page-add' ? 'active' : ''"><a th:href="@{/admin/page/add}"><span
                             class="nav-text">Add new</span></a></li>
                 </ul>
@@ -157,14 +185,14 @@
                 </span>
                     <span class="nav-icon">
                   <i class="material-icons">&#xe3fc;
-                    <span th:attr="ui-include='\''+ @{/assets/backend/assets/images/i_0.svg} +'\''"></span>
+                    <span th:attr="ui-include=@{'\'/assets/backend/assets/images/i_0.svg\''}"></span>
                   </i>
                 </span>
                     <span class="nav-text">Menu</span>
                 </a>
                 <ul class="nav-sub nav-mega">
                     <li th:class="${path} == 'menu-group' ? 'active' : ''"><a th:href="@{/admin/menu-group}"><span
-                            class="nav-text">List</span></a></li>
+                            class="nav-text">Menu group list</span></a></li>
                     <li th:class="${path} == 'menu-group-add' ? 'active' : ''"><a th:href="@{/admin/menu-group/add}"><span
                             class="nav-text">Add new menu group</span></a></li>
                 </ul>
@@ -176,13 +204,13 @@
                  </span>
                     <span class="nav-icon">
                    <i class="material-icons">&#xe39e;
-                     <span th:attr="ui-include='\''+ @{/assets/backend/assets/images/i_6.svg} +'\''"></span>
+                     <span th:attr="ui-include=@{'\'/assets/backend/assets/images/i_6.svg\''} "></span>
                    </i>
                  </span>
                     <span class="nav-text">Province</span>
                 </a>
                 <ul class="nav-sub nav-mega">
-                    <li th:class="${path} == 'province' ? 'active' : ''"><a th:href="@{/admin/province}"><span class="nav-text">List</span></a></li>
+                    <li th:class="${path} == 'province' ? 'active' : ''"><a th:href="@{/admin/province}"><span class="nav-text">Province list</span></a></li>
                     <li th:class="${path} == 'province-add' ? 'active' : ''"><a th:href="@{/admin/province/add}"><span class="nav-text">Add new</span></a></li>
                 </ul>
             </li>
@@ -190,7 +218,7 @@
                 <a th:href="@{/admin/media}" >
                  <span class="nav-icon">
                    <i class="material-icons">&#xe8f0;
-                     <span th:attr="ui-include='\''+ @{/assets/backend/assets/images/i_2.svg} +'\''"></span>
+                     <span th:attr="ui-include=@{'\'/assets/backend/assets/images/i_2.svg\''}"></span>
                    </i>
                  </span>
                     <span class="nav-text">Multimedia</span>
@@ -204,51 +232,40 @@
                  </span>
                  <span class="nav-icon">
                    <i class="material-icons">&#xe1b8;
-                     <span th:attr="ui-include='\''+ @{/assets/backend/assets/images/i_8.svg} +'\''"></span>
+                     <span th:attr="ui-include=@{'\'/assets/backend/assets/images/i_8.svg\''}"></span>
                    </i>
                  </span>
                  <span class="nav-text">Event</span>
                </a>
                <ul class="nav-sub nav-mega">
-                 <li th:class="${path} == 'event' ? 'active'"><a th:href="@{/admin/event}"><span class="nav-text">List</span></a></li>
-                 <li th:class="${path} == 'event-add' ? 'active'"><a th:href="@{/admin/event/add}"><span class="nav-text">Add new</span></a></li>
+                 <li th:classappend="${#strings.equalsIgnoreCase('event', path)} ? 'active'"><a th:href="@{/admin/event}"><span class="nav-text">Event list</span></a></li>
+                 <li th:classappend="${#strings.equalsIgnoreCase('event-add', path)} ? 'active'"><a th:href="@{/admin/event/add}"><span class="nav-text">Add new</span></a></li>
              </ul>
             </li>
 
-            <li th:class="${ratingPage} ? 'active'" >
+            <li th:class="${reviewPage} ? 'active'" >
                 <a>
                    <span class="nav-caret">
                    <i class="fa fa-caret-down"></i>
                  </span>
                     <span class="nav-icon">
-                   <i class="material-icons">&#xe1b8;
-                     <span th:attr="ui-include='\''+ @{/assets/backend/assets/images/i_8.svg} +'\''"></span>
+                   <i class="material-icons">&#xe838;
                    </i>
                  </span>
-                    <span class="nav-text">Rating Review</span>
+                    <span class="nav-text">Review</span>
                 </a>
                 <ul class="nav-sub nav-mega">
-                    <li th:class="${path} == 'rating' ? 'active'"><a th:href="@{/admin/rating}"><span class="nav-text">List Rating</span></a></li>
-                    <li th:class="${path} == 'rating-add' ? 'active'"><a th:href="@{/admin/rating/add}"><span class="nav-text">Add new</span></a></li>
+                    <li th:classappend="${reviewListPage} ? 'active'"><a th:href="@{/admin/rating}" ><span class="nav-text">Review list</span></a></li>
+                    <li th:classappend="${reviewStatisticPage} ? 'active'"><a th:href="@{/admin/rating-statistic}" >
+                        <span class="nav-text">Review statistic</span></a></li>
                 </ul>
-            </li>
-
-            <li th:class="${ratingStatisticPage} ? 'active'">
-                <a th:href="@{/admin/rating-statistic}" >
-                 <span class="nav-icon">
-                   <i class="material-icons">&#xe8f0;
-                     <span th:attr="ui-include='\''+ @{/assets/backend/assets/images/i_2.svg} +'\''"></span>
-                   </i>
-                 </span>
-                    <span class="nav-text">Rating Statistic</span>
-                </a>
             </li>
 
             <li th:class="${configPage} ? 'active'"><a> <span
                     class="nav-caret"> <i class="fa fa-caret-down"></i>
 					</span> <span class="nav-icon"> <i class="material-icons">&#xe429;
 								<span
-                                        th:attr="ui-include='\''+ @{/assets/backend/assets/images/i_4.svg} +'\''"></span>
+                                        th:attr="ui-include=@{'\'/assets/backend/assets/images/i_4.svg\''}"></span>
 						</i>
 					</span> <span class="nav-text">Setting</span>
             </a>
@@ -276,7 +293,56 @@
                 </ul>
             </li>
         </ul>
-
+    </nav>
+</div>
+<div th:fragment="customer">
+    <nav class="scroll nav-light">
+        <!-- Customer -->
+        <ul class="nav" ui-nav>
+            <li class="nav-header hidden-folded">
+                <small class="text-muted">Main</small>
+            </li>
+            <li th:class="${profilePage} ? 'active'">
+                <a th:href="@{'/user/' + ${user.id}}" >
+                    <span class="nav-icon">
+                      <i class="material-icons">&#xe851;</i>
+                    </span>
+                    <span class="nav-text">Profile</span>
+                </a>
+            </li>
+            <li th:class="${addressPage} ? 'active'">
+                <a th:href="@{'/user/' + ${user.id}+ '/address'}" >
+                    <span class="nav-icon">
+                      <i class="material-icons">&#xe54b;</i>
+                    </span>
+                    <span class="nav-text">Address Book</span>
+                </a>
+            </li>
+            <li th:class="${commentPage} ? 'active'">
+                <a th:href="@{'/user/' + ${user.id}+ '/comment'}" >
+                    <span class="nav-icon">
+                      <i class="material-icons">&#xe0ca;</i>
+                    </span>
+                    <span class="nav-text">Comments</span>
+                </a>
+            </li>
+            <li th:class="${ratingPage} ? 'active'">
+                <a th:href="@{'/user/' + ${user.id}+ '/rating'}" >
+                    <span class="nav-icon">
+                      <i class="material-icons">&#xe8d0;</i>
+                    </span>
+                    <span class="nav-text">Rating</span>
+                </a>
+            </li>
+            <li th:class="${settingPage} ? 'active'">
+                <a th:href="@{'/user/' + ${user.id}+ '/setting'}" >
+                    <span class="nav-icon">
+                      <i class="material-icons">&#xe3c9;</i>
+                    </span>
+                    <span class="nav-text">Setting</span>
+                </a>
+            </li>
+        </ul>
     </nav>
 </div>
 </body>

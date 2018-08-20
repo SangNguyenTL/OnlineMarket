@@ -7,13 +7,13 @@
 <th:block layout:fragment="head">
 
 </th:block>
-<!--/*@thymesVar id="postCategoryList" type="java.util.List<onlinemarket.model.PostCategory>"*/-->
-<!--/*@thymesVar id="postCategory" type="onlinemarket.model.PostCategory"*/-->
+<!--/*@thymesVar id="postCategoryList" type="java.util.List<OnlineMarket.model.PostCategory>"*/-->
+<!--/*@thymesVar id="postCategory" type="OnlineMarket.model.PostCategory"*/-->
 <!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
 <!--/*@thymesVar id="relativePath" type="java.lang.String"*/-->
 <!--/*@thymesVar id="subTitle" type="java.lang.String"*/-->
-<!--/*@thymesVar id="result" type="onlinemarket.result.ResultObject<onlinemarket.model.Post>"*/-->
-<!--/*@thymesVar id="filterForm" type="onlinemarket.form.filter.FilterForm"*/-->
+<!--/*@thymesVar id="result" type="OnlineMarket.result.ResultObject<OnlineMarket.model.Post>"*/-->
+<!--/*@thymesVar id="filterForm" type="OnlineMarket.form.filter.FilterForm"*/-->
 <head>
 </head>
 <body th:inline="text">
@@ -26,14 +26,12 @@
         </ul>
         <div class="row">
             <aside id="column-left" class="col-sm-3 hidden-xs">
-                <h3 class="subtitle"><a th:href="@{${relativePath}}">Categories</a></h3>
+                <h3 class="subtitle"><a th:href="@{/product-category}">Categories</a></h3>
                 <div class="box-category">
                     <ul id="cat_accordion">
                         <li class="cutom-parent-li" th:each="postCate : ${postCategoryList}">
-                            <a th:href="@{'/post-category/'+${postCate.slug}}"
-                               th:classappend="${postCategory != null && postCate.slug == postCategory.slug ? 'active' : ''}"
-                               class="cutom-parent"
-                               th:text="${postCate.name}+' ('+${postCate.posts.size()}+')'"></a></span>
+                          <span><a th:href="@{'/post-category/'+${postCate.slug}}" class="cutom-parent"
+                                   th:text="${postCate.name}+' ('+${postCate.posts.size()}+')'"></a></span>
                         </li>
                     </ul>
                 </div>
@@ -42,44 +40,48 @@
                 <h1 class="title" th:text="${title}">All product</h1>
                 <h3 class="subtitle" th:text="${subTitle}"></h3>
 
-                <div class="row" th:each="post : ${result.list}">
-                    <div class="span8">
+                <div class="row" th:each="postC : ${result.list}">
+                    <div class="col-md-12 post">
                         <div class="row">
-                            <div class="span8">
-                                <h4><strong><a th:href="@{'/post/'+${post.slug}}" th:title="${post.title}" th:text="${post.title}">Title of the post</a></strong></h4>
-                            </div>
+                            <div class="col-md-12"><h4><strong><a th:href="@{'/post/'+${postC.slug}}"
+                                                                  th:title="${postC.title}" th:text="${postC.title}">Title
+                                of the post</a></strong></h4></div>
                         </div>
                         <div class="row">
-                            <div class="span2">
-                                <a th:href="@{'/post/'+${post.slug}}" class="thumbnail">
-                                    <img th:if="${post.featureImage != null}" th:src="@{${post.featureImage}}" alt="">
-                                    <img th:if="${post.featureImage == null}" th:src="@{/assets/images/defaultImage.jpg}" alt="">
+                            <div class="col-md-12 post-header-line">
+                                <span class="glyphicon glyphicon-user"></span>by <a href="#"
+                                                                                    th:text="${postC.user.displayName}">Bhaumik</a>
+                                | <span class="glyphicon glyphicon-calendar">
+                            </span>
+                                <th:block th:text="${#dates.format(postC.createDate, 'MMMM dd, yyyy - hh:mm a')}">
+                                    Posted on January 1, 2018 at 12:00 PM
+                                </th:block>&nbsp;|
+                                <span class="glyphicon glyphicon-tags"></span>
+                                <a th:if="${postC.postCategory} != null" th:href="@{'/post-category/'+${postC.postCategory.slug}}"><span class="label label-info" th:text="${postC.postCategory.name}">Bootstrap</span></a>
+                            </div>
+                        </div>
+                        <div class="row post-content">
+                            <div class="col-md-5">
+                                <a th:href="@{'/post/'+${postC.slug}}" class="thumbnail">
+                                    <img th:if="${postC.featureImage != null}" th:src="@{${postC.featureImage}}"
+                                         alt="" class="img-responsive">
+                                    <img th:if="${postC.featureImage == null}"
+                                         th:src="@{/assets/images/defaultImage.jpg}" alt="" class="img-responsive">
                                 </a>
                             </div>
-                            <div class="span6">
-                                <p><a class="btn" th:href="@{'/post/'+${post.slug}}" >Read more</a></p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="span8">
-                                <p></p>
-                                <p>
-                                    <i class="icon-user"></i> by <a href="#" th:text="${post.user.firstName}">John</a>
-                                    <th:block th:text="${#dates.format(post.createDate, 'MMMM dd, yyyy - hh:mm a')}">Posted on January 1, 2018 at 12:00 PM</th:block>
-                                    | <i class="icon-tags"></i> Tags :
-                                    <a th:href="@{'/post-category/'+${post.postCategory.slug}}"><span class="label label-info" th:text="${post.postCategory.name}">Bootstrap</span></a>
-                                </p>
+                            <div class="col-md-7">
+                                <p th:utext="${#strings.abbreviate(T(org.jsoup.Jsoup).parse(postC.content).text(),300)}"></p>
+                                <p><a class="btn btn-read-more" th:href="@{'/post/'+${postC.slug}}">Read more</a></p>
                             </div>
                         </div>
                     </div>
+
                 </div>
                 <hr>
 
                 <div class="row">
                     <div class="col-sm-6 text-left">
-                        <filter:pagination filter:currentPage="${page}"
-                                           filter:totalPages="${result.totalPages}"
-                                           filter:uri="@{${relativePath}}"></filter:pagination>
+                        <filter:pagination filter:uri="@{${relativePath}}"> </filter:pagination>
                     </div>
                     <div class="col-sm-6 text-right"
                          th:with="productFrom=${result.getCurrentPage()*filterForm.size +1 - filterForm.size},productTo=${result.getCurrentPage()*filterForm.size}"

@@ -59,20 +59,20 @@
                 <table class="table table-hover b-t">
                     <thead>
                     <tr>
-                        <filter:th order="asc" orderBy="id" filter:uri="@{${relativePath}}" filter:currentPage="${page}"
+                        <filter:th order="asc" orderBy="id" filter:uri="@{${relativePath}}"
                                    name="#">#
                         </filter:th>
                         <filter:th order="asc" orderBy="firstNamr" filter:uri="@{${relativePath}}"
-                                   filter:currentPage="${page}" name="First Name">First Name
+                                   name="First Name">First Name
                         </filter:th>
                         <filter:th order="asc" orderBy="lastName" filter:uri="@{${relativePath}}"
-                                   filter:currentPage="${page}" name="Last Name">Last Name
+                                   name="Last Name">Last Name
                         </filter:th>
                         <filter:th order="asc" orderBy="phone" filter:uri="@{${relativePath}}"
-                                   filter:currentPage="${page}" name="Phone">Phone
+                                   name="Phone">Phone
                         </filter:th>
                         <filter:th order="asc" orderBy="address" filter:uri="@{${relativePath}}"
-                                   filter:currentPage="${page}" name="Address">Address
+                                   name="Address">Address
                         </filter:th>
                         <th>Province</th>
                         <th>Action</th>
@@ -89,9 +89,9 @@
                         <td>
                             <form class="form-confirm" th:action="@{${relativePath}+'/delete'}" method="POST">
                                 <a th:href="@{${relativePath}+'/update/'+${address.id}}"
-                                   class="btn btn-outline b-info text-success btn-sm">Update</a>
+                                   class="btn btn-outline b-info text-success btn-sm btn-fw">Update</a>
                                 <input type="hidden" th:name="id" th:value="${address.id}">
-                                <button type="submit" class="btn btn-outline b-info text-danger btn-sm">Delete</button>
+                                <button type="submit" class="btn btn-outline b-info text-danger btn-sm btn-fw">Delete</button>
                             </form>
                         </td>
                     </tr>
@@ -114,12 +114,12 @@
                                 <option th:value="50" th:if="${result.totalPages * filterForm.size} > 50">50 rows
                                 </option>
                             </select>
-                            <button type="submit" class="btn btn-sm white">Apply</button>
+                            <button type="submit" class="btn btn-sm btn-fw white">Apply</button>
                         </form>
 
                     </div>
                     <div class="col-sm-4 pull-right text-right text-center-xs">
-                        <filter:pagination filter:currentPage="${page}" filter:totalPages="${result.totalPages}"
+                        <filter:pagination
                                            filter:uri="@{${relativePath}}"></filter:pagination>
                     </div>
                 </div>

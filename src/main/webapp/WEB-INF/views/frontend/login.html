@@ -18,20 +18,20 @@
         <!--Middle Part Start-->
         <div id="content" class="col-sm-9">
           <h1 class="title">Account Login</h1>
-          	<div class="alert alert-success" role="alert" th:if="${param.success} != null">
+          	<div class="alert alert-success" role="alert" th:if="${success}">
 				<strong>Congratulations!</strong> You have successfully registered your account, you are now able to login.
 			</div>
 			<div class="alert alert-success" role="alert" th:if="${param.logout} != null">
 					<strong>Congratulations!</strong> You have successfully logged out.
 			</div>
-			<div class="alert alert-warning" th:if="${#strings.equals(param.error, '')}">
+			<div class="alert alert-warning" th:if="${#strings.equals(param.error, 'wrong')}">
 				<strong>OOPS!</strong> Email or password is invalid!
 			</div>
-			<div class="alert alert-warning" th:if="${#strings.equals(param.error, 'alreadyLogin')}">
-				<strong>OOPS!</strong> This session has been expired (possibly due to multiple concurrent logins being attempted as the same user).
-			</div>
 			<div class="alert alert-warning" th:if="${#strings.equals(param.error, 'invalidSession')}">
-				<strong>OOPS!</strong> This session is invalid.
+				<strong>OOPS!</strong> Account authentication is failed.
+			</div>
+			<div class="alert alert-warning" th:if="${#strings.equals(param.error, 'expired')}">
+				<strong>OOPS!</strong> Your session is expired or someone else is using your account.
 			</div>
           <div class="row">
             <div class="col-sm-6">
@@ -59,7 +59,7 @@
 					        Remember me
 					      </label>
 	                  </p>
-	                  <a href="#">Forgotten Password</a>
+	                  <a th:href="@{/forgot-password}">Forgotten Password</a>
                     </div>
 	                <input type="hidden" name="redirect" th:value="${redirect}" class="btn btn-primary" />
 	                <input type="submit" value="Login" class="btn btn-primary" />
@@ -70,13 +70,11 @@
         <!--Middle Part End -->
         <!--Right Part Start -->
           <aside id="column-right" class="col-sm-3 hidden-xs">
-              <h3 class="subtitle"><a th:href="@{${relativePath}}">Categories</a></h3>
+              <h3 class="subtitle"><a th:href="@{/product-category}">Categories</a></h3>
               <div class="box-category">
                   <ul id="cat_accordion">
                       <li class="cutom-parent-li" th:each="productCate : ${productCategoryList}">
-                          <a th:href="@{${productPath}+'/'+${productCate.slug}}"
-                             th:classappend="${productCategory != null && productCate.slug == productCategory.slug ? 'active' : ''}"
-                             class="cutom-parent"
+                          <span><a th:href="@{'/product-category/'+${productCate.slug}}" class="cutom-parent"
                              th:text="${productCate.name}+' ('+${productCate.products.size()}+')'"></a></span>
                       </li>
                   </ul>

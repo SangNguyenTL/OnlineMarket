@@ -7,19 +7,19 @@
 <th:block layout:fragment="head">
 
 </th:block>
-<!--/*@thymesVar id="productCategoryList" type="java.util.List<onlinemarket.model.ProductCategory>"*/-->
-<!--/*@thymesVar id="productBestSellerList" type="java.util.List<onlinemarket.model.Product>"*/-->
-<!--/*@thymesVar id="productBestViewing" type="java.util.List<onlinemarket.model.Product>"*/-->
-<!--/*@thymesVar id="productBestRating" type="java.util.List<onlinemarket.model.Product>"*/-->
-<!--/*@thymesVar id="brandList" type="java.util.List<onlinemarket.model.Brand>"*/-->
-<!--/*@thymesVar id="productCategory" type="onlinemarket.model.ProductCategory"*/-->
+<!--/*@thymesVar id="productCategoryList" type="java.util.List<OnlineMarket.model.ProductCategory>"*/-->
+<!--/*@thymesVar id="productBestSellerList" type="java.util.List<OnlineMarket.model.Product>"*/-->
+<!--/*@thymesVar id="productBestViewing" type="java.util.List<OnlineMarket.model.Product>"*/-->
+<!--/*@thymesVar id="productBestRating" type="java.util.List<OnlineMarket.model.Product>"*/-->
+<!--/*@thymesVar id="brandList" type="java.util.List<OnlineMarket.model.Brand>"*/-->
+<!--/*@thymesVar id="productCategory" type="OnlineMarket.model.ProductCategory"*/-->
 <!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
 <!--/*@thymesVar id="relativePath" type="java.lang.String"*/-->
 <!--/*@thymesVar id="productPath" type="java.lang.String"*/-->
 <!--/*@thymesVar id="brandPath" type="java.lang.String"*/-->
 <!--/*@thymesVar id="subTitle" type="java.lang.String"*/-->
-<!--/*@thymesVar id="result" type="onlinemarket.result.ResultObject<onlinemarket.model.Event>"*/-->
-<!--/*@thymesVar id="filterForm" type="onlinemarket.form.filter.FilterForm"*/-->
+<!--/*@thymesVar id="result" type="OnlineMarket.result.ResultObject<OnlineMarket.model.Event>"*/-->
+<!--/*@thymesVar id="filterForm" type="OnlineMarket.form.filter.FilterForm"*/-->
 <head>
 </head>
 <body th:inline="text">
@@ -75,8 +75,8 @@
 
                 <div class="row padding">
                     <div class="col-sm-6 text-left">
-                        <filter:pagination filter:currentPage="${page}"
-                                           filter:totalPages="${result.totalPages}"
+                        <filter:pagination
+
                                            filter:uri="@{${relativePath}}"></filter:pagination>
                     </div>
                     <div class="col-sm-6 text-right"

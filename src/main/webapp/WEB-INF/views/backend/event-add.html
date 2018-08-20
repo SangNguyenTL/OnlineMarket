@@ -30,7 +30,7 @@
 
                     <div class="box-body">
 
-                        <!--/*@thymesVar id="event" type="onlinemarket.model.Event"*/-->
+                        <!--/*@thymesVar id="event" type="OnlineMarket.model.Event"*/-->
                         <form ui-jp="parsley" role="form" th:object="${event}"
                               th:action="@{${pathAction}}" method="POST">
                             <input th:if="${action} == 'update'" type="hidden"

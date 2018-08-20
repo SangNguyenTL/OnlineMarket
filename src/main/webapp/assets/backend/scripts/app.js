@@ -65,7 +65,6 @@
 
       $('[data-target="folded"] input').prop('checked', app.setting.folded);
       $('[data-target="boxed"] input').prop('checked', app.setting.boxed);
-      
     }
 
     // click to switch
@@ -93,12 +92,92 @@
     function init(){
       $('[ui-jp]').uiJp();
       $('body').uiInclude();
+      $('[data-toggle="popover"]').popover()
     }
 
     $(document).on('pjaxStart', function() {
         $('#aside').modal('hide');
         $('body').removeClass('modal-open').find('.modal-backdrop').remove();
         $('.navbar-toggleable-sm').collapse('hide');
+
+    });
+
+    $(document).on('pjaxEnd', function() {
+        $('[data-toggle="popover"]').popover()
+    });
+    window.pending = false;
+    $(document).on('click', "button.activate-rating", function(e) {
+        var element = $(e.target), id = element.data("id"),
+        container = element.closest("td");
+        if(!id) return;
+        if(window.pending){
+            alert("Processing...", "warning");
+            return;
+        }
+        $.ajax({
+            type: 'POST',
+            url: PATH + 'api/rating/modify-review-state',
+            data: {
+                id : id
+            },
+            beforeSend: function () {
+                window.pending = true;
+            },
+            dataType: 'json',
+            success: function (data, textStatus) {
+                if(textStatus)
+                    if(data.error)
+                        alert(data.message, "warning");
+                    else{
+                        alert("Success!");
+                        container.html("<span class='text-success'>Activated</span>")
+                    }
+            },
+            error: function () {
+                alert("Unknown error", "danger");
+            },
+            complete: function () {
+                window.pending = false;
+            }
+
+        })
+    });
+
+    $(document).on('click', "button.activate-comment", function(e) {
+        var element = $(e.target), id = element.data("id"),
+        container = element.closest("td");
+        if(!id) return;
+        if(window.pending){
+            alert("Processing...", "warning");
+            return;
+        }
+        $.ajax({
+            type: 'POST',
+            url: PATH + 'api/comment/modify-status',
+            data: {
+                id : id
+            },
+            beforeSend: function () {
+                window.pending = true;
+            },
+            dataType: 'json',
+            success: function (data, textStatus) {
+                if(textStatus)
+                    if(data.error)
+                        alert(data.message, "warning");
+                    else{
+                        alert("Success!");
+                        container.html("<span class='text-success'>Activated</span>")
+                    }
+            },
+            error: function () {
+                alert("Unknown error", "danger");
+            },
+            complete: function () {
+                window.pending = false;
+            }
+
+        })
     });
     
     init();

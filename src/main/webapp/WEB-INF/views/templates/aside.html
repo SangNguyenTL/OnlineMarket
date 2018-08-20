@@ -6,23 +6,23 @@
 
 </head>
 <body>
-<!--/*@thymesVar id="productBestSellerList" type="java.util.List<onlinemarket.model.Product>"*/-->
-<!--/*@thymesVar id="productBestViewing" type="java.util.List<onlinemarket.model.Product>"*/-->
-<!--/*@thymesVar id="productBestRating" type="java.util.List<onlinemarket.model.Product>"*/-->
+<!--/*@thymesVar id="productBestSellerList" type="java.util.List<OnlineMarket.model.Product>"*/-->
+<!--/*@thymesVar id="productBestViewing" type="java.util.List<OnlineMarket.model.Product>"*/-->
+<!--/*@thymesVar id="productBestRating" type="java.util.List<OnlineMarket.model.Product>"*/-->
 <th:block th:fragment="aside">
-    <h3>Best seller</h3>
+    <h3 class="subtitle">Best seller</h3>
     <div class="side-item">
         <th:block th:each="product : ${productBestSellerList}">
             <div th:replace="/templates/item::productList (${product})"></div>
         </th:block>
     </div>
-    <h3>Best viewing</h3>
+    <h3 class="subtitle">Best viewing</h3>
     <div class="side-item">
         <th:block th:each="product : ${productBestViewing}">
             <div th:replace="/templates/item::productList (${product})"></div>
         </th:block>
     </div>
-    <h3>Best Rating</h3>
+    <h3 class="subtitle">Best Rating</h3>
     <div class="side-item">
         <th:block th:each="product : ${productBestRating}">
             <div th:replace="/templates/item::productList (${product})"></div>

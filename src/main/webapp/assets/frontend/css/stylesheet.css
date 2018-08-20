@@ -383,7 +383,7 @@ a:focus { outline:none; }
 	background: #FFF;
 	border:3px solid #3e7cb4;
 	border-width:3px 0 0 0;
-	width:420px;
+	width: 620px;
 	border-radius:0;
 	right:0;
 	left:auto;
@@ -7802,3 +7802,4 @@ fieldset[disabled] .md-switch input + i:after {
 .post .glyphicon { margin-right:5px; }
 .post-header-line { border-top:1px solid #DDD;border-bottom:1px solid #DDD;padding:5px 0px 5px 15px;font-size: 12px; }
 .post-content { padding-bottom: 15px;padding-top: 15px;}
+.item-total{ width: 150px; text-align: right}

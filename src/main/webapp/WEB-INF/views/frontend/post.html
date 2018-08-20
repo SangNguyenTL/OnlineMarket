@@ -1,17 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:filter="http://thymeleafexamples"
       layout:decorate="templates/frontend">
 
 <th:block layout:fragment="head">
 
 </th:block>
-<!--/*@thymesVar id="productCategoryList" type="java.util.List<onlinemarket.model.ProductCategory>"*/-->
-<!--/*@thymesVar id="brandList" type="java.util.List<onlinemarket.model.Brand>"*/-->
+<!--/*@thymesVar id="productCategoryList" type="java.util.List<OnlineMarket.model.ProductCategory>"*/-->
+<!--/*@thymesVar id="brandList" type="java.util.List<OnlineMarket.model.Brand>"*/-->
 <!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
 <!--/*@thymesVar id="relativePath" type="java.lang.String"*/-->
-<!--/*@thymesVar id="product" type="onlinemarket.model.Product"*/-->
+<!--/*@thymesVar id="success" type="java.lang.String"*/-->
+<!--/*@thymesVar id="pathAction" type="java.lang.String"*/-->
+<!--/*@thymesVar id="error" type="java.lang.String"*/-->
+<!--/*@thymesVar id="post" type="OnlineMarket.model.Post"*/-->
+<!--/*@thymesVar id="comment" type="OnlineMarket.model.Comment"*/-->
+<!--/*@thymesVar id="result" type="OnlineMarket.result.ResultObject<OnlineMarket.model.Comment>"*/-->
+
 <head>
 </head>
 <body th:inline="text">
@@ -26,14 +33,87 @@
         <!-- Breadcrumb End-->
         <div class="row" th:object="${post}">
             <!--Middle Part Start-->
-            <div id="content" class="col-sm-12">
-                <h1 class="title" th:text="*{title}">About Us</h1>
-                <p class="lead">
-                    by
-                    <a href="#" th:text="*{user.firstName}">Start Bootstrap</a>
-                    <th:block th:text="${#dates.format(post.createDate, 'MMMM dd, yyyy - hh:mm a')}">Posted on January 1, 2018 at 12:00 PM</th:block>
-                </p>
-                <th:block th:utext="*{content}"></th:block>
+            <div id="content-post" class="box">
+                <div class="item">
+                    <img th:src="@{*{featureImage}}" class="h-v-5 w-full" />
+                </div>
+                <div class="p-a-md">
+                    <h1 class="title" th:text="*{title}">About Us</h1>
+                    <div class="content">
+                        <th:block th:utext="*{content}"> </th:block>
+                    </div>
+                    <p class="lead">
+                        by <a href="#" th:text="*{user.displayName}">Start Bootstrap</a> Posted on <th:block th:text="${#dates.format(post.createDate, 'MMMM dd, yyyy - hh:mm a')}">Posted on January 1, 2018 at 12:00 PM</th:block>
+                        <a sec:authorize="hasAnyRole('ADMIN', 'SUPER_ADMIN')" th:href="@{'/admin/post/update/'+*{id}}">Edit</a>
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12" id="logout">
+                    <div class="page-header">
+                        <h3 class="reviews">Leave your comment</h3>
+                    </div>
+                    <div class="comment-tabs">
+                        <ul class="b-2x b-b nav nav-tabs" role="tablist">
+                            <li th:classappend="${addComment == null} ? 'active'"><a href="#comments-logout" role="tab" data-toggle="tab" aria-expanded="true"><h4 class="reviews text-capitalize" th:text="${'Comments ('+result.count+')'}">Comments</h4></a></li>
+                            <li th:classappend="${addComment} ? 'active'" class=""><a href="#comment-box" role="tab" data-toggle="tab" aria-expanded="false"><h4 class="reviews text-capitalize">Add comment</h4></a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div th:classappend="${addComment == null} ? 'active'" class="tab-pane" id="comments-logout">
+                                <ul class="media-list">
+                                    <li th:each="comment : ${result.list}" class="media">
+                                        <a class="col-sm-2" href="#">
+                                            <img class="media-object img-circle img-responsive w-128 pull-right" th:src="@{${comment.user.avatar}}" alt="profile">
+                                        </a>
+                                        <div class="media-body col-sm-10">
+                                            <div class="row well">
+                                                <h4 class="col-sm-6 media-heading reviews text-uppercase" th:text="${comment.user.displayName}">Marco </h4>
+                                                <div class="col-sm-6 text-right" th:text="${#dates.format(comment.createDate, 'dd-MM-yyyy hh:mm:ss')}">
+                                                </div>
+                                                <p class="media-comment col-sm-12" th:text="${comment.content}">
+                                                    Great snippet! Thanks for sharing.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                                <div class="text-right text-center-xs">
+                                    <filter:pagination filter:uri="@{${relativePath}}">Pagination</filter:pagination>
+                                </div>
+                            </div>
+                            <div th:classappend="${addComment} ? 'active'" class="tab-pane" id="comment-box">
+                                <div class="alert alert-success m-x-lg" th:if="${success} != null">
+                                    <strong>Congratulation!</strong> Your comment was sent, please wait for censorship.
+                                </div>
+                                <div class="alert alert-danger m-x-lg" th:if="${error} != null">
+                                    <strong>Obbs!</strong> [[${error}]]
+                                </div>
+                                <form class="form-horizontal" th:object="${comment}" th:action="@{${pathAction}}" method="POST">
+                                    <input type="hidden" th:field="*{post.id}">
+                                    <input type="hidden" th:field="*{user.id}">
+                                    <fieldset>
+                                        <div class="form-group required">
+                                            <label class="col-md-2 col-sm-3 control-label">Content</label>
+                                            <div class="col-md-10 col-sm-9">
+                                                <textarea th:field="*{content}" rows="5" class="form-control"> </textarea>
+                                                <ul th:if="${#fields.errors('content')} or ${#fields.errors('user')} or ${#fields.errors('post')}" class="help-block">
+                                                    <li th:if="${#fields.errors('user')}" class="text-danger" th:errors="*{content}"></li>
+                                                    <li th:if="${#fields.errors('user')}" class="text-danger" th:errors="*{user}"></li>
+                                                    <li th:if="${#fields.errors('user')}" class="text-danger" th:errors="*{post}"></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <div class="form-group">
+                                        <div class="col-sm-10 col-sm-offset-2">
+                                            <button class="btn btn-success btn-circle text-uppercase" type="submit" id="submitComment"><span class="glyphicon glyphicon-send"></span> Summit comment</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <!--Middle Part End -->
         </div>

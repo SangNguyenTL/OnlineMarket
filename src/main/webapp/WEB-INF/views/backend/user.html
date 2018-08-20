@@ -8,11 +8,11 @@
 <!--/*@thymesVar id="pageTitle" type="java.lang.String"*/-->
 <!--/*@thymesVar id="error" type="java.lang.String"*/-->
 <!--/*@thymesVar id="success" type="java.lang.Boolean"*/-->
-<!--/*@thymesVar id="filterForm" type="onlinemarket.form.filter.FilterForm"*/-->
-<!--/*@thymesVar id="state" type="onlinemarket.model.State"*/-->
-<!--/*@thymesVar id="result" type="onlinemarket.result.ResultObject<onlinemarket.model.User>"*/-->
-<!--/*@thymesVar id="user" type="onlinemarket.model.User"*/-->
-<!--/*@thymesVar id="roles" type="java.util.List<onlinemarket.model.Role>"*/-->
+<!--/*@thymesVar id="filterForm" type="OnlineMarket.form.filter.FilterForm"*/-->
+<!--/*@thymesVar id="state" type="OnlineMarket.util.other.State"*/-->
+<!--/*@thymesVar id="result" type="OnlineMarket.result.ResultObject<OnlineMarket.model.User>"*/-->
+<!--/*@thymesVar id="user" type="OnlineMarket.model.User"*/-->
+<!--/*@thymesVar id="roles" type="java.util.List<OnlineMarket.model.Role>"*/-->
 <head>
 </head>
 <body>
@@ -50,7 +50,7 @@
                         <div class="input-group input-group-sm">
                             <select class="form-control" th:field="*{groupSearch['state']}">
                                 <option value="">State...</option>
-                                <option th:each="state : ${T(onlinemarket.model.State).values()}"
+                                <option th:each="state : ${T(OnlineMarket.util.other.State).values()}"
                                         th:value="${state}" th:text="${state.state}"></option>
                             </select>
                         </div>
@@ -84,36 +84,36 @@
                     <thead>
                     <tr>
                         <filter:th order="asc" orderBy="id"
-                                   filter:uri="@{${relativePath}}" filter:currentPage="${page}"
+                                   filter:uri="@{${relativePath}}"
                                    name="#">#
                         </filter:th>
                         <th>Avatar</th>
                         <filter:th order="asc" orderBy="firstName"
-                                   filter:uri="@{${relativePath}}" filter:currentPage="${page}"
+                                   filter:uri="@{${relativePath}}"
                                    name="First Name">First name
                         </filter:th>
                         <filter:th order="asc" orderBy="lastName"
-                                   filter:uri="@{${relativePath}}" filter:currentPage="${page}"
+                                   filter:uri="@{${relativePath}}"
                                    name="Last Name">Last name
                         </filter:th>
                         <filter:th order="asc" orderBy="role"
-                                   filter:uri="@{${relativePath}}" filter:currentPage="${page}"
+                                   filter:uri="@{${relativePath}}"
                                    name="Role">Role
                         </filter:th>
                         <filter:th order="asc" orderBy="email"
-                                   filter:uri="@{${relativePath}}" filter:currentPage="${page}"
+                                   filter:uri="@{${relativePath}}"
                                    name="Email">Email
                         </filter:th>
                         <filter:th order="asc" orderBy="createDate"
-                                   filter:uri="@{${relativePath}}" filter:currentPage="${page}"
+                                   filter:uri="@{${relativePath}}"
                                    name="Create Date">Create Date
                         </filter:th>
                         <filter:th order="asc" orderBy="updateDate"
-                                   filter:uri="@{${relativePath}}" filter:currentPage="${page}"
+                                   filter:uri="@{${relativePath}}"
                                    name="Update Date">Update Date
                         </filter:th>
                         <filter:th order="asc" orderBy="state"
-                                   filter:uri="@{${relativePath}}" filter:currentPage="${page}"
+                                   filter:uri="@{${relativePath}}"
                                    name="State">State
                         </filter:th>
                         <th>Action</th>
@@ -122,9 +122,9 @@
                     <tbody th:object="${result}">
                     <tr th:each="user : *{list}">
                         <td th:text="${user.id}"></td>
-                        <td><span class="w-40">
+                        <td><a th:href="@{'/user/'+${user.id}}"> <span class="w-40">
 									<img th:src="@{${user.avatar}}" class="w-full" alt="...">
-								</span></td>
+								</span></a></td>
                         <td th:text="${user.firstName}"></td>
                         <td th:text="${user.lastName}"></td>
                         <td th:text="${user.role.name}"></td>
@@ -135,11 +135,11 @@
                         <td>
                             <form class="form-confirm" th:action="@{${relativePath} + '/delete'}" method="POST">
                                 <a th:href="@{${relativePath} + '/' + ${user.id}+'/address-book' }"
-                                   class="btn btn-outline b-warn text-warn btn-sm">Address book</a>
+                                   class="btn btn-outline b-warn text-warn btn-sm btn-fw">Address book</a>
                                 <a th:href="@{${relativePath} + '/update/' + ${user.id} }"
-                                   class="btn btn-outline b-success text-success btn-sm">Update</a>
+                                   class="btn btn-outline b-success text-success btn-sm btn-fw">Update</a>
                                 <input type="hidden" th:name="id" th:value="${user.id}">
-                                <button type="submit" class="btn btn-outline b-info text-danger btn-sm">Delete</button>
+                                <button type="submit" class="btn btn-outline b-info text-danger btn-sm btn-fw">Delete</button>
                             </form>
                         </td>
                     </tr>
@@ -166,13 +166,13 @@
                                         th:if="${result.totalPages * filterForm.size} > 50">50 rows
                                 </option>
                             </select>
-                            <button type="submit" class="btn btn-sm white">Apply</button>
+                            <button type="submit" class="btn btn-sm btn-fw white">Apply</button>
                         </form>
 
                     </div>
                     <div class="col-sm-4 pull-right text-right text-center-xs">
-                        <filter:pagination filter:currentPage="${page}"
-                                           filter:totalPages="${result.totalPages}"
+                        <filter:pagination
+
                                            filter:uri="@{${relativePath}}"></filter:pagination>
                     </div>
                 </div>

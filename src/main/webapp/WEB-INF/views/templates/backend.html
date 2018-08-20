@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<!--/*@thymesVar id="general" type="onlinemarket.form.config.GeneralConfig"*/-->
-<!--/*@thymesVar id="logo" type="onlinemarket.form.config.LogoConfig"*/-->
-<!--/*@thymesVar id="menuSite" type="onlinemarket.util.MenuSite"*/-->
-<!--/*@thymesVar id="currentUser" type="onlinemarket.model.User"*/-->
-<!--/*@thymesVar id="social" type="onlinemarket.form.config.SocialConfig"*/-->
+<!--/*@thymesVar id="general" type="OnlineMarket.form.config.GeneralConfig"*/-->
+<!--/*@thymesVar id="logo" type="OnlineMarket.form.config.LogoConfig"*/-->
+<!--/*@thymesVar id="menuSite" type="OnlineMarket.util.MenuSite"*/-->
+<!--/*@thymesVar id="currentUser" type="OnlineMarket.model.User"*/-->
+<!--/*@thymesVar id="social" type="OnlineMarket.form.config.SocialConfig"*/-->
 <!--/*@thymesVar id="pageTitle" type="java.lang.String"*/-->
 <!--/*@thymesVar id="pathAdd" type="java.lang.String"*/-->
 <head>
@@ -42,14 +42,15 @@
   <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
   
   <script type="text/javascript" th:inline="javascript">
-  /*<![CDATA[*/
-  var PATH = [[@{/}]],
-    PATH_IMAGE = PATH.substring(0, PATH.length -1),
-	googleApiKey  = [[${api.apiGoogle}]],
-    uploadType = [[${pageType}]] || "product",
-        PATH_ICON = [[@{/assets/backend/scripts/FontAwesome-JSON/FontAwesome.json}]];
-
-  /*]]>*/
+      /*<![CDATA[*/
+      /*[+
+      var PATH = [[@{/}]],
+          PATH_IMAGE = PATH.substring(0, PATH.length -1),
+          googleApiKey  = [[${api.apiGoogle}]],
+          uploadType = [[${pageType}]] || "product",
+          PATH_ICON = [[@{/assets/backend/scripts/FontAwesome-JSON/FontAwesome.json}]];
+      +]*/
+      /*]]>*/
   </script>
 </head>
 <body th:inline="text">
@@ -68,20 +69,8 @@
         </a>
         <!-- / brand -->
       </div>
-      <div flex class="hide-scroll" th:include="templates/backend/main-nav :: nav">
+      <div flex class="hide-scroll" th:include="templates/backend/main-nav :: admin">
           
-      </div>
-      <div flex-no-shrink class="b-t">
-        <div class="nav-fold">
-        	<a th:href="@{/user}">
-        	    <span class="pull-left">
-        	      <img th:src="@{${currentUser.avatar}}" class="w-40 img-circle">
-        	    </span>
-        	    <span class="clear hidden-folded p-x">
-        	      <span class="block _500" th:text="${currentUser.firstName}"></span>
-        	    </span>
-        	</a>
-        </div>
       </div>
     </div>
   </div>

@@ -25,7 +25,7 @@
                     </div>
                     <div class="box-divider m-a-0"></div>
                     <div class="box-body">
-                        <!--/*@thymesVar id="post" type="onlinemarket.model.Post"*/-->
+                        <!--/*@thymesVar id="post" type="OnlineMarket.model.Post"*/-->
                         <form ui-jp="parsley" role="form" th:object="${post}" th:action="@{${pathAction}}" method="POST">
                             <input th:if="${action} == 'update'" type="hidden" th:field="*{id}" />
                             <input th:if="${action} == 'update'" type="hidden" id="beforeSlug" name="beforeSlug"
@@ -62,7 +62,7 @@
                                 <div class="col-sm-3">
                                     <select th:field="*{status}" class="form-control" required>
                                         <option value="">Choice option...</option>
-                                        <option th:each="status : ${T(onlinemarket.model.NumStatePost).values()}" th:value="${status.id}" th:text="${status.state}"></option>
+                                        <option th:each="status : ${T(OnlineMarket.util.other.NumStatePost).values()}" th:value="${status.id}" th:text="${status.state}"></option>
                                     </select>
                                 </div>
                             </div>
@@ -71,7 +71,7 @@
                                 <div class="col-sm-9">
                                     <select th:field="*{status}" class="form-control" required>
                                         <option value="">Choice option...</option>
-                                        <option th:each="status : ${T(onlinemarket.model.NumStatePost).values()}" th:value="${status.id}" th:text="${status.state}"></option>
+                                        <option th:each="status : ${T(OnlineMarket.util.other.NumStatePost).values()}" th:value="${status.id}" th:text="${status.state}"></option>
                                     </select>
                                 </div>
                             </div>

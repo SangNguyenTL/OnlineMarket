@@ -500,7 +500,24 @@
     simpleCart.currency({
         code: "VND" ,
         symbol: "₫" ,
-        name: "Viet nam dong"
+        name: "Viet nam dong",
+        accuracy: 0,
+        delimiter: " ",
+        decimal: "."
+    });
+
+    simpleCart.bind( "afterAdd" , function( item ){
+        alert( item.get("name") + " was added to the cart!" );
+    });
+
+    simpleCart.bind( "afterAdd" , function( item , isNew ){
+        if( isNew ){
+            alert( "A brand new item called " + item.get( 'name' ) + " was added to the cart" );
+        }
+    });
+
+    simpleCart.bind( 'beforeRemove' , function( item ){
+        alert( item.get('name') + " was removed from the cart" , "warning");
     });
 
     simpleCart({
@@ -508,10 +525,19 @@
         // see the cart columns documentation
         cartColumns: [
             { attr: "image", label: "Image", view: 'image'},
-            { attr: "name", label: "Name"},
+            {
+                label: "Name",
+                view: function(item, column){
+                    var link = item.get("pagelink");
+                    link = link ? link : "#";
+                    return '<a href="'+link+'">'+item.get("name")+'</a>';
+                }
+            },
+            { view: "decrement" , label: false , text: "-" } ,
             { attr: "quantity", label: "Qty"},
-            { view: "currency", attr: "total", label: "SubTotal" },
-            { view: "remove", text: "Remove", label: false}
+            { view: "increment" , label: false , text: "+" } ,
+            { view: "currency", attr: "total", label: "Sub Total" },
+            { view: "remove", text: "<i class='fa fa-close text-info'></i>", label: false}
         ],
         // "div" or "table" - builds the cart as a
         // table or collection of divs

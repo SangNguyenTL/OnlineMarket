@@ -11,21 +11,20 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item" th:each="breadcrumb : ${breadcrumbs}"><a th:href="@{${breadcrumb[0]}}" th:text="${breadcrumb[1]}"></a></li>
         </ol>
-        <h5 class="_300 margin" th:text="${pageTitle}"></h5>
         <div class="alert alert-success" th:if="${success}">
             <strong>Congratulation!</strong> Process completed.
         </div>
         <div class="row">
-            <div class="col-md-9">
+            <div class="col-md-12">
 
-                <!--/*@thymesVar id="product" type="onlinemarket.form.product.ProductForm"*/-->
+                <!--/*@thymesVar id="product" type="OnlineMarket.form.product.ProductForm"*/-->
                 <form id="formProduct" ui-jp="parsley" role="form" th:object="${product}" th:action="@{${pathAction}}" method="POST">
                     <input th:if="${action} == 'update'" type="hidden" th:field="*{id}"/>
                     <input th:if="${action} == 'update'" type="hidden" id="beforeSlug" name="beforeSlug"
                            th:value="*{slug}"/>
                     <div class="box">
                         <div class="box-header">
-                            <h2 th:text="${subPageTitle}"></h2>
+                            <h2 th:text="${pageTitle}"></h2>
                             <small th:text="${description}"></small>
                         </div>
 
@@ -90,9 +89,9 @@
                                 <div class="col-sm-3">
                                     <select th:field="*{state}" class="form-control" data-parsley-id="4" required>
                                         <option value="">Please choice</option>
-                                        <!--/*@thymesVar id="st" type="onlinemarket.model.State"*/-->
+                                        <!--/*@thymesVar id="st" type="OnlineMarket.util.other.State"*/-->
                                         <option
-                                                th:each="st : ${T(onlinemarket.model.NumState).values()}"
+                                                th:each="st : ${T(OnlineMarket.util.other.NumState).values()}"
                                                 th:value="${st.id}" th:text="${st.name}"></option>
                                     </select>
                                     <ul class="parsley-errors-list filled"
@@ -104,8 +103,8 @@
                                 <div class="col-sm-3">
                                     <select th:field="*{brand.id}" class="form-control" data-parsley-id="4" required>
                                         <option value="">Please choice</option>
-                                        <!--/*@thymesVar id="brandList" type="java.util.List<onlinemarket.model.Brand>"*/-->
-                                        <!--/*@thymesVar id="brandChoice" type="onlinemarket.model.Brand"*/-->
+                                        <!--/*@thymesVar id="brandList" type="java.util.List<OnlineMarket.model.Brand>"*/-->
+                                        <!--/*@thymesVar id="brandChoice" type="OnlineMarket.model.Brand"*/-->
                                         <option
                                                 th:each="brandChoice : ${brandList}"
                                                 th:value="${brandChoice.id}" th:text="${brandChoice.name}"></option>
@@ -179,7 +178,7 @@
                         </div>
 
                     </div>
-                    <!--/*@thymesVar id="productCategory" type="onlinemarket.model.ProductCategory"*/-->
+                    <!--/*@thymesVar id="productCategory" type="OnlineMarket.model.ProductCategory"*/-->
                     <div th:each="attributeGroup : ${productCategory.attributeGroups}" class="box">
                         <div class="box-header">
                             <h2 th:text="${attributeGroup.name}"></h2>

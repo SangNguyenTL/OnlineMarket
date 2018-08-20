@@ -29,7 +29,7 @@
 
                     <div class="box-body">
 
-                        <!--/*@thymesVar id="brand" type="onlinemarket.model.Brand"*/-->
+                        <!--/*@thymesVar id="brand" type="OnlineMarket.model.Brand"*/-->
                         <form ui-jp="parsley" role="form" th:object="${brand}" th:action="@{${pathAction}}"
                               method="POST">
                             <input th:if="${action} == 'update'" type="hidden" th:field="*{id}"/>

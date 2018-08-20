@@ -3,8 +3,14 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:filter="http://thymeleafexamples"
       layout:decorate="templates/backend">
-<!--/*@thymesVar id="result" type="onlinemarket.result.ResultObject<onlinemarket.model.ProductCategory>"*/-->
+<!--/*@thymesVar id="result" type="OnlineMarket.result.ResultObject<OnlineMarket.model.Rating>"*/-->
+<!--/*@thymesVar id="rating" type="OnlineMarket.model.Rating>"*/-->
 <!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
+<!--/*@thymesVar id="relativePath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="pageTitle" type="java.lang.String"*/-->
+<!--/*@thymesVar id="success" type="java.lang.String"*/-->
+<!--/*@thymesVar id="error" type="java.lang.String"*/-->
+<!--/*@thymesVar id="filterForm" type="OnlineMarket.form.filter.FilterForm"*/-->
 <head>
 </head>
 <body>
@@ -25,52 +31,70 @@
                 <strong>Obbs!</strong> [[${error}]]
             </div>
             <div class="row p-a">
+                <form th:object="${filterForm}" th:action="@{${relativePath}}" method="POST">
                 <div class="col-sm-5">
+                    <select class="form-control" th:field="*{groupSearch['state']}">
+                        <option value="">State...</option>
+                        <option th:value="${T(OnlineMarket.util.other.State).ACTIVE.name()}">Active</option>
+                        <option th:value="${T(OnlineMarket.util.other.State).INACTIVE.name()}">In Active</option>
+                    </select>
                 </div>
                 <div class="col-sm-4">
+                    <select class="form-control" th:field="*{searchBy}">
+                        <option value="product.name">Product Name</option>
+                        <option value="user.firstName">First name</option>
+                        <option value="user.lastName">Last name</option>
+                    </select>
                 </div>
                 <div class="col-sm-3">
-                    <form th:object="${filterForm}" th:action="@{${relativePath}}" method="POST">
-                        <div class="input-group input-group-sm">
-                            <input class="form-control" placeholder="Search" type="text" th:field="*{search}">
-                            <span class="input-group-btn">
-	            <button class="btn b-a white" type="submit">Go!</button>
-	          </span>
-                        </div>
-                        <input type="hidden" th:field="*{searchBy}"/>
-                        <input type="hidden" th:field="*{size}" />
-                        <input type="hidden" th:field="*{order}" />
-                        <input type="hidden" th:field="*{orderBy}" />
-                    </form>
+                    <div class="input-group">
+                        <input class="form-control" placeholder="Search" type="text" th:field="*{search}">
+                        <span class="input-group-btn">
+                            <button class="btn b-a white" type="submit">Go!</button>
+                        </span>
+                    </div>
+                    <input type="hidden" th:field="*{size}" />
+                    <input type="hidden" th:field="*{order}" />
+                    <input type="hidden" th:field="*{orderBy}" />
                 </div>
+                </form>
             </div>
             <div class="table-responsive">
                 <table class="table table-hover b-t">
                     <thead>
                     <tr>
-                        <filter:th order="asc" orderBy="id" filter:uri="@{${relativePath}}" filter:currentPage="${page}" name="#">#</filter:th>
-                        <filter:th order="asc" orderBy="name" filter:uri="@{${relativePath}}" filter:currentPage="${page}" name="Product Name">Product Name</filter:th>
-                        <filter:th order="asc" orderBy="lastName" filter:uri="@{${relativePath}}" filter:currentPage="${page}" name="User Name">User Name</filter:th>
-                        <filter:th order="asc" orderBy="score" filter:uri="@{${relativePath}}" filter:currentPage="${page}" name="Score">Score</filter:th>
-                        <filter:th order="asc" orderBy="createDate" filter:uri="@{${relativePath}}" filter:currentPage="${page}" name="Create Date"></filter:th>
-                        <filter:th order="asc" orderBy="state" filter:uri="@{${relativePath}}" filter:currentPage="${page}" name="Score">State</filter:th>
+                        <filter:th order="asc" orderBy="id" filter:uri="@{${relativePath}}" name="#">#</filter:th>
+                        <filter:th order="asc" orderBy="product.name" filter:uri="@{${relativePath}}" name="Product Name">Product Name</filter:th>
+                        <filter:th order="asc" orderBy="firstName" filter:uri="@{${relativePath}}" name="User Name">User Name</filter:th>
+                        <filter:th order="asc" orderBy="score" filter:uri="@{${relativePath}}" name="Score">Score</filter:th>
+                        <filter:th order="asc" orderBy="createDate" filter:uri="@{${relativePath}}" name="Create Date">Create Date</filter:th>
+                        <filter:th order="asc" orderBy="state" filter:uri="@{${relativePath}}" name="Score">State</filter:th>
                         <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="rating : ${result.list}">
                         <td th:text="${rating.id}"></td>
-                        <td th:text="${rating.product.name}"></td>
-                        <td th:text="${rating.user.lastName}"></td>
-                        <td th:text="${rating.score}"></td>
-                        <td th:text="${#dates.format(rating.createRateDate, 'dd-MM-yyyy hh:mm:ss a')}"></td>
-                        <td th:text="${rating.state}"></td>
+                        <td><a th:href="@{'/product/'+${rating.product.slug}}" class="text-info" th:text="${rating.product.name}"></a> </td>
+                        <td><a th:href="@{'/user/'+${rating.user.id}}" class="text-info" th:text="${rating.user.displayName}"></a> </td>
+                        <td><a data-toggle="popover" th:attr="data-content=${rating.content}" href="#">
+                                <span class="fa fa-stack text-warn" th:each="number : ${#numbers.sequence(1, 5)}">
+                                    <i th:if="${rating.score >= number}"
+                                       class="fa fa-star fa-stack-2x"></i>
+                                    <i class="fa fa-star-o fa-stack-2x"></i>
+                                </span>
+                            </a>
+                        </td>
+                        <td ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(rating.createRateDate, 'dd-MM-yyyy hh:mm:ss a')}+'\', format: \'DD-MM-YYYY hh:mm:ss a\'}'" th:text="${#dates.format(rating.createRateDate, 'dd-MM-yyyy')}"></td>
+                        <td>
+                            <span class="text-success" th:if="${#strings.equalsIgnoreCase(rating.state, T(OnlineMarket.util.other.State).ACTIVE.name())}">Activated</span>
+                            <button class="btn btn-outline btn-sm b-accent text-info activate-rating" th:attr="data-id=${rating.id}" th:if="${#strings.equalsIgnoreCase(rating.state, T(OnlineMarket.util.other.State).INACTIVE.name())}">Activate</button>
+                        </td>
                         <td>
                             <form class="form-confirm" th:action="@{${relativePath} + '/delete'}" method="POST">
-                                <a th:href="@{${relativePath} + '/update/' + ${rating.id}}" class="btn btn-outline b-info text-info btn-sm">View Rating Detail</a>
-                                <a th:href="@{${relativePath} + '/update/'+${rating.id}}" class="btn btn-outline b-info text-success btn-sm">Update Status</a>
+
                                 <input type="hidden" th:name="id" th:value="${rating.id}">
-                                <button type="submit" class="btn btn-outline b-info text-danger btn-sm">Delete</button>
+                                <button type="submit" class="btn btn-outline b-info text-danger btn-sm btn-fw">Delete</button>
                             </form>
                         </td>
                     </tr>
@@ -91,12 +115,12 @@
                                 <option value="20" th:if="${result.totalPages * filterForm.size} > 10">20 rows</option>
                                 <option value="50" th:if="${result.totalPages * filterForm.size} > 50">50 rows</option>
                             </select>
-                            <button type="submit" class="btn btn-sm white">Apply</button>
+                            <button type="submit" class="btn btn-sm btn-fw white">Apply</button>
                         </form>
 
                     </div>
                     <div class="col-sm-4 pull-right text-right text-center-xs">
-                        <filter:pagination filter:currentPage="${page}" filter:totalPages="${result.totalPages}" filter:uri="@{${relativePath}}"></filter:pagination>
+                        <filter:pagination filter:uri="@{${relativePath}}">Pagination</filter:pagination>
                     </div>
                 </div>
             </footer>

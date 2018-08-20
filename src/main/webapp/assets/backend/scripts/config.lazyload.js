@@ -178,5 +178,9 @@ var MODULE_CONFIG = {
     clipboard: [
         PATH + 'assets/backend/libs/js/clipboard/clipboard.min.js',
         PATH + 'assets/backend/libs/js/clipboard/plugin.js'
+    ],
+    humanTime: [
+        PATH + 'assets/backend/libs/js/moment/moment.js',
+        PATH + 'assets/backend/scripts/plugins/humanTime.js'
     ]
 };

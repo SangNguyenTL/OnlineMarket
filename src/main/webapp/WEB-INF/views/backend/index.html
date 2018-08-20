@@ -7,7 +7,14 @@
 <body>
 
   <div ui-view class="app-body" id="view" layout:fragment="container">
-  
+      <div class="p-a white lt box-shadow">
+          <div class="row">
+              <div class="col-sm-6">
+                  <h4 class="m-b-0 _300" th:text="'Welcome to '+${general.title}+' management system'">Welcome to Flatkit</h4>
+                  <small class="text-muted">Gives you a visual view of  <strong>everything</strong></small>
+              </div>
+          </div>
+      </div>
   </div>
 
 </body>

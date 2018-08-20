@@ -6,12 +6,23 @@
 <head>
 </head>
 <body>
+<!--/*@thymesVar id="result" type="OnlineMarket.result.ResultObject<OnlineMarket.model.AttributeGroup>"*/-->
+<!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
+<!--/*@thymesVar id="relativePath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="pageTitle" type="java.lang.String"*/-->
+<!--/*@thymesVar id="productCategoryPath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="success" type="boolean"*/-->
+<!--/*@thymesVar id="error" type="boolean"*/-->
+<!--/*@thymesVar id="filterForm" type="OnlineMarket.form.filter.FilterForm"*/-->
 
 <div ui-view class="app-body" id="view" layout:fragment="container">
     <div class="padding">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item" th:each="breadcrumb : ${breadcrumbs}"><a th:href="@{${breadcrumb[0]}}" th:text="${breadcrumb[1]}"></a></li>
+        </ol>
         <div class="box">
             <div class="box-header">
-                <h2><a th:href="@{${relativePath}}" th:text="${pageTitle}"></a></h2>
+                <h2><a th:href="@{${productCategoryPath}}" th:text="${pageTitle}"></a></h2>
             </div>
             <div class="alert alert-success m-x-lg" th:if="${success} != null">
                 <strong>Congratulation!</strong> Process completed.
@@ -43,14 +54,14 @@
                 <table class="table table-hover b-t">
                     <thead>
                     <tr>
-                        <filter:th order="asc" orderBy="id" filter:uri="@{${relativePath}}" filter:currentPage="${page}"
+                        <filter:th order="asc" orderBy="id" filter:uri="@{${relativePath}}"
                                    name="#">#
                         </filter:th>
                         <filter:th order="asc" orderBy="name" filter:uri="@{${relativePath}}"
-                                   filter:currentPage="${page}" name="Name">Name
+                                   name="Name">Name
                         </filter:th>
                         <filter:th order="asc" orderBy="priority" filter:uri="@{${relativePath}}"
-                                   filter:currentPage="${page}" name="Priority">Priority
+                                   name="Priority">Priority
                         </filter:th>
                         <th>Action</th>
                     </tr>
@@ -62,14 +73,16 @@
                         <td th:text="${attributeGroup.priority}"></td>
                         <td>
                             <form class="form-confirm" th:action="@{${relativePath}+'/delete'}" method="POST">
-                                <a th:href="@{${relativePath}+'/'+${attributeGroup.id}+'/attribute'}"
-                                   class="btn btn-outline b-info text-info btn-sm">View Attribute</a>
-                                <a th:href="@{${relativePath}+'/'+${attributeGroup.id}+'/attribute/add'}"
-                                   class="btn btn-outline b-primary text-primary btn-sm">Add Attribute</a>
-                                <a th:href="@{${relativePath}+'/update/'+${attributeGroup.id}}"
-                                   class="btn btn-outline b-accent text-accent btn-sm">Update</a>
-                                <input type="hidden" th:name="id" th:value="${attributeGroup.id}">
-                                <button type="submit" class="btn btn-outline b-info text-danger btn-sm">Delete</button>
+                                <div class="btn-group">
+                                    <a th:href="@{${relativePath}+'/'+${attributeGroup.id}+'/attribute'}"
+                                       class="btn btn-outline b-info text-info btn-sm btn-fw">View Attribute</a>
+                                    <a th:href="@{${relativePath}+'/'+${attributeGroup.id}+'/attribute/add'}"
+                                       class="btn btn-outline b-primary text-primary btn-sm btn-fw">Add Attribute</a>
+                                    <a th:href="@{${relativePath}+'/update/'+${attributeGroup.id}}"
+                                       class="btn btn-outline b-accent text-accent btn-sm btn-fw">Update</a>
+                                    <input type="hidden" th:name="id" th:value="${attributeGroup.id}">
+                                    <button type="submit" class="btn btn-outline b-info text-danger btn-sm btn-fw">Delete</button>
+                                </div>
                             </form>
                         </td>
                     </tr>
@@ -92,12 +105,12 @@
                                 <option th:value="50" th:if="${result.totalPages * filterForm.size} > 50">50 rows
                                 </option>
                             </select>
-                            <button type="submit" class="btn btn-sm white">Apply</button>
+                            <button type="submit" class="btn btn-sm btn-fw white">Apply</button>
                         </form>
 
                     </div>
                     <div class="col-sm-4 pull-right text-right text-center-xs">
-                        <filter:pagination filter:currentPage="${page}" filter:totalPages="${result.totalPages}"
+                        <filter:pagination
                                            filter:uri="@{${relativePath}}"></filter:pagination>
                     </div>
                 </div>

@@ -9,11 +9,11 @@
 <!--/*@thymesVar id="error" type="java.lang.String"*/-->
 <!--/*@thymesVar id="postType" type="java.lang.String"*/-->
 <!--/*@thymesVar id="success" type="java.lang.Boolean"*/-->
-<!--/*@thymesVar id="filterForm" type="onlinemarket.form.filter.FilterForm"*/-->
-<!--/*@thymesVar id="state" type="onlinemarket.model.NumStatePost"*/-->
-<!--/*@thymesVar id="result" type="onlinemarket.result.ResultObject<onlinemarket.model.Post>"*/-->
-<!--/*@thymesVar id="roles" type="java.util.List<onlinemarket.model.Role>"*/-->
-<!--/*@thymesVar id="postCategoryList" type="java.util.List<onlinemarket.model.PostCategory>"*/-->
+<!--/*@thymesVar id="filterForm" type="OnlineMarket.form.filter.FilterForm"*/-->
+<!--/*@thymesVar id="state" type="OnlineMarket.util.other.NumStatePost"*/-->
+<!--/*@thymesVar id="result" type="OnlineMarket.result.ResultObject<OnlineMarket.model.Post>"*/-->
+<!--/*@thymesVar id="roles" type="java.util.List<OnlineMarket.model.Role>"*/-->
+<!--/*@thymesVar id="postCategoryList" type="java.util.List<OnlineMarket.model.PostCategory>"*/-->
 <head>
 </head>
 <body>
@@ -40,7 +40,7 @@
                     <div class="col-sm-3">
                         <select class="form-control" th:field="*{groupSearch['status']}">
                             <option value="">Status...</option>
-                            <option th:each="state : ${T(onlinemarket.model.NumStatePost).values()}"
+                            <option th:each="state : ${T(OnlineMarket.util.other.NumStatePost).values()}"
                                     th:value="${state.id}" th:text="${state.state}"></option>
                         </select>
                     </div>
@@ -76,21 +76,21 @@
                     <thead>
                     <tr>
                         <filter:th order="asc" orderBy="id"
-                                   filter:uri="@{${relativePath}}" filter:currentPage="${page}"
+                                   filter:uri="@{${relativePath}}"
                                    name="#">#</filter:th>
                         <filter:th order="asc" orderBy="name"
-                                   filter:uri="@{${relativePath}}" filter:currentPage="${page}"
+                                   filter:uri="@{${relativePath}}"
                                    name="Name">Name</filter:th>
                         <th>Publisher</th>
                         <th th:if="${postType} == 'post'">Category</th>
                         <filter:th order="asc" orderBy="status"
-                                   filter:uri="@{${relativePath}}" filter:currentPage="${page}"
+                                   filter:uri="@{${relativePath}}"
                                    name="Status">Status</filter:th>
                         <filter:th order="asc" orderBy="createDate"
-                                   filter:uri="@{${relativePath}}" filter:currentPage="${page}"
+                                   filter:uri="@{${relativePath}}"
                                    name="Create Date">Create Date</filter:th>
                         <filter:th order="asc" orderBy="updateDate"
-                                   filter:uri="@{${relativePath}}" filter:currentPage="${page}"
+                                   filter:uri="@{${relativePath}}"
                                    name="Update Date">Update Date</filter:th>
                         <th>Action</th>
                     </tr>
@@ -98,7 +98,7 @@
                     <tbody>
                     <tr th:each="post : ${result.list}">
                         <td th:text="${post.id}"></td>
-                        <td th:text="${post.title}"></td>
+                        <td><a th:href="@{'/'+${postType}+'/'+${post.slug}}" class="text-info" th:text="${post.title}"></a></td>
                         <td th:text="${post.user.firstName}"></td>
                         <td th:if="${postType} == 'post'" th:text="${post.postCategory.name}"></td>
                         <td th:switch="${post.status}">
@@ -107,16 +107,15 @@
                             <th:block th:case="2">Deleted</th:block>
                             <th:block th:case="3">Lock</th:block>
                         </td>
-                        <td th:text="${#dates.format(post.createDate, 'dd-MM-yyyy hh:mm:ss a')}"></td>
-                        <td th:text="${#dates.format(post.updateDate, 'dd-MM-yyyy hh:mm:ss a')}"></td>
+                        <td ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(post.createDate, 'dd-MM-yyyy')}+'\', format: \'DD-MM-YYYY\'}'" th:text="${#dates.format(post.createDate, 'dd-MM-yyyy')}"></td>
+                        <td ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(post.updateDate, 'dd-MM-yyyy')}+'\', format: \'DD-MM-YYYY\'}'" th:text="${#dates.format(post.updateDate, 'dd-MM-yyyy')}"></td>
                         <td>
                             <form class="form-confirm"
                                   th:action="@{${relativePath} + '/delete'}" method="POST">
-                                <a th:href="@{${relativePath} + '/update/'+${post.id}}" class="btn btn-outline b-success text-success btn-sm">Update</a>
-                                <a th:href="@{'/'+${postType}+'/'+${post.slug}}" class="btn btn-outline b-info text-info btn-sm">View</a>
+                                <a th:href="@{${relativePath} + '/update/'+${post.id}}" class="btn btn-outline b-success text-success btn-sm btn-fw">Update</a>
                                 <input type="hidden" th:name="id" th:value="${post.id}">
                                 <button type="submit"
-                                        class="btn btn-outline b-info text-danger btn-sm">Delete</button>
+                                        class="btn btn-outline b-info text-danger btn-sm btn-fw">Delete</button>
                             </form>
                         </td>
                     </tr>
@@ -140,13 +139,13 @@
                                 <option th:value="50"
                                         th:if="${result.totalPages * filterForm.size} > 50">50 rows</option>
                             </select>
-                            <button type="submit" class="btn btn-sm white">Apply</button>
+                            <button type="submit" class="btn btn-sm btn-fw white">Apply</button>
                         </form>
 
                     </div>
                     <div class="col-sm-4 pull-right text-right text-center-xs">
-                        <filter:pagination filter:currentPage="${page}"
-                                           filter:totalPages="${result.totalPages}"
+                        <filter:pagination
+
                                            filter:uri="@{${relativePath}}"></filter:pagination>
                     </div>
                 </div>

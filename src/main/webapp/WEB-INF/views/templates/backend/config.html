@@ -4,7 +4,7 @@
 </head>
 <body>
 <div class="box-body" th:fragment="general">
-    <!--/*@thymesVar id="generalConfig" type="onlinemarket.form.config.GeneralConfig"*/-->
+    <!--/*@thymesVar id="generalConfig" type="OnlineMarket.form.config.GeneralConfig"*/-->
     <form ui-jp="parsley" role="form" th:object="${generalConfig}" th:action="@{/admin/config}" method="POST">
         <div class="form-group row">
             <label class="col-sm-3 form-control-label">Application Name</label>
@@ -66,7 +66,7 @@
 </div>
 
 <div class="box-body" th:fragment="upload">
-    <!--/*@thymesVar id="uploadConfig" type="onlinemarket.form.config.UploadConfig"*/-->
+    <!--/*@thymesVar id="uploadConfig" type="OnlineMarket.form.config.UploadConfig"*/-->
     <form ui-jp="parsley" role="form" th:object="${uploadConfig}" th:action="@{/admin/config/upload}" method="POST">
         <div class="form-group row">
             <label class="col-sm-3 form-control-label">File size limit</label>
@@ -96,7 +96,7 @@
 </div>
 
 <div class="box-body" th:fragment="logo">
-    <!--/*@thymesVar id="logoConfig" type="onlinemarket.form.config.LogoConfig"*/-->
+    <!--/*@thymesVar id="logoConfig" type="OnlineMarket.form.config.LogoConfig"*/-->
     <form ui-jp="parsley" role="form" th:object="${logoConfig}" th:action="@{/admin/config/logo}" method="POST">
         <div class="form-group row">
             <label class="col-sm-3 form-control-label">Favicon</label>
@@ -152,7 +152,7 @@
 </div>
 
 <div class="box-body" th:fragment="social">
-    <!--/*@thymesVar id="socialConfig" type="onlinemarket.form.config.SocialConfig"*/-->
+    <!--/*@thymesVar id="socialConfig" type="OnlineMarket.form.config.SocialConfig"*/-->
     <form ui-jp="parsley" role="form" th:object="${socialConfig}" th:action="@{/admin/config/social}" method="POST">
         <div class="form-group row">
             <label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Facebook</label>
@@ -194,7 +194,7 @@
 </div>
 
 <div class="box-body" th:fragment="api">
-    <!--/*@thymesVar id="apiConfig" type="onlinemarket.form.config.ApiConfig"*/-->
+    <!--/*@thymesVar id="apiConfig" type="OnlineMarket.form.config.ApiConfig"*/-->
     <form ui-jp="parsley" role="form" th:object="${apiConfig}" th:action="@{/admin/config/api}" method="POST">
         <div class="form-group row">
             <label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Api Facebook</label>
@@ -223,14 +223,16 @@
 </div>
 
 <div class="box-body" th:fragment="contact">
-    <!--/*@thymesVar id="contactConfig" type="onlinemarket.form.config.ContactConfig"*/-->
+    <!--/*@thymesVar id="contactConfig" type="OnlineMarket.form.config.ContactConfig"*/-->
     <form ui-jp="parsley" role="form" th:object="${contactConfig}" th:action="@{/admin/config/contact}" method="POST">
         <div class="form-group row">
             <label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Address</label>
             <div class="col-sm-12 col-md-8 col-lg-9 select2-bootstrap-append">
                 <select th:errorclass="parsley-error" class="form-control select2" type="text" th:field="*{address}"
                        placeholder="371/50/2 Truong Chinh, District Tan Binh, HCM" required data-parsley-id="address"
-                        data-parsley-length="[10, 255]" ui-options="{theme: 'bootstrap'}"></select>
+                        data-parsley-length="[10, 255]" ui-options="{theme: 'bootstrap'}">
+                    <option th:value="*{address}" th:text="*{address}"></option>
+                </select>
                 <ul class="parsley-errors-list filled" id="parsley-id-address" th:if="${#fields.hasErrors('address')}">
                     <li th:errors="*{address}"></li>
                 </ul>
@@ -271,17 +273,17 @@
 
 
 <div class="box-body" th:fragment="emailSystem">
-    <!--/*@thymesVar id="emailSystemConfig" type="onlinemarket.form.config.EmailSystemConfig"*/-->
+    <!--/*@thymesVar id="emailSystemConfig" type="OnlineMarket.form.config.EmailSystemConfig"*/-->
     <form ui-jp="parsley" role="form" th:object="${emailSystemConfig}" th:action="@{/admin/config/email-system}"
           method="POST">
         <div class="form-group row">
             <label class="col-sm-12 col-md-4 col-lg-3 form-control-label">Email</label>
             <div class="col-sm-12 col-md-8 col-lg-9">
-                <input th:errorclass="parsley-error" class="form-control" type="email" th:field="*{emailHost}" required
-                       data-parsley-id="emailHost" placeholder="system@domain.com" data-parsley-length="[6, 125]"/>
-                <ul class="parsley-errors-list filled" id="parsley-id-emailHost"
-                    th:if="${#fields.hasErrors('emailHost')}">
-                    <li th:errors="*{emailHost}"></li>
+                <input th:errorclass="parsley-error" class="form-control" type="email" th:field="*{userName}" required
+                       data-parsley-id="userName" placeholder="system@domain.com" data-parsley-length="[6, 125]"/>
+                <ul class="parsley-errors-list filled" id="parsley-id-userName"
+                    th:if="${#fields.hasErrors('userName')}">
+                    <li th:errors="*{userName}"></li>
                 </ul>
             </div>
         </div>
@@ -325,7 +327,7 @@
 </div>
 
 <div class="box-body" th:fragment="menuPosition">
-    <!--/*@thymesVar id="menuPositionConfig" type="onlinemarket.form.config.MenuPositionConfig"*/-->
+    <!--/*@thymesVar id="menuPositionConfig" type="OnlineMarket.form.config.MenuPositionConfig"*/-->
     <form ui-jp="parsley" role="form" th:object="${menuPositionConfig}" th:action="@{/admin/config/menu-position}"
           method="POST">
         <div class="form-group row">
@@ -333,7 +335,7 @@
             <div class="col-sm-12 col-md-8 col-lg-9">
                 <select th:errorclass="parsley-error" class="form-control" th:field="*{top}">
                     <option value="">-- Choice menu ---</option>
-                    <!--/*@thymesVar id="menuGroupList" type="java.util.List<onlinemarket.model.MenuGroup>"*/-->
+                    <!--/*@thymesVar id="menuGroupList" type="java.util.List<OnlineMarket.model.MenuGroup>"*/-->
                     <option th:each="menuGroup : ${menuGroupList}" th:value="${menuGroup.id}" th:text="${menuGroup.name}"></option>
                 </select>
                 <ul class="parsley-errors-list filled"
@@ -347,7 +349,7 @@
             <div class="col-sm-12 col-md-8 col-lg-9">
                 <select th:errorclass="parsley-error" class="form-control" th:field="*{header}">
                     <option value="">-- Choice menu ---</option>
-                    <!--/*@thymesVar id="menuGroupList" type="java.util.List<onlinemarket.model.MenuGroup>"*/-->
+                    <!--/*@thymesVar id="menuGroupList" type="java.util.List<OnlineMarket.model.MenuGroup>"*/-->
                     <option th:each="menuGroup : ${menuGroupList}" th:value="${menuGroup.id}" th:text="${menuGroup.name}"></option>
                 </select>
                 <ul class="parsley-errors-list filled"
@@ -361,7 +363,7 @@
             <div class="col-sm-12 col-md-8 col-lg-9">
                 <select th:errorclass="parsley-error" class="form-control" th:field="*{footerFirst}">
                     <option value="">-- Choice menu ---</option>
-                    <!--/*@thymesVar id="menuGroupList" type="java.util.List<onlinemarket.model.MenuGroup>"*/-->
+                    <!--/*@thymesVar id="menuGroupList" type="java.util.List<OnlineMarket.model.MenuGroup>"*/-->
                     <option th:each="menuGroup : ${menuGroupList}" th:value="${menuGroup.id}" th:text="${menuGroup.name}"></option>
                 </select>
                 <ul class="parsley-errors-list filled"
@@ -376,7 +378,7 @@
             <div class="col-sm-12 col-md-8 col-lg-9">
                 <select th:errorclass="parsley-error" class="form-control" th:field="*{footerSecond}">
                     <option value="">-- Choice menu ---</option>
-                    <!--/*@thymesVar id="menuGroupList" type="java.util.List<onlinemarket.model.MenuGroup>"*/-->
+                    <!--/*@thymesVar id="menuGroupList" type="java.util.List<OnlineMarket.model.MenuGroup>"*/-->
                     <option th:each="menuGroup : ${menuGroupList}" th:value="${menuGroup.id}" th:text="${menuGroup.name}"></option>
                 </select>
                 <ul class="parsley-errors-list filled"
@@ -390,7 +392,7 @@
             <div class="col-sm-12 col-md-8 col-lg-9">
                 <select th:errorclass="parsley-error" class="form-control" th:field="*{footerThird}">
                     <option value="">-- Choice menu ---</option>
-                    <!--/*@thymesVar id="menuGroupList" type="java.util.List<onlinemarket.model.MenuGroup>"*/-->
+                    <!--/*@thymesVar id="menuGroupList" type="java.util.List<OnlineMarket.model.MenuGroup>"*/-->
                     <option th:each="menuGroup : ${menuGroupList}" th:value="${menuGroup.id}" th:text="${menuGroup.name}"></option>
                 </select>
                 <ul class="parsley-errors-list filled"
@@ -404,7 +406,7 @@
             <div class="col-sm-12 col-md-8 col-lg-9">
                 <select th:errorclass="parsley-error" class="form-control" th:field="*{footerFour}">
                     <option value="">-- Choice menu ---</option>
-                    <!--/*@thymesVar id="menuGroupList" type="java.util.List<onlinemarket.model.MenuGroup>"*/-->
+                    <!--/*@thymesVar id="menuGroupList" type="java.util.List<OnlineMarket.model.MenuGroup>"*/-->
                     <option th:each="menuGroup : ${menuGroupList}" th:value="${menuGroup.id}" th:text="${menuGroup.name}"></option>
                 </select>
                 <ul class="parsley-errors-list filled"
@@ -418,7 +420,7 @@
             <div class="col-sm-12 col-md-8 col-lg-9">
                 <select th:errorclass="parsley-error" class="form-control" th:field="*{footerBottomRight}">
                     <option value="">-- Choice menu ---</option>
-                    <!--/*@thymesVar id="menuGroupList" type="java.util.List<onlinemarket.model.MenuGroup>"*/-->
+                    <!--/*@thymesVar id="menuGroupList" type="java.util.List<OnlineMarket.model.MenuGroup>"*/-->
                     <option th:each="menuGroup : ${menuGroupList}" th:value="${menuGroup.id}" th:text="${menuGroup.name}"></option>
                 </select>
                 <ul class="parsley-errors-list filled"
@@ -432,7 +434,7 @@
             <div class="col-sm-12 col-md-8 col-lg-9">
                 <select th:errorclass="parsley-error" class="form-control" th:field="*{footerBottom}">
                     <option value="">-- Choice menu ---</option>
-                    <!--/*@thymesVar id="menuGroupList" type="java.util.List<onlinemarket.model.MenuGroup>"*/-->
+                    <!--/*@thymesVar id="menuGroupList" type="java.util.List<OnlineMarket.model.MenuGroup>"*/-->
                     <option th:each="menuGroup : ${menuGroupList}" th:value="${menuGroup.id}" th:text="${menuGroup.name}"></option>
                 </select>
                 <ul class="parsley-errors-list filled"

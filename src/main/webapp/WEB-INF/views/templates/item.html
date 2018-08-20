@@ -3,9 +3,9 @@
 <head>
 </head>
 <body>
-
 <div class="product-thumb clearfix" th:fragment="productList (item)">
-    <div class="image"><a th:href="@{'/product/'+${item.slug}}"><img
+    <div class="image">
+    <a th:href="@{'/product/'+${item.slug}}"><img
             th:src="@{${item.featureImage}}" class="img-responsive"/></a></div>
     <div class="caption">
         <h4><a th:href="@{'/product/'+${item.slug}}" th:alt="${item.name}"
@@ -15,19 +15,21 @@
                   th:text="${item.priceStr}"></span> <span th:if="${item.sale != ''}"
                                                               class="saving"
                                                               th:text="${item.sale}"></span>
-        <div class="rating">
-                <span class="fa fa-stack" th:each="number : ${#numbers.sequence(1, 5)}">
-                    <i th:if="${item.ratingStatistic != null && item.ratingStatistic.averageScore > number}"
-                       class="fa fa-star fa-stack-2x"></i>
-                    <i class="fa fa-star-o fa-stack-2x"></i>
-                </span>
+        <div class="rating text-warn">
+                                        <span class="fa fa-stack" th:each="number : ${#numbers.sequence(1, 5)}">
+                                            <i th:if="${item.ratingStatistic != null && item.ratingStatistic.averageScore >= number}"
+                                               class="fa fa-star fa-stack-2x"></i>
+                                            <i th:if="${item.ratingStatistic != null && item.ratingStatistic.averageScore < number && item.ratingStatistic.averageScore > number - 1}"
+                                               class="fa fa-star-half-full fa-stack-2x"></i>
+                                            <i class="fa fa-star-o fa-stack-2x"></i>
+                                        </span>
         </div>
         </p>
     </div>
 </div>
 
 <div class="simpleCart_shelfItem product-thumb clearfix" th:fragment="productGrid (item)">
-    <div class="image"><a th:href="@{'/product/'+${product.slug}}"><img
+    <div class="image"><a class="item_pagelink" th:href="@{'/product/'+${product.slug}}"><img
             th:src="@{${item.featureImage}}" class="img-responsive item_image"/></a></div>
     <div>
         <div class="caption">
@@ -41,10 +43,12 @@
             </p>
             <p class="item_price hidden" th:text="${item.newPrice}"></p>
             <p class="item_id hidden" th:text="${item.id}"></p>
-            <div class="rating">
+            <div class="rating text-warn">
                                         <span class="fa fa-stack" th:each="number : ${#numbers.sequence(1, 5)}">
-                                            <i th:if="${item.ratingStatistic != null && item.ratingStatistic.averageScore > number}"
+                                            <i th:if="${item.ratingStatistic != null && item.ratingStatistic.averageScore >= number}"
                                                class="fa fa-star fa-stack-2x"></i>
+                                            <i th:if="${item.ratingStatistic != null && item.ratingStatistic.averageScore < number && item.ratingStatistic.averageScore > number - 1}"
+                                               class="fa fa-star-half-full fa-stack-2x"></i>
                                             <i class="fa fa-star-o fa-stack-2x"></i>
                                         </span>
             </div>
@@ -66,7 +70,7 @@
 
 <div th:fragment="productGridList (product)" class="product-layout product-list col-xs-12">
     <div class="simpleCart_shelfItem product-thumb clearfix">
-        <div class="image"><a th:href="@{'/product/'+${product.slug}}"><img
+        <div class="image"><a class="item_pagelink" th:href="@{'/product/'+${product.slug}}"><img
                 th:src="@{${product.featureImage}}" class="img-responsive item_image"/></a></div>
         <div>
             <div class="caption">
@@ -86,10 +90,12 @@
                 </p>
                 <p class="item_price hidden" th:text="${product.newPrice}"></p>
                 <p class="item_id hidden" th:text="${product.id}"></p>
-                <div class="rating">
+                <div class="rating text-warn">
                                         <span class="fa fa-stack" th:each="number : ${#numbers.sequence(1, 5)}">
-                                            <i th:if="${product.ratingStatistic != null && product.ratingStatistic.averageScore > number}"
+                                            <i th:if="${item.ratingStatistic != null && item.ratingStatistic.averageScore >= number}"
                                                class="fa fa-star fa-stack-2x"></i>
+                                            <i th:if="${item.ratingStatistic != null && item.ratingStatistic.averageScore < number && item.ratingStatistic.averageScore > number - 1}"
+                                               class="fa fa-star-half-full fa-stack-2x"></i>
                                             <i class="fa fa-star-o fa-stack-2x"></i>
                                         </span>
                 </div>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="templates/backend-user">
+<head>
+</head>
+<body>
+<!--/*@thymesVar id="changePassword" type="OnlineMarket.form.user.ChangePassword"*/-->
+<div ui-view class="app-body" id="view" layout:fragment="container">
+    <div class="row-col">
+        <div class="col-sm-3 col-lg-2">
+            <div class="p-y">
+                <div class="nav-active-border left b-primary">
+                    <ul class="nav nav-sm">
+                        <li class="nav-item">
+                            <a th:classappend="${settingSecurity   == null} ? 'active'" class="nav-link block" href data-toggle="tab" data-target="#tab-1">Profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <a th:classappend="${settingSecurity} ? 'active'" class="nav-link block" href data-toggle="tab" data-target="#tab-5">Security</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-9 col-lg-10 light lt bg-auto">
+            <div class="tab-content pos-rlt">
+                <div th:classappend="${settingSecurity   == null} ? 'active'" class="tab-pane" id="tab-1">
+                    <div class="p-a-md dker _600">
+                       Public profile
+                    </div>
+
+                    <!--/*@thymesVar id="userForm" type="OnlineMarket.model.User"*/-->
+                    <div class="p-a-md">
+                        <div class="clearfix m-b-lg">
+                            <div class="alert alert-success" th:if="${successProfile}">
+                                <strong>Congratulation!</strong> Process completed.
+                            </div>
+                            <form class="col-md-6 p-a-0" ui-jp="parsley" role="form" th:object="${userForm}"
+
+                              th:action="@{${pathAction}}" method="POST">
+
+                            <input type="hidden" th:field="*{id}"/>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Email</label>
+                                <div class="col-sm-9">
+                                    <input th:errorclass="parsley-error" type="email"
+                                           class="form-control" placeholder="your@email"
+                                           autocomplete="off"
+                                           th:attr="data-parsley-unique-email=@{/api/user/check-email}"
+                                           data-parsley-id="1" minlength="6" maxlength="128" required readonly
+                                           th:field="*{email}">
+                                    <ul class="parsley-errors-list filled" id="parsley-id-1"
+                                        th:if="${#fields.hasErrors('email')}">
+                                        <li th:errors="*{email}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">First Name</label>
+                                <div class="col-sm-9">
+                                    <input th:errorclass="parsley-error" type="text"
+                                           class="form-control" placeholder="First Name"
+                                           data-parsley-id="2" maxlength="64" required
+                                           th:field="*{firstName}">
+                                    <ul class="parsley-errors-list filled" id="parsley-id-2"
+                                        th:if="${#fields.hasErrors('firstName')}">
+                                        <li th:errors="*{firstName}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Last Name</label>
+                                <div class="col-sm-9">
+                                    <input th:errorclass="parsley-error" type="text"
+                                           class="form-control" placeholder="First Name"
+                                           data-parsley-id="3" maxlength="64" required
+                                           th:field="*{lastName}">
+                                    <ul class="parsley-errors-list filled" id="parsley-id-3"
+                                        th:if="${#fields.hasErrors('lastName')}">
+                                        <li th:errors="*{lastName}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Avatar</label>
+                                <div class="col-sm-9 box-image">
+                                    <a href="#" data-toggle="modal" data-target="#modal-image-gallery"
+                                       ui-toggle-class="zoom" ui-target="#animate" data-target-input='avatar'>
+                                        <img th:if="*{avatar}" th:src="@{*{avatar}}" alt="..."
+                                             class="img-thumbnail thumbnail box-thumbnail">
+                                        <img th:unless="*{avatar}" th:src="@{/assets/images/defaultImage.jpg}" alt="..."
+                                             class="img-thumbnail thumbnail box-thumbnail">
+                                    </a>
+                                    <input th:errorclass="parsley-error" class="form-control hide" type="text"
+                                           th:field="*{avatar}" data-parsley-length="[3, 150]"
+                                           data-parsley-id="8"/>
+                                    <ul class="parsley-errors-list filled" id="parsley-id-8"
+                                        th:if="${#fields.hasErrors('avatar')}">
+                                        <li th:errors="*{avatar}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Birthday</label>
+                                <div class="col-sm-9">
+                                    <input ui-jp="datetimepicker" ui-options="{format: 'DD/MM/YYYY'}" data-parsley-id="4" required
+                                           th:errorclass="parsley-error" class="form-control"
+                                           type="text" th:field="*{birthday}"/>
+                                    <ul class="parsley-errors-list filled" id="parsley-id-4"
+                                        th:if="${#fields.hasErrors('birthday')}">
+                                        <li th:errors="*{birthday}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Gender</label>
+                                <div class="col-sm-9">
+                                    <select th:errorclass="parsley-error" th:field="*{gender}" class="form-control"
+                                            data-parsley-id="5" required>
+                                        <option value="">Please choice</option>
+                                        <option
+                                                th:each="gender : ${T(OnlineMarket.util.other.Gender).values()}"
+                                                th:value="${gender.code}" th:text="${gender.text}"></option>
+                                    </select>
+                                    <ul class="parsley-errors-list filled" id="parsley-id-5"
+                                        th:if="${#fields.hasErrors('gender')}">
+                                        <li th:errors="*{gender}"></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="p-a">
+                                <button type="submit" class="btn info">Save</button>
+                            </div>
+                        </form>
+                        </div>
+                    </div>
+
+                </div>
+                <div th:classappend="${settingSecurity} ? 'active'"  class="tab-pane" id="tab-5">
+                    <div class="p-a-md dker _600">Security</div>
+
+                    <div class="p-a-md">
+                        <div class="clearfix m-b-lg">
+                            <div class="alert alert-success" th:if="${successSecurity}">
+                                <strong>Congratulation!</strong> Process completed.
+                            </div>
+                            <form th:object="${changePassword}" th:action="@{${pathActionChangePass}}" role="form" class="col-md-6 p-a-0" method="POST">
+                                <input type="hidden" name="userId" th:value="${user.id}">
+                                <div class="form-group">
+                                    <label>Old Password</label>
+                                    <input type="password" th:field="*{oldPassword}" class="form-control">
+                                    <ul class="parsley-errors-list filled"
+                                        th:if="${#fields.hasErrors('oldPassword')}">
+                                        <li class="text-danger" th:errors="*{oldPassword}"></li>
+                                    </ul>
+                                </div>
+                                <div class="form-group">
+                                    <label>New Password</label>
+                                    <input type="password" th:field="*{password}" class="form-control">
+                                    <ul class="parsley-errors-list filled"
+                                        th:if="${#fields.hasErrors('password')}">
+                                        <li class="text-danger" th:errors="*{password}"></li>
+                                    </ul>
+                                </div>
+                                <div class="form-group">
+                                    <label>New Password Again</label>
+                                    <input type="password" th:field="*{confirmPassword}" class="form-control">
+                                    <ul class="parsley-errors-list filled"
+                                        th:if="${#fields.hasErrors('confirmPassword')}">
+                                        <li class="text-danger" th:errors="*{confirmPassword}"></li>
+                                    </ul>
+                                </div>
+                                <div class="form-group">
+                                    <label>Reset session</label>
+                                    <div class="check-box">
+                                        <label class="ui-check ui-check-md">
+                                            <input type="checkbox" name="flagReset" value="1">
+                                            <i class="dark"></i>
+                                        </label>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-info m-t">Update</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div id="modal-image-gallery" class="modal fade animate" data-backdrop="true" aria-hidden="true">
+        <div class="modal-dialog zoom modal-lg" id="animate" ui-class="zoom">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Pick Image</h5>
+                </div>
+                <div class="modal-body" ui-jp='galleryManager'
+                     th:attr="ui-options='{modal: true, actionUpload: \''+@{/api/image/upload}+'\', actionLoadImage: \''+@{/api/image/load}+'\', actionDelete: \''+@{/api/image/delete}+'\', \'role\': \''+${user.role.name}+'\'}'">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn dark-white p-x-md" data-dismiss="modal">No</button>
+                    <button type="button" class="btn danger p-x-md" data-dismiss="modal" data-action="yes">Yes</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div>
+    </div>
+    <div th:replace="templates/backend/media :: media"></div>
+</div>
+
+
+</body>
+</html>

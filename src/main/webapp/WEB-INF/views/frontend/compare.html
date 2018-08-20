@@ -7,10 +7,10 @@
 <th:block layout:fragment="head">
 
 </th:block>
-<!--/*@thymesVar id="productCategory" type="onlinemarket.model.ProductCategory"*/-->
+<!--/*@thymesVar id="productCategory" type="OnlineMarket.model.ProductCategory"*/-->
 <!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
 <!--/*@thymesVar id="relativePath" type="java.lang.String"*/-->
-<!--/*@thymesVar id="result" type="onlinemarket.result.ResultObject<onlinemarket.view.FrontendProduct>"*/-->
+<!--/*@thymesVar id="result" type="OnlineMarket.result.ResultObject<OnlineMarket.view.FrontendProduct>"*/-->
 
 <head>
 </head>
@@ -65,12 +65,13 @@
                 </tr>
                 <tr>
                     <td colspan="2" >Rating</td>
-                    <td th:each="product : ${result.list}" class="rating">
+                    <td th:each="product : ${result.list}" class="text-warn">
                         <span class="fa fa-stack" th:each="number : ${#numbers.sequence(1, 5)}">
-                            <i th:if="${product.ratingStatistic != null && product.ratingStatistic.averageScore > number}" class="fa fa-star fa-stack-2x"></i>
+                            <i th:if="${product.ratingStatistic != null && product.ratingStatistic.averageScore >= number}" class="fa fa-star fa-stack-2x"></i>
+                            <i th:if="${product.ratingStatistic != null && product.ratingStatistic.averageScore > number - 1 && product.ratingStatistic.averageScore < number}" class="fa fa-star-half-full fa-stack-2x"></i>
                             <i class="fa fa-star-o fa-stack-2x"></i>
-                        </span>
-                        <th:block th:if="${product.ratingStatistic != null}" th:text="${'Based on '+product.ratingStatistic.userCount+' reviews.'}"></th:block>
+                        </span>&nbsp;
+                        <div th:if="${product.ratingStatistic != null}" th:text="${'Based on '+product.ratingStatistic.userCount+' reviews.'}" class="text-black"></div>
                     </td>
                 </tr>
                 <tr>

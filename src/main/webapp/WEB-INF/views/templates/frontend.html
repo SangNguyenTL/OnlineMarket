@@ -2,11 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<!--/*@thymesVar id="general" type="onlinemarket.form.config.GeneralConfig"*/-->
-<!--/*@thymesVar id="logo" type="onlinemarket.form.config.LogoConfig"*/-->
-<!--/*@thymesVar id="menuSite" type="onlinemarket.util.MenuSite"*/-->
-<!--/*@thymesVar id="currentUser" type="onlinemarket.model.User"*/-->
-<!--/*@thymesVar id="social" type="onlinemarket.form.config.SocialConfig"*/-->
+<!--/*@thymesVar id="general" type="OnlineMarket.form.config.GeneralConfig"*/-->
+<!--/*@thymesVar id="logo" type="OnlineMarket.form.config.LogoConfig"*/-->
+<!--/*@thymesVar id="menuSite" type="OnlineMarket.util.MenuSite"*/-->
+<!--/*@thymesVar id="currentUser" type="OnlineMarket.model.User"*/-->
+<!--/*@thymesVar id="social" type="OnlineMarket.form.config.SocialConfig"*/-->
 <!--/*@thymesVar id="pageTitle" type="java.lang.String"*/-->
 <head>
     <meta charset="UTF-8"/>
@@ -59,26 +59,22 @@
                         <div class="links">
                             <ul>
                                 <li class="mobile"><i class="fa fa-phone"></i>[[${contact.phoneNumber}]]</li>
-                                <li class="email"><a href="'mailto:'+${metaPage.email}"><i class="fa fa-envelope"></i>[[${contact.email}]]</a></li>
+                                <li class="email"><a th:href="'mailto:'+${contact.email}"><i class="fa fa-envelope"></i>[[${contact.email}]]</a></li>
                                 <th:block th:utext="${menuSite.top}"></th:block>
                             </ul>
                         </div>
 
                     </div>
                     <div id="top-links" class="nav pull-right flip">
-                        <div id="nav-user" class="btn-group" th:if="${currentUser.id}">
+                        <div id="nav-user" class="btn-group" sec:authorize="isAuthenticated()">
                             <button class="btn-link dropdown-toggle" data-toggle="dropdown"><span> [[${currentUser.firstName}]] <i
                                     class="fa fa-caret-down"></i></span></button>
                             <ul class="dropdown-menu">
-                                <li sec:authorize="hasAnyRole('ADMIN','SUPPER_ADMIN')">
+                                <li sec:authorize="hasAnyRole('ADMIN','SUPER_ADMIN')">
                                     <a class="nav-user-select" th:href="@{/admin}">Administrator</a>
                                 </li>
                                 <li>
-                                    <a class="nav-user-select" th:href="@{/user}">Personal Page
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="nav-user-select" th:href="@{/user/cart}">Cart
+                                    <a class="nav-user-select" th:href="@{/user}">Profile
                                     </a>
                                 </li>
                                 <li>
@@ -87,7 +83,6 @@
                                 <li>
                                     <a class="nav-user-select" th:href="@{/user/order}">Order</a>
                                 </li>
-                                <li class="divider" role="separator"></li>
                                 <li>
                                     <a class="nav-user-select" th:href="@{/user/setting}">Setting</a>
                                 </li>
@@ -97,7 +92,7 @@
                             </ul>
                         </div>
 
-                        <ul th:unless="${currentUser.id}">
+                        <ul sec:authorize="${isAnonymous()}">
                             <li><a th:href="@{/login}">Login</a></li>
                             <li><a th:href="@{/register}">Register</a></li>
                         </ul>
@@ -117,14 +112,14 @@
                     <!-- Logo End -->
                     <!-- Mini Cart Start-->
                     <div class="col-table-cell col-lg-3 col-md-3 col-sm-6 col-xs-12">
-                        <div id="cart">
+                        <div id="cart" th:if="${pageTitle} != 'Checkout'">
                             <button type="button" data-toggle="dropdown" data-loading-text="Loading..."
                                     class="heading">
                                 <span class="cart-icon pull-left flip"></span>
                                 <span id="cart-total"><span class="simpleCart_quantity"></span> item(s) - <span class="simpleCart_total"></span></span></button>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <div class="simpleCart_items table">
+                                    <div class="simpleCart_items table table-responsive">
 
                                     </div>
                                 </li>
@@ -225,7 +220,7 @@
              data-adapt-container-width="true" data-hide-cover="true" data-show-facepile="true" data-show-posts="false">
             <div class="fb-xfbml-parse-ignore">
                 <blockquote th:attr="cite=${social.facebook}"><a
-                        th:href="${social.facebook}">Fanpage</a></blockquote>
+                        th:href="@{${social.facebook}}">Fanpage</a></blockquote>
             </div>
         </div>
         <div id="fb-root"></div>

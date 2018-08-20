@@ -46,6 +46,7 @@
                 actionUpload: false,
                 actionDelete: false,
                 actionLoadImage: false,
+                role: false,
                 maxFileSize: '5M',
                 filter: {
                     pageNumber: 1,
@@ -60,6 +61,13 @@
             _this = this;
         this.element = $(element);
         this.settings = $.extend(true, defaults, options);
+
+        if(this.settings.role === "USER"){
+            this.settings.filterType = this.settings.filterType.filter(function (e) {
+                return e.type === "user";
+            })
+        }
+
         this.render(this.settings, this.templateMain, this.element);
         this.selectTypeElement = this.element.find('#selectTypeDate');
         this.tabGalleryElement = $('[data-target=#gallery]');

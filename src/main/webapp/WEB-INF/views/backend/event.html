@@ -3,13 +3,13 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:filter="http://thymeleafexamples"
       layout:decorate="templates/backend">
-<!--/*@thymesVar id="result" type="onlinemarket.result.ResultObject<onlinemarket.model.Event>"*/-->
+<!--/*@thymesVar id="result" type="OnlineMarket.result.ResultObject<OnlineMarket.model.Event>"*/-->
 <!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
 <!--/*@thymesVar id="pageTitle" type="java.lang.String"*/-->
 <!--/*@thymesVar id="relativePath" type="java.lang.String"*/-->
 <!--/*@thymesVar id="success" type="java.lang.Boolean"*/-->
 <!--/*@thymesVar id="error" type="java.lang.Boolean"*/-->
-<!--/*@thymesVar id="filterForm" type="onlinemarket.form.filter.FilterForm"*/-->
+<!--/*@thymesVar id="filterForm" type="OnlineMarket.form.filter.FilterForm"*/-->
 <head>
 </head>
 <body>
@@ -65,36 +65,35 @@
                 <table class="table table-hover b-t">
                     <thead>
                     <tr>
-                        <filter:th order="asc" orderBy="id" filter:uri="@{${relativePath}}" filter:currentPage="${page}"
+                        <filter:th order="asc" orderBy="id" filter:uri="@{${relativePath}}"
                                    name="#">#
                         </filter:th>
                         <filter:th order="asc" orderBy="status" filter:uri="@{${relativePath}}"
-                                   filter:currentPage="${page}"
+
                                    name="Status">Name
                         </filter:th>
                         <filter:th order="asc" orderBy="name" filter:uri="@{${relativePath}}"
-                                   filter:currentPage="${page}"
+
                                    name="Name">Name
                         </filter:th>
                         <filter:th order="asc" orderBy="count" filter:uri="@{${relativePath}}"
-                                   filter:currentPage="${page}"
+
                                    name="Count">Name
                         </filter:th>
                         <filter:th order="asc" orderBy="dateForm" filter:uri="@{${relativePath}}"
-                                   filter:currentPage="${page}"
+
                                    name="Start Date">Name
                         </filter:th>
                         <filter:th order="asc" orderBy="dateTo" filter:uri="@{${relativePath}}"
-                                   filter:currentPage="${page}"
+
                                    name="End Date">Name
                         </filter:th>
-                        <th>Value decreases</th>
                         <filter:th order="asc" orderBy="createDate" filter:uri="@{${relativePath}}"
-                                   filter:currentPage="${page}"
+
                                    name="Create Date">Name
                         </filter:th>
                         <filter:th order="asc" orderBy="updateDate" filter:uri="@{${relativePath}}"
-                                   filter:currentPage="${page}"
+
                                    name="Update Date">Name
                         </filter:th>
                         <th>Action</th>
@@ -107,22 +106,18 @@
                             <th:block th:if="${event.status} == 0">Active</th:block>
                             <th:block th:if="${event.status} == 1">In Active</th:block>
                         </td>
-                        <td th:text="${event.name}"></td>
+                        <td><a th:href="@{'/event/'+${event.id}}" th:text="${event.name}" class="text-info">View</a></td>
                         <td th:text="${event.count}"></td>
-                        <td th:text="${#dates.format(event.dateFrom, 'dd-MM-yyyy')}"></td>
-                        <td th:text="${#dates.format(event.dateTo, 'dd-MM-yyyy')}"></td>
-                        <td th:if="${event.percentValue != null}" th:text="${event.percentValue}+' %'"></td>
-                        <td th:if="${event.value != null}" th:text="${event.value}"></td>
-                        <td th:text="${#dates.format(event.createDate, 'dd-MM-yyyy')}"></td>
-                        <td th:text="${#dates.format(event.updateDate, 'dd-MM-yyyy')}"></td>
+                        <td ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(event.dateFrom, 'dd-MM-yyyy')}+'\', format: \'DD-MM-YYYY\'}'" th:text="${#dates.format(event.dateFrom, 'dd-MM-yyyy')}"></td>
+                        <td ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(event.dateTo, 'dd-MM-yyyy')}+'\', format: \'DD-MM-YYYY\'}'" th:text="${#dates.format(event.dateTo, 'dd-MM-yyyy')}"></td>
+                        <td ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(event.createDate, 'dd-MM-yyyy')}+'\', format: \'DD-MM-YYYY\'}'" th:text="${#dates.format(event.createDate, 'dd-MM-yyyy')}"></td>
+                        <td ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(event.updateDate, 'dd-MM-yyyy')}+'\', format: \'DD-MM-YYYY\'}'" th:text="${#dates.format(event.updateDate, 'dd-MM-yyyy')}"></td>
                         <td>
                             <form class="form-confirm" th:action="@{${relativePath}+'/delete'}" method="POST">
-                                <a th:href="@{'/event/'+${event.id}}"
-                                   class="btn btn-outline b-info text-info btn-sm">View</a>
                                 <a th:href="@{${relativePath}+'/update/'+${event.id}}"
-                                   class="btn btn-outline b-info text-success btn-sm">Update</a>
+                                   class="btn btn-outline b-info text-success btn-sm btn-fw">Update</a>
                                 <input type="hidden" th:name="id" th:value="${event.id}">
-                                <button type="submit" class="btn btn-outline b-info text-danger btn-sm">Delete</button>
+                                <button type="submit" class="btn btn-outline b-info text-danger btn-sm btn-fw">Delete</button>
                             </form>
                         </td>
                     </tr>
@@ -145,13 +140,12 @@
                                 <option th:value="50" th:if="${result.totalPages * filterForm.size} > 50">50 rows
                                 </option>
                             </select>
-                            <button type="submit" class="btn btn-sm white">Apply</button>
+                            <button type="submit" class="btn btn-sm btn-fw white">Apply</button>
                         </form>
 
                     </div>
                     <div class="col-sm-4 pull-right text-right text-center-xs">
-                        <filter:pagination filter:currentPage="${page}" filter:totalPages="${result.totalPages}"
-                                           filter:uri="@{${relativePath}}"></filter:pagination>
+                        <filter:pagination filter:uri="@{${relativePath}}"></filter:pagination>
                     </div>
                 </div>
             </footer>

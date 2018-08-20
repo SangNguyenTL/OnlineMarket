@@ -39,10 +39,10 @@
       				<th th:text="${menuGroup.description}">Description</th>
       				<td>
  				      	<form class="form-confirm" th:action="@{${relativePath}+'/delete'}" method="POST">
-	      					<a th:href="@{${relativePath}+ '/'+${menuGroup.id}+'/menu'}" class="btn btn-outline b-info text-info btn-sm">View menu</a>
-	      					<a th:href="@{${relativePath}+ '/update/'+${menuGroup.id}}" class="btn btn-outline b-info text-success btn-sm">Update menu group</a>
+	      					<a th:href="@{${relativePath}+ '/'+${menuGroup.id}+'/menu'}" class="btn btn-outline b-info text-info btn-sm btn-fw">View menu</a>
+	      					<a th:href="@{${relativePath}+ '/update/'+${menuGroup.id}}" class="btn btn-outline b-info text-success btn-sm btn-fw">Update menu group</a>
       						<input type="hidden" th:name="id" th:value="${menuGroup.id}">
-      						<button type="submit" class="btn btn-outline b-info text-danger btn-sm">Delete</button>
+      						<button type="submit" class="btn btn-outline b-info text-danger btn-sm btn-fw">Delete</button>
       					</form>
       				</td>
       			</tr>

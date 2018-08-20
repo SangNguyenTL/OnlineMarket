@@ -4,6 +4,16 @@
 		layout:decorate="templates/backend">
 <head>
 </head>
+<!--/*@thymesVar id="result" type="OnlineMarket.result.ResultObject<OnlineMarket.model.ProductCategory>"*/-->
+<!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
+<!--/*@thymesVar id="relativePath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="pageTitle" type="java.lang.String"*/-->
+<!--/*@thymesVar id="subPageTitle" type="java.lang.String"*/-->
+<!--/*@thymesVar id="description" type="java.lang.String"*/-->
+<!--/*@thymesVar id="pathAction" type="java.lang.String"*/-->
+<!--/*@thymesVar id="action" type="java.lang.String"*/-->
+<!--/*@thymesVar id="success" type="boolean"*/-->
+<!--/*@thymesVar id="productCategory" type="OnlineMarket.model.ProductCategory"*/-->
 <body>
 
   <div ui-view class="app-body" id="view" layout:fragment="container">
@@ -16,7 +26,11 @@
 				<strong>Congratulation!</strong> Process completed.
 			</div>
 			<div class="row">
-				<div class="col-md-9">
+				<div th:if="${action} == 'update'" class="col-md-3 push-md-9">
+					<a th:href="@{${relativePath} + '/' + ${productCategory.id}+ '/attribute-group'}" class="m-b-xs btn btn-outline b-info text-info btn-sm btn-fw">View Attribute Group</a>
+					<a th:href="@{'/product-category/' + ${productCategory.slug}}" class="m-b-xs btn btn-outline b-primary text-primary btn-sm btn-fw">View Product category</a>
+				</div>
+				<div class="col-md-9 pull-md-3">
 
 					<div class="box">
 						<div class="box-header">
@@ -25,10 +39,10 @@
 						</div>
 
 						<div class="box-divider m-a-0"></div>
-						
+
 						<div class="box-body">
-							
-							<!--/*@thymesVar id="productCategory" type="onlinemarket.model.ProductCategory"*/-->
+
+                            <!--/*@thymesVar id="productCategory" type="OnlineMarket.model.ProductCategory"*/-->
 							<form ui-jp="parsley" role="form" th:object="${productCategory}" th:action="@{${pathAction}}" method="POST">
 								<input th:if="${action} == 'update'" type="hidden" th:field="*{id}" />
 								<input th:if="${action} == 'update'" type="hidden" id="beforeSlug" name="beforeSlug" th:value="*{slug}" />
@@ -42,7 +56,7 @@
 								<div class="form-group row">
 									<label class="col-sm-3 form-control-label">Slug</label>
 									<div class="col-sm-9">
-										<input th:errorclass="parsley-error" class="form-control" type="text" th:field="*{slug}" required data-parsley-length="[3, 64]" data-parsley-id="2" data-parsley-target="name" 
+										<input th:errorclass="parsley-error" class="form-control" type="text" th:field="*{slug}" required data-parsley-length="[3, 64]" data-parsley-id="2" data-parsley-target="name"
 										th:attr="data-parsley-unique-slug=@{/api/product-category/check-slug}" />
 										<ul class="parsley-errors-list filled" id="parsley-id-2" th:if="${#fields.hasErrors('slug')}"><li th:errors="*{slug}"> </li></ul>
 									</div>
@@ -58,7 +72,7 @@
 					    			<button type="submit" class="btn info">Save</button>
 								</div>
 							</form>
-						
+
 						</div>
 					</div>
 

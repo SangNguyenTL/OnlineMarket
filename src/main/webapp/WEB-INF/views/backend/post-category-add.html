@@ -25,7 +25,7 @@
 						</div>
 						<div class="box-divider m-a-0"></div>
 						<div class="box-body">
-							<!--/*@thymesVar id="postCategory" type="onlinemarket.model.PostCategory"*/-->
+                            <!--/*@thymesVar id="postCategory" type="OnlineMarket.model.PostCategory"*/-->
 							<form ui-jp="parsley" role="form" th:object="${postCategory}" th:action="@{${pathAction}}" method="POST">
 								<input th:if="${action} == 'update'" type="hidden" th:field="*{id}" />
 								<input th:if="${action} == 'update'" type="hidden" id="beforeSlug" name="beforeSlug" th:value="*{slug}" />

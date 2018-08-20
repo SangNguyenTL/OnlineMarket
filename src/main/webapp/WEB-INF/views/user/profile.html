@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+         layout:decorate="templates/backend-user">
+<head>
+</head>
+<body>
+<!--/*@thymesVar id="user" type="OnlineMarket.model.User"*/-->
+<div ui-view class="app-body" id="view" layout:fragment="container">
+    <div class="item">
+        <div class="item-bg">
+            <img th:src="@{${user.avatar}}" class="blur opacity-3">
+        </div>
+        <div class="p-a-md">
+            <div class="row m-t">
+                <div class="col-sm-7">
+                    <a href="" class="pull-left m-r-md">
+            <span class="avatar w-96">
+              <img th:src="@{${user.avatar}}">
+              <i class="on b-white"></i>
+            </span>
+                    </a>
+                    <div class="clear m-b">
+                        <h3 class="m-a-0 m-b-xs" th:text="${user.displayName}">Jean Reyes</h3>
+                        <p class="text-muted"><span class="m-r" th:text="${user.addresses.size() > 0 ? user.addresses.get(0).phoneNumber : ''}">UX/UI Director</span> <small><i class="fa fa-map-marker m-r-xs"></i><th:block th:text="${user.addresses.size() > 0 ? user.addresses.get(0).province.name : ''}"></th:block></small></p>
+                    </div>
+                </div>
+                <div class="col-sm-5">
+                    <p class="text-md profile-status" th:text="${user.email}">I am feeling good!</p>
+                    <p class="text-md profile-status" th:text="${#dates.format(user.birthday, 'dd-MM-yyyy')}">I am feeling good!</p>
+                </div>
+            </div>
+        </div>
+        <div class="dker p-x">
+            <div class="row">
+                <div class="col-sm-6 push-sm-6">
+                    <div class="p-y text-center text-sm-right">
+                        <a th:href="@{/user/order}" class="inline p-x text-center">
+                            <span class="h4 block m-a-0" th:text="${T(OnlineMarket.util.Help).format(user.orders.size())}">2k</span>
+                            <small class="text-xs text-muted">Orders</small>
+                        </a>
+                        <a th:href="@{'/user/'+${user.id}+'/rating'}"  class="inline p-x b-l b-r text-center">
+                            <span class="h4 block m-a-0" th:text="${T(OnlineMarket.util.Help).format(user.ratings.size())}">250</span>
+                            <small class="text-xs text-muted">Ratings</small>
+                        </a>
+                        <a th:href="@{'/user/'+${user.id}+'/comment'}" class="inline p-x b-r text-center">
+                            <span class="h4 block m-a-0" th:text="${T(OnlineMarket.util.Help).format(user.comments.size())}">89</span>
+                            <small class="text-xs text-muted">Comments</small>
+                        </a>
+                        <a th:href="@{'/user/'+${user.id}+'/address'}" class="inline p-x text-center">
+                            <span class="h4 block m-a-0" th:text="${T(OnlineMarket.util.Help).format(user.addresses.size())}">89</span>
+                            <small class="text-xs text-muted">Addresses</small>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-sm-6 pull-sm-6">
+                    <div class="p-y-md clearfix nav-active-primary">
+                        <ul class="nav nav-pills nav-sm">
+                            <li class="nav-item active">
+                                <a class="nav-link" href="" data-toggle="tab" data-target="#tab_1">Activities</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="" data-toggle="tab" data-target="#tab_2">Stream</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="" data-toggle="tab" data-target="#tab_3">Friends</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="" data-toggle="tab" data-target="#tab_4">Profile</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
