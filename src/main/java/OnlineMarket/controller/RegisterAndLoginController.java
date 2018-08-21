@@ -74,7 +74,7 @@ public class RegisterAndLoginController extends MainController{
     @RequestMapping(value = { "/register" }, method = RequestMethod.GET)
     public String registerPage(ModelMap model) {
 
-        if (currentUser.getId() != null)
+        if (currentUser != null)
             return "redirect:/";
 
         breadcrumbs.add(new String[]{"/register", "Registration"});

@@ -123,7 +123,7 @@ public class FrPostPageController extends MainController {
         if(post == null || post.getStatus() != 0) throw new NoHandlerFoundException(request.getMethod(),request.getRequestURL().toString(),null);
 
         try {
-            if (currentUser.getId() == null) throw new CustomException("You must be login.");
+            if (currentUser == null) throw new CustomException("You must be login.");
             redirectAttributes.addFlashAttribute("addComment", true);
             if(!result.hasErrors()){
                 commentService.save(comment);

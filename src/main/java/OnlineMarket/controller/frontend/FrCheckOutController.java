@@ -20,10 +20,9 @@ public class FrCheckOutController extends MainController {
     }
 
     @RequestMapping(value = "", method = {RequestMethod.GET, RequestMethod.POST})
-    public String mainPage(RedirectAttributes redirectAttributes){
+    public String mainPage(){
 
-        if(currentUser.getId() == null){
-            redirectAttributes.addFlashAttribute("referer", "/check-out");
+        if(currentUser == null){
             return "redirect:/register";
         }
 
