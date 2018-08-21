@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/api/comment")
 public class ApiCommentController {
@@ -25,11 +27,11 @@ public class ApiCommentController {
 
     @RequestMapping(value = "/modify-status", produces = MediaType.APPLICATION_JSON_VALUE, method = { RequestMethod.POST,
             RequestMethod.GET })
-    public ResponseEntity<?> checkSlugUnique(@RequestParam(value = "id") Integer id) {
+    public ResponseEntity<?> checkSlugUnique(@RequestParam(value = "id") Integer id, HttpServletRequest request) {
         boolean error = false;
         String message = "";
         try {
-            eventPublisher.publishEvent(new OnCommentApprovedEvent(commentService.activeComment(id)));
+            eventPublisher.publishEvent(new OnCommentApprovedEvent(commentService.activeComment(id), request));
         } catch (CustomException e) {
             error = true;
             message = e.getMessage();

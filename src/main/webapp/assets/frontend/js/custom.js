@@ -208,7 +208,7 @@
     /*---------------------------------------------------
         Language and Currency Dropdowns
     ----------------------------------------------------- */
-    $('#currency, #language, #my_account, #nav-user').hover(function() {
+    $('#nav-user').hover(function() {
         $(this).find('ul').stop(true, true).slideDown('fast');
     },function() {
         $(this).find('ul').stop(true, true).css('display', 'none');
@@ -562,4 +562,31 @@
         // (may be used for checkout)
         language: "english-us"
     });
+
+    setInterval(function(){
+        if(userLogged)
+        $.ajax({
+            url: PATH + 'api/notification/count',
+            success: function (data) {
+                if(data.error)
+                    if(data.message !== "User not found")
+                        alert(data.message, "warning");
+                    else window.location.href = PATH+"login?error=expired";
+                else{
+                    let notifyA = $(".notification-a"),
+                        count = Number.parseInt(data.message);
+                    if(notifyA.length > 0){
+                        if(notifyA.find(".count").length>0){
+                            if(count > 0)
+                                notifyA.find(".count").html(data.message);
+                            else notifyA.find(".count").remove();
+                        }else {
+                            if(count > 0)
+                                notifyA.append('<span class="count">'+data.message+'</span>')
+                        }
+                    }
+                }
+            }
+        })
+    }, (5 * 1000));
 })(jQuery);

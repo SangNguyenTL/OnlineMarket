@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping("/api/rating")
 public class ApiRatingController {
@@ -25,11 +27,11 @@ public class ApiRatingController {
 
     @RequestMapping(value = "/modify-review-state", produces = MediaType.APPLICATION_JSON_VALUE, method = { RequestMethod.POST,
             RequestMethod.GET })
-    public ResponseEntity<?> checkSlugUnique(@RequestParam(value = "id") Integer id) {
+    public ResponseEntity<?> checkSlugUnique(@RequestParam(value = "id") Integer id, HttpServletRequest request) {
         boolean error = false;
         String message = "";
         try {
-            eventPublisher.publishEvent(new OnReviewApprovedEvent(ratingService.activeRating(id)));
+            eventPublisher.publishEvent(new OnReviewApprovedEvent(ratingService.activeRating(id), request));
         } catch (RatingNotFoundException e) {
             error = true;
             message = e.getMessage();

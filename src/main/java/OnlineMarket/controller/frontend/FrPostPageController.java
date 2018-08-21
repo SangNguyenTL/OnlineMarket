@@ -69,6 +69,7 @@ public class FrPostPageController extends MainController {
 
         if(postType.equals("post")){
             breadcrumbs.add(new String[]{"/post-category", "List post"});
+            if(post.getPostCategory()!= null)
             breadcrumbs.add(new String[]{"/post-category/"+ post.getPostCategory().getSlug(), post.getPostCategory().getName()});
             model.put("pathAction", relativePath+"/comment");
             Comment comment = (Comment) model.get("comment");

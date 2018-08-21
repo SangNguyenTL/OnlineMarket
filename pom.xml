@@ -24,6 +24,13 @@
 		<commons-lang3.version>3.0</commons-lang3.version>
 		<war.pakage.name>OnlineMarket</war.pakage.name>
 	</properties>
+	<repositories>
+		<!-- To use snapshots, you must also use the Sonatype Snapshots respository -->
+		<repository>
+			<id>sonatype-snapshots</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+		</repository>
+	</repositories>
 	<dependencies>
 		<!-- Spring -->
 		<dependency>
@@ -230,6 +237,12 @@
             <artifactId>UserAgentUtils</artifactId>
             <version>1.21</version>
         </dependency>
+
+		<dependency>
+			<groupId>org.ocpsoft.prettytime</groupId>
+			<artifactId>prettytime</artifactId>
+			<version>4.0.1.Final</version>
+		</dependency>
 
 	</dependencies>
 	<build>

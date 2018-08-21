@@ -7,6 +7,7 @@
 <!--/*@thymesVar id="currentUser" type="OnlineMarket.model.User"*/-->
 <!--/*@thymesVar id="social" type="OnlineMarket.form.config.SocialConfig"*/-->
 <!--/*@thymesVar id="pageTitle" type="java.lang.String"*/-->
+<!--/*@thymesVar id="countNotify" type="java.lang.Long"*/-->
 <!--/*@thymesVar id="pathAdd" type="java.lang.String"*/-->
 <head>
   <meta charset="utf-8" />
@@ -87,16 +88,15 @@
             <!-- / -->
         
             <!-- Page title - Bind to $state's title -->
-            <div class="navbar-item pull-left h5" ng-bind="$state.current.data.title" id="pageTitle"></div>
+            <div class="navbar-item pull-left h5" id="pageTitle"></div>
         
             <!-- navbar right -->
             <ul class="nav navbar-nav pull-right">
-              <li class="nav-item dropdown pos-stc-xs">
-                <a class="nav-link" href="#" data-toggle="dropdown">
+              <li class="nav-item pos-stc-xs">
+                <a class="nav-link notification-a" th:href="@{'/user/'+${currentUser.id}+'/notification'}">
                   <i class="material-icons">&#xe7f5;</i>
-                  <span class="label label-sm up warn">3</span>
+                  <span class="label label-sm up warn" th:if="${countNotify != null && countNotify > 0}" th:text="${countNotify}">3</span>
                 </a>
-                <div ></div>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link clear" href="#" data-toggle="dropdown">
@@ -106,20 +106,10 @@
                   </span>
                 </a>
                 <div class="dropdown-menu pull-right dropdown-menu-scale">
-				  <a class="dropdown-item" th:href="@{/user/noitification}">
-				    Notification
-
-				  </a>
-				  <a class="dropdown-item" th:href="@{/user}">
-				    <span>Profile</span>
-				  </a>
-				  <a class="dropdown-item" th:href="@{/user/setting}">
-				    Setting
-				  </a>
+                  <a class="dropdown-item" th:href="@{'/user'+${currentUser}}">Profile
+                  </a>
 				  <div class="dropdown-divider"></div>
-				  <a class="dropdown-item" th:href="@{/help}">
-				    Help?
-				  </a>
+                  <a class="dropdown-item" th:href="@{'/user/'+${currentUser}+'/setting'}">Setting</a>
 				  <a class="dropdown-item" th:href="@{/logout}">Log Out</a>
 				</div>
               </li>

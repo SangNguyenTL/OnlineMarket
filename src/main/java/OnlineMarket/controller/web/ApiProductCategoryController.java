@@ -21,7 +21,7 @@ public class ApiProductCategoryController {
 
 	@RequestMapping(value = "/check-slug", produces = MediaType.APPLICATION_JSON_VALUE, method = { RequestMethod.POST,
 			RequestMethod.GET })
-	public ResponseEntity<?> checkSlugUnique(@RequestParam(value = "value", required = true) String value,
+	public ResponseEntity<?> checkSlugUnique(@RequestParam(value = "value") String value,
 			@RequestParam(value = "id", required = false) Integer id) {
 
 		ProductCategory productCategory = productCategoryService.getByDeclaration("slug", value);

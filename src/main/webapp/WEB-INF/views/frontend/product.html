@@ -21,6 +21,7 @@
 <!--/*@thymesVar id="product" type="OnlineMarket.view.FrontendProduct"*/-->
 <!--/*@thymesVar id="currentUser" type="OnlineMarket.model.User"*/-->
 <!--/*@thymesVar id="rating" type="OnlineMarket.model.Rating"*/-->
+<!--/*@thymesVar id="prettyTime" type="org.ocpsoft.prettytime.PrettyTime"*/-->
 <head>
 </head>
 <body th:inline="text">
@@ -133,7 +134,7 @@
                                         <th:block th:each="attributeValues : ${attribute.attributeValues}" th:if="${product.checkProductAttributes(attributeValues)}">
                                             <p>
                                                 <a th:if="${attributeValues.link} != '' and ${attributeValues.link} != null" th:href="@{${attributeValues.link}}" th:text="${'- ' + attributeValues.value}"></a>
-                                                <th:block th:unless="${attributeValues.link} != '' and ${attributeValues.link} != null" th:text="${'- ' + attributeValues.value}"></th:block>
+                                                <th:block th:unless="${attributeValues.link} != '' and ${attributeValues.link} != null" th:text="${'- ' + attributeValues.value}"> </th:block>
                                             </p>
                                         </th:block>
                                     </div>
@@ -141,6 +142,36 @@
                             </div>
                         </div>
                         <div th:classappend="${ratingPage} ? 'active'" id="tab-review" class="tab-pane">
+                            <div id="review">
+                                <div th:each="rating : ${result.list}">
+                                    <table class="table table-striped table-bordered">
+                                        <tbody>
+                                        <tr>
+                                            <td style="width: 50%;"><strong><span
+                                                    th:text="${rating.user.firstName + ' ' + rating.user.lastName}"></span></strong>
+                                            </td>
+                                            <td class="text-right"><span th:text="${prettyTime.format(rating.createRateDate)}"></span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2"><p th:text="${rating.content}"></p>
+                                                <div class="rating">
+                                                        <span class="fa fa-stack"
+                                                              th:each="ada : ${#numbers.sequence(1, 5)}">
+                                                            <i th:if="${rating.score > ada}" class="fa fa-star fa-stack-2x"></i>
+                                                            <i class="fa fa-star-o fa-stack-2x"></i>
+                                                        </span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="text-right"></div>
+                                <div class="col-sm-4 pull-right text-right text-center-xs">
+                                    <filter:pagination filter:uri="@{${relativePath}}">Pagination</filter:pagination>
+                                </div>
+                            </div>
                             <div class="alert alert-success m-x-lg" th:if="${success} != null">
                                 <strong>Congratulation!</strong> Your review was sent, please wait for censorship.
                             </div>
@@ -154,36 +185,7 @@
                                   method="POST">
                                 <input type="hidden" name="user.id" th:value="${currentUser.id}">
                                 <input type="hidden" name="product.id" th:value="${product.id}">
-                                <div id="review">
-                                    <div th:each="rating : ${result.list}">
-                                        <table class="table table-striped table-bordered">
-                                            <tbody>
-                                            <tr>
-                                                <td style="width: 50%;"><strong><span
-                                                        th:text="${rating.user.firstName + ' ' + rating.user.lastName}"></span></strong>
-                                                </td>
-                                                <td class="text-right"><span th:text="${rating.createRateDate}"></span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2"><p th:text="${rating.content}"></p>
-                                                    <div class="rating">
-                                                        <span class="fa fa-stack"
-                                                              th:each="ada : ${#numbers.sequence(1, 5)}">
-                                                            <i th:if="${rating.score > ada}" class="fa fa-star fa-stack-2x"></i>
-                                                            <i class="fa fa-star-o fa-stack-2x"></i>
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="text-right"></div>
-                                    <div class="col-sm-4 pull-right text-right text-center-xs">
-                                        <filter:pagination filter:uri="@{${relativePath}}">Pagination</filter:pagination>
-                                    </div>
-                                </div>
+
                                 <h2>Write a review</h2>
                                 <div class="form-group required">
                                     <div class="col-sm-12">

@@ -4,12 +4,16 @@ import javax.persistence.*;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import OnlineMarket.validation.PasswordsEqualConstraint;
+import org.hibernate.annotations.*;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
@@ -232,6 +236,8 @@ public class User implements java.io.Serializable {
 
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+	@LazyCollection(LazyCollectionOption.EXTRA)
+    @Filter(name = "StatusUnRead")
 	public Set<Notification> getNotifications() {
 		return this.notifications;
 	}

@@ -192,7 +192,7 @@ a:focus { outline:none; }
 	font-size:12px;
 }
 #top .dropdown-menu li + li a, #currency ul li + li .currency-select, #language ul li + li .language-select, #nav-user ul li + li .nav-user-select { border-top:1px solid #eee; }
-#my_account:hover > a:after, #language:hover span:after, #currency:hover span:after, #header .links > ul > li.wrap_custom_block:hover > a:after, #nav-user:hover span:after {
+#nav-user button.btn-link:hover span:after {
 	clear:both;
 	content:' ';
 	display:block;

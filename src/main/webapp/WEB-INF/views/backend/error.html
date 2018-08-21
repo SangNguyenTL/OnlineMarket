@@ -3,6 +3,8 @@
 <!--/*@thymesVar id="pageTitle" type="java.lang.String"*/-->
 <!--/*@thymesVar id="general" type="OnlineMarket.form.config.GeneralConfig"*/-->
 <!--/*@thymesVar id="logo" type="OnlineMarket.form.config.LogoConfig"*/-->
+<!--/*@thymesVar id="code" type="java.lang.Integer"*/-->
+<!--/*@thymesVar id="errorMsg" type="java.lang.String"*/-->
 <head>
     <meta charset="utf-8"/>
     <title th:text="(${pageTitle} == null) ? ${general.title} : (${pageTitle} + ' | '+ ${general.title})"></title>
@@ -36,8 +38,6 @@
         /*[+
         var PATH = [[@{/}]],
             PATH_IMAGE = PATH.substring(0, PATH.length -1),
-            googleApiKey  = [[${api.apiGoogle}]],
-            uploadType = [[${pageType}]] || "product",
             PATH_ICON = [[@{/assets/backend/scripts/FontAwesome-JSON/FontAwesome.json}]];
         +]*/
         /*]]>*/
@@ -47,7 +47,19 @@
 <div class="app" id="app">
 
     <!-- ############ LAYOUT START-->
+    <div class="app-body bg-auto w-full" th:classappend="${code} < 500 ? 'amber' : 'indigo'">
+        <div class="text-center pos-rlt p-y-md">
+            <h1 class="text-shadow m-a-0 text-white text-4x">
+                <span class="text-2x font-bold block m-t-lg" th:text="${code}"></span>
+            </h1>
+            <h2 class="h1 m-y-lg text-black">OOPS!</h2>
+            <p class="h5 m-y-lg text-u-c font-bold text-black" th:text="${errorMsg}"></p>
 
+            <a th:href="@{/}" class="md-btn amber-700 md-raised p-x-md">
+                <span class="text-white">Go home!</span>
+            </a>
+        </div>
+    </div>
 
     <!-- ############ LAYOUT END-->
 

@@ -2,6 +2,8 @@ package OnlineMarket.model;
 // default package
 // Generated Jan 2, 2018 4:57:38 PM by Hibernate Tools 4.3.5.Final
 
+import org.hibernate.annotations.FilterDef;
+
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,6 +22,7 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "tb_notification", schema = "dbo", catalog = "SmartMarket")
+@FilterDef(name = "StatusUnRead", defaultCondition = "[status] = 0")
 public class Notification implements java.io.Serializable {
 
 	/**
@@ -42,7 +45,12 @@ public class Notification implements java.io.Serializable {
 		this.createDate = createDate;
 	}
 
-	@Id
+    public Notification(User user, String content) {
+	    this.user = user;
+        this.content = content;
+    }
+
+    @Id
 	@GeneratedValue(strategy = IDENTITY)
 
 	@Column(name = "_id", unique = true, nullable = false)

@@ -1,10 +1,9 @@
 package OnlineMarket.thymeleaf.dialect;
 
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
-import java.net.URLEncoder;
 import java.util.*;
 
+import OnlineMarket.model.User;
 import org.apache.commons.lang3.StringUtils;
 import org.thymeleaf.context.ITemplateContext;
 import org.thymeleaf.model.AttributeValueQuotes;
@@ -34,6 +33,7 @@ public class OrderHeadElementProcessor extends AbstractElementTagProcessor {
 
     private String orderBy;
 
+	private boolean publicState = false;
 
     OrderHeadElementProcessor(final String dialectPrefix) {
 		super(TemplateMode.HTML, // This processor will apply only to HTML mode
@@ -51,6 +51,10 @@ public class OrderHeadElementProcessor extends AbstractElementTagProcessor {
 			IElementTagStructureHandler structureHandler) {
 
 		filterForm = (FilterForm) context.getVariable("filterForm");
+
+		User user = (User) context.getVariable("currentUser");
+
+        publicState = user == null || user.getRole() == null || (!user.getRole().getName().equals("ADMIN") && !user.getRole().getName().equals("SUPER_ADMIN"));
 
 		if (filterForm == null)
 			filterForm = new FilterForm();
@@ -94,7 +98,7 @@ public class OrderHeadElementProcessor extends AbstractElementTagProcessor {
 	}
 
 	private String buildQuery() {
-		StringBuilder sb = new StringBuilder();
+		StringBuilder sb;
 		Set<String> paramList = new HashSet<>();
 		for (Field field : filterForm.getClass().getDeclaredFields()) {
 			field.setAccessible(true);
@@ -114,6 +118,7 @@ public class OrderHeadElementProcessor extends AbstractElementTagProcessor {
 					@SuppressWarnings("unchecked")
 					TreeMap<String, String> values = (TreeMap<String, String>) value;
                     for (Map.Entry<String, String> valueE : values.entrySet()) {
+                    	 if(!publicState && (valueE.getKey().equals("state") || valueE.getKey().equals("status") || valueE.getKey().equals("postType"))) continue;
                         if (StringUtils.isNotBlank(valueE.getValue())) {
                             sb = new StringBuilder();
                             paramList.add(sb.append(valueE.getKey()).append("=").append(valueE.getValue()).toString());

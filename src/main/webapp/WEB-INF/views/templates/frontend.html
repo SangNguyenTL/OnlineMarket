@@ -4,10 +4,12 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <!--/*@thymesVar id="general" type="OnlineMarket.form.config.GeneralConfig"*/-->
 <!--/*@thymesVar id="logo" type="OnlineMarket.form.config.LogoConfig"*/-->
+<!--/*@thymesVar id="contact" type="OnlineMarket.form.config.ContactConfig"*/-->
 <!--/*@thymesVar id="menuSite" type="OnlineMarket.util.MenuSite"*/-->
 <!--/*@thymesVar id="currentUser" type="OnlineMarket.model.User"*/-->
 <!--/*@thymesVar id="social" type="OnlineMarket.form.config.SocialConfig"*/-->
 <!--/*@thymesVar id="pageTitle" type="java.lang.String"*/-->
+<!--/*@thymesVar id="countNotify" type="java.lang.Long"*/-->
 <head>
     <meta charset="UTF-8"/>
     <title th:text="(${pageTitle} == null) ? ${general.title} : (${pageTitle} + ' | '+ ${general.title})"></title>
@@ -41,9 +43,12 @@
     </th:block>
     <script type="text/javascript" th:inline="javascript">
         /*<![CDATA[*/
+        /*[+
         var PATH = [[@{/}]],
             PATH_IMAGE = PATH.substring(0, PATH.length -1),
-                googleApiKey  = [[${api.apiGoogle}]];
+                googleApiKey  = [[${api.apiGoogle}]],
+                userLogged = [[${currentUser != null ? currentUser.id : false}]];
+        +]*/
         /*]]>*/
     </script>
 </head>
@@ -60,31 +65,35 @@
                             <ul>
                                 <li class="mobile"><i class="fa fa-phone"></i>[[${contact.phoneNumber}]]</li>
                                 <li class="email"><a th:href="'mailto:'+${contact.email}"><i class="fa fa-envelope"></i>[[${contact.email}]]</a></li>
-                                <th:block th:utext="${menuSite.top}"></th:block>
+                                <th:block th:utext="${menuSite.top}"> </th:block>
                             </ul>
                         </div>
 
                     </div>
                     <div id="top-links" class="nav pull-right flip">
+                        <div sec:authorize="isAuthenticated()" id="currency">
+                            <a th:href="@{'/user/'+${currentUser.id}+'/notification'}" class="btn-link notification-a">
+                                <span><i class="fa fa-bell"></i></span>
+                                <span class="count" th:if="${countNotify != null && countNotify > 0}" th:text="${countNotify}"> 3</span>
+                            </a>
+                        </div>
                         <div id="nav-user" class="btn-group" sec:authorize="isAuthenticated()">
-                            <button class="btn-link dropdown-toggle" data-toggle="dropdown"><span> [[${currentUser.firstName}]] <i
-                                    class="fa fa-caret-down"></i></span></button>
+                            <button class="btn-link" data-toggle="dropdown">
+                                <span> [[${currentUser.firstName}]] <i class="fa fa-caret-down"></i></span>
+                            </button>
                             <ul class="dropdown-menu">
                                 <li sec:authorize="hasAnyRole('ADMIN','SUPER_ADMIN')">
                                     <a class="nav-user-select" th:href="@{/admin}">Administrator</a>
                                 </li>
                                 <li>
-                                    <a class="nav-user-select" th:href="@{/user}">Profile
+                                    <a class="nav-user-select" th:href="@{'/user/'+${currentUser.id}}">Profile
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="nav-user-select" th:href="@{/user/noitification}">Notification</a>
+                                    <a class="nav-user-select" th:href="@{'/user/'+${currentUser.id}+'/order'}">Order</a>
                                 </li>
                                 <li>
-                                    <a class="nav-user-select" th:href="@{/user/order}">Order</a>
-                                </li>
-                                <li>
-                                    <a class="nav-user-select" th:href="@{/user/setting}">Setting</a>
+                                    <a class="nav-user-select" th:href="@{'/user/'+${currentUser.id}+'/setting'}">Setting</a>
                                 </li>
                                 <li>
                                     <a class="nav-user-select" th:href="@{/logout}">Exit</a>

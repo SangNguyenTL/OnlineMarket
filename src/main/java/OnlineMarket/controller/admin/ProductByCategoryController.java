@@ -42,8 +42,6 @@ public class ProductByCategoryController extends MainController {
 
 	private String relativePath;
 
-	private FilterForm filterForm;
-
 	@ModelAttribute
 	public ModelMap modelAttribute(@PathVariable("productCategoryId") Integer productCategoryId, ModelMap model) {
 
@@ -53,9 +51,9 @@ public class ProductByCategoryController extends MainController {
 		relativePath = productCategoryPath + "/" + productCategoryId + "/product";
 		generateBreadcrumbs();
 		breadcrumbs.add(new String[]{ productCategoryPath, "Product Category"});
-		breadcrumbs.add(new String[]{ relativePath, "Product"});
+		breadcrumbs.add(new String[]{ relativePath, productCategory.getName()});
 
-		filterForm = new FilterForm();
+		FilterForm filterForm = new FilterForm();
 		filterForm.setOrderBy("createDate");
 		filterForm.setOrder("DESC");
 		model.put("productPage", true);
@@ -130,6 +128,7 @@ public class ProductByCategoryController extends MainController {
 			if(!result.hasErrors()){
 				productService.save(product, productCategory, currentUser);
 				redirectAttributes.addFlashAttribute("success", true);
+				return "redirect:" + relativePath+"/update/"+product.getId();
 			}else{
 				modelMap.put("subPageTitle", "Add");
 				modelMap.put("description", "Add product for " + productCategory.getName());

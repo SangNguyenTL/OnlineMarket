@@ -29,7 +29,7 @@ public class ApiProductController {
 			flag = false;
 		else if(id != null){
 			Product oldProduct = productService.getByKey(id);
-			if (product != null && oldProduct.equals(product))
+			if (oldProduct != null && oldProduct.equals(product))
 				flag = false;
 		}
 		return ResponseEntity.ok(new ResponseResult(flag, null));

@@ -24,6 +24,7 @@
 <!--/*@thymesVar id="settingPage" type="java.lang.Boolean"*/-->
 <!--/*@thymesVar id="addressPage" type="java.lang.Boolean"*/-->
 <!--/*@thymesVar id="user" type="OnlineMarket.model.User"*/-->
+<!--/*@thymesVar id="countNotify" type="java.lang.Long"*/-->
 <head>
     <meta charset="UTF-8">
     <title>Insert title here</title>
@@ -324,6 +325,17 @@
                       <i class="material-icons">&#xe0ca;</i>
                     </span>
                     <span class="nav-text">Comments</span>
+                </a>
+            </li>
+            <li th:classappend="${commentPage} ? 'active'">
+                <a th:href="@{'/user/' + ${user.id}+ '/notification'}" class="notification-li">
+                    <span class="nav-icon">
+                      <i class="material-icons">&#xe7f5;</i>
+                    </span>
+                    <span class="nav-label" th:if="${countNotify != null && countNotify > 0}">
+                      <b class="label label-sm warn" th:text="${countNotify}">8</b>
+                    </span>
+                    <span class="nav-text">Notification</span>
                 </a>
             </li>
             <li th:class="${ratingPage} ? 'active'">

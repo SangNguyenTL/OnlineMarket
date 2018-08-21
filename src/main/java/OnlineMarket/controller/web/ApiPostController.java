@@ -29,7 +29,7 @@ public class ApiPostController {
             flag = false;
         else if(id != null){
             Post oldPost = postService.getByKey(id);
-            if (post != null && oldPost.equals(post))
+            if (oldPost != null && oldPost.equals(post))
                 flag = false;
         }
         return ResponseEntity.ok(new ResponseResult(flag, null));

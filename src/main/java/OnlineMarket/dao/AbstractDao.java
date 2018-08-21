@@ -54,7 +54,7 @@ public abstract class AbstractDao<PK extends Serializable, T> {
                     if(StringUtils.isNotBlank(value)){
                         try {
                             Field field = persistentClass.getDeclaredField(key);
-                            switch (field.getType().toString()){
+                            switch (field.getType().getSimpleName()){
                                 case "byte":
                                 case "Byte":
                                     criteria.add(Restrictions.eq(key, Byte.parseByte(value)));

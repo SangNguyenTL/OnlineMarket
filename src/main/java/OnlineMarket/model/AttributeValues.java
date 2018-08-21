@@ -75,15 +75,13 @@ public class AttributeValues {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AttributeValues that = (AttributeValues) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(value, that.value) &&
-                Objects.equals(link, that.link);
+        return Objects.equals(id, that.id) ||
+                Objects.equals(value, that.value);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(id, value, link);
+        return Objects.hash(id, value);
     }
 
     @ManyToOne

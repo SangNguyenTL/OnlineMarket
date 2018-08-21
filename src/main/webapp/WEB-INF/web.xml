@@ -3,4 +3,8 @@
     <error-page>
         <location>/errors</location>
     </error-page>
+    <error-page>
+        <exception-type>org.springframework.security.web.authentication.rememberme.CookieTheftException</exception-type>
+        <location>/login?error=invalidSession</location>
+    </error-page>
 </web-app>

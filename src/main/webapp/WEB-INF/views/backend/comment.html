@@ -77,8 +77,8 @@
                         <td th:text="${comment.id}"></td>
                         <td><a th:href="@{'/post/'+${comment.post.slug}}" class="text-info" th:text="${comment.post.title}"></a> </td>
                         <td><a th:href="@{'/user/'+${comment.user.id}}" class="text-info" th:text="${comment.user.displayName}"></a> </td>
-                        <td ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(comment.createDate, 'dd-MM-yyyy hh:mm:ss a')}+'\', format: \'DD-MM-YYYY hh:mm:ss a\'}'" th:text="${#dates.format(comment.createDate, 'dd-MM-yyyy')}"></td>
-                        <td ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(comment.updateDate, 'dd-MM-yyyy hh:mm:ss a')}+'\', format: \'DD-MM-YYYY hh:mm:ss a\'}'" th:text="${#dates.format(comment.updateDate, 'dd-MM-yyyy')}"></td>
+                        <td ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(comment.createDate, 'dd-MM-yyyy HH:mm:ss')}+'\', format: \'DD-MM-YYYY HH:mm:ss\'}'" th:text="${#dates.format(comment.createDate, 'dd-MM-yyyy')}"></td>
+                        <td ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(comment.updateDate, 'dd-MM-yyyy HH:mm:ss')}+'\', format: \'DD-MM-YYYY HH:mm:ss\'}'" th:text="${#dates.format(comment.updateDate, 'dd-MM-yyyy')}"></td>
                         <td>
                             <span class="text-success" th:if="${comment.status == T(OnlineMarket.util.other.CommentState).ACTIVE.id}">Activated</span>
                             <button class="btn btn-outline btn-sm b-accent text-info activate-comment" th:attr="data-id=${comment.id}" th:unless="${comment.status == T(OnlineMarket.util.other.CommentState).ACTIVE.id}">Activate</button>

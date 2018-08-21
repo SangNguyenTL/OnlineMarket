@@ -92,9 +92,9 @@
                 <p class="item_id hidden" th:text="${product.id}"></p>
                 <div class="rating text-warn">
                                         <span class="fa fa-stack" th:each="number : ${#numbers.sequence(1, 5)}">
-                                            <i th:if="${item.ratingStatistic != null && item.ratingStatistic.averageScore >= number}"
+                                            <i th:if="${product.ratingStatistic != null && product.ratingStatistic.averageScore >= number}"
                                                class="fa fa-star fa-stack-2x"></i>
-                                            <i th:if="${item.ratingStatistic != null && item.ratingStatistic.averageScore < number && item.ratingStatistic.averageScore > number - 1}"
+                                            <i th:if="${product.ratingStatistic != null && product.ratingStatistic.averageScore < number && product.ratingStatistic.averageScore > number - 1}"
                                                class="fa fa-star-half-full fa-stack-2x"></i>
                                             <i class="fa fa-star-o fa-stack-2x"></i>
                                         </span>

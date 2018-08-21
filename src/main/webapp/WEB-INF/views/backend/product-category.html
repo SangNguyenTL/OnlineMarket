@@ -64,8 +64,8 @@
       			<tr th:each="productCategory : ${result.list}">
       				<td th:text="${productCategory.id}"></td>
       				<td><a th:href="@{'/product-category/'+${productCategory.slug}}" th:text="${productCategory.name}"></a></td>
-					<td ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(productCategory.createDate, 'dd-MM-yyyy hh:mm:ss a')}+'\', format: \'DD-MM-YYYY hh:mm:ss a\'}'" th:text="${#dates.format(productCategory.createDate, 'dd-MM-yyyy')}"></td>
-					<td ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(productCategory.updateDate, 'dd-MM-yyyy hh:mm:ss a')}+'\', format: \'DD-MM-YYYY hh:mm:ss a\'}'" th:text="${#dates.format(productCategory.updateDate, 'dd-MM-yyyy')}"></td>
+					<td ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(productCategory.createDate, 'dd-MM-yyyy HH:mm:ss')}+'\', format: \'DD-MM-YYYY HH:mm:ss\'}'" th:text="${#dates.format(productCategory.createDate, 'dd-MM-yyyy')}"></td>
+					<td ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(productCategory.updateDate, 'dd-MM-yyyy HH:mm:ss')}+'\', format: \'DD-MM-YYYY HH:mm:ss\'}'" th:text="${#dates.format(productCategory.updateDate, 'dd-MM-yyyy')}"></td>
       				<td>
       					<form class="form-confirm" th:action="@{${relativePath} + '/delete'}" method="POST">
       					<a th:href="@{${relativePath} + '/' + ${productCategory.id}+ '/attribute-group'}" class="btn btn-outline b-info text-info btn-sm btn-fw">View Attribute Group</a>

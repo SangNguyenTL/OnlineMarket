@@ -72,8 +72,8 @@
                     <tr th:each="comment : ${result.list}">
                         <td th:text="${comment.id}"></td>
                         <td><a th:href="@{'/post/'+${comment.post.slug}}" class="text-info" th:text="${comment.post.title}"></a> </td>
-                        <td ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(comment.createDate, 'dd-MM-yyyy hh:mm:ss a')}+'\', format: \'DD-MM-YYYY hh:mm:ss a\'}'" th:text="${#dates.format(comment.createDate, 'dd-MM-yyyy')}"></td>
-                        <td ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(comment.updateDate, 'dd-MM-yyyy hh:mm:ss a')}+'\', format: \'DD-MM-YYYY hh:mm:ss a\'}'" th:text="${#dates.format(comment.updateDate, 'dd-MM-yyyy')}"></td>
+                        <td ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(comment.createDate, 'dd-MM-yyyy HH:mm:ss')}+'\', format: \'DD-MM-YYYY HH:mm:ss\'}'" th:text="${#dates.format(comment.createDate, 'dd-MM-yyyy')}"></td>
+                        <td ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(comment.updateDate, 'dd-MM-yyyy HH:mm:ss')}+'\', format: \'DD-MM-YYYY HH:mm:ss\'}'" th:text="${#dates.format(comment.updateDate, 'dd-MM-yyyy')}"></td>
                         <td>
                             <th:block th:each="state : ${T(OnlineMarket.util.other.CommentState).values()}">
                                 <span th:if="${comment.status == state.id}" th:text="${state.state}"></span>

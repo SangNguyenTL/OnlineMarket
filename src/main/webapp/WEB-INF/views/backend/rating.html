@@ -4,7 +4,6 @@
       xmlns:filter="http://thymeleafexamples"
       layout:decorate="templates/backend">
 <!--/*@thymesVar id="result" type="OnlineMarket.result.ResultObject<OnlineMarket.model.Rating>"*/-->
-<!--/*@thymesVar id="rating" type="OnlineMarket.model.Rating>"*/-->
 <!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
 <!--/*@thymesVar id="relativePath" type="java.lang.String"*/-->
 <!--/*@thymesVar id="pageTitle" type="java.lang.String"*/-->
@@ -85,7 +84,7 @@
                                 </span>
                             </a>
                         </td>
-                        <td ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(rating.createRateDate, 'dd-MM-yyyy hh:mm:ss a')}+'\', format: \'DD-MM-YYYY hh:mm:ss a\'}'" th:text="${#dates.format(rating.createRateDate, 'dd-MM-yyyy')}"></td>
+                        <td ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(rating.createRateDate, 'dd-MM-yyyy HH:mm:ss')}+'\', format: \'DD-MM-YYYY HH:mm:ss\'}'" th:text="${#dates.format(rating.createRateDate, 'dd-MM-yyyy')}"></td>
                         <td>
                             <span class="text-success" th:if="${#strings.equalsIgnoreCase(rating.state, T(OnlineMarket.util.other.State).ACTIVE.name())}">Activated</span>
                             <button class="btn btn-outline btn-sm b-accent text-info activate-rating" th:attr="data-id=${rating.id}" th:if="${#strings.equalsIgnoreCase(rating.state, T(OnlineMarket.util.other.State).INACTIVE.name())}">Activate</button>

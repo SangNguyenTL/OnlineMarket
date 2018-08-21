@@ -50,7 +50,7 @@ public class PageController extends MainController {
     }
 
     @RequestMapping(value = "", method = {RequestMethod.GET, RequestMethod.POST})
-    public String mainPage( ModelMap modelMap) {
+    public String mainPage(@ModelAttribute("filterForm") FilterForm filterForm, ModelMap modelMap) {
 
         modelMap.put("result", postService.list(filterForm));
         modelMap.put("pageTitle", title + " manager");
@@ -61,6 +61,7 @@ public class PageController extends MainController {
 
     @RequestMapping(value = "/page/{page:^\\d+}", method = {RequestMethod.GET, RequestMethod.POST})
     public String mainPagePagination(
+            @ModelAttribute("filterForm") FilterForm filterForm,
             @PathVariable("page") Integer page, ModelMap modelMap) {
 
         filterForm.setCurrentPage(page);

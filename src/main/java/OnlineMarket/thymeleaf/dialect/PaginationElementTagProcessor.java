@@ -1,10 +1,9 @@
 package OnlineMarket.thymeleaf.dialect;
 
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
-import java.net.URLEncoder;
 import java.util.*;
 
+import OnlineMarket.model.User;
 import OnlineMarket.result.ResultObject;
 import org.apache.commons.lang3.StringUtils;
 import org.thymeleaf.context.ITemplateContext;
@@ -26,8 +25,9 @@ public class PaginationElementTagProcessor extends AbstractElementTagProcessor{
     private Integer displayedPages;
     private String previous;
     private String next;
-    
-    
+
+	private boolean publicState = false;
+
     private FilterForm filterForm;
     
 	PaginationElementTagProcessor(final String dialectPrefix) {
@@ -46,7 +46,10 @@ public class PaginationElementTagProcessor extends AbstractElementTagProcessor{
 			ITemplateContext context,
 			IProcessableElementTag tag,
 			IElementTagStructureHandler structureHandler) {
-		
+		User user = (User) context.getVariable("currentUser");
+
+        publicState = user == null || user.getRole() == null || (!user.getRole().getName().equals("ADMIN") && !user.getRole().getName().equals("SUPER_ADMIN"));
+
 		filterForm = (FilterForm) context.getVariable("filterForm");
 		
 		if(filterForm == null) filterForm = new FilterForm();
@@ -129,7 +132,7 @@ public class PaginationElementTagProcessor extends AbstractElementTagProcessor{
     }
     
     private String buildQuery() {
-    	StringBuilder sb = new StringBuilder();
+    	StringBuilder sb;
 		Set<String> paramList = new HashSet<>();
     	for(Field field : filterForm.getClass().getDeclaredFields()) {
     		field.setAccessible(true);
@@ -147,6 +150,7 @@ public class PaginationElementTagProcessor extends AbstractElementTagProcessor{
 					@SuppressWarnings("unchecked")
 					TreeMap<String, String> values = (TreeMap) value;
 					for (Map.Entry<String, String> valueE : values.entrySet()) {
+						if(publicState && (valueE.getKey().equals("state") || valueE.getKey().equals("status") || valueE.getKey().equals("postType"))) continue;
 						if (StringUtils.isNotBlank(valueE.getValue())) {
 							sb = new StringBuilder();
 							if(filterForm.getExcludeProperties().contains(valueE.getKey())) continue;

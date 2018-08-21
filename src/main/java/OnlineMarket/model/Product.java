@@ -333,13 +333,13 @@ public class Product implements java.io.Serializable {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Product product = (Product) o;
-		return Objects.equals(id, product.id) &&
+		return Objects.equals(id, product.id) ||
 				Objects.equals(slug, product.slug);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, slug);
+		return Objects.hash(slug);
 	}
 
 }

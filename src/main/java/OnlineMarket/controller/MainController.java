@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import OnlineMarket.form.filter.FilterForm;
 import OnlineMarket.model.ProductCategory;
 import OnlineMarket.service.*;
+import OnlineMarket.util.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.ui.ModelMap;
@@ -45,6 +46,9 @@ public abstract class MainController {
 
     @Autowired
     MenuSiteService menuSiteService;
+
+    @Autowired
+    protected NotificationService notificationService;
 
     protected User currentUser;
 
@@ -98,6 +102,13 @@ public abstract class MainController {
         if(pathMatches(new String[]{"/(post|page|product|(post|product)-category|brand)(/[\\w\\d-]*)*", "/login", "/register", "/forgot-password", "/change-password", "/event", "/?" }, restOfTheUrl)){
             populateAttribute(model);
             generateBreadcrumbs();
+        }
+
+        if(currentUser != null){
+            try {
+                model.put("countNotify", notificationService.countByUser());
+            } catch (CustomException ignore) {
+            }
         }
 
         addMeta(model);

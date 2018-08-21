@@ -74,11 +74,13 @@ public class ProductServiceImpl implements ProductService {
         product.setUser(user);
         product.setProductCategory(productCategory);
         product.setSlug(slugify.slugify(product.getSlug()));
+        if(product instanceof ProductForm) product = new Product((ProductForm) product);
         List<ProductAttributeValues> productAttributeValuesList = new ArrayList<>(product.getProductAttributeValues());
         product.getProductAttributeValues().clear();
-        product.setProductAttributeValues(makeListProductAttributeValues(product, productAttributeValuesList));
-        if(product instanceof ProductForm) product = new Product((ProductForm) product);
         productDao.persist(product);
+        product.setProductAttributeValues(makeListProductAttributeValues(product, productAttributeValuesList));
+        if(product.getProductAttributeValues().size() > 0)
+        productDao.merge(product);
     }
 
     @Override

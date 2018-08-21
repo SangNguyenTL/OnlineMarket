@@ -3,8 +3,13 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:filter="http://thymeleafexamples"
       layout:decorate="templates/backend-user">
-<!--/*@thymesVar id="result" type="OnlineMarket.result.ResultObject<OnlineMarket.model.Rating>"*/-->
+<!--/*@thymesVar id="result" type="OnlineMarket.result.ResultObject<OnlineMarket.model.Notification>"*/-->
 <!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
+<!--/*@thymesVar id="pageTitle" type="java.lang.String"*/-->
+<!--/*@thymesVar id="relativePath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="success" type="java.lang.Boolean"*/-->
+<!--/*@thymesVar id="error" type="java.lang.Boolean"*/-->
+<!--/*@thymesVar id="filterForm" type="OnlineMarket.form.filter.FilterForm"*/-->
 <head>
 </head>
 <body>
@@ -32,11 +37,16 @@
                 <div class="col-sm-3">
                     <form th:object="${filterForm}" th:action="@{${relativePath}}" method="POST">
                         <div class="input-group">
-                            <input class="form-control" placeholder="Search" type="text" th:field="*{search}">
+                            <select class="form-control" name="groupSearch['status']">
+                                <option>Status...</option>
+                                <option th:value="${T(OnlineMarket.util.other.NotificationStatus).SEEN.id}">Seen</option>
+                                <option th:value="${T(OnlineMarket.util.other.NotificationStatus).UNREAD.id}">Unread</option>
+                            </select>
                             <span class="input-group-btn">
-	            <button class="btn b-a white" type="submit">Go!</button>
-	          </span>
+                            <button class="btn b-a white" type="submit">Go!</button>
+                          </span>
                         </div>
+                        <input type="hidden" th:field="*{search}"/>
                         <input type="hidden" th:field="*{searchBy}"/>
                         <input type="hidden" th:field="*{size}" />
                         <input type="hidden" th:field="*{order}" />
@@ -44,44 +54,29 @@
                     </form>
                 </div>
             </div>
-            <div class="table-responsive">
-                <table class="table table-hover b-t">
-                    <thead>
-                    <tr>
-                        <filter:th order="asc" orderBy="id" filter:uri="@{${relativePath}}" name="#">#</filter:th>
-                        <filter:th order="asc" orderBy="product.name" filter:uri="@{${relativePath}}" name="Product Name">Product Name</filter:th>
-                        <filter:th order="asc" orderBy="score" filter:uri="@{${relativePath}}" name="Score">Score</filter:th>
-                        <filter:th order="asc" orderBy="createDate" filter:uri="@{${relativePath}}" name="Create Date"></filter:th>
-                        <filter:th order="asc" orderBy="state" filter:uri="@{${relativePath}}" name="Score">State</filter:th>
-                        <th>Action</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="rating : ${result.list}">
-                        <td th:text="${rating.id}"></td>
-                        <td>
-                            <a th:href="@{'/product/'+${rating.product.slug}}" th:text="${rating.product.name}"></a>
-                        </td>
-                        <td>
-                            <a data-toggle="popover" th:attr="data-content=${rating.content}" href="#">
-                                <span class="fa fa-stack text-warn" th:each="number : ${#numbers.sequence(1, 5)}">
-                                    <i th:if="${rating.score >= number}"
-                                       class="fa fa-star fa-stack-2x"></i>
-                                    <i class="fa fa-star-o fa-stack-2x"></i>
-                                </span>
-                            </a>
-                        </td>
-                        <td ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(rating.createRateDate, 'dd-MM-yyyy HH:mm:ss')}+'\', format: \'DD-MM-YYYY HH:mm:ss\'}'" th:text="${#dates.format(rating.createRateDate, 'dd-MM-yyyy')}"></td>
-                        <td th:text="${rating.state}"></td>
-                        <td>
-                            <form class="form-confirm" th:action="@{${relativePath} + '/delete'}" method="POST">
-                                <input type="hidden" th:name="id" th:value="${rating.id}">
-                                <button type="submit" class="btn btn-outline b-info text-danger btn-sm btn-fw">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+            <div class="box">
+                <div class="box-body">
+                    <div class="p-a">
+                        <div class="streamline b-l m-b">
+                            <div th:each="notification : ${result.list}" th:classappend="${notification.status == T(OnlineMarket.util.other.NotificationStatus).SEEN.id} ? 'b-success'" class="sl-item">
+                                <div class="sl-content">
+                                    <div class="sl-date text-muted" ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(notification.createDate, 'dd-MM-yyyy HH:mm:ss')}+'\', format: \'DD-MM-YYYY HH:mm:ss\'}'" th:text="${#dates.format(notification.createDate, 'dd-MM-yyyy')}">8:30</div>
+                                    <p th:utext="${notification.content}">Call to customer <a href="" class="text-info">Jacob</a> and discuss the detail.</p>
+                                    <p class="m-b">
+
+                                    <form class="form-confirm" th:action="@{${relativePath} + '/delete'}" method="POST">
+                                        <input type="hidden" th:name="id" th:value="${notification.id}">
+                                        <a th:attr="data-id=${notification.id},data-status=${notification.status == T(OnlineMarket.util.other.NotificationStatus).UNREAD.id ? 1 : 0}" href="#" th:classappend="${notification.status == T(OnlineMarket.util.other.NotificationStatus).UNREAD.id} ? 'b-success' : 'b-accent'" class="btn btn-icon btn-sm btn-outline action-seen">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                        <button type="submit" class="btn btn-outline b-danger text-danger btn-sm btn-fw"><i class="fa fa-remove"></i> Delete</button>
+                                    </form>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <footer class="dker p-a">
                 <div class="row">
