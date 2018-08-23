@@ -5,9 +5,7 @@
       xmlns:filter="http://thymeleafexamples"
       layout:decorate="templates/frontend">
 
-<th:block layout:fragment="head">
 
-</th:block>
 <!--/*@thymesVar id="productCategoryList" type="java.util.List<OnlineMarket.model.ProductCategory>"*/-->
 <!--/*@thymesVar id="brandList" type="java.util.List<OnlineMarket.model.Brand>"*/-->
 <!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
@@ -17,6 +15,7 @@
 <!--/*@thymesVar id="error" type="java.lang.String"*/-->
 <!--/*@thymesVar id="post" type="OnlineMarket.model.Post"*/-->
 <!--/*@thymesVar id="comment" type="OnlineMarket.model.Comment"*/-->
+<!--/*@thymesVar id="prettyTime type="org.ocpsoft.prettytime.PrettyTime"*/-->
 <!--/*@thymesVar id="result" type="OnlineMarket.result.ResultObject<OnlineMarket.model.Comment>"*/-->
 
 <head>
@@ -43,7 +42,8 @@
                         <th:block th:utext="*{content}"> </th:block>
                     </div>
                     <p class="lead b-t b-3x b-black m-t-sm row">
-                        by <a href="#" th:text="*{user.displayName}">Start Bootstrap</a> Posted on <th:block th:text="${#dates.format(post.createDate, 'dd/MM/yyyy - HH:mm')}">Posted on January 1, 2018 at 12:00 PM</th:block>
+                        by <a href="#" th:text="*{user.displayName}">Start Bootstrap</a> Posted on <th:block th:text="${prettyTime.format(post.createDate)}
+">Posted on January 1, 2018 at 12:00 PM</th:block>
                         <a sec:authorize="hasAnyRole('ADMIN', 'SUPER_ADMIN')" th:href="@{'/admin/post/update/'+*{id}}">Edit</a>
                     </p>
                 </div>
@@ -65,10 +65,10 @@
                                         <a class="col-sm-2" href="#">
                                             <img class="media-object img-circle img-responsive w-128 pull-right" th:src="@{${comment.user.avatar}}" alt="profile">
                                         </a>
-                                        <div class="media-body col-sm-10">
+                                        <div class="col-sm-10">
                                             <div class="row well">
                                                 <h4 class="col-sm-6 media-heading reviews text-uppercase" th:text="${comment.user.displayName}">Marco </h4>
-                                                <div class="col-sm-6 text-right" th:text="${#dates.format(comment.createDate, 'dd-MM-yyyy hh:mm:ss')}">
+                                                <div class="col-sm-6 text-right" th:text="${prettyTime.format(comment.createDate)}">
                                                 </div>
                                                 <p class="media-comment col-sm-12" th:text="${comment.content}">
                                                     Great snippet! Thanks for sharing.

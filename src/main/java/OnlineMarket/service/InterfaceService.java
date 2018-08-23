@@ -20,4 +20,5 @@ public interface InterfaceService<PK extends Serializable,T> {
 	List<T> list();
 	
 	List<T> list(Integer offset, Integer maxResults);
+
 }

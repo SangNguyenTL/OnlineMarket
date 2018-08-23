@@ -5,6 +5,7 @@ import OnlineMarket.form.filter.FilterForm;
 import OnlineMarket.model.PostCategory;
 import OnlineMarket.service.PostCategoryService;
 import OnlineMarket.service.PostService;
+import org.ocpsoft.prettytime.PrettyTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -41,6 +42,7 @@ public class FrPostController extends MainController {
 
         relativePath = "/post-category";
         model.put("title", title);
+
         breadcrumbs.add(new String[]{relativePath, "Post"});
 
         model.put("filterForm", filterForm);

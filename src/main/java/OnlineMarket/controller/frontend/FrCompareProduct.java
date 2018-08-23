@@ -29,7 +29,7 @@ public class FrCompareProduct extends MainController {
 
     @RequestMapping( value = "", method = {RequestMethod.GET, RequestMethod.POST})
     @SuppressWarnings("unchecked")
-    public String mainPage(@PathVariable("productCategorySlug") String productCategorySlug, @CookieValue(value = "compareList", required = false)String listCompare, ModelMap modelMap) throws NoHandlerFoundException {
+    public String mainPage(@PathVariable("productCategorySlug") String productCategorySlug, @CookieValue(value = "compareList", required = false) String listCompare, ModelMap modelMap) throws NoHandlerFoundException {
 
         ProductCategory productCategory = productCategoryService.getByDeclaration("slug", productCategorySlug);
         if(productCategory == null) throw new NoHandlerFoundException(null,null,null);

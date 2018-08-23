@@ -20,7 +20,8 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "tb_product_views", schema = "dbo", catalog = "SmartMarket")
-public class ProductViews implements java.io.Serializable {
+public class
+ProductViews implements java.io.Serializable {
 
 	/**
 	 * 

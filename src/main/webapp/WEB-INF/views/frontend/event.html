@@ -4,9 +4,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="templates/frontend">
 
-<th:block layout:fragment="head">
 
-</th:block>
 <!--/*@thymesVar id="productCategoryList" type="java.util.List<OnlineMarket.model.ProductCategory>"*/-->
 <!--/*@thymesVar id="brandList" type="java.util.List<OnlineMarket.model.Brand>"*/-->
 <!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
@@ -34,8 +32,8 @@
                 <div class="p-a-md">
                     <h1 class="title" th:text="*{name}">About Us</h1>
                     <div class="content">
-                        <code th:if="*{show}" class="center-block h2 p-a-md w-lg" th:text="*{code}">xHfjuak0QNyt</code>
-                        <th:block th:text="*{content}"> </th:block>
+                        <code th:if="${event.code != null && event.show}" class="center-block h2 p-a-md text-center w-lg w-xl" th:text="*{code}">xHfjuak0QNyt</code>
+                        <th:block th:utext="*{content}"> </th:block>
                     </div>
                     <p class="lead">
                         by <a href="#" th:text="*{publisher.displayName}">Start Bootstrap</a> Posted on <th:block th:text="${#dates.format(event.createDate, 'MMMM dd, yyyy - hh:mm a')}">Posted on January 1, 2018 at 12:00 PM</th:block>

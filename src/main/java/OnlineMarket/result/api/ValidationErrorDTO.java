@@ -19,4 +19,12 @@ public class ValidationErrorDTO {
         FieldErrorDTO error = new FieldErrorDTO(path, message);
         fieldErrors.add(error);
     }
+
+    public List<FieldErrorDTO> getFieldErrors() {
+        return fieldErrors;
+    }
+
+    public void setFieldErrors(List<FieldErrorDTO> fieldErrors) {
+        this.fieldErrors = fieldErrors;
+    }
 }

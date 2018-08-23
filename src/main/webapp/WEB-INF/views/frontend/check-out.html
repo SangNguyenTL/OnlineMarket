@@ -1,22 +1,26 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:filter="http://thymeleafexamples"
       layout:decorate="templates/frontend">
 
-<th:block layout:fragment="head">
-
-</th:block>
-<!--/*@thymesVar id="productCategory" type="OnlineMarket.model.ProductCategory"*/-->
+<!--/*@thymesVar id="addressList" type="OnlineMarket.result.ResultObject<OnlineMarket.model.Address>"*/-->
+<!--/*@thymesVar id="addressBook" type="OnlineMarket.model.Address"*/-->
+<!--/*@thymesVar id="provinceList" type="OnlineMarket.result.ResultObject<OnlineMarket.model.Province>"*/-->
+<!--/*@thymesVar id="order" type="OnlineMarket.model.Order"*/-->
 <!--/*@thymesVar id="currentUser" type="OnlineMarket.model.User"*/-->
 <!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
 <!--/*@thymesVar id="relativePath" type="java.lang.String"*/-->
-<!--/*@thymesVar id="result" type="OnlineMarket.result.ResultObject<OnlineMarket.model.Product>"*/-->
+<!--/*@thymesVar id="pageTitle" type="java.lang.String"*/-->
+<!--/*@thymesVar id="pathAction" type="java.lang.String"*/-->
+<!--/*@thymesVar id="error" type="java.util.List<java.lang.String>"*/-->
 
 <head>
 </head>
 <body th:inline="text">
+<th:block layout:fragment="head">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/backend/libs/jquery/parsleyjs/dist/parsley.css}"/>
 
+</th:block>
 <div id="container" layout:fragment="container">
     <div class="container">
         <!-- Breadcrumb Start-->
@@ -25,27 +29,207 @@
                                                                                  th:text="${breadcrumb[1]}"></a></li>
         </ul>
         <!-- Breadcrumb End-->
-        <h1 class="title" th:text="${title}">Product Comparison</h1>
-        <div class="row">
-            <div id="content" class="col-sm-12">
-                <div class="col-sm-4"></div>
+        <h1 class="title" th:text="${pageTitle}">Product Comparison</h1>
+        <div th:if="${error.size() > 0}" class="container">
+            <div class="alert alert-warning">
+                <ul>
+                    <li th:each="str : ${error}" th:text="${str}"></li>
+                </ul>
+            </div>
+        </div>
+        <div id="contentNone" th:if="${order.orderDetails.size() == 0}">
+            <div class="text-center h1 m-a-lg p-a-lg b-a b-danger">
+                Cart is empty, please select the product, that you want before checkout.<br/>
+                <a th:href="@{/}">Back Home</a>
+
+            </div>
+        </div>
+        <div id="content" th:if="${order.orderDetails.size() > 0}">
+            <form th:object="${order}" th:action="${pathAction}" method="POST">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title"><i class="fa fa-book"></i> Your Address</h4>
+                        </div>
+                        <div class="panel-body">
+                            <fieldset class="required">
+                                <div class="form-group">
+                                    <label class="control-label">Select Address</label>
+                                    <select class="form-control" th:field="*{address}">
+                                        <option value="">Choice address...</option>
+                                        <option th:each="addressBook : ${addressList.list}" th:value="${{addressBook}}" th:text="${addressBook.address+' - '+addressBook.province.name}"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <!-- Button trigger modal -->
+                                    <a data-toggle="modal" data-target="#addAddress">
+                                        Add new address...
+                                    </a>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="col-sm-8">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h4 class="panel-title"><i class="fa fa-shopping-cart"></i> Shopping cart</h4>
+                            <h4 class="panel-title"><i class="fa fa-ticket"></i> Use gift Code</h4>
                         </div>
                         <div class="panel-body">
-                            <div class="table-responsive">
-                                <div class="simpleCart_items table table-responsive">
-
-                                </div>
+                            <label for="input-coupon" class="col-sm-3 control-label">Enter gift code</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="input-coupon" placeholder="Enter your code here" value="" name="coupon">
+                                <span class="input-group-btn">
+                                    <a class="btn btn-primary" data-loading-text="Loading..." id="button-coupon">Apply Coupon</a>
+                                </span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="panel panel-default m-a">
+                    <div class="panel-heading">
+                        <h4 class="panel-title"><i class="fa fa-shopping-cart"></i> Shopping cart</h4>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table id="cartTable" class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <td class="text-center w-96">Image</td>
+                                    <td class="text-left">Product Name</td>
+                                    <td class="text-left w">Quantity</td>
+                                    <td class="text-right w-128">Unit Price</td>
+                                    <td class="text-right w-128">Total</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <th:block th:each="orderDetailOne,status : *{orderDetails}">
+                                    <tr th:class="${'product-'+orderDetailOne.product.id}">
+                                        <td class="text-center" rowspan="2">
+                                            <a th:href="@{'/product/'+${orderDetailOne.product.slug}}">
+                                                <img th:src="@{${orderDetailOne.product.featureImage}}" th:alt="${orderDetailOne.product.name}" th:title="${orderDetailOne.product.name}" class="img-thumbnail">
+                                            </a>
+                                        </td>
+                                        <td class="text-left product-name" rowspan="2">
+                                            <p><a th:href="@{'/product/'+${orderDetailOne.product.slug}}" th:text="${orderDetailOne.product.name}">Xitefun Causal Wear Fancy Shoes</a></p>
+                                            <p th:each="event : ${orderDetailOne.product.events}" th:text="${event.name}"></p>
+                                        </td>
+                                        <td class="text-left">
+                                            <div class="input-group btn-block" style="max-width: 200px;">
+                                                <input type="text" th:field="*{orderDetails[__${status.index}__].productQuantity}" th:value="${orderDetailOne.productQuantity}" class="form-control productQuantity" />
+                                                <span class="input-group-btn">
+                                                <a data-toggle="tooltip" title="" class="btn btn-primary updateProduct" data-original-title="Update"><i class="fa fa-refresh"></i></a>
+                                                <a data-toggle="tooltip" title="" class="btn btn-danger removeProduct" data-original-title="Remove"><i class="fa fa-times-circle"></i></a>
+
+                                            </span>
+                                            </div>
+                                        </td>
+                                        <td class="text-right" th:if="${orderDetailOne.product.newPrice} ne ${orderDetailOne.product.price}">
+                                            <p class="price-old unitPrice" th:text="${#numbers.formatDecimal(orderDetailOne.product.price, 0, 'WHITESPACE', 0, 'NONE')}"></p><p class="price-new unitPrice" th:text="${#numbers.formatDecimal(orderDetailOne.product.newPrice, 0, 'WHITESPACE', 0, 'NONE')}"></p>
+                                        </td>
+                                        <td class="text-right" th:unless="${orderDetailOne.product.newPrice} ne ${orderDetailOne.product.price}">
+                                            <p class="price-new unitPrice" th:text="${#numbers.formatDecimal(orderDetailOne.product.price, 0, 'WHITESPACE', 0, 'NONE')}"></p>
+                                        </td>
+                                        <td class="text-right" th:if="${orderDetailOne.product.newPrice} ne ${orderDetailOne.product.price}">
+                                            <p class="price-old totalPriceRow" th:text="${#numbers.formatDecimal(orderDetailOne.product.price * orderDetailOne.productQuantity, 0, 'WHITESPACE', 0, 'NONE')}"></p>
+                                            <p class="price-new totalPriceRow" th:text="${#numbers.formatDecimal(orderDetailOne.product.newPrice * orderDetailOne.productQuantity, 0, 'WHITESPACE', 0, 'NONE')}"></p>
+                                        </td>
+                                        <td class="text-right" th:unless="${orderDetailOne.product.newPrice} ne ${orderDetailOne.product.price}">
+                                            <p class="price-new totalPriceRow" th:text="${#numbers.formatDecimal(orderDetailOne.product.price * orderDetailOne.productQuantity, 0, 'WHITESPACE', 0, 'NONE')}"></p>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-left">Weight</td>
+                                        <td class="text-right unitWeight" th:text="${#numbers.formatDecimal(orderDetailOne.product.weight, 0, 'WHITESPACE', 0, 'NONE')}"></td>
+                                        <td class="text-right totalWeightRow" th:text="${{#numbers.formatDecimal(orderDetailOne.product.weight * orderDetailOne.productQuantity, 0, 'WHITESPACE', 0, 'NONE')}}"></td>
+                                    </tr>
+                                </th:block>
+
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td class="text-right" colspan="2"><strong>Sub-Total price:</strong></td>
+                                    <td class="text-right totalPaidReal" colspan="3" th:text="*{totalPaidReal}"></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right" colspan="2"><strong>Fee ship (w x f):</strong></td>
+                                    <td class="text-right feeShip">0</td>
+                                    <td class="text-right totalWeight">0</td>
+                                    <td class="text-right totalShip" th:text="*{totalShipping}"></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right" colspan="2"><strong>Total:</strong></td>
+                                    <td class="text-right totalPaidAndShip" colspan="3">$910.00</td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </form>
+            <!-- Modal -->
+            <div class="modal fade" id="addAddress" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+
+                    <form id="addressForm" parsley-validat>
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                            </div>
+                            <div class="modal-body">
+                                    <input type="hidden" name="userId" th:value="${currentUser.id}">
+                                    <fieldset class="required">
+                                        <div class="form-group required">
+                                            <label for="firstName" class="control-label">First name</label>
+                                            <input type="text" class="form-control" id="firstName" placeholder="First name" value="" name="firstName" maxlength="64" required>
+                                        </div>
+                                        <div class="form-group required">
+                                            <label for="lastName" class="control-label">Last name</label>
+                                            <input type="text" class="form-control" id="lastName" placeholder="Last name" value="" name="lastName"  maxlength="64" required>
+                                        </div>
+                                        <div class="form-group required">
+                                            <label for="address" class="control-label">Address</label>
+                                            <input type="text" class="form-control" id="address" placeholder="Address" value="" name="address" minlength="10" maxlength="255" required>
+                                        </div>
+                                        <div class="form-group required">
+                                            <label for="city" class="control-label">Phone number</label>
+                                            <input type="number" class="form-control" id="phoneNumber" placeholder="Phone number" value="" name="phoneNumber" data-parsley-length="[8, 11]" required>
+                                        </div>
+                                        <div class="form-group required">
+                                            <label for="city" class="control-label">City</label>
+                                            <input type="text" class="form-control" id="city" placeholder="City" value="" name="city" maxlength="32" required>
+                                        </div>
+                                        <div class="form-group required">
+                                            <label for="provinceId" class="control-label">Province</label>
+                                            <select class="form-control" id="provinceId" name="provinceId" required>
+                                                <option value=""> --- Please Select --- </option>
+                                                <option th:each="province : ${provinceList.list}" th:value="${province.id}" th:text="${province.name}"></option>
+                                            </select>
+                                        </div>
+                                    </fieldset>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
+</div>
+<div layout:fragment="customScript" th:remove="tag">
+    <script type="text/javascript" th:src="@{/assets/backend/libs/jquery/parsleyjs/dist/parsley.min.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/frontend/js/checkout.js}"></script>
+
 </div>
 </body>
 </html>

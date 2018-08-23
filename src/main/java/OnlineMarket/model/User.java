@@ -222,9 +222,9 @@ public class User implements java.io.Serializable {
 		this.images = images;
 	}
 	
-	@JsonIgnore
 	@NotEmpty(groups = AdvancedValidation.Register.class)
     @Valid
+	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
 	public List<Address> getAddresses() {
 		return addresses;

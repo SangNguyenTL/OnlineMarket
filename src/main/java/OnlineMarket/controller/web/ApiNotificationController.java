@@ -2,7 +2,7 @@ package OnlineMarket.controller.web;
 
 import OnlineMarket.service.NotificationService;
 import OnlineMarket.service.UserService;
-import OnlineMarket.util.ResponseResult;
+import OnlineMarket.result.api.ResponseResult;
 import OnlineMarket.util.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +17,6 @@ public class ApiNotificationController {
 
     @Autowired
     private NotificationService notificationService;
-
-    @Autowired
-    private UserService userService;
 
     @RequestMapping(value = "/change-status", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseEntity<?> changeStatus(@RequestParam("id") Integer id, @RequestParam("status") Byte status){

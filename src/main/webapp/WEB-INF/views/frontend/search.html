@@ -3,10 +3,6 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:filter="http://thymeleafexamples"
       layout:decorate="templates/frontend">
-
-<th:block layout:fragment="head">
-
-</th:block>
 <!--/*@thymesVar id="productCategoryList" type="java.util.List<OnlineMarket.model.ProductCategory>"*/-->
 <!--/*@thymesVar id="productBestSellerList" type="java.util.List<OnlineMarket.model.Product>"*/-->
 <!--/*@thymesVar id="productBestViewing" type="java.util.List<OnlineMarket.model.Product>"*/-->
@@ -72,12 +68,12 @@
                                     <option value="">Sort by ...</option>
                                     <option value="name">Name</option>
                                     <option value="price">Price</option>
-                                    <option value="ratingStatistics.totalScore">Rating (Highest)</option>
-                                    <option value="productViewsStatistic.day">View in day (Lowest)</option>
-                                    <option value="productViewsStatistic.week">View on week (Highest)</option>
-                                    <option value="productViewsStatistic.month">View on month (Highest)</option>
-                                    <option value="productViewsStatistic.year">View on year (Highest)</option>
-                                    <option value="productViewsStatistic.total">View on total (Highest)</option>
+                                    <option value="ratingStatistics.totalScore">Rating</option>
+                                    <option value="productViewsSet.count">View in day</option>
+                                    <option value="productViewsStatistic.week">View on week</option>
+                                    <option value="productViewsStatistic.month">View on month</option>
+                                    <option value="productViewsStatistic.year">View on year</option>
+                                    <option value="productViewsStatistic.total">View on total</option>
                                     <option value="releaseDate">Model newest</option>
                                 </select>
                             </div>

@@ -3,6 +3,7 @@ package OnlineMarket.dao;
 import OnlineMarket.form.filter.FilterForm;
 import OnlineMarket.model.User;
 import OnlineMarket.result.ResultObject;
+import OnlineMarket.util.exception.CustomException;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
@@ -17,6 +18,15 @@ public class AddressDaoImpl extends AbstractDao<Integer, Address> implements Add
 	public Address getByProvince(Province province) {
 		Criteria criteria = createEntityCriteria();
 		criteria.add(Restrictions.eq("province", province));
+		return (Address) criteria.uniqueResult();
+	}
+
+	@Override
+	public Address getByKeyAndUser(Integer key, User user) throws CustomException {
+		if(user == null) throw  new CustomException("User not found");
+		Criteria criteria = createEntityCriteria();
+		criteria.add(Restrictions.eq("user", user));
+		criteria.add(Restrictions.eq("id", key));
 		return (Address) criteria.uniqueResult();
 	}
 

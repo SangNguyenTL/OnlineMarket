@@ -28,6 +28,8 @@
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="shortcut icon" sizes="196x196" th:href="@{${logo.favicon}}">
 
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 
     <!-- CSS Part Start-->
     <link rel="stylesheet" type="text/css" th:href="@{/assets/frontend/js/bootstrap/css/bootstrap.min.css}"/>
@@ -268,9 +270,9 @@
 <script type="text/javascript" th:src="@{/assets/frontend/js/jquery.easing-1.3.min.js}"></script>
 <script type="text/javascript" th:src="@{/assets/frontend/js/jquery.dcjqaccordion.min.js}"></script>
 <script type="text/javascript" th:src="@{/assets/frontend/js/owl.carousel.min.js}"></script>
-<script type="text/javascript" th:src="@{/assets/frontend/js/simpleCart.min.js}"></script>
-<script th:src="@{/assets/backend/libs/jquery/bootstrap/dist/js/bootstrap-notify.js}"></script>
-<script th:src="@{/assets/backend/libs/js/bootbox/bootbox.min.js}"></script>
+<script type="text/javascript" th:src="@{/assets/frontend/js/simpleCart.js}"></script>
+<script type="text/javascript" th:src="@{/assets/backend/libs/jquery/bootstrap/dist/js/bootstrap-notify.js}"></script>
+<script type="text/javascript" th:src="@{/assets/backend/libs/js/bootbox/bootbox.min.js}"></script>
 <!-- JS Part End-->
 <div layout:fragment="customScript">
 

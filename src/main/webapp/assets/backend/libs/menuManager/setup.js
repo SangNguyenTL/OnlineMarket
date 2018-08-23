@@ -7,12 +7,11 @@
         root.MyMenu = factory(root.jQuery);
     }
 }(this, function ($) {
-    var pluginName = "myMenu";
+    let pluginName = "myMenu";
 
     function MyMenu(element, options) {
-        if (typeof $.fn.nestable != "function" && typeof $.fn.select2 != "function")
+        if (typeof $.fn.nestable !== "function" && typeof $.fn.select2 !== "function")
             return;
-        var _this = this;
         this.element = element;
         this._element = $(element);
         this.pending = false;
@@ -51,9 +50,9 @@
     }
 
     MyMenu.prototype.onChangeItem = function (e, b) {
-        if (e.currentTarget.id != b.id)
+        if (e.currentTarget.id !== b.id)
             return;
-        var _this = this
+        let _this = this
             , item = $(e.currentTarget)
             , ol = item.parent('.dd-list')
             , parent = ol.parent(".dd-item");
@@ -76,15 +75,16 @@
             return;
         _this.beforeSend();
 
-        var requestUpdate = function(){
-            var promise = false,
+        let requestUpdate = function(){
+            let promise = false,
                 deferred = new $.Deferred();
             ol.children().each(function (i, v) {
                 v = $(v);
                 if(!promise) promise = deferred.promise();
                 promise = promise.then(function () {
-                    for(property in v.data()){
-                        if(v.data()[property] === "") v.data()[property] = null
+                    for(let key in v.data()){
+                        if(v.data(key) === "")
+                            v.data(key,null)
                     }
                     return _this.request("api/menu/update", JSON.stringify(v.data()))
                 });
@@ -99,13 +99,12 @@
     };
 
     MyMenu.prototype.equalDataItem = function (data) {
-        var _this = this, flag = true;
+        let _this = this, flag = true;
         if (!this.oldData)
             return flag;
         $.each(_this.oldData, function (i, v) {
-            if (data[i] != _this.oldData[i]) {
+            if (data[i] !== _this.oldData[i]) {
                 flag = false;
-                return;
             }
         });
         return flag;
@@ -113,14 +112,14 @@
     ;
 
     MyMenu.prototype.getFormData = function ($form) {
-        var unindexed_array = $form.serializeArray();
-        var indexed_array = {};
+        let unIndexed_array = $form.serializeArray(),
+            indexed_array = {};
 
-        $.map(unindexed_array, function (n, i) {
-            var value = n['value'];
+        $.map(unIndexed_array, function (n, i) {
+            let value = n['value'];
             if (!isNaN(value))
                 value = parseInt(value);
-            if (value != '' && value != 0 && value != NaN && value != null) {
+            if (value !== '' && value !== 0 && value != null) {
                 indexed_array[n['name']] = value;
             }
         });
@@ -131,14 +130,14 @@
 
     MyMenu.prototype.onSubmitForm = function (e) {
         e.preventDefault();
-        var form = $(e.currentTarget)
+        let form = $(e.currentTarget)
             , _this = this
             , data = _this.getFormData(form)
             , url = _this.form.id.val() != null && _this.form.id.val() > 0 ? 'api/menu/update' : 'api/menu/add';
         form.parsley().validate();
         if (form.parsley().isValid())
             _this.beforeSend();
-            _this.request(url, JSON.stringify(data)).then(function (reuslt) {
+            _this.request(url, JSON.stringify(data)).then(function () {
                 _this.complete();
                 _this.generateListItem()
             });
@@ -146,40 +145,40 @@
     ;
 
     MyMenu.prototype.beforeSend = function () {
-        var _this = this;
         this.pending = true;
-        if($("#overlay-box").length == 0)
-            $("body").prepend("<div class='black-overlay item-bg item' id='overlay-box'/>");
-            $("#overlay-box").append('<div class="center text-center"><i class="fa fa-5x fa-spin fa-spinner text-white"></i></div>').css("z-index", "1200");
+        if($("#overlay-box").length === 0){
+            let container = $.parseHTML("<div class='black-overlay item-bg item' id='overlay-box'/>");
+            $(container).append('<div class="center text-center"><i class="fa fa-5x fa-spin fa-spinner text-white"></i></div>').css("z-index", "1200");
+            $("body").prepend(container);
+        }
     };
 
     MyMenu.prototype.complete = function () {
-        var _this = this;
+        let _this = this;
         _this.pending = false;
         $("#overlay-box").remove();
     };
 
     MyMenu.prototype.request = function (url, data) {
-        var _this = this;
         return $.ajax({
             url: PATH + url,
             type: "POST",
             data: data,
             contentType: 'application/json',
             error: function (xhr) {
-                var data = JSON.parse(xhr.responseText);
-                if (typeof data == "object" && data.fieldErrors != null) {
+                let data = JSON.parse(xhr.responseText);
+                if (typeof data === "object" && data.fieldErrors != null) {
                     $.each(data.fieldErrors, function (i, v) {
                         alert(v.field + ": " + v.message)
                     })
-                } else if (typeof data == "string")
+                } else if (typeof data === "string")
                     alert(data);
             }
         })
     };
 
-    MyMenu.prototype.onResetForm = function (e) {
-        var _this = this;
+    MyMenu.prototype.onResetForm = function () {
+        let _this = this;
         _this.form.id.val(0);
         _this.form.parentId.val(0);
         _this.form.priority.val(0);
@@ -220,19 +219,18 @@
     ;
 
     MyMenu.prototype.removeItem = function (e) {
-        var _this = this
+        let _this = this
             , item = $(e.currentTarget).closest(".list-group-item")
             , data = item.data()
             , menuId = data.id;
-        _this.request("api/menu/remove/" + menuId).then(function (value) {
+        _this.request("api/menu/remove/" + menuId).then(function () {
             _this.generateListItem()
         });
     }
     ;
 
     MyMenu.prototype.updateItem = function (e) {
-        var _this = this;
-        var _this = this
+        let _this = this
             , item = $(e.currentTarget).closest('.list-group-item')
             , data = item.data();
         _this.form.id.val(data.id);
@@ -249,9 +247,9 @@
     MyMenu.prototype.render = function (data, template, target, isAppend) {
         if (!Array.isArray(template))
             return false;
-        var resultTemplate = template.join("\n");
+        let resultTemplate = template.join("\n");
         Mustache.parse(resultTemplate);
-        var rendered = Mustache.render(resultTemplate, data);
+        let rendered = Mustache.render(resultTemplate, data);
         if (isAppend)
             target.append(rendered);
         else
@@ -260,7 +258,7 @@
     ;
 
     MyMenu.prototype.generateListItem = function () {
-        var _this = this
+        let _this = this
             , menuGroupId = this.form.menuGroupId.val();
         if(_this.pending) alert("Processing...", "warning");
         else
@@ -280,12 +278,12 @@
                 _this.items.on("change", _this.onChangeItem);
             },
             error: function (xhr) {
-                var data = JSON.parse(xhr.responseText);
-                if (typeof data == "object" && data.fieldErrors != null) {
+                let data = JSON.parse(xhr.responseText);
+                if (typeof data === "object" && data.fieldErrors != null) {
                     $.each(data.fieldErrors, function (i, v) {
                         alert(v.field + ": " + v.message)
                     })
-                } else if (typeof data == "string")
+                } else if (typeof data === "string")
                     alert(data);
             }
         })
@@ -293,13 +291,13 @@
     ;
 
     MyMenu.prototype.renderItems = function (v, container) {
-        var _this = this;
+        let _this = this;
         if (v.icon)
             v.iconHtml = '<i class="fa ' + v.icon + '"></i>';
         _this.render(v, _this.templateItem, container, true);
-        if (v.menus.length == 0)
+        if (v.menus.length === 0)
             return;
-        var newItem = container.find("#item-" + v.id)
+        let newItem = container.find("#item-" + v.id)
             , childContainer = {};
         newItem.append('<ol class="dd-list"></ol>');
         childContainer = newItem.find(".dd-list");
@@ -313,7 +311,7 @@
     MyMenu.prototype.templateItem = ['<li id="item-{{id}}" class="m-b-sm dd-item list-group-item" data-id="{{id}}" data-name="{{name}}" data-path="{{path}}" data-description="{{description}}" data-icon="{{icon}}" data-menu-group-id="{{menuGroup.id}}" data-parent-id="{{parentId}}" data-priority="{{priority}}">', '<div class="dd-content"><div class="dd-handle"><i class="fa fa-reorder text-muted"></i></div> {{&iconHtml}} {{name}} <span class="pull-right"><button class="btn btn-icon btn-sm white updateItem"><i class="btn-success fa fa-refresh"></i></button><button class="btn btn-icon btn-sm white removeItem"><i class="btn-danger fa fa-remove"></i></button> </span></div>', '</li>'];
 
     MyMenu.prototype.generateNestable = function () {
-        var _this = this;
+        let _this = this;
         this.nestableContainer.nestable({
             maxDepth: _this.options.maxDepth
         })
@@ -326,7 +324,7 @@
     ;
 
     MyMenu.prototype.buildSelectIcon = function () {
-        var _this = this;
+        let _this = this;
         this.generateIconData().done(function (result) {
             _this.form.icon.select2({
                 placeholder: '--Choice icon --',

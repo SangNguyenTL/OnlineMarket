@@ -91,7 +91,7 @@ public class EventController extends MainController {
         if (!result.hasErrors()) {
             eventService.save(event, currentUser);
             redirectAttributes.addFlashAttribute("success", "");
-            return "redirect:" + relativePath;
+            return "redirect:" + relativePath+"/update/"+event.getId();
         }
 
         model.put("subPageTitle", "Add");
@@ -141,7 +141,7 @@ public class EventController extends MainController {
            if(!result.hasErrors()){
                eventService.update(event, currentUser);
                redirectAttributes.addFlashAttribute("success", true);
-               return "redirect:" + relativePath;
+               return "redirect:" + relativePath+"/update/"+event.getId();
            }
 
             model.put("pageTitle", "Update event");

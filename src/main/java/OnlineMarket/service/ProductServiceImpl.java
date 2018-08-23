@@ -49,6 +49,11 @@ public class ProductServiceImpl implements ProductService {
         return productDao.getByDeclaration(key, value);
     }
 
+    @Override
+    public FrontendProduct getFrontendProductByDeclaration(String key, Object value){
+        return convertProductToFrProduct(getByDeclaration(key,value));
+    }
+
     private List<ProductAttributeValues> makeListProductAttributeValues(Product newProduct, List<ProductAttributeValues> inputList){
         List<ProductAttributeValues> productAttributeValuesList = new ArrayList<>();
         for (ProductAttributeValues productAttributeValues : inputList) {
@@ -138,6 +143,7 @@ public class ProductServiceImpl implements ProductService {
     public ResultProduct searchSelect(SearchSelect searchSelect) {
         FilterForm filterForm = new FilterForm();
         filterForm.setSearch(searchSelect.getQ());
+        filterForm.setSearchBy("name");
         filterForm.setCurrentPage(searchSelect.getPage());
         ResultObject<Product> productResultObject = productDao.list(filterForm);
         ResultProduct resultProduct = new ResultProduct();
@@ -161,7 +167,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public FrontendProduct convertProductToFrProduct(Product product){
-
+        if(product == null) return null;
         FrontendProduct frontendProduct = new FrontendProduct(product);
 
         frontendProduct.setNewPrice(product.getPrice());
@@ -180,6 +186,7 @@ public class ProductServiceImpl implements ProductService {
         }
 
         Double number = Math.ceil(frontendProduct.getPrice() - (frontendProduct.getPrice() * perSale/100d) - value);
+        if(number <0) number = 0d;
 
         frontendProduct.setNewPrice(number.longValue());
         frontendProduct.setNewPriceStr(Help.format(frontendProduct.getNewPrice()));

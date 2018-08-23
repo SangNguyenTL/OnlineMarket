@@ -26,7 +26,7 @@ public class AddressServiceImpl implements AddressService  {
 
 	@Autowired
 	OrderDao orderDao;
-	
+
 	@Override
 	public void save(Address address) {
 		addressDao.persist(address);
@@ -48,6 +48,11 @@ public class AddressServiceImpl implements AddressService  {
 	}
 
 	@Override
+	public Address getByKeyAndUser(Integer key, User user) throws CustomException {
+	    return addressDao.getByKeyAndUser(key, user);
+    }
+
+	@Override
 	public List<Address> list() {
 		return addressDao.list();
 	}
@@ -65,7 +70,7 @@ public class AddressServiceImpl implements AddressService  {
 			address.setFirstName(user.getFirstName());
 			address.setLastName(user.getLastName());
 		}
-		addressDao.save(address);
+		addressDao.persist(address);
 	}
 
 	@Override
@@ -93,7 +98,12 @@ public class AddressServiceImpl implements AddressService  {
 		delete(address);
 	}
 
-	@Override
+    @Override
+    public List<Address> listByDeclaration(String value, Object object) {
+        return addressDao.listByDeclaration(value, object);
+    }
+
+    @Override
 	public void update(Address address, User user) throws CustomException, AddressNotFoundException {
 		Address addressCheck = addressDao.getByKey(address.getId());
 		if(addressCheck == null) throw new AddressNotFoundException();

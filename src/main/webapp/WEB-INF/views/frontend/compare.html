@@ -3,10 +3,6 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:filter="http://thymeleafexamples"
       layout:decorate="templates/frontend">
-
-<th:block layout:fragment="head">
-
-</th:block>
 <!--/*@thymesVar id="productCategory" type="OnlineMarket.model.ProductCategory"*/-->
 <!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
 <!--/*@thymesVar id="relativePath" type="java.lang.String"*/-->
@@ -24,7 +20,7 @@
                                                                                  th:text="${breadcrumb[1]}"></a></li>
         </ul>
         <!-- Breadcrumb End-->
-        <h1 class="title" th:text="${title}">Product Comparison</h1>
+        <h1 class="title" th:text="${pageTitle}">Product Comparison</h1>
         <p>Comparative limit is 3 products, the older the product will be eliminated.</p>
         <div th:if="${result} == null"  class="alert alert-warning h5"><i class="fa fa-warning"></i> No products to compare</div>
         <div th:if="${result} != null" class="table-responsive">

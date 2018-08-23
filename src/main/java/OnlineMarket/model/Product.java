@@ -53,6 +53,7 @@ public class Product implements java.io.Serializable {
 	protected Set<Event> events = new HashSet<>(0);
 	protected List<ProductAttributeValues> productAttributeValues = new ArrayList<>();
 	protected Set<ProductViews> productViewsSet = new HashSet<>(0);
+	protected Set<OrderDetail> orderDetails = new HashSet<>();
 
 
 	public Product() {}
@@ -162,7 +163,7 @@ public class Product implements java.io.Serializable {
 		this.description = description;
 	}
 
-	@Column(name = "price", nullable = false, precision = 13, scale = 6)
+	@Column(name = "price", nullable = false)
 	@Range(max = 1000000000)
 	public long getPrice() {
 		return this.price;
@@ -327,6 +328,16 @@ public class Product implements java.io.Serializable {
     public void setProductViewsStatistic(ProductViewsStatistic productViewsStatistc) {
         this.productViewsStatistic = productViewsStatistc;
     }
+
+    @OneToMany(mappedBy = "product")
+	@JsonIgnore
+	public Set<OrderDetail> getOrderDetails() {
+		return orderDetails;
+	}
+
+	public void setOrderDetails(Set<OrderDetail> orderDetails) {
+		this.orderDetails = orderDetails;
+	}
 
 	@Override
 	public boolean equals(Object o) {

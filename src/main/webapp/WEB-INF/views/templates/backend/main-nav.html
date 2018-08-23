@@ -6,6 +6,7 @@
 <!--/*@thymesVar id="brandPage" type="java.lang.Boolean"*/-->
 <!--/*@thymesVar id="productCategoryPage" type="java.lang.Boolean"*/-->
 <!--/*@thymesVar id="commentPage" type="java.lang.Boolean"*/-->
+<!--/*@thymesVar id="notificationPage" type="java.lang.Boolean"*/-->
 <!--/*@thymesVar id="dashboardPage" type="java.lang.Boolean"*/-->
 <!--/*@thymesVar id="reviewListPage" type="java.lang.Boolean"*/-->
 <!--/*@thymesVar id="productPage" type="java.lang.Boolean"*/-->
@@ -327,7 +328,7 @@
                     <span class="nav-text">Comments</span>
                 </a>
             </li>
-            <li th:classappend="${commentPage} ? 'active'">
+            <li th:classappend="${notificationPage} ? 'active'">
                 <a th:href="@{'/user/' + ${user.id}+ '/notification'}" class="notification-li">
                     <span class="nav-icon">
                       <i class="material-icons">&#xe7f5;</i>

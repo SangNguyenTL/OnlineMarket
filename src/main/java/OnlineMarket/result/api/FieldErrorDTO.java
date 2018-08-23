@@ -1,6 +1,8 @@
 package OnlineMarket.result.api;
 
-public class FieldErrorDTO {
+
+public class FieldErrorDTO  {
+
     private String field;
 
     private String message;

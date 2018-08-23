@@ -18,6 +18,8 @@ public interface ProductService {
 
     Product getByDeclaration(String key, Object value);
 
+    FrontendProduct getFrontendProductByDeclaration(String key, Object value);
+
     void save(Product product, ProductCategory productCategory, User user) throws ProductCategoryNotFoundException;
 
     void update(Product product, ProductCategory productCategory, User user) throws ProductCategoryNotFoundException, ProductNotFoundException;

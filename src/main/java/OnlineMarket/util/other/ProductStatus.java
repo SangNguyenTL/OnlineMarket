@@ -1,26 +1,26 @@
 package OnlineMarket.util.other;
 
-public enum NumState {
+public enum ProductStatus {
 
-	INSTOCK(0, "In stock"),
-	OUTOFSTOCK(1, "Out of stock"),
-	STOPSELLING(2, "Stop selling"),
-    LOCK(3, "Lock");
+	INSTOCK((byte) 0, "In stock"),
+	OUTOFSTOCK((byte) 1, "Out of stock"),
+	STOPSELLING((byte) 2, "Stop selling"),
+    LOCK((byte) 3, "Lock");
 	
-	private Integer id;
+	private Byte id;
 	
 	private String name;
 
-	NumState(Integer id, String name) {
+	ProductStatus(Byte id, String name) {
 		this.id = id;
 		this.name = name;
 	}
 
-	public Integer getId() {
+	public Byte getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Byte id) {
 		this.id = id;
 	}
 

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import OnlineMarket.model.ProductCategory;
 import OnlineMarket.service.ProductCategoryService;
-import OnlineMarket.util.ResponseResult;
+import OnlineMarket.result.api.ResponseResult;
 
 @RequestMapping("api/product-category")
 @RestController
@@ -33,6 +33,6 @@ public class ApiProductCategoryController {
 			if (oldProductCategory != null && oldProductCategory.equals(productCategory))
 				flag = false;
 		}
-		return ResponseEntity.ok(new ResponseResult(flag, null));
+		return ResponseEntity.ok(new ResponseResult(flag, ""));
 	}
 }

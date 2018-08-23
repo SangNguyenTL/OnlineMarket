@@ -417,7 +417,7 @@
             },1000);
     });
 
-    if(typeof $.notify != 'function') return;
+    if(typeof $.notify !== 'function') return;
     window.alert = function(msg, type){
         type = type || "success";
         $.notify({
@@ -425,17 +425,17 @@
         },{
             type: type
         });
-    }
+    };
     $.cookie.json = true;
     $(".compare-product").on("click", function(e){
-        var element = $(e.currentTarget),
+        let element = $(e.currentTarget),
             compareList = $.cookie("compareList") || {},
-            id= element.data("id"),
-            cateId= element.data("cateId");
-        if(typeof id == "number"  && typeof cateId == "number"){
-            if(typeof compareList[cateId] == "object" && compareList[cateId].filter(function(item){return item == id}).length > 0){
-                compareList[cateId] = compareList[cateId].filter(function(item){return item != id});
-                if(compareList[cateId].length == 0) delete (compareList[cateId]);
+            id= Number.parseInt(element.data("id")),
+            cateId= Number.parseInt(element.data("cateId"));
+        if(typeof id === "number"  && typeof cateId === "number"){
+            if(typeof compareList[cateId] === "object" && compareList[cateId].filter(function(item){return item === id}).length > 0){
+                compareList[cateId] = compareList[cateId].filter(function(item){return item !== id});
+                if(compareList[cateId].length === 0) delete (compareList[cateId]);
                 alert("Removed product to compare factory", "warning")
             }else{
                 compareList[cateId] = compareList[cateId] || [];
@@ -444,80 +444,33 @@
                     compareList[cateId] = compareList[cateId].slice(-3);
                 alert("Added product to compare factory")
             }
-            $.cookie("compareList", compareList);
+            $.cookie("compareList", compareList, {path:"/"});
         }
     });
     $(".remove-compare").on("click", function (e) {
-        var element = $(e.currentTarget),
+        let element = $(e.currentTarget),
             compareList = $.cookie("compareList") || {},
-            id= element.data("id"),
-            cateId= element.data("cateId");
-        if(typeof id == "number" && typeof cateId == "number"){
-            if(typeof compareList[cateId] == "object" && compareList[cateId].filter(function(item){return item == id}).length > 0){
-                compareList[cateId] = compareList[cateId].filter(function(item){return item != id});
-                if(compareList[cateId].length == 0) delete (compareList[cateId]);
+            id= Number.parseInt(element.data("id")),
+            cateId= Number.parseInt(element.data("cateId"));
+        if(typeof id === "number" && typeof cateId === "number"){
+            if(typeof compareList[cateId] === "object" && compareList[cateId].filter(function(item){return item === id}).length > 0){
+                compareList[cateId] = compareList[cateId].filter(function(item){return item !== id});
+                if(compareList[cateId].length === 0) delete compareList[cateId];
                 alert("Removed product to compare factory", "warning")
             }
-            $.cookie("compareList", compareList);
+            $.cookie("compareList", compareList, {path:"/"});
         }
         location.reload();
     });
 
-    $(".add-cart").on("click", function(e){
-        var element = $(e.currentTarget), data = {
-            id: element.data("id")
-        }, cart = $.cookie("cart") || [];
-        if(typeof compareList != "object") compareList = [];
-        if(data.id != null){
-            if(cart.filter(item => item.id == data.id).length > 0){
-                cart = cart.map(function(item){
-                    if(item.id == data.id) item.count++;
-                    return item;
-                })
-            }else{
-                cart.push({id: data.id})
-            }
-            $.cookie("compareList", cart)
-        }
-    });
-    $(".add-cart").on("click", function(e){
-        var element = $(e.currentTarget), data = {
-            id: element.data("id")
-        }, cart = $.cookie("cart") || [];
-        if(typeof compareList != "object") compareList = [];
-        if(data.id != null){
-            if(cart.filter(item => item.id == data.id).length > 0){
-                cart = cart.map(function(item){
-                    if(item.id == data.id) item.count++;
-                    return item;
-                })
-            }else{
-                cart.push({id: data.id})
-            }
-            $.cookie("compareList", cart)
-        }
-    });
     simpleCart.currency({
         code: "VND" ,
-        symbol: "₫" ,
+        symbol: "&#x20AB;" ,
         name: "Viet nam dong",
         accuracy: 0,
         delimiter: " ",
-        decimal: "."
-    });
-
-    simpleCart.bind( "afterAdd" , function( item ){
-        alert( item.get("name") + " was added to the cart!" );
-    });
-
-    simpleCart.bind( "afterAdd" , function( item , isNew ){
-        if( isNew ){
-            alert( "A brand new item called " + item.get( 'name' ) + " was added to the cart" );
-        }
-    });
-
-    simpleCart.bind( 'beforeRemove' , function( item ){
-        alert( item.get('name') + " was removed from the cart" , "warning");
+        decimal: ".",
+        after: true
     });
 
     simpleCart({
@@ -528,7 +481,7 @@
             {
                 label: "Name",
                 view: function(item, column){
-                    var link = item.get("pagelink");
+                    let link = item.get("pagelink");
                     link = link ? link : "#";
                     return '<a href="'+link+'">'+item.get("name")+'</a>';
                 }
@@ -563,30 +516,60 @@
         language: "english-us"
     });
 
+    simpleCart.bind( "afterAdd" , function( item ){
+        alert( item.get("name") + " was added to the cart!" );
+    });
+
+    simpleCart.bind( 'beforeRemove' , function( item ){
+        alert( item.get('name') + " was removed from the cart" , "warning");
+    });
+
+    simpleCart.bind( 'update' , function(){
+        let cart = JSON.parse(window.localStorage.getItem("simpleCart_items")) || {};
+        if(typeof cart === "object"){
+            let cartCookies = [];
+            for(let key in cart){
+                if(cart[key].hasOwnProperty("quantity"))
+                    cartCookies.push({
+                        id: key,
+                        quantity: cart[key].quantity
+                    })
+            }
+            $.cookie("cart", cartCookies, {path:"/"});
+        }
+    });
+
+    let token = $("meta[name='_csrf']").attr("content"),
+        header = $("meta[name='_csrf_header']").attr("content");
+
+    $(document).ajaxSend(function(e, xhr) {
+        xhr.setRequestHeader(header, token);
+    });
+
     setInterval(function(){
         if(userLogged)
-        $.ajax({
-            url: PATH + 'api/notification/count',
-            success: function (data) {
-                if(data.error)
-                    if(data.message !== "User not found")
-                        alert(data.message, "warning");
-                    else window.location.href = PATH+"login?error=expired";
-                else{
-                    let notifyA = $(".notification-a"),
-                        count = Number.parseInt(data.message);
-                    if(notifyA.length > 0){
-                        if(notifyA.find(".count").length>0){
-                            if(count > 0)
-                                notifyA.find(".count").html(data.message);
-                            else notifyA.find(".count").remove();
-                        }else {
-                            if(count > 0)
-                                notifyA.append('<span class="count">'+data.message+'</span>')
+            $.ajax({
+                url: PATH + 'api/notification/count',
+                success: function (data) {
+                    if(data.error)
+                        if(data.message !== "User not found")
+                            alert(data.message, "warning");
+                        else window.location.href = PATH+"login?error=expired";
+                    else{
+                        let notifyA = $(".notification-a"),
+                            count = Number.parseInt(data.message);
+                        if(notifyA.length > 0){
+                            if(notifyA.find(".count").length>0){
+                                if(count > 0)
+                                    notifyA.find(".count").html(data.message);
+                                else notifyA.find(".count").remove();
+                            }else {
+                                if(count > 0)
+                                    notifyA.append('<span class="count">'+data.message+'</span>')
+                            }
                         }
                     }
                 }
-            }
-        })
+            })
     }, (5 * 1000));
 })(jQuery);

@@ -2,7 +2,7 @@ package OnlineMarket.controller.web;
 
 import OnlineMarket.listener.OnCommentApprovedEvent;
 import OnlineMarket.service.CommentService;
-import OnlineMarket.util.ResponseResult;
+import OnlineMarket.result.api.ResponseResult;
 import OnlineMarket.util.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;

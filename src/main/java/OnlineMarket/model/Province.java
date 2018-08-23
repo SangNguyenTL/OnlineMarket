@@ -17,6 +17,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import OnlineMarket.util.group.AdvancedValidation;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
 
@@ -88,6 +89,7 @@ public class Province implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "province")
+    @JsonIgnore
 	public Set<Address> getAddresses() {
 		return this.addresses;
 	}

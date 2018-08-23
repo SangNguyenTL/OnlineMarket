@@ -11,7 +11,6 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 import javax.validation.constraints.Size;
 
-import OnlineMarket.util.other.NumState;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;

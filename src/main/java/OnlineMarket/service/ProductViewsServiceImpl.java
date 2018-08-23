@@ -7,11 +7,13 @@ import OnlineMarket.model.ProductViews;
 import OnlineMarket.model.ProductViewsStatistic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Calendar;
 import java.util.Date;
 
 @Service("productViewsService")
+@Transactional
 public class ProductViewsServiceImpl implements ProductViewsService{
 
     @Autowired
@@ -27,7 +29,6 @@ public class ProductViewsServiceImpl implements ProductViewsService{
 
     @Override
     public void save(Product product) {
-
         ProductViews productViews = productViewsDao.getByProductInCurrentDay(product);
         if(productViews == null){
             productViews = new ProductViews();

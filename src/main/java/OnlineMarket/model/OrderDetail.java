@@ -25,6 +25,7 @@ public class OrderDetail implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private OrderDetailId id;
 	private Order order;
+	private Product product;
 	private int productQuantity;
 	private long productPrice;
 	private double productWeight;
@@ -64,6 +65,16 @@ public class OrderDetail implements java.io.Serializable {
 
 	public void setOrder(Order order) {
 		this.order = order;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "product_id", nullable = false, insertable = false, updatable = false)
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
 	}
 
 	@Column(name = "product_quantity", nullable = false)

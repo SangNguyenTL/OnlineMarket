@@ -21,6 +21,10 @@ public class OrderDetailId implements java.io.Serializable {
 	public OrderDetailId() {
 	}
 
+	public OrderDetailId(int productId) {
+		this.productId = productId;
+	}
+
 	public OrderDetailId(int productId, int orderId) {
 		this.productId = productId;
 		this.orderId = orderId;

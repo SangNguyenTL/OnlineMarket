@@ -13,6 +13,7 @@ import OnlineMarket.util.exception.post.PostNotFoundException;
 import OnlineMarket.util.exception.user.UserNotFoundException;
 import OnlineMarket.util.group.AdvancedValidation;
 import OnlineMarket.util.other.CommentState;
+import org.ocpsoft.prettytime.PrettyTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -40,8 +41,6 @@ public class FrPostPageController extends MainController {
     @Autowired
     UserService userService;
 
-    private FilterForm filterForm;
-
     @ModelAttribute("comment")
     public Comment getCommentForm(){
         return new Comment();
@@ -49,11 +48,13 @@ public class FrPostPageController extends MainController {
 
     @Override
     protected void addMeta(ModelMap modelMap) {
+        PrettyTime prettyTime = new PrettyTime();
         generateBreadcrumbs();
-        filterForm = new FilterForm();
+        FilterForm filterForm = new FilterForm();
         filterForm.setOrderBy("createDate");
         filterForm.setOrder("desc");
         filterForm.getGroupSearch().put("status", String.valueOf(CommentState.ACTIVE.getId()));
+        modelMap.put("prettyTime", prettyTime);
         modelMap.put("filterForm", filterForm);
         modelMap.put("relativePath", relativePath);
     }

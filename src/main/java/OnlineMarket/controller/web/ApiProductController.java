@@ -9,9 +9,12 @@ import org.springframework.web.bind.annotation.*;
 
 import OnlineMarket.model.Product;
 import OnlineMarket.service.ProductService;
-import OnlineMarket.util.ResponseResult;
+import OnlineMarket.result.api.ResponseResult;
 
-@RequestMapping("api/product")
+import java.util.ArrayList;
+import java.util.List;
+
+@RequestMapping("/api/product")
 @RestController
 public class ApiProductController {
 
@@ -20,7 +23,7 @@ public class ApiProductController {
 
 	@RequestMapping(value = "/check-slug", produces = MediaType.APPLICATION_JSON_VALUE, method = { RequestMethod.POST,
 			RequestMethod.GET })
-	public ResponseEntity<?> checkSlugUnique(@RequestParam(value = "value", required = true) String value,
+	public ResponseEntity<?> checkSlugUnique(@RequestParam(value = "value") String value,
 			@RequestParam(value = "id", required = false) Integer id) {
 
 		Product product = productService.getByDeclaration("slug", value);
@@ -32,7 +35,7 @@ public class ApiProductController {
 			if (oldProduct != null && oldProduct.equals(product))
 				flag = false;
 		}
-		return ResponseEntity.ok(new ResponseResult(flag, null));
+		return ResponseEntity.ok(new ResponseResult(flag, ""));
 	}
 
 	@RequestMapping(value = "/search", produces = MediaType.APPLICATION_JSON_VALUE, method = {RequestMethod.GET, RequestMethod.POST})
@@ -40,5 +43,14 @@ public class ApiProductController {
 		if(searchSelect.getQ().length() > 3)
 			return ResponseEntity.ok(productService.searchSelect(searchSelect));
 		else  return ResponseEntity.ok(new ResultProduct());
+	}
+
+	@RequestMapping(value = "", method = RequestMethod.GET)
+	public ResponseEntity<?> getById(@RequestParam("id") Integer id){
+		boolean error = false;
+		Product product = productService.getByKey(id);
+		List<Product> list = new ArrayList<>();
+ 		if(product!=null) list.add(product);
+		return ResponseEntity.ok(new ResponseResult(error, list));
 	}
 }

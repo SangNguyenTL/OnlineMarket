@@ -9,7 +9,7 @@
 <!--/*@thymesVar id="error" type="java.lang.String"*/-->
 <!--/*@thymesVar id="success" type="java.lang.Boolean"*/-->
 <!--/*@thymesVar id="filterForm" type="OnlineMarket.form.filter.FilterForm"*/-->
-<!--/*@thymesVar id="state" type="OnlineMarket.util.other.NumState"*/-->
+<!--/*@thymesVar id="state" type="OnlineMarket.util.other.ProductStatus"*/-->
 <!--/*@thymesVar id="result" type="OnlineMarket.result.ResultObject<OnlineMarket.model.Product>"*/-->
 <head>
 </head>
@@ -38,7 +38,7 @@
 							<div class="input-group input-group-sm">
 								<select class="form-control" th:field="*{groupSearch['state']}">
 									<option value="">State...</option>
-									<option th:each="state : ${T(OnlineMarket.util.other.NumState).values()}"
+									<option th:each="state : ${T(OnlineMarket.util.other.ProductStatus).values()}"
 											th:value="${state.id}" th:text="${state.name}"></option>
 								</select>
 							</div>
@@ -107,7 +107,7 @@
 								<td><a th:href="@{'/product/'+${product.slug}}" th:text="${product.getName()}"></a></td>
 								<td th:text="${product.brand.name}"></td>
 								<td>
-									<th:block  th:each="state : ${T(OnlineMarket.util.other.NumState).values()}">
+									<th:block  th:each="state : ${T(OnlineMarket.util.other.ProductStatus).values()}">
 										<th:block th:if="${state.id} == ${product.state}" th:text="${state.name}"></th:block>
 									</th:block>
 								</td>

@@ -91,7 +91,7 @@
                                         <option value="">Please choice</option>
                                         <!--/*@thymesVar id="st" type="OnlineMarket.util.other.State"*/-->
                                         <option
-                                                th:each="st : ${T(OnlineMarket.util.other.NumState).values()}"
+                                                th:each="st : ${T(OnlineMarket.util.other.ProductStatus).values()}"
                                                 th:value="${st.id}" th:text="${st.name}"></option>
                                     </select>
                                     <ul class="parsley-errors-list filled"

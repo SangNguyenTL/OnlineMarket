@@ -2,7 +2,7 @@ package OnlineMarket.controller.web;
 
 import OnlineMarket.model.User;
 import OnlineMarket.service.UserService;
-import OnlineMarket.util.ResponseResult;
+import OnlineMarket.result.api.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +32,7 @@ public class ApiUserController {
             if (oldUser != null && oldUser.equals(user))
                 flag = false;
         }
-        return ResponseEntity.ok(new ResponseResult(flag, null));
+        return ResponseEntity.ok(new ResponseResult(flag, ""));
     }
 
 }

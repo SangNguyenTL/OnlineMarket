@@ -38,18 +38,17 @@ public class ProvinceController extends MainController {
 
     FilterForm filterForm;
 
-    @ModelAttribute
-    public ModelMap modelAttribute(ModelMap model) {
+    @Override
+    public void addMeta(ModelMap model) {
         filterForm = new FilterForm();
+        filterForm.setSearchBy("name");
         relativePath = "/admin/province";
         model.put("filterForm", filterForm);
         model.put("relativePath", relativePath);
         model.put("provincePage", true);
         model.put("pathAdd", relativePath + "/add");
+        generateBreadcrumbs();
         breadcrumbs.add(new String[]{ relativePath, "Province"});
-        
-        return model;
-
     }
 
     @RequestMapping(value = "", method = { RequestMethod.GET, RequestMethod.POST})

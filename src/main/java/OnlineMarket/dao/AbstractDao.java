@@ -45,15 +45,15 @@ public abstract class AbstractDao<PK extends Serializable, T> {
             matcher = patternOrder.matcher(entry.getKey());
             if(matcher.matches()){
                 String key = matcher.group(1), value = entry.getValue();
-                if(StringUtils.isNotBlank(key)){
-                    if(matcher.group(2) != null){
-                        key = key + "Alias";
-                        criteria.createAlias(matcher.group(1), key);
-                        key = key+matcher.group(2);
-                    }
-                    if(StringUtils.isNotBlank(value)){
-                        try {
-                            Field field = persistentClass.getDeclaredField(key);
+                try {
+                    Field field = persistentClass.getDeclaredField(key);
+                    if(StringUtils.isNotBlank(key)){
+                        if(matcher.group(2) != null){
+                            key = key + "Alias";
+                            criteria.createAlias(matcher.group(1), key);
+                            key = key+matcher.group(2);
+                        }
+                        if(StringUtils.isNotBlank(value)){
                             switch (field.getType().getSimpleName()){
                                 case "byte":
                                 case "Byte":
@@ -68,9 +68,10 @@ public abstract class AbstractDao<PK extends Serializable, T> {
                                     break;
                                 default:
                             }
-                        } catch (NumberFormatException|NoSuchFieldException ignore) {
                         }
                     }
+                } catch (NumberFormatException|NoSuchFieldException ignore) {
+
                 }
             }
         }
@@ -205,13 +206,25 @@ public abstract class AbstractDao<PK extends Serializable, T> {
             matcher = patternOrder.matcher(filterForm.getSearchBy());
             if(matcher.matches()){
                 String key = matcher.group(1);
-                if(StringUtils.isNotBlank(key)){
-                    if(matcher.group(2) != null){
-                        key = key + "Alias";
-                        criteria.createAlias(matcher.group(1), key);
-                        key = key+matcher.group(2);
+                try {
+                    Field field = persistentClass.getDeclaredField(key);
+                    if(StringUtils.isNotBlank(key)){
+                        if(matcher.group(2) != null){
+                            switch (field.getType().getSimpleName()){
+                                case "List":
+                                case "Set":
+                                    ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
+                                    Class<?> aClass = (Class<?>) parameterizedType.getActualTypeArguments()[0];
+                                    aClass.getDeclaredField(matcher.group(2));
+                                    break;
+                            }
+                            key = key + "Alias";
+                            criteria.createAlias(matcher.group(1), key);
+                            key = key+matcher.group(2);
+                        }
+                        criteria.add(Restrictions.ilike(key, "%" + filterForm.getSearch() + "%"));
                     }
-                    criteria.add(Restrictions.ilike(key, "%" + filterForm.getSearch() + "%"));
+                } catch (NoSuchFieldException ignore) {
                 }
             }
         }
@@ -220,14 +233,18 @@ public abstract class AbstractDao<PK extends Serializable, T> {
 
         criteria.setProjection(Projections.rowCount());
         Long count = (Long) criteria.uniqueResult();
-        if (count != null) {
+        if (filterForm.getSize()!= null && count != null) {
             int totalPages = (int) Math.ceil((float) count / filterForm.getSize());
             result.setTotalPages(totalPages);
             result.setCount(count);
-        } else result.setTotalPages(0);
 
-        if (filterForm.getSize() > 0 && filterForm.getCurrentPage() > 0)
-            criteria.setFirstResult((filterForm.getCurrentPage() - 1) * filterForm.getSize()).setMaxResults(filterForm.getSize());
+            if (filterForm.getSize() > 0 && filterForm.getCurrentPage() > 0)
+                criteria.setFirstResult((filterForm.getCurrentPage() - 1) * filterForm.getSize()).setMaxResults(filterForm.getSize());
+
+        } else if(filterForm.getSize() == null && count != null) result.setTotalPages(1);
+        else result.setTotalPages(0);
+
+
         criteria.setProjection(null);
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
@@ -236,17 +253,45 @@ public abstract class AbstractDao<PK extends Serializable, T> {
             matcher = patternOrder.matcher(filterForm.getOrderBy());
             if(matcher.matches()){
                 String key = matcher.group(1);
-                if(StringUtils.isNotBlank(key)){
-                    if(matcher.group(2) != null){
-                        key = key + "Alias";
-                        criteria.createAlias(matcher.group(1), key);
-                        key = key+matcher.group(2);
-                    }
+                try{
+                    Field field = persistentClass.getDeclaredField(key);
+                    Field childField = null;
+                    if(StringUtils.isNotBlank(key)){
+                        if(matcher.group(2) != null){
+                            switch (field.getType().getSimpleName()){
+                                case "List":
+                                case "Set":
+                                    ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
+                                    Class<?> aClass = (Class<?>) parameterizedType.getActualTypeArguments()[0];
+                                    childField = aClass.getDeclaredField(matcher.group(2).substring(1));
 
-                    if (filterForm.getOrder().equals("asc") || !filterForm.getOrder().equals("desc"))
-                        criteria.addOrder(Order.asc(key));
-                    else
-                        criteria.addOrder(Order.desc(key));
+                                    break;
+                            }
+                            key = key + "Alias";
+                            criteria.createAlias(matcher.group(1), key);
+                            if(childField!=null){
+                                if(field.getName().equals("productViewsSet") && childField.getName().equals("count")){
+                                    Calendar cal = Calendar.getInstance();
+                                    cal.set(Calendar.HOUR_OF_DAY, 0); // ! clear would not reset the hour of day !
+                                    cal.clear(Calendar.MINUTE);
+                                    cal.clear(Calendar.SECOND);
+                                    cal.clear(Calendar.MILLISECOND);
+
+                                    cal.add(Calendar.DATE, +1);
+                                    criteria.add(Restrictions.le(key+".datetime", cal.getTime()));
+                                    cal.add(Calendar.DATE, -1);
+                                    criteria.add(Restrictions.ge(key+".datetime", cal.getTime()));
+                                }
+                            }
+                            key = key+matcher.group(2);
+                        }
+
+                        if (filterForm.getOrder().equals("asc") || !filterForm.getOrder().equals("desc"))
+                            criteria.addOrder(Order.asc(key));
+                        else
+                            criteria.addOrder(Order.desc(key));
+                    }
+                }catch (NoSuchFieldException ignore) {
                 }
             }
         }

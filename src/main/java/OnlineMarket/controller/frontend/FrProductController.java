@@ -64,7 +64,7 @@ public class FrProductController extends MainController {
     @ModelAttribute
     public ModelMap modelAttribute(@PathVariable("slug") String slug, ModelMap model) throws NoHandlerFoundException{
 
-        product = productService.getByDeclaration("slug", slug);
+        product = productService.getFrontendProductByDeclaration("slug", slug);
         relativePath = "/product/" + slug;
         if (product == null || product.getState() == 3)
             throw new NoHandlerFoundException(null, null, null);

@@ -2,7 +2,7 @@ package OnlineMarket.controller.web;
 
 import OnlineMarket.listener.OnReviewApprovedEvent;
 import OnlineMarket.service.RatingService;
-import OnlineMarket.util.ResponseResult;
+import OnlineMarket.result.api.ResponseResult;
 import OnlineMarket.util.exception.rating.RatingNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;

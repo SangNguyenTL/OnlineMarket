@@ -51,6 +51,9 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 	ProductFormatter productFormatter;
 
 	@Autowired
+	AddressFormatter addressFormatter;
+
+	@Autowired
 	SessionFactory sessionFactory;
 
 	@Autowired
@@ -139,6 +142,7 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 	public void addFormatters(FormatterRegistry registry) {
 		registry.addFormatter(new ProvinceFormatter());
 		registry.addFormatter(productFormatter);
+		registry.addFormatter(addressFormatter);
 		registry.addFormatter(new RoleFormatter());
 		registry.addFormatter(new AttributeValuesFormatter());
 	}

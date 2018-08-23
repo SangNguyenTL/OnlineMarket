@@ -9,12 +9,12 @@ import javax.persistence.*;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import OnlineMarket.util.group.AdvancedValidation;
+import com.fasterxml.jackson.annotation.*;
 import org.hibernate.validator.constraints.NotEmpty;
 
 
@@ -22,13 +22,16 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name = "tb_address", schema = "dbo", catalog = "SmartMarket")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Address implements java.io.Serializable {
 
 
 	private static final long serialVersionUID = 1L;
 	private Integer id;
 	private User user;
+	private Integer userId;
 	private Province province;
+	private Integer provinceId;
 	private String firstName;
 	private String lastName;
 	private String address;
@@ -73,9 +76,10 @@ public class Address implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "user_id", nullable = false)
-	public User getUser() {
+    @NotNull(groups = AdvancedValidation.AddNew.class)
+    public User getUser() {
 		return this.user;
 	}
 
@@ -86,7 +90,6 @@ public class Address implements java.io.Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "province_id", nullable = false)
 	@NotNull
-	@Valid
 	public Province getProvince() {
 		return this.province;
 	}
@@ -129,7 +132,7 @@ public class Address implements java.io.Serializable {
 	}
 
 	@Column(name = "phone_number", nullable = false, length = 11)
-	@NotNull
+    @NotEmpty
 	@Pattern(regexp = "(^$|[0-9]{10,11})")
 	public String getPhoneNumber() {
 		return this.phoneNumber;
@@ -151,6 +154,7 @@ public class Address implements java.io.Serializable {
 	}
 
 	@OneToMany(mappedBy = "address", fetch = FetchType.LAZY)
+    @JsonIgnore
 	public Set<Order> getOrders() {
 		return this.orders;
 	}
@@ -159,4 +163,27 @@ public class Address implements java.io.Serializable {
 		this.orders = orders;
 	}
 
+	@Transient
+    @NotNull(groups = AdvancedValidation.AddNew.class)
+	public Integer getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Integer userId) {
+		this.user = new User();
+		this.user.setId(userId);
+		this.userId = userId;
+	}
+
+    @Transient
+    @NotNull(groups = AdvancedValidation.AddNew.class)
+    public Integer getProvinceId() {
+        return provinceId;
+    }
+
+    public void setProvinceId(Integer provinceId) {
+	    this.province = new Province();
+	    this.province.setId(provinceId);
+        this.provinceId = provinceId;
+    }
 }

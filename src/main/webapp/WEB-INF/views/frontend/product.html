@@ -5,9 +5,6 @@
       xmlns:filter="http://thymeleafexamples"
       layout:decorate="templates/frontend">
 
-<th:block layout:fragment="head">
-
-</th:block>
 <!--/*@thymesVar id="productCategoryList" type="java.util.List<OnlineMarket.model.ProductCategory>"*/-->
 <!--/*@thymesVar id="relatedProducts" type="java.util.List<OnlineMarket.model.Product>"*/-->
 <!--/*@thymesVar id="result" type="OnlineMarket.result.ResultObject<OnlineMarket.model.Rating>"*/-->
@@ -79,7 +76,7 @@
                                 <h3 class="subtitle">Available Options</h3>
 
                                 <div class="cart">
-                                    <div th:if="${product.state == T(OnlineMarket.util.other.NumState).INSTOCK.id}">
+                                    <div th:if="${product.state == T(OnlineMarket.util.other.ProductStatus).INSTOCK.id}">
                                         <button type="button" id="button-cart" class="btn btn-primary btn-lg item_add">Add to
                                             Cart
                                         </button>
@@ -158,7 +155,7 @@
                                                 <div class="rating">
                                                         <span class="fa fa-stack"
                                                               th:each="ada : ${#numbers.sequence(1, 5)}">
-                                                            <i th:if="${rating.score > ada}" class="fa fa-star fa-stack-2x"></i>
+                                                            <i th:if="${rating.score >= ada}" class="fa fa-star fa-stack-2x"></i>
                                                             <i class="fa fa-star-o fa-stack-2x"></i>
                                                         </span>
                                                 </div>

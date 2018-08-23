@@ -22,7 +22,7 @@ import OnlineMarket.service.ImageService;
 import OnlineMarket.util.exception.CreateFolderException;
 import OnlineMarket.util.exception.UploadTypeException;
 import OnlineMarket.util.FileValidator;
-import OnlineMarket.util.ResponseResult;
+import OnlineMarket.result.api.ResponseResult;
 import javax.validation.Valid;
 
 @RestController

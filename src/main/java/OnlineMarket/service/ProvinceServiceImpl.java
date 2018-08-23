@@ -34,7 +34,7 @@ public class ProvinceServiceImpl implements ProvinceService{
 		Province provinceCheck = provinceDao.getByKey(entity.getId());
 		if (provinceCheck == null)
 			throw new CustomException("Province not found");
-		provinceDao.update(entity);
+		provinceDao.merge(entity);
 	}
 
 	@Override

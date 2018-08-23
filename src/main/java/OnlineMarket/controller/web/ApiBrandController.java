@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import OnlineMarket.model.Brand;
 import OnlineMarket.service.BrandService;
-import OnlineMarket.util.ResponseResult;
+import OnlineMarket.result.api.ResponseResult;
 
 @RequestMapping("api/brand")
 @RestController
@@ -33,6 +33,6 @@ public class ApiBrandController {
 			if (oldBrand != null && oldBrand.equals(brand))
 				flag = false;
 		}
-		return ResponseEntity.ok(new ResponseResult(flag, null));
+		return ResponseEntity.ok(new ResponseResult(flag, ""));
 	}
 }

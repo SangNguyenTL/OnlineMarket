@@ -9,7 +9,11 @@ import OnlineMarket.util.exception.AddressNotFoundException;
 import OnlineMarket.util.exception.CustomException;
 import OnlineMarket.util.exception.address.AddressHasOrderException;
 
+import java.util.List;
+
 public interface AddressService extends InterfaceService<Integer, Address> {
+
+    Address getByKeyAndUser(Integer key, User user) throws CustomException;
 
     void save(Address address, User user) throws CustomException;
 
@@ -20,4 +24,7 @@ public interface AddressService extends InterfaceService<Integer, Address> {
     ResultObject<Address> listByUser(User user, FilterForm filterForm) throws CustomException;
 
     void delete(Integer id) throws AddressHasOrderException, AddressNotFoundException;
+
+    List<Address> listByDeclaration(String value, Object object);
+
 }

@@ -26,6 +26,7 @@ public class FrSearchController extends MainController {
 
         filterForm.getGroupSearch().put("state", "0");
         filterForm.setOrderBy("releaseDate");
+        filterForm.setSearchBy("name");
         filterForm.setOrder("desc");
         relativePath = "/search";
 

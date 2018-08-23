@@ -3,14 +3,12 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="templates/frontend">
 
-<th:block layout:fragment="head">
-<link rel="stylesheet" type="text/css" th:href="@{/assets/frontend/js/bootstrap/css/bootstrap-datetimepicker.min.css}" />
-</th:block>
-
 <head>
 </head>
 <body th:inline="text">
-
+<th:block layout:fragment="head">
+	<link rel="stylesheet" type="text/css" th:href="@{/assets/frontend/js/bootstrap/css/bootstrap-datetimepicker.min.css}" />
+</th:block>
 	<div id="container" layout:fragment="container">
 		<div class="container">
 				<!-- Breadcrumb Start-->
