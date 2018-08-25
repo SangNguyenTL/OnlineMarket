@@ -1,12 +1,47 @@
 (function ($) {
     "use strict";
+    window.Parsley.addValidator('uniqueCode', {
+        validateString: function (value, requirement, instance) {
+
+            let elementId = instance.$element.closest("form").find("[name=id]"), id = elementId.val();
+
+            let xhr = $.ajax({
+                url: requirement,
+                data: {
+                    code : value,
+                    id: id
+                },
+                dataType: 'json',
+                method: 'POST'
+            });
+
+            return xhr.then(function (data) {
+                if (!data.error) {
+                    return true;
+                } else {
+                    return $.Deferred().reject();
+                }
+            },function(data){
+                if(data.responseJSON.errors){
+                    $.each(data.responseJSON.errors, function(k, val){
+                        alert(val,"danger")
+                    })
+                }
+                return false;
+            });
+        },
+        messages: {
+            en: 'Code of item is invalid, the code may be already exists!'
+        },
+        priority: 32
+    });
 
     window.Parsley.addValidator('uniqueSlug', {
         validateString: function (value, requirement, instance) {
 
-            var elementId = instance.$element.closest("form").find("[name=id]"), id = elementId.val();
+            let elementId = instance.$element.closest("form").find("[name=id]"), id = elementId.val();
 
-            var xhr = $.ajax({
+            let xhr = $.ajax({
                 url: requirement,
                 data: {
                     value : value,
@@ -40,9 +75,9 @@
     window.Parsley.addValidator('uniqueEmail', {
         validateString: function (value, requirement, instance) {
 
-            var elementId = instance.$element.closest("form").find("[name=id]"), id = elementId.val();
+            let elementId = instance.$element.closest("form").find("[name=id]"), id = elementId.val();
 
-            var xhr = $.ajax({
+            let xhr = $.ajax({
                 url: requirement,
                 data: {
                     value : value,
@@ -74,20 +109,20 @@
     });
 
     function initPar(){
-        var uniqueSlugElement = $('[data-parsley-unique-slug]');
+        let uniqueSlugElement = $('[data-parsley-unique-slug]');
         if(uniqueSlugElement.length > 0){
-            var data = uniqueSlugElement.data();
+            let data = uniqueSlugElement.data();
             if(data.parsleyTarget){
-                var target = $("[name="+data.parsleyTarget+"]");
+                let target = $("[name="+data.parsleyTarget+"]");
                 target.on("keyup",function (){
-                    var value = slug($(this).val(), {lower: true});
+                    let value = slug($(this).val(), {lower: true});
                     uniqueSlugElement.val(value);
                     uniqueSlugElement.trigger("change");
                 });
             }
 
             uniqueSlugElement.on("change", function(){
-                var val = uniqueSlugElement.val();
+                let val = uniqueSlugElement.val();
                 uniqueSlugElement.val(slug(val));
             });
         }

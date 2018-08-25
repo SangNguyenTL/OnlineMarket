@@ -25,7 +25,7 @@ public class ApiRatingController {
     @Autowired
     ApplicationEventPublisher eventPublisher;
 
-    @RequestMapping(value = "/modify-review-state", produces = MediaType.APPLICATION_JSON_VALUE, method = { RequestMethod.POST,
+    @RequestMapping(value = "/modify-review-state", method = { RequestMethod.POST,
             RequestMethod.GET })
     public ResponseEntity<?> checkSlugUnique(@RequestParam(value = "id") Integer id, HttpServletRequest request) {
         boolean error = false;

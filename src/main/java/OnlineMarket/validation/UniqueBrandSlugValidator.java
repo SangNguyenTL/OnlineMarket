@@ -12,7 +12,7 @@ import OnlineMarket.model.Brand;
 import OnlineMarket.service.BrandService;
 
 @Component
-public class UniqueBrandSlugValidator implements ConstraintValidator<UniqueBrandSlug, Object>{
+public class UniqueBrandSlugValidator implements ConstraintValidator<UniqueBrandSlug, Brand>{
 
 	@Autowired
 	BrandService brandService;
@@ -23,14 +23,10 @@ public class UniqueBrandSlugValidator implements ConstraintValidator<UniqueBrand
 	}
 
 	@Override
-	public boolean isValid(Object candidate, ConstraintValidatorContext context) {
+	public boolean isValid(Brand brand, ConstraintValidatorContext context) {
 		
-		Brand brand = (Brand) candidate;
 		Brand brandMod = brandService.getByDeclaration("slug", brand.getSlug());
-		boolean isValid = false;
-		if(brandMod == null) isValid = true;
-		else if(StringUtils.equals(brand.getSlug(), brand.getBeforeSlug())) isValid = true;
-		else isValid = false;
+		boolean isValid = brandMod == null || (brandMod.getId().equals(brand.getId()) && StringUtils.equals(brand.getSlug(), brandMod.getBeforeSlug()));
         if ( !isValid ) {
         	context.disableDefaultConstraintViolation();
         	context

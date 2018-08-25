@@ -37,7 +37,7 @@ public class UserNotificationController extends UserProfileController {
                            HttpServletRequest request) throws NoHandlerFoundException {
         try {
             modelMap.put("pageTitle", title);
-            modelMap.put("result", notificationService.listByUser(currentUser.getId(), filterForm));
+            modelMap.put("result", notificationService.listByUser(user.getId(), filterForm));
         } catch (CustomException e) {
             throw new NoHandlerFoundException(request.getMethod(),request.getRequestURL().toString(), null);
         }

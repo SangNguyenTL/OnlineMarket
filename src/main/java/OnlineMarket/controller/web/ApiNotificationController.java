@@ -18,7 +18,7 @@ public class ApiNotificationController {
     @Autowired
     private NotificationService notificationService;
 
-    @RequestMapping(value = "/change-status", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/change-status", method = RequestMethod.GET)
     public ResponseEntity<?> changeStatus(@RequestParam("id") Integer id, @RequestParam("status") Byte status){
         boolean error = false;
         String message = "";

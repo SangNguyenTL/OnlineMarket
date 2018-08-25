@@ -4,28 +4,23 @@ package OnlineMarket.model;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
+import javax.persistence.*;
+
 import static javax.persistence.GenerationType.IDENTITY;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import OnlineMarket.util.group.AdvancedValidation;
 import OnlineMarket.validation.EventValidate;
+import OnlineMarket.validation.UniqueCodeEvent;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -36,6 +31,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Table(name = "tb_event", schema = "dbo", catalog = "SmartMarket")
 @EventValidate(groups =  AdvancedValidation.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@UniqueCodeEvent
 public class Event implements java.io.Serializable {
 
 	/**
@@ -50,6 +46,7 @@ public class Event implements java.io.Serializable {
 	private Byte percentValue;
 	private Long value;
 	private String code;
+	private String beforeCode;
 	private Date createDate;
 	private Date updateDate;
 	private Date dateFrom;
@@ -88,6 +85,7 @@ public class Event implements java.io.Serializable {
 
 	@Column(name = "name", nullable = false)
 	@Size(min = 6, max = 255)
+    @NotEmpty
 	public String getName() {
 		return this.name;
 	}
@@ -117,6 +115,7 @@ public class Event implements java.io.Serializable {
 
 	@Column(name = "status", nullable = false )
 	@Range(min = 0, max = 1)
+    @NotNull
 	public Integer getStatus() {
 		return this.status;
 	}
@@ -252,4 +251,27 @@ public class Event implements java.io.Serializable {
 		this.featureImage = featureImage;
 }
 
+    @Transient
+    @JsonIgnore
+    public String getBeforeCode() {
+        return code;
+    }
+
+    public void setBeforeCode(String beforeCode) {
+        this.beforeCode = beforeCode;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Event event = (Event) o;
+        return Objects.equals(id, event.id) &&
+                Objects.equals(code, event.code);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, code);
+    }
 }

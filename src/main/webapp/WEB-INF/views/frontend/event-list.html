@@ -62,7 +62,7 @@
                                 </a>
                             </div>
                             <div class="col-md-7">
-                                <p th:utext="${#strings.abbreviate(T(org.jsoup.Jsoup).parse(event.content).text(),150)}"></p>
+                                <p th:if="${event.content}" th:utext="${#strings.abbreviate(T(org.jsoup.Jsoup).parse(event.content).text(),150)}"></p>
                                 <p><a class="btn btn-read-more" th:href="@{'/event/'+${event.id}}">Read more</a></p>
                             </div>
                         </div>
@@ -74,7 +74,7 @@
                     <div class="col-sm-6 text-left">
                         <filter:pagination
 
-                                           filter:uri="@{${relativePath}}"></filter:pagination>
+                                           filter:uri="@{${relativePath}}"> </filter:pagination>
                     </div>
                     <div class="col-sm-6 text-right"
                          th:with="productFrom=${result.getCurrentPage()*filterForm.size +1 - filterForm.size},productTo=${result.getCurrentPage()*filterForm.size}"

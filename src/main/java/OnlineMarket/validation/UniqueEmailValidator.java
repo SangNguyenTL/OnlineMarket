@@ -25,10 +25,7 @@ public class UniqueEmailValidator implements ConstraintValidator<UniqueEmail, Us
 	@Override
 	public boolean isValid(User user, ConstraintValidatorContext context) {
 		User user1 = userService.getByEmail(user.getEmail());
-		boolean isValid = false;
-		if(user1 == null) isValid = true;
-		else
-			if(user1 != null && user1.getId().equals(user.getId()) && user.getEmail().equals(user1.getEmail())) isValid = true;
+		boolean isValid = user1 == null || (user1.getId().equals(user.getId()) && user.getEmail().equals(user1.getEmail()));
 
 		if(!isValid){
 			context.disableDefaultConstraintViolation();

@@ -25,7 +25,7 @@ public class ApiCommentController {
     @Autowired
     ApplicationEventPublisher eventPublisher;
 
-    @RequestMapping(value = "/modify-status", produces = MediaType.APPLICATION_JSON_VALUE, method = { RequestMethod.POST,
+    @RequestMapping(value = "/modify-status", method = { RequestMethod.POST,
             RequestMethod.GET })
     public ResponseEntity<?> checkSlugUnique(@RequestParam(value = "id") Integer id, HttpServletRequest request) {
         boolean error = false;

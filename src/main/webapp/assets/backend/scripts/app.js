@@ -151,7 +151,7 @@
             return;
         }
         $.ajax({
-            type: 'POST',
+            type: 'GET',
             url: PATH + 'api/notification/change-status',
             data: {
                 id : id,

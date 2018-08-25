@@ -20,13 +20,11 @@ public class UniquePostSlugValidator implements ConstraintValidator<UniquePostSl
 	}
 
 	@Override
-	public boolean isValid(Post candidate, ConstraintValidatorContext context) {
+	public boolean isValid(Post post, ConstraintValidatorContext context) {
 
-		Post post = candidate;
 		Post post1 = postService.getByDeclaration("slug", post.getSlug());
-		boolean isValid = false;
-		if(post1 == null || StringUtils.equals(post1.getSlug(), post.getBeforeSlug())) isValid = true;
-		else isValid = false;
+		boolean isValid = post1 == null ||  (post1.getId().equals(post.getId()) && StringUtils.equals(post1.getSlug(), post.getBeforeSlug()));
+
         if ( !isValid ) {
         	context.disableDefaultConstraintViolation();
         	context

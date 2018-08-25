@@ -80,7 +80,9 @@ public class UserController extends MainController {
         model.put("path", "user-add");
         model.put("action", "add");
         model.put("pathAction", relativePath+"/add");
-        model.put("user", new User());
+        User user = new User();
+        user.setRole(roleService.getByKey(2));
+        model.put("user", user);
 
         return "backend/user-add";
     }
@@ -129,7 +131,7 @@ public class UserController extends MainController {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public String processUpdatePage(
             @Validated(value = {Default.class, AdvancedValidation.CheckEmail.class}) @ModelAttribute("user") User user, BindingResult result,
-            @RequestParam("flagReset") boolean flagReset,
+            @RequestParam(value = "flagReset", required = false) boolean flagReset,
             ModelMap model, RedirectAttributes redirectAttributes) {
 
         try {

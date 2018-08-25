@@ -12,7 +12,7 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 
 @Component
-public class UniqueProductCategorySlugValidator implements ConstraintValidator<UniqueProductCategorySlug, Object>{
+public class UniqueProductCategorySlugValidator implements ConstraintValidator<UniqueProductCategorySlug, ProductCategory>{
 
 	@Autowired
 	ProductCategoryService productCategoryService;
@@ -23,13 +23,10 @@ public class UniqueProductCategorySlugValidator implements ConstraintValidator<U
 	}
 
 	@Override
-	public boolean isValid(Object candidate, ConstraintValidatorContext context) {
+	public boolean isValid(ProductCategory productCategory, ConstraintValidatorContext context) {
 		
-		ProductCategory productCategory = (ProductCategory) candidate;
 		ProductCategory productCategory1 = productCategoryService.getByDeclaration("slug", productCategory.getSlug());
-		boolean isValid = false;
-		if(productCategory1 == null || StringUtils.equals(productCategory1.getSlug(), productCategory.getBeforeSlug())) isValid = true;
-		else isValid = false;
+		boolean isValid = productCategory1 == null || (productCategory1.getId().equals(productCategory.getId()) && StringUtils.equals(productCategory1.getSlug(), productCategory.getBeforeSlug()));
         if ( !isValid ) {
         	context.disableDefaultConstraintViolation();
         	context

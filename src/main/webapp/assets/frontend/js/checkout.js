@@ -449,6 +449,10 @@
         let _this = this;
 
         if(!event.products || event.products.length === 0){
+            if(_this.totalCart.numbers.totalPaid > event.maxPrice || _this.totalCart.numbers.totalPaid < event.minPrice){
+                alert("Order value is not in the price range of the event.", "warning");
+                return;
+            }
             if(_this.totalCart.sale.length === 0)
                 _this.childElement.cartTable.find(".totalPaidShip").closest("tr").before("<tr><td class='text-right' colspan='2'>Sale</td><td class='text-right sale' colspan='3'></td></tr>");
             _this.totalCart.sale =  _this.childElement.cartTable.find(".sale");

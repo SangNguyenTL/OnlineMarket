@@ -14,10 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -74,5 +71,24 @@ public class ApiEventController {
 
         responseResult.setError(error);
         return ResponseEntity.ok(responseResult);
+    }
+
+    @RequestMapping(
+            value = "/check-unique-code", produces = MediaType.APPLICATION_JSON_VALUE,
+            method = {RequestMethod.GET, RequestMethod.POST}
+    )
+    public ResponseEntity<?> checkCodeUnique(@RequestParam("code") String code, @RequestParam(value = "id", required = false) Integer id){
+
+        boolean valid = true;
+        Event event = eventService.getByDeclaration("code", code);
+        if (event == null)
+            valid = false;
+        else if(id != null){
+            Event oldEvent = eventService.getByKey(id);
+            if (oldEvent != null && oldEvent.equals(event))
+                valid = false;
+        }
+
+        return ResponseEntity.ok(new ResponseResult(valid, ""));
     }
 }
