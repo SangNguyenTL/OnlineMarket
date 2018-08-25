@@ -8,11 +8,11 @@
         root.GalleryManager = factory(root.jQuery);
     }
 }(this, function ($) {
-    var pluginName = "galleryManager";
+    let pluginName = "galleryManager";
 
     function GalleryManager(element, options) {
         if (!window.Mustache || !window.jQuery) return;
-        var defaults = {
+        let defaults = {
                 title: false,
                 filterType: [{
                     type: 'site',
@@ -118,7 +118,7 @@
 
     GalleryManager.prototype.onSelectTypeDate = function (e) {
         this.selectTypeElement.off('change', this.onSelectTypeDate);
-        var element = $(e.currentTarget);
+        let element = $(e.currentTarget);
         switch (element.val()) {
             case 'day':
                 this.datePickerElement.data('DateTimePicker').viewMode('days');
@@ -141,7 +141,7 @@
     GalleryManager.prototype.onDelete = function (e) {
         this.actionDeleteElement.off('click', this.onDelete);
         if (!this.settings.actionDelete) return;
-        var box = $(e.target).closest('.image-item');
+        let box = $(e.target).closest('.image-item');
         $.post(this.settings.actionDelete+'/'+ $(e.currentTarget).data('id'), {}, function (result) {
             if (!result.error)
                 box.remove();
@@ -151,7 +151,7 @@
     };
 
     GalleryManager.prototype.selectImageElement = function (e) {
-        var element = $(e.currentTarget),
+        let element = $(e.currentTarget),
             box = element.find(".box");
         this.imageElement.off('click', this.selectImageElement);
         if (box.hasClass('info')) {
@@ -162,11 +162,13 @@
             box.addClass("info");
             this.imageLink = box.data("path");
         }
+        this.inputElment.val(this.imageLink);
+        this.inputElment.closest(".box-image").find("img").attr("src", PATH_IMAGE +this.imageLink);
         this.imageElement.on('click', this.selectImageElement);
     };
 
     GalleryManager.prototype.loadImage = function () {
-        var templateHtml = this.templateImage,
+        let templateHtml = this.templateImage,
             render = this.render,
             _this = this;
         if(this.pending) return;
@@ -224,7 +226,7 @@
                 _this.pending = false;
                 if(!_this.spinner.hasClass("hide")) _this.spinner.addClass("hide");
                 _this.listen();
-                var clipboard = new Clipboard('.clipboard-btn');
+                let clipboard = new Clipboard('.clipboard-btn');
                 clipboard.on('success', function(e) {
                     alert('Link was saved to clipboard!');
                 });
@@ -237,9 +239,9 @@
 
     GalleryManager.prototype.render = function (data, template, target, isAppend) {
         if (!Array.isArray(template)) return false;
-        var resultTemplate = template.join("\n");
+        let resultTemplate = template.join("\n");
         Mustache.parse(resultTemplate);
-        var rendered = Mustache.render(resultTemplate, data);
+        let rendered = Mustache.render(resultTemplate, data);
         if (isAppend)
             target.append(rendered);
         else target.html(rendered);

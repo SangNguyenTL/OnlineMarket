@@ -554,7 +554,10 @@
                     if(data.error)
                         if(data.message !== "User not found")
                             alert(data.message, "warning");
-                        else window.location.href = PATH+"login?error=expired";
+                        else {
+                            alert("Session invalid", "warning");
+                            window.location.reload()
+                        }
                     else{
                         let notifyA = $(".notification-a"),
                             count = Number.parseInt(data.message);

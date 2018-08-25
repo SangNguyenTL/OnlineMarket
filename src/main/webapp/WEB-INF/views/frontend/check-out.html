@@ -12,6 +12,7 @@
 <!--/*@thymesVar id="relativePath" type="java.lang.String"*/-->
 <!--/*@thymesVar id="pageTitle" type="java.lang.String"*/-->
 <!--/*@thymesVar id="pathAction" type="java.lang.String"*/-->
+<!--/*@thymesVar id="totalWeight" type="java.lang.Integer"*/-->
 <!--/*@thymesVar id="error" type="java.util.List<java.lang.String>"*/-->
 
 <head>
@@ -61,11 +62,16 @@
                                         <option th:each="addressBook : ${addressList.list}" th:value="${{addressBook}}" th:text="${addressBook.address+' - '+addressBook.province.name}"></option>
                                     </select>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group text-center">
                                     <!-- Button trigger modal -->
-                                    <a data-toggle="modal" data-target="#addAddress">
-                                        Add new address...
-                                    </a>
+                                    <div class="btn-group btn-group-sm">
+                                        <a class="btn btn-outline b-info b-a" data-toggle="modal" data-target="#addAddress">
+                                            Add new address
+                                        </a>
+                                        <a class="btn btn-outline b-success b-a refreshAddress">
+                                            Refresh address list
+                                        </a>
+                                    </div>
                                 </div>
                             </fieldset>
                         </div>
@@ -77,13 +83,17 @@
                         <div class="panel-heading">
                             <h4 class="panel-title"><i class="fa fa-ticket"></i> Use gift Code</h4>
                         </div>
-                        <div class="panel-body">
-                            <label for="input-coupon" class="col-sm-3 control-label">Enter gift code</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="input-coupon" placeholder="Enter your code here" value="" name="coupon">
-                                <span class="input-group-btn">
-                                    <a class="btn btn-primary" data-loading-text="Loading..." id="button-coupon">Apply Coupon</a>
-                                </span>
+                        <div class="panel-body form-horizontal">
+                            <div class="form-group">
+                                <label for="input-coupon" class="col-sm-3 form-control-label">Enter gift code</label>
+                                <div class="col-sm-9">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="input-coupon" placeholder="Enter your code here" value="" name="coupon">
+                                        <span class="input-group-btn">
+                                            <a class="btn btn-primary" data-loading-text="Loading..." id="button-coupon">Apply Coupon</a>
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -109,7 +119,7 @@
                                 </thead>
                                 <tbody>
                                 <th:block th:each="orderDetailOne,status : *{orderDetails}">
-                                    <tr th:class="${'product-'+orderDetailOne.product.id}">
+                                    <tr th:attr="data-id=${orderDetailOne.product.id}" th:class="${'product-'+orderDetailOne.product.id}">
                                         <td class="text-center" rowspan="2">
                                             <a th:href="@{'/product/'+${orderDetailOne.product.slug}}">
                                                 <img th:src="@{${orderDetailOne.product.featureImage}}" th:alt="${orderDetailOne.product.name}" th:title="${orderDetailOne.product.name}" class="img-thumbnail">
@@ -117,7 +127,9 @@
                                         </td>
                                         <td class="text-left product-name" rowspan="2">
                                             <p><a th:href="@{'/product/'+${orderDetailOne.product.slug}}" th:text="${orderDetailOne.product.name}">Xitefun Causal Wear Fancy Shoes</a></p>
-                                            <p th:each="event : ${orderDetailOne.product.events}" th:text="${event.name}"></p>
+                                            <ul class="simple-ul eventList">
+                                                <li th:each="event : ${orderDetailOne.product.events}" ><a th:href="@{'/event/'+${event.id}}" th:text="${event.name}"></a></li>
+                                            </ul>
                                         </td>
                                         <td class="text-left">
                                             <div class="input-group btn-block" style="max-width: 200px;">
@@ -136,11 +148,11 @@
                                             <p class="price-new unitPrice" th:text="${#numbers.formatDecimal(orderDetailOne.product.price, 0, 'WHITESPACE', 0, 'NONE')}"></p>
                                         </td>
                                         <td class="text-right" th:if="${orderDetailOne.product.newPrice} ne ${orderDetailOne.product.price}">
-                                            <p class="price-old totalPriceRow" th:text="${#numbers.formatDecimal(orderDetailOne.product.price * orderDetailOne.productQuantity, 0, 'WHITESPACE', 0, 'NONE')}"></p>
-                                            <p class="price-new totalPriceRow" th:text="${#numbers.formatDecimal(orderDetailOne.product.newPrice * orderDetailOne.productQuantity, 0, 'WHITESPACE', 0, 'NONE')}"></p>
+                                            <p class="price-old totalPrice" th:text="${#numbers.formatDecimal(orderDetailOne.product.price * orderDetailOne.productQuantity, 0, 'WHITESPACE', 0, 'NONE')}"></p>
+                                            <p class="price-new totalPrice" th:text="${#numbers.formatDecimal(orderDetailOne.product.newPrice * orderDetailOne.productQuantity, 0, 'WHITESPACE', 0, 'NONE')}"></p>
                                         </td>
                                         <td class="text-right" th:unless="${orderDetailOne.product.newPrice} ne ${orderDetailOne.product.price}">
-                                            <p class="price-new totalPriceRow" th:text="${#numbers.formatDecimal(orderDetailOne.product.price * orderDetailOne.productQuantity, 0, 'WHITESPACE', 0, 'NONE')}"></p>
+                                            <p class="price-new totalPrice" th:text="${#numbers.formatDecimal(orderDetailOne.product.price * orderDetailOne.productQuantity, 0, 'WHITESPACE', 0, 'NONE')}"></p>
                                         </td>
                                     </tr>
                                     <tr>
@@ -154,20 +166,26 @@
                                 <tfoot>
                                 <tr>
                                     <td class="text-right" colspan="2"><strong>Sub-Total price:</strong></td>
-                                    <td class="text-right totalPaidReal" colspan="3" th:text="*{totalPaidReal}"></td>
+                                    <td class="text-right totalPaidReal" colspan="3" th:text="${#numbers.formatDecimal( order.totalPaid, 0, 'WHITESPACE', 0, 'NONE')}"></td>
                                 </tr>
                                 <tr>
-                                    <td class="text-right" colspan="2"><strong>Fee ship (w x f):</strong></td>
-                                    <td class="text-right feeShip">0</td>
-                                    <td class="text-right totalWeight">0</td>
-                                    <td class="text-right totalShip" th:text="*{totalShipping}"></td>
+                                    <td class="text-right" colspan="2"><strong>Fee ship (Fee x kg):</strong></td>
+                                    <td th:unless="*{address != null}" class="text-right feeShip">0</td>
+                                    <td th:if="*{address != null}" class="text-right feeShip" th:text="${#numbers.formatDecimal(order.address.province.shippingFee, 0, 'WHITESPACE',0,'NONE')}">0</td>
+                                    <td class="text-right totalWeight" th:text="${#numbers.formatDecimal(totalWeight, 0, 'WHITESPACE', 0, 'NONE')}">0</td>
+                                    <td class="text-right totalShip" th:text="${#numbers.formatDecimal(order.totalShipping, 0, 'WHITESPACE', 0, 'NONE')}"></td>
                                 </tr>
                                 <tr>
                                     <td class="text-right" colspan="2"><strong>Total:</strong></td>
-                                    <td class="text-right totalPaidAndShip" colspan="3">$910.00</td>
+                                    <td class="text-right totalPaidShip" colspan="3" th:text="${#numbers.formatDecimal(order.totalPaidReal+order.totalShipping , 0, 'WHITESPACE',0, 'NONE')}">0</td>
                                 </tr>
                                 </tfoot>
                             </table>
+                        </div>
+                        <div class="buttons">
+                            <div class="pull-right">
+                                <input type="button" class="btn btn-primary" id="button-confirm" value="Confirm Order">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -177,7 +195,7 @@
             <div class="modal fade" id="addAddress" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                 <div class="modal-dialog" role="document">
 
-                    <form id="addressForm" parsley-validat>
+                    <form id="addressForm">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>

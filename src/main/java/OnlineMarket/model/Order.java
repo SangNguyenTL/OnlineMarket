@@ -3,18 +3,9 @@ package OnlineMarket.model;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
+import javax.persistence.*;
+
 import static javax.persistence.GenerationType.IDENTITY;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "tb_order", schema = "dbo", catalog = "SmartMarket")
@@ -27,12 +18,13 @@ public class Order implements java.io.Serializable {
 	private Long totalPaid;
 	private Long totalPaidReal;
 	private Integer totalProduct;
-	private Integer totalShipping;
+	private Long totalShipping;
 	private Byte status;
 	private Date invoiceDate;
 	private Date createDate;
 	private Date updateDate;
 	private Set<OrderDetail> orderDetails = new HashSet<>(0);
+	private Set<Event> events = new HashSet<>(0);
 
 	public Order() {
 	}
@@ -101,11 +93,11 @@ public class Order implements java.io.Serializable {
 	}
 
 	@Column(name = "total_shipping")
-	public Integer getTotalShipping() {
+	public Long getTotalShipping() {
 		return this.totalShipping;
 	}
 
-	public void setTotalShipping(Integer totalShipping) {
+	public void setTotalShipping(Long totalShipping) {
 		this.totalShipping = totalShipping;
 	}
 
@@ -155,6 +147,18 @@ public class Order implements java.io.Serializable {
 
 	public void setOrderDetails(Set<OrderDetail> orderDetails) {
 		this.orderDetails = orderDetails;
+	}
+
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "tb_event_order", schema = "dbo", catalog = "SmartMarket", joinColumns = {
+			@JoinColumn(name = "order_id", nullable = false, updatable = false) }, inverseJoinColumns = {
+			@JoinColumn(name = "event_id", nullable = false, updatable = false) })
+	public Set<Event> getEvents() {
+		return this.events;
+	}
+
+	public void setEvents(Set<Event> events) {
+		this.events = events;
 	}
 
 }

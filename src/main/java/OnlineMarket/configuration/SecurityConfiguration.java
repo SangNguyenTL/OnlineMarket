@@ -92,10 +92,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 						"/admin/**",
 						"/api/rating/**",
 						"/api/menu/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
-				.antMatchers("/api/image/**", "/user/**").authenticated()
+				.antMatchers(
+						"/api/image/**",
+						"/api/address/**",
+						"/api/event/**",
+						"/user/**"
+						).authenticated()
 				.anyRequest().permitAll();
 
-        http.formLogin()
+        http.httpBasic()
+                .and()
+                .formLogin()
 				.loginPage("/login")
 				.usernameParameter("email")
 				.successHandler(successHandler)

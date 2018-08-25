@@ -92,21 +92,16 @@
             });
         }
 
-        var pickElement = $("#modal-image-gallery [data-action=yes]");
+        let pickElement = $("[data-target=#modal-image-gallery]");
 
         if(pickElement.length === 1){
-            var galleryData = {},
+            let galleryData = {},
                 actionModalElement = $("[data-toggle=modal]");
             actionModalElement.on("click", function(){
-                var dataInputPath = $(this).data("targetInput");
+                let dataInputPath = $(this).data("targetInput");
                 galleryData = $("[ui-jp=galleryManager]").data("galleryManager");
                 galleryData.inputElment = $("#"+dataInputPath);
             });
-            pickElement.on("click", function(){
-                if(galleryData.inputElment)
-                    galleryData.inputElment.val(galleryData.imageLink);
-                galleryData.inputElment.closest(".box-image").find("img").attr("src", window.location.origin+PATH+galleryData.imageLink);
-            })
         }
     }
     initPar();

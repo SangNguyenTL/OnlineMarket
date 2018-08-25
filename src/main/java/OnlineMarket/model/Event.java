@@ -24,6 +24,8 @@ import javax.validation.constraints.Size;
 
 import OnlineMarket.util.group.AdvancedValidation;
 import OnlineMarket.validation.EventValidate;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -33,6 +35,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Entity
 @Table(name = "tb_event", schema = "dbo", catalog = "SmartMarket")
 @EventValidate(groups =  AdvancedValidation.class)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Event implements java.io.Serializable {
 
 	/**
@@ -74,7 +77,8 @@ public class Event implements java.io.Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "publisher_id", nullable = false)
-	public User getPublisher() {
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    public User getPublisher() {
 		return publisher;
 	}
 
@@ -229,7 +233,8 @@ public class Event implements java.io.Serializable {
 	@JoinTable(name = "tb_event_product", schema = "dbo", catalog = "SmartMarket", joinColumns = {
 			@JoinColumn(name = "event_id", nullable = false, updatable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "product_id", nullable = false, updatable = false) })
-	public Set<Product> getProducts() {
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    public Set<Product> getProducts() {
 		return this.products;
 	}
 

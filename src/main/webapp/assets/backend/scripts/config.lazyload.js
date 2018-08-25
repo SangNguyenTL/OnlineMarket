@@ -7,7 +7,7 @@ window.searchProduct = {
         url: PATH+'api/product/search',
         dataType: 'json',
         data: function (params) {
-            var query = {
+            let query = {
                 q: params.term,
                 type: 'public',
                 page: params.page || 1
@@ -28,8 +28,8 @@ window.searchProduct = {
 };
 
 window.sendFile = function(files){
-    var data = new FormData();
-    for(var i = 0; i < files.length; i++){
+    let data = new FormData();
+    for(let i = 0; i < files.length; i++){
         data.append("files["+i+"]", files[i]);
     }
     data.append("uploadType", uploadType);
@@ -42,7 +42,7 @@ window.sendFile = function(files){
         contentType: false,
         processData: false,
         success: function(result) {
-            if(typeof result == "object"){
+            if(typeof result === "object"){
                 $.each(result, function (i, v) {
                     window.obList.$summernote.summernote('insertImage', window.location.origin + PATH + v.path, v.name);
                 })
@@ -53,7 +53,7 @@ window.sendFile = function(files){
         }
     });
 };
-var MODULE_CONFIG = {
+let MODULE_CONFIG = {
     easyPieChart : [
         PATH + 'assets/backend/libs/jquery/jquery.easy-pie-chart/dist/jquery.easypiechart.fill.js' ],
     sparkline : [

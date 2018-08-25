@@ -4,6 +4,6 @@
 	padding: 0;
 	font-size: 85%;
 }
-.form-control.parsley-error{
+.form-control.parsley-error, .parsley-error.input-group input{
 	border-color: #ff0000;
 }

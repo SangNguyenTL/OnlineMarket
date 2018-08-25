@@ -13,17 +13,14 @@ public class ResponseResult {
 
 	private ValidationErrorDTO validationErrorDTO;
 
-    public List<?>  getList() {
-        return list;
-    }
+    private List<?> list;
 
-    public void setList(List<?>  list) {
-        this.list = list;
+    public ResponseResult() {
+        list = new ArrayList<>();
     }
-
-    private List<?> list = new ArrayList<>();
 
     public ResponseResult(boolean error) {
+        super();
         this.error = error;
     }
 
@@ -34,11 +31,13 @@ public class ResponseResult {
 	}
 
 	public ResponseResult(boolean error, ValidationErrorDTO validationErrorDTO) {
+        super();
 		this.error = error;
 		this.validationErrorDTO = validationErrorDTO;
 	}
 
 	public ResponseResult(boolean error, List<?>  list) {
+        super();
 		this.error = error;
 		this.list = list;
 	}
@@ -66,4 +65,12 @@ public class ResponseResult {
 	public void setValidationErrorDTO(ValidationErrorDTO validationErrorDTO) {
 		this.validationErrorDTO = validationErrorDTO;
 	}
+
+    public List<?>  getList() {
+        return list;
+    }
+
+    public void setList(List<?>  list) {
+        this.list = list;
+    }
 }

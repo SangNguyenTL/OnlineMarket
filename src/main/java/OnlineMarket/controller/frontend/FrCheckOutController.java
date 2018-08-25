@@ -3,6 +3,7 @@ package OnlineMarket.controller.frontend;
 import OnlineMarket.controller.MainController;
 import OnlineMarket.form.filter.FilterForm;
 import OnlineMarket.form.product.ProductDetail;
+import OnlineMarket.model.Address;
 import OnlineMarket.model.Order;
 import OnlineMarket.model.OrderDetail;
 import OnlineMarket.model.OrderDetailId;
@@ -71,6 +72,13 @@ public class FrCheckOutController extends MainController {
 
         }
         Order order = new Order();
+        long totalPaid = 0;
+        long totalPaidReal = 0;
+        long totalShipping = 0;
+        long totalProduct = 0;
+        long totalWeight = 0;
+
+
         if(productDetailList.size() > 0){
             for(ProductDetail productDetail : productDetailList){
                 FrontendProduct product = productService.convertProductToFrProduct(productService.getByKey(productDetail.getId()));
@@ -81,7 +89,10 @@ public class FrCheckOutController extends MainController {
                 }else if(product.getQuantity() == 0 || product.getState().equals(ProductStatus.OUTOFSTOCK.getId())){
                     error.add("Product "+product.getName()+" has stopped selling");
                 }else {
-                    if(product.getQuantity() < productDetail.getQuantity()) {
+                    if(10 < productDetail.getQuantity()) {
+                        productDetail.setQuantity(10);
+                        error.add("You only buy up to 10 items each");
+                    }else if( productDetail.getQuantity() > product.getQuantity() && productDetail.getQuantity() < 10){
                         productDetail.setQuantity(product.getQuantity());
                         error.add("Product "+product.getName()+"has only "+product.getQuantity()+" item(s)");
                     }
@@ -90,10 +101,21 @@ public class FrCheckOutController extends MainController {
                     orderDetail.setProduct(product);
                     orderDetail.setProductQuantity(productDetail.getQuantity());
                     order.getOrderDetails().add(orderDetail);
+                    totalProduct = totalProduct + orderDetail.getProductQuantity();
+                    totalWeight = totalWeight + product.getWeight() * orderDetail.getProductQuantity();
+                    totalPaid = totalPaid + product.getPrice();
+                    totalPaidReal = totalPaidReal + product.getNewPrice();
+                    order.getEvents().addAll(product.getEvents());
                 }
+                if(order.getAddress() != null)
+                    totalShipping = (long) (Math.floor((double) totalWeight/1000) * order.getAddress().getProvince().getShippingFee());
+                order.setTotalPaid(totalPaid);
+                order.setTotalPaidReal(totalPaidReal);
+                order.setTotalShipping(totalShipping);
 
             }
         }
+        modelMap.put("totalWeight", totalWeight);
         modelMap.put("order", order);
         modelMap.put("error", error);
 

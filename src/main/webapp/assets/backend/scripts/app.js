@@ -37,7 +37,7 @@
         }
     };
 
-    var setting = 'jqStorage-'+app.name+'-Setting',
+    let setting = 'jqStorage-'+app.name+'-Setting',
         storage = $.localStorage;
 
     if( storage.isEmpty(setting) ){
@@ -45,8 +45,8 @@
     }else{
         app.setting = storage.get(setting);
     }
-    var v = window.location.search.substring(1).split('&');
-    for (var i = 0; i < v.length; i++)
+    let v = window.location.search.substring(1).split('&');
+    for (let i = 0; i < v.length; i++)
     {
         var n = v[i].split('=');
         app.setting[n[0]] = (n[1] == "true" || n[1]== "false") ? (n[1] == "true") : n[1];
@@ -226,7 +226,7 @@
     }, (5 * 1000));
 
     $(document).on('click', "button.activate-comment", function(e) {
-        var element = $(e.target), id = element.data("id"),
+        let element = $(e.target), id = element.data("id"),
             container = element.closest("td");
         if(!id) return;
         if(window.pending){

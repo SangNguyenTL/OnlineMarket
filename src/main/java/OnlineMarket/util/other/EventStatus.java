@@ -1,17 +1,15 @@
 package OnlineMarket.util.other;
 
-public enum  NumStatePost {
+public enum EventStatus {
 
     ACTIVE(0,"Active"),
-    INACTIVE(1,"Inactive"),
-    DELETED(2,"Deleted"),
-    LOCKED(3,"Locked");
+    INACTIVE(1,"Locked");
 
     private Integer id;
 
     private String state;
 
-    NumStatePost(final Integer id,final String state){
+    EventStatus(final Integer id, final String state){
         this.id = id;
         this.state = state;
     }

@@ -10,7 +10,7 @@
 <!--/*@thymesVar id="postType" type="java.lang.String"*/-->
 <!--/*@thymesVar id="success" type="java.lang.Boolean"*/-->
 <!--/*@thymesVar id="filterForm" type="OnlineMarket.form.filter.FilterForm"*/-->
-<!--/*@thymesVar id="state" type="OnlineMarket.util.other.NumStatePost"*/-->
+<!--/*@thymesVar id="state" type="OnlineMarket.util.other.PostStatus"*/-->
 <!--/*@thymesVar id="result" type="OnlineMarket.result.ResultObject<OnlineMarket.model.Post>"*/-->
 <!--/*@thymesVar id="roles" type="java.util.List<OnlineMarket.model.Role>"*/-->
 <!--/*@thymesVar id="postCategoryList" type="java.util.List<OnlineMarket.model.PostCategory>"*/-->
@@ -40,7 +40,7 @@
                     <div class="col-sm-3">
                         <select class="form-control" th:field="*{groupSearch['status']}">
                             <option value="">Status...</option>
-                            <option th:each="state : ${T(OnlineMarket.util.other.NumStatePost).values()}"
+                            <option th:each="state : ${T(OnlineMarket.util.other.PostStatus).values()}"
                                     th:value="${state.id}" th:text="${state.state}"></option>
                         </select>
                     </div>
