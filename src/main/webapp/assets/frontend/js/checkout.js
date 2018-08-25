@@ -184,6 +184,7 @@
             }
         };
         _this.totalCart.numbers.provinceFeeShip = Number.parseInt(_this.totalCart.feeShip.text().replace(/ /g, ''));
+        this.childElement.productRow = this._element.find("tr[class*=product-]");
         this.childElement.productRow.each((i, v) => {
             let el = $(v), id = el.attr("class").match(/product-(\d+)/)[1];
 
@@ -325,24 +326,36 @@
         });
     };
 
-    CheckOut.prototype.removeProduct = (e, productId) => {
-        let productContainer;
+    CheckOut.prototype.removeProduct = function(e, productId) {
+        let productContainer, _this = this;
         if(e){
             let target = $(e.target);
             productContainer = target.closest("tr");
             if(productContainer.length === 0) return;
             productId = Number.parseInt(productContainer.data('id')) || false;
         }else if(productId){
-            productContainer = this.childElement.cartTable.find('.product-'+productId);
+            productContainer = _this.childElement.cartTable.find('.product-'+productId);
         }
         if(!isNaN(productId))
-            delete this.cart[productId];
+            delete _this.cart[productId];
         simpleCart.find(productId) && simpleCart.find(productId).remove();
         simpleCart.update();
         productContainer.next("tr").remove();
         productContainer.remove();
-        this.processCartRow();
-        if(simpleCart.quantity() === 0) window.location.href = "/";
+        for(let i = 0; i < _this._element.find(".listEvent").length; i++){
+            let el = $(_this._element.find(".listEvent")[0]), event = el.data("event");
+            _this.removeEvent(event);
+        }
+        _this.processCartRow();
+        for(let i = 0; i < _this._element.find(".listEvent").length; i++){
+            let el = $(_this._element.find(".listEvent")[0]), event = el.data("event");
+            _this.addEvent(event);
+        }
+        _this.processCartRow();
+        if(simpleCart.quantity() === 0){
+            alert("Cart is empty.");
+            window.location.href = "/";
+        }
     };
 
     CheckOut.prototype.checkCode = function (e){
@@ -446,8 +459,11 @@
             _this.totalCart.numbers.sale = saleNum;
             _this.totalCart.sale.text(saleNum.format(0, 3, ' '))
         }else{
+            let count = 0;
             $.each(event.products, (i,v) => {
-                let id = v.id, originalPrice = v.price, quantity = _this.cart[id].numbers.quantity, unitPrice = _this.cart[id].numbers.unitPrice, totalPrice = _this.cart[id].numbers.totalPrice, originalTotalPrice = originalPrice * quantity;
+                let id = v.id;
+                if(!_this.cart[id]) return;
+                let originalPrice = v.price, quantity = _this.cart[id].numbers.quantity, unitPrice = _this.cart[id].numbers.unitPrice, totalPrice = _this.cart[id].numbers.totalPrice, originalTotalPrice = originalPrice * quantity;
                 _this.cart[id].eventList.append("<li class='event-"+event.id+"'><a href='"+PATH+"event/"+event.id+"'>"+event.name+"</a></li>");
                 if(_this.cart[id].unitPriceOld.length === 0){
                     _this.cart[id].unitPrice.before("<p class='price-old unitPrice'>"+originalPrice.format(0, 3, " ")+"</p>");
@@ -462,7 +478,12 @@
                     _this.cart[id].unitPrice.html((unitPrice - Math.floor(originalPrice/100 * event.percentValue)).format(0, 3, " "));
                     _this.cart[id].totalPrice.html((totalPrice  - Math.floor(originalPrice/100 * event.percentValue) * quantity).format(0, 3, " "));
                 }
-            })
+                count++;
+            });
+            if(count ===0){
+                alert("There are no products that match '"+event.code+"'.", "warning");
+                _this._element.find("#event-"+event.id).remove();
+            }
         }
     };
 
@@ -479,7 +500,9 @@
             else _this.totalCart.sale.closest("tr").remove();
         }else{
             $.each(event.products, (i,v) => {
-                let id = v.id, unitPrice = _this.cart[id].numbers.unitPrice, totalPrice = _this.cart[id].numbers.totalPrice,
+                let id = v.id;
+                if(!_this.cart[id]) return;
+                let unitPrice = _this.cart[id].numbers.unitPrice, totalPrice = _this.cart[id].numbers.totalPrice,
                     quantity =_this.cart[id].numbers.quantity,
                     originalPrice = v.price, originalTotalPrice = originalPrice * quantity;
                 _this.cart[id].eventList.find(".event-"+event.id).remove();
