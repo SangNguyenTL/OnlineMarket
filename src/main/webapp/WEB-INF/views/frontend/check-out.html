@@ -7,6 +7,7 @@
 <!--/*@thymesVar id="addressBook" type="OnlineMarket.model.Address"*/-->
 <!--/*@thymesVar id="provinceList" type="OnlineMarket.result.ResultObject<OnlineMarket.model.Province>"*/-->
 <!--/*@thymesVar id="order" type="OnlineMarket.model.Order"*/-->
+<!--/*@thymesVar id="success" type="OnlineMarket.model.Order"*/-->
 <!--/*@thymesVar id="currentUser" type="OnlineMarket.model.User"*/-->
 <!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
 <!--/*@thymesVar id="relativePath" type="java.lang.String"*/-->
@@ -14,6 +15,7 @@
 <!--/*@thymesVar id="pathAction" type="java.lang.String"*/-->
 <!--/*@thymesVar id="totalWeight" type="java.lang.Integer"*/-->
 <!--/*@thymesVar id="error" type="java.util.List<java.lang.String>"*/-->
+<!--/*@thymesVar id="totalSale" type="java.lang.Integer*/-->
 
 <head>
 </head>
@@ -38,14 +40,20 @@
                 </ul>
             </div>
         </div>
-        <div id="contentNone" th:if="${order.orderDetails.size() == 0}">
+        <div id="contentSuccess" th:if="${success}">
+            <div class="text-center h1 m-a-lg p-a-lg b-a b-success">
+                Your order has been submitted, we will review and send the results to you as soon as possible. Thank you for using our service.<br/>
+                <a th:href="@{'/user/'+curretnUser.id+'/order/'+success.id}">View info your order</a>
+            </div>
+        </div>
+        <div id="contentNone" th:if="${success == null && order.orderDetails.size() == 0}">
             <div class="text-center h1 m-a-lg p-a-lg b-a b-danger">
                 Cart is empty, please select the product, that you want before checkout.<br/>
                 <a th:href="@{/}">Back Home</a>
 
             </div>
         </div>
-        <div id="content" th:if="${order.orderDetails.size() > 0}">
+        <div id="content" th:if="${success == null && order.orderDetails.size() > 0}">
             <form th:object="${order}" th:action="${pathAction}" method="POST">
             <div class="row">
                 <div class="col-sm-4">
@@ -55,12 +63,15 @@
                         </div>
                         <div class="panel-body">
                             <fieldset class="required">
-                                <div class="form-group">
+                                <div class="form-group required">
                                     <label class="control-label">Select Address</label>
-                                    <select class="form-control" th:field="*{address}">
+                                    <select th:classappend="${#fields.hasErrors('address')} ? 'parsley-error'" class="form-control" th:field="*{address}">
                                         <option value="">Choice address...</option>
                                         <option th:each="addressBook : ${addressList.list}" th:value="${{addressBook}}" th:text="${addressBook.address+' - '+addressBook.province.name}"></option>
                                     </select>
+                                    <span class="help-block"
+                                            th:if="${#fields.hasErrors('address')}"
+                                            th:errors="*{address}"></span>
                                 </div>
                                 <div class="form-group text-center">
                                     <!-- Button trigger modal -->
@@ -92,6 +103,15 @@
                                         <span class="input-group-btn">
                                             <a class="btn btn-primary" data-loading-text="Loading..." id="button-coupon">Apply Coupon</a>
                                         </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div th:each="event,status : *{events}" th:if="${event.getCode() != null}" th:id="${'event-'+event.id}" th:attr="data-id=${event.id}" class="form-group listEvent">
+                                <label class="form-control-label col-sm-6"><a th:href="@{'/event/'+${event.id}}" th:text="${event.name}">Information</a></label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <input class="form-control" readonly="readonly" type="text" th:field="*{events[__${status.index}__].code}">
+                                        <span class="input-group-btn"><a href="#" class="btn btn-danger removeCode"><i class="fa fa-close"></i></a></span>
                                     </div>
                                 </div>
                             </div>
@@ -128,12 +148,20 @@
                                         <td class="text-left product-name" rowspan="2">
                                             <p><a th:href="@{'/product/'+${orderDetailOne.product.slug}}" th:text="${orderDetailOne.product.name}">Xitefun Causal Wear Fancy Shoes</a></p>
                                             <ul class="simple-ul eventList">
-                                                <li th:each="event : ${orderDetailOne.product.events}" ><a th:href="@{'/event/'+${event.id}}" th:text="${event.name}"></a></li>
+                                                <li th:class="${'event-'+event.id}" th:each="event : ${orderDetailOne.product.events}" ><a th:href="@{'/event/'+${event.id}}" th:text="${event.name}"></a></li>
                                             </ul>
+                                            <th:block th:if="${#fields.hasErrors('orderDetails['+status.index+'].product')}">
+                                                <span class="help-block text-warning" th:errors="*{orderDetails[__${status.index}__].product}"></span>
+                                            </th:block>
+                                            <th:block th:if="${#fields.hasErrors('orderDetails['+status.index+'].productQuantity')}">
+                                                <span class="help-block text-warning" th:errors="*{orderDetails[__${status.index}__].productQuantity}"></span>
+                                            </th:block>
+
                                         </td>
                                         <td class="text-left">
                                             <div class="input-group btn-block" style="max-width: 200px;">
-                                                <input type="text" th:field="*{orderDetails[__${status.index}__].productQuantity}" th:value="${orderDetailOne.productQuantity}" class="form-control productQuantity" />
+                                                <input type="hidden" th:field="*{orderDetails[__${status.index}__].id.productId}"/>
+                                                <input type="text" th:field="*{orderDetails[__${status.index}__].productQuantity}" class="form-control productQuantity" />
                                                 <span class="input-group-btn">
                                                 <a data-toggle="tooltip" title="" class="btn btn-primary updateProduct" data-original-title="Update"><i class="fa fa-refresh"></i></a>
                                                 <a data-toggle="tooltip" title="" class="btn btn-danger removeProduct" data-original-title="Remove"><i class="fa fa-times-circle"></i></a>
@@ -166,7 +194,7 @@
                                 <tfoot>
                                 <tr>
                                     <td class="text-right" colspan="2"><strong>Sub-Total price:</strong></td>
-                                    <td class="text-right totalPaidReal" colspan="3" th:text="${#numbers.formatDecimal( order.totalPaid, 0, 'WHITESPACE', 0, 'NONE')}"></td>
+                                    <td class="text-right totalPaidReal" colspan="3" th:text="${#numbers.formatDecimal( order.totalPaidReal, 0, 'WHITESPACE', 0, 'NONE')}"></td>
                                 </tr>
                                 <tr>
                                     <td class="text-right" colspan="2"><strong>Fee ship (Fee x kg):</strong></td>
@@ -175,6 +203,8 @@
                                     <td class="text-right totalWeight" th:text="${#numbers.formatDecimal(totalWeight, 0, 'WHITESPACE', 0, 'NONE')}">0</td>
                                     <td class="text-right totalShip" th:text="${#numbers.formatDecimal(order.totalShipping, 0, 'WHITESPACE', 0, 'NONE')}"></td>
                                 </tr>
+                                <tr th:if="${totalSale}">
+                                    <td class="text-right" colspan="2">Sale</td><td class="text-right sale" colspan="3" th:text="${#numbers.formatDecimal(totalSale, 0, 'WHITESPACE', 0, 'NONE')}">31 340 797</td></tr>
                                 <tr>
                                     <td class="text-right" colspan="2"><strong>Total:</strong></td>
                                     <td class="text-right totalPaidShip" colspan="3" th:text="${#numbers.formatDecimal(order.totalPaidReal+order.totalShipping , 0, 'WHITESPACE',0, 'NONE')}">0</td>
@@ -184,7 +214,7 @@
                         </div>
                         <div class="buttons">
                             <div class="pull-right">
-                                <input type="button" class="btn btn-primary" id="button-confirm" value="Confirm Order">
+                                <input type="submit" class="btn btn-primary" id="button-confirm" value="Confirm Order">
                             </div>
                         </div>
                     </div>

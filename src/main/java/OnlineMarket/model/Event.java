@@ -2,10 +2,7 @@ package OnlineMarket.model;
 // default package
 // Generated Jan 2, 2018 4:57:38 PM by Hibernate Tools 4.3.5.Final
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import javax.persistence.*;
 
@@ -31,7 +28,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Table(name = "tb_event", schema = "dbo", catalog = "SmartMarket")
 @EventValidate(groups =  AdvancedValidation.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@UniqueCodeEvent
+@UniqueCodeEvent(groups = AdvancedValidation.Advanced.class)
 public class Event implements java.io.Serializable {
 
 	/**
@@ -56,7 +53,7 @@ public class Event implements java.io.Serializable {
 	private Integer count;
 	private boolean show = true;
 	private String featureImage;
-	private Set<Product> products = new HashSet<>(0);
+	private List<Product> products = new ArrayList<>(0);
 
 	public Event() {
 	}
@@ -228,16 +225,16 @@ public class Event implements java.io.Serializable {
 		this.minPrice = minPrice;
 	}
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
 	@JoinTable(name = "tb_event_product", schema = "dbo", catalog = "SmartMarket", joinColumns = {
 			@JoinColumn(name = "event_id", nullable = false, updatable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "product_id", nullable = false, updatable = false) })
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    public Set<Product> getProducts() {
+    public List<Product> getProducts() {
 		return this.products;
 	}
 
-	public void setProducts(Set<Product> products) {
+	public void setProducts(List<Product> products) {
 		this.products = products;
 	}
 

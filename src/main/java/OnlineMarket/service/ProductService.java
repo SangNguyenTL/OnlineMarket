@@ -11,6 +11,7 @@ import OnlineMarket.util.exception.productCategory.ProductCategoryNotFoundExcept
 import OnlineMarket.view.FrontendProduct;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ProductService {
 
@@ -41,4 +42,6 @@ public interface ProductService {
     List<FrontendProduct> convertProductToFrProduct(List<Product> productList);
 
     FrontendProduct convertProductToFrProduct(Product product);
+
+    void processEventProduct(FrontendProduct frontendProduct, Set<Event> events);
 }

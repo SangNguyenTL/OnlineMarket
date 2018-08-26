@@ -527,15 +527,20 @@
     simpleCart.bind( 'update' , function(){
         let cart = JSON.parse(window.localStorage.getItem("simpleCart_items")) || {};
         if(typeof cart === "object"){
-            let cartCookies = [];
-            for(let key in cart){
-                if(cart[key].hasOwnProperty("quantity"))
-                    cartCookies.push({
-                        id: key,
-                        quantity: cart[key].quantity
-                    })
+            let cartCookies = $.cookie("cart");
+            if(typeof  cartCookies === "object" && cartCookies.length === 0 && !$.isEmptyObject(cart)){
+                window.localStorage.setItem("simpleCart_items", "{}");
+            }else{
+                cartCookies = [];
+                for(let key in cart){
+                    if(cart.hasOwnProperty(key) && cart[key].hasOwnProperty("quantity"))
+                        cartCookies.push({
+                            id: key,
+                            quantity: cart[key].quantity
+                        })
+                }
+                $.cookie("cart", cartCookies, {path:"/"});
             }
-            $.cookie("cart", cartCookies, {path:"/"});
         }
     });
 

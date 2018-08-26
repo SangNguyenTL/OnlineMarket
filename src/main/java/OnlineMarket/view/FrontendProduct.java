@@ -17,6 +17,20 @@ public class FrontendProduct extends Product {
     private String priceStr;
     private String newPriceStr;
 
+    public FrontendProduct(FrontendProduct frontendProduct){
+        for (Method getMethod : frontendProduct.getClass().getMethods()) {
+            if (getMethod.getName().startsWith("get")) {
+                try {
+                    Method setMethod = this.getClass().getMethod(getMethod.getName().replace("get", "set"), getMethod.getReturnType());
+                    setMethod.invoke(this, getMethod.invoke(frontendProduct, (Object[]) null));
+
+                } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ignore) {
+
+                }
+            }
+        }
+    }
+
     public FrontendProduct(Product parent){
         for (Method getMethod : parent.getClass().getMethods()) {
             if (getMethod.getName().startsWith("get")) {

@@ -1,9 +1,6 @@
 package OnlineMarket.service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import OnlineMarket.dao.AttributeValuesDao;
 import OnlineMarket.dao.CommentDao;
@@ -166,6 +163,7 @@ public class ProductServiceImpl implements ProductService {
         return frontendProductList;
     }
 
+    @Override
     public FrontendProduct convertProductToFrProduct(Product product){
         if(product == null) return null;
         FrontendProduct frontendProduct = new FrontendProduct(product);
@@ -173,11 +171,18 @@ public class ProductServiceImpl implements ProductService {
         frontendProduct.setNewPrice(product.getPrice());
         frontendProduct.setPriceStr(Help.format(product.getPrice()));
 
+        Set<Event> events =  frontendProduct.getEvents();
+        processEventProduct(frontendProduct, events);
+
+        return frontendProduct;
+    }
+
+    @Override
+    public void processEventProduct(FrontendProduct frontendProduct, Set<Event> events){
         Integer perSale = 0;
         long value = 0;
-        Set<Event> events =  frontendProduct.getEvents();
         for (Event event : events){
-            if(event.getMaxPrice() > frontendProduct.getPrice() && event.getMinPrice() < frontendProduct.getPrice()){
+            if(event.getMaxPrice() >= frontendProduct.getPrice() && event.getMinPrice() <= frontendProduct.getPrice()){
                 if(event.getPercentValue() != null)
                     perSale += event.getPercentValue();
                 if(event.getValue() != null)
@@ -185,7 +190,7 @@ public class ProductServiceImpl implements ProductService {
             }else events.remove(event);
         }
 
-        Double number = Math.ceil(frontendProduct.getPrice() - (frontendProduct.getPrice() * perSale/100d) - value);
+        Double number = Math.floor(frontendProduct.getPrice() - (frontendProduct.getPrice() * perSale/100d) - value);
         if(number <0) number = 0d;
 
         frontendProduct.setNewPrice(number.longValue());
@@ -195,7 +200,5 @@ public class ProductServiceImpl implements ProductService {
         if(perSale != 0)
             frontendProduct.setSale("-"+perSale.toString()+"%");
         else if(value != 0) frontendProduct.setSale("-"+Help.format(value));
-
-        return frontendProduct;
     }
 }
