@@ -50,7 +50,7 @@ public class ApiEventController {
                 }
                 int count = 0;
                 for(Product product : event.getProducts()){
-                    if(ArrayUtils.contains(checkCode.getProductIds(), product.getId()) && product.getPrice() > event.getMinPrice() && product.getPrice() < event.getMaxPrice()) count++;
+                    if(ArrayUtils.contains(checkCode.getProductIds(), product.getId()) && product.getPrice() >= event.getMinPrice() && product.getPrice() <= event.getMaxPrice()) count++;
                 }
                 if(count == 0 && event.getProducts().size() > 0 ){
                     throw new CustomException("Code is invalid");

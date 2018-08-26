@@ -106,10 +106,10 @@
                   </span>
                 </a>
                 <div class="dropdown-menu pull-right dropdown-menu-scale">
-                  <a class="dropdown-item" th:href="@{'/user'+${currentUser}}">Profile
+                  <a class="dropdown-item" th:href="@{'/user/'+${currentUser.id}}">Profile
                   </a>
 				  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item" th:href="@{'/user/'+${currentUser}+'/setting'}">Setting</a>
+                  <a class="dropdown-item" th:href="@{'/user/'+${currentUser.id}+'/setting'}">Setting</a>
 				  <a class="dropdown-item" th:href="@{/logout}">Log Out</a>
 				</div>
               </li>

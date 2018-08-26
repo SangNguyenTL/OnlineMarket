@@ -1,9 +1,9 @@
 package OnlineMarket.model;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -15,16 +15,16 @@ public class Order implements java.io.Serializable {
 	private Integer id;
 	private User user;
 	private Address address;
-	private Long totalPaid;
-	private Long totalPaidReal;
-	private Integer totalProduct;
-	private Long totalShipping;
+	private Long totalPaid = 0L;
+	private Long totalPaidReal = 0L;
+	private Integer totalProduct = 0;
+	private Long totalShipping = 0L;
 	private Byte status;
 	private Date invoiceDate;
 	private Date createDate;
 	private Date updateDate;
-	private Set<OrderDetail> orderDetails = new HashSet<>(0);
-	private Set<Event> events = new HashSet<>(0);
+	private List<OrderDetail> orderDetails = new ArrayList<>(0);
+	private List<Event> events = new ArrayList<>(0);
 
 	public Order() {
 	}
@@ -57,6 +57,7 @@ public class Order implements java.io.Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "address_id", nullable = false)
+    @NotNull
 	public Address getAddress() {
 		return address;
 	}
@@ -141,11 +142,12 @@ public class Order implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
-	public Set<OrderDetail> getOrderDetails() {
+    @Valid
+	public List<OrderDetail> getOrderDetails() {
 		return this.orderDetails;
 	}
 
-	public void setOrderDetails(Set<OrderDetail> orderDetails) {
+	public void setOrderDetails(List<OrderDetail> orderDetails) {
 		this.orderDetails = orderDetails;
 	}
 
@@ -153,11 +155,11 @@ public class Order implements java.io.Serializable {
 	@JoinTable(name = "tb_event_order", schema = "dbo", catalog = "SmartMarket", joinColumns = {
 			@JoinColumn(name = "order_id", nullable = false, updatable = false) }, inverseJoinColumns = {
 			@JoinColumn(name = "event_id", nullable = false, updatable = false) })
-	public Set<Event> getEvents() {
+	public List<Event> getEvents() {
 		return this.events;
 	}
 
-	public void setEvents(Set<Event> events) {
+	public void setEvents(List<Event> events) {
 		this.events = events;
 	}
 

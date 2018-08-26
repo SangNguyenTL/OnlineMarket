@@ -90,12 +90,21 @@
     CheckOut.prototype.listen = function (){
         this.childElement.addressForm.on("submit", this.addAddress);
         this.childElement.cartTable.on("click", ".updateProduct", this.updateProduct);
+        this.childElement.cartTable.on("change", ".productQuantity", this.updateProduct);
         this.childElement.cartTable.on("click", ".removeProduct", this.removeProduct);
         this.childElement.addressInputSelect.on("change", this.OnAddressSelectChange);
 
         this._element.on("click", ".refreshAddress", this.getAddressList);
         this._element.on("click", ".removeCode", this.removeCode);
         this._element.on("click", "#button-coupon", this.checkCode);
+    };
+
+    CheckOut.prototype.loadEvent = function(e){
+        let listEvent = this._element.find(".listEvent");
+        for(var i = 0; i < listEvent.length; i++){
+            let el = $(listEvent[i]), id = el.data("id");
+
+        }
     };
 
     CheckOut.prototype.OnAddressSelectChange = function (e) {
@@ -126,7 +135,7 @@
         e.preventDefault();
         let _this = this;
         if(_this.pending){
-            alert("Pending... please wait.")
+            alert("Pending... please wait.");
             return;
         }
         _this.pending = true;
@@ -243,7 +252,7 @@
     CheckOut.prototype.getAddressList = function (){
         let _this = this;
         if(_this.pending){
-            alert("Pending... please wait.")
+            alert("Pending... please wait.");
             return;
         }
         _this.pending = true;
@@ -289,9 +298,14 @@
         if(productContainer.length === 0) return;
         let productId = Number.parseInt(productContainer.data('id')) || false,
             quantity = Number.parseInt(productContainer.data('quantity').val());
-        if(!productId || !quantity) return;
+        if(!productId) return;
+        if(!quantity){
+            quantity = 1;
+            alert("The quantity must be lager than 0");
+            productContainer.data('quantity').val(quantity);
+        }
         if(_this.pending){
-            alert("Pending... please wait.")
+            alert("Pending... please wait.");
             return;
         }
         _this.pending = true;
@@ -300,14 +314,14 @@
                 alert("This product not found or out of stock.");
                 _this.removeProduct(false, productId);
                 return;
+            }else if(result.list && result.list[0].quantity < quantity && quantity > 10){
+                alert("Your quantity is larger than this product quantity. That will be set it to the current value of product.");
+                productContainer.find("input.productQuantity").val(result.list[0].quantity);
+                quantity = result.list[0].quantity;
             }else if(quantity > 10){
                 alert("You only buy up to 10 items each.");
                 quantity = 10;
                 productContainer.find("input.productQuantity").val(quantity);
-            }else if(result.list && result.list[0].quantity < quantity){
-                alert("Your quantity is larger than this product quantity. That will be set it to the current value of product.");
-                productContainer.find("input.productQuantity").val(result.list[0].quantity);
-                quantity = result.list[0].quantity;
             }
             simpleCart.find(productId) && simpleCart.find(productId).set("quantity", quantity);
             simpleCart.update();
@@ -385,7 +399,7 @@
             productIds.push($(value).data("id"))
         });
         if(_this.pending){
-            alert("Pending... please wait.")
+            alert("Pending... please wait.");
             return;
         }
         _this.pending = true;
@@ -394,7 +408,7 @@
             productIds : productIds
         }), result => {
             if(result.error){
-                if(result.message) alert(result.message)
+                if(result.message) alert(result.message);
                 else if(result.validationErrorDTO.fieldErrors && result.validationErrorDTO.fieldErrors.length > 0){
                     containerInput.addClass("parsley-error");
                     containerInput.after("<ul class='parsley-errors-list'/>");
@@ -406,24 +420,26 @@
                 if(result.list && result.list.length > 0){
                     for(let key in result.list){
                         if(result.list.hasOwnProperty(key)){
-                            let event = result.list[key],
-                                html =
+                            let event = result.list[key];
+                            if(_this.addEvent(event)){
+                                let index = _this._element.find(".listEvent").length;
+                                let html =
                                     "<div id='event-"+event.id+"' class='form-group listEvent'>" +
                                     "<label class='form-control-label col-sm-6'><a href='"+PATH+"event/"+event.id+"'>"+event.name+"</a></label>"+
                                     "<div class='col-sm-6'>" +
                                     "<div class='input-group'>" +
-                                    "<input class='form-control' readonly='readonly' type='text' name='events["+key+"].code' value='"+event.code+"' />" +
+                                    "<input class='form-control' readonly='readonly' type='text' name='events["+index+"].code' value='"+event.code+"' />" +
                                     "<span class='input-group-btn'>" +
                                     "<a href='#' class='btn btn-danger removeCode'><i class='fa fa-close'></i></a>" +
                                     "</span>"+
                                     "</div>" +
                                     "</div>"+
                                     "</div>";
-                            container.after(html);
-                            $("#event-"+event.id).data('event', event);
-                            _this.processEvent(event);
-                            _this.processCartRow();
-                            alert("The code is valid, that is applied.")
+                                container.after(html);
+                                $("#event-"+event.id).data('event', event);
+                                _this.processCartRow();
+                                alert("The code is valid, that is applied.")
+                            }
                         }
                     }
                 }
@@ -438,11 +454,58 @@
 
     CheckOut.prototype.removeCode = function(e) {
         e.preventDefault();
-        let el = $(e.currentTarget), container = el.closest(".listEvent"), id = el.data('id'), data = container.data('event');
-        container.remove();
-        this.childElement.cartTable.find(".event-"+id).remove();
-        this.processEvent(data, true);
-        alert("Delete event is success!")
+        let el = $(e.currentTarget), container = el.closest(".listEvent"), data = container.data('event'), id = data ? data.id : container.data("id");
+        if(!data){
+            let _this = this,
+                productIds = [], el = container.find("input"), value = el.val();
+            _this.childElement.productRow.each((index, value) => {
+                productIds.push($(value).data("id"))
+            });
+            if(_this.pending){
+                alert("Pending... please wait.");
+                return;
+            }
+            _this.pending = true;
+            $.post(PATH+"api/event/check-code",JSON.stringify({
+                code: value,
+                productIds : productIds
+            }), result => {
+                if(!result.error){
+                    if(result.list && result.list.length > 0){
+                        for(let key in result.list){
+                            if(result.list.hasOwnProperty(key)){
+                                data = result.list[key];
+                            }
+                        }
+                    }
+                }
+                _this.childElement.cartTable.find(".event-"+id).remove();
+                _this.processEvent(data, true);
+                container.remove();
+                let listEvent = this._element.find('.listEvent');
+                for(let i = 0; i < listEvent.length; i++ ){
+                    let input = $(listEvent[i]).find('input'), name = input.attr("name");
+                    name = name.replace(/\d+/, i);
+                    input.attr("name", name)
+                }
+                alert("Delete event is success!")
+            }, "application/json")
+                .always(()=>{
+                    _this.pending = false;
+                });
+        }else{
+            this.childElement.cartTable.find(".event-"+id).remove();
+            this.processEvent(data, true);
+            container.remove();
+            let listEvent = this._element.find('.listEvent');
+            for(let i = 0; i < listEvent.length; i++ ){
+                let input = $(listEvent[i]).find('input'), name = input.attr("name");
+                name = name.replace(/\d+/, i);
+                input.attr("name", name)
+            }
+            alert("Delete event is success!")
+        }
+
     };
 
     CheckOut.prototype.addEvent = function(event) {
@@ -451,7 +514,7 @@
         if(!event.products || event.products.length === 0){
             if(_this.totalCart.numbers.totalPaid > event.maxPrice || _this.totalCart.numbers.totalPaid < event.minPrice){
                 alert("Order value is not in the price range of the event.", "warning");
-                return;
+                return false;
             }
             if(_this.totalCart.sale.length === 0)
                 _this.childElement.cartTable.find(".totalPaidShip").closest("tr").before("<tr><td class='text-right' colspan='2'>Sale</td><td class='text-right sale' colspan='3'></td></tr>");
@@ -487,8 +550,10 @@
             if(count ===0){
                 alert("There are no products that match '"+event.code+"'.", "warning");
                 _this._element.find("#event-"+event.id).remove();
+                return false;
             }
         }
+        return true;
     };
 
     CheckOut.prototype.removeEvent = function(event) {
@@ -511,21 +576,21 @@
                     originalPrice = v.price, originalTotalPrice = originalPrice * quantity;
                 _this.cart[id].eventList.find(".event-"+event.id).remove();
                 if(event.value){
-                    unitPrice = unitPriceOld + event.value;
-                    totalPrice = unitPriceOld + event.value * quantity;
+                    _this.cart[id].numbers.unitPrice = unitPrice = unitPrice + event.value;
+                    _this.cart[id].numbers.totalPrice = totalPrice = totalPrice + event.value * quantity;
                 }
                 else if(event.percentValue){
-                    unitPrice = unitPrice + Math.floor(originalPrice/100 * event.percentValue);
-                    totalPrice = totalPrice + Math.floor(originalTotalPrice/100 * event.percentValue);
+                    _this.cart[id].numbers.unitPrice  = unitPrice = unitPrice + Math.floor(originalPrice/100 * event.percentValue);
+                    _this.cart[id].numbers.totalPrice = totalPrice = totalPrice + Math.floor(originalTotalPrice/100 * event.percentValue);
                 }
                 if(originalPrice === unitPrice){
                     _this.cart[id].unitPriceOld.remove();
                     _this.cart[id].totalPriceOld.remove();
                 }
-                else {
-                    _this.cart[id].unitPrice.html((unitPrice).format(0, 3, " "));
-                    _this.cart[id].totalPrice.html((totalPrice).format(0, 3, " "));
-                }
+
+                _this.cart[id].unitPrice.html((unitPrice).format(0, 3, " "));
+                _this.cart[id].totalPrice.html((totalPrice).format(0, 3, " "));
+
             })
         }
     };
