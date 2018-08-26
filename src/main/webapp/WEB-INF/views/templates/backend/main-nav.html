@@ -138,6 +138,23 @@
                             th:href="@{/admin/post-category/add}"><span class="nav-text">Add new</span></a></li>
                 </ul>
             </li>
+
+            <li th:class="${reviewPage} ? 'active'" >
+                <a>
+                   <span class="nav-caret">
+                   <i class="fa fa-caret-down"></i>
+                 </span>
+                    <span class="nav-icon">
+                   <i class="material-icons">&#xe838;
+                   </i>
+                 </span>
+                    <span class="nav-text">Order</span>
+                </a>
+                <ul class="nav-sub nav-mega">
+                    <li th:classappend="${reviewListPage} ? 'active'"><a th:href="@{/admin/order}" ><span class="nav-text">Order list</span></a></li>
+                </ul>
+            </li>
+
             <li th:class="${postPage} ? 'active'">
                 <a>
                   	<span class="nav-caret">

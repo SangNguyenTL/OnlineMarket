@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:filter="http://thymeleafexamples"
+      layout:decorate="templates/backend">
+<!--/*@thymesVar id="result" type="OnlineMarket.result.ResultObject<OnlineMarket.model.Order>"*/-->
+<!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
+<!--/*@thymesVar id="relativePath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="pageTitle" type="java.lang.String"*/-->
+<!--/*@thymesVar id="success" type="java.lang.String"*/-->
+<!--/*@thymesVar id="error" type="java.lang.String"*/-->
+<!--/*@thymesVar id="filterForm" type="OnlineMarket.form.filter.FilterForm"*/-->
+<head>
+</head>
+<body>
+
+<div ui-view class="app-body" id="view" layout:fragment="container">
+    <div class="padding">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item" th:each="breadcrumb : ${breadcrumbs}"><a th:href="@{${breadcrumb[0]}}" th:text="${breadcrumb[1]}"></a></li>
+        </ol>
+        <div class="box">
+            <div class="box-header">
+                <h2 th:text="${pageTitle}"></h2>
+            </div>
+            <div class="alert alert-success m-x-lg" th:if="${success} != null">
+                <strong>Congratulation!</strong> Process completed.
+            </div>
+            <div class="alert alert-danger m-x-lg" th:if="${error} != null">
+                <strong>Obbs!</strong> [[${error}]]
+            </div>
+            <div class="row p-a">
+                <form th:object="${filterForm}" th:action="@{${relativePath}}" method="POST">
+                <div class="col-sm-5">
+                    <select class="form-control" th:field="*{groupSearch['state']}">
+                        <option value="">State...</option>
+                        <option th:value="${T(OnlineMarket.util.other.State).ACTIVE.name()}">Active</option>
+                        <option th:value="${T(OnlineMarket.util.other.State).INACTIVE.name()}">In Active</option>
+                    </select>
+                </div>
+                <div class="col-sm-4">
+                    <select class="form-control" th:field="*{searchBy}">
+                        <option value="product.name">Product Name</option>
+                        <option value="user.firstName">First name</option>
+                        <option value="user.lastName">Last name</option>
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <input class="form-control" placeholder="Search" type="text" th:field="*{search}">
+                        <span class="input-group-btn">
+                            <button class="btn b-a white" type="submit">Go!</button>
+                        </span>
+                    </div>
+                    <input type="hidden" th:field="*{size}" />
+                    <input type="hidden" th:field="*{order}" />
+                    <input type="hidden" th:field="*{orderBy}" />
+                </div>
+                </form>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover b-t">
+                    <thead>
+                    <tr>
+                        <filter:th order="asc" orderBy="id" filter:uri="@{${relativePath}}" name="#">#</filter:th>
+                        <filter:th order="asc" orderBy="user.firstName" filter:uri="@{${relativePath}}" name="User Name">User Name</filter:th>
+                        <filter:th order="asc" orderBy="invoiceDate" filter:uri="@{${relativePath}}" name="Invoice Date">Invoice Date</filter:th>
+                        <filter:th order="asc" orderBy="updateDate" filter:uri="@{${relativePath}}" name="Update Date">Update Date</filter:th>
+                        <filter:th order="asc" orderBy="createDate" filter:uri="@{${relativePath}}" name="Create Date">Create Date</filter:th>
+                        <filter:th order="asc" orderBy="status" filter:uri="@{${relativePath}}" name="Status">Status</filter:th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="order : ${result.list}">
+                        <td th:text="${order.id}"></td>
+                        <td><a th:href="@{'/user/'+${user.id}}" class="text-info" th:text="${user.firstName}"></a> </td>
+                        <td ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(order.invoiceDate, 'dd-MM-yyyy HH:mm:ss')}+'\', format: \'DD-MM-YYYY HH:mm:ss\'}'" th:text="${#dates.format(order.invoiceDate, 'dd-MM-yyyy')}"></td>
+                        <td ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(order.updateDate, 'dd-MM-yyyy HH:mm:ss')}+'\', format: \'DD-MM-YYYY HH:mm:ss\'}'" th:text="${#dates.format(order.updateDate, 'dd-MM-yyyy')}"></td>
+                        <td ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(order.createDate, 'dd-MM-yyyy HH:mm:ss')}+'\', format: \'DD-MM-YYYY HH:mm:ss\'}'" th:text="${#dates.format(order.createDate, 'dd-MM-yyyy')}"></td>
+                        <td>
+                            <span class="text-success" th:if="${#strings.equalsIgnoreCase(order.status, T(OnlineMarket.util.other.State).ACTIVE.name())}">Activated</span>
+                            <button class="btn btn-outline btn-sm b-accent text-info activate-rating" th:attr="data-id=${order.id}" th:if="${#strings.equalsIgnoreCase(order.status, T(OnlineMarket.util.other.State).INACTIVE.name())}">Activate</button>
+                        </td>
+                        <td>
+                            <form class="form-confirm" th:action="@{${relativePath} + '/delete'}" method="POST">
+
+                                <input type="hidden" th:name="id" th:value="${order.id}">
+                                <button type="submit" class="btn btn-outline b-info text-danger btn-sm btn-fw">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <footer class="dker p-a">
+                <div class="row">
+                    <div class="col-sm-4 hidden-xs">
+                        <form th:object="${filterForm}" th:action="@{${relativePath}}" method="get">
+                            <input type="hidden" th:field="*{search}" />
+                            <input type="hidden" th:field="*{searchBy}" />
+                            <input type="hidden" th:field="*{order}" />
+                            <input type="hidden" th:field="*{orderBy}" />
+                            <label class="form-control-label">Show</label>
+                            <select class="input-sm form-control w-sm inline v-middle" th:field="*{size}">
+                                <option value="10">10 rows</option>
+                                <option value="20" th:if="${result.totalPages * filterForm.size} > 10">20 rows</option>
+                                <option value="50" th:if="${result.totalPages * filterForm.size} > 50">50 rows</option>
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-fw white">Apply</button>
+                        </form>
+
+                    </div>
+                    <div class="col-sm-4 pull-right text-right text-center-xs">
+                        <filter:pagination filter:uri="@{${relativePath}}">Pagination</filter:pagination>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
