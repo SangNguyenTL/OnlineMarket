@@ -24,6 +24,7 @@ public class RatingController extends MainController {
     @Override
     protected void addMeta(ModelMap modelMap) {
         FilterForm filterForm = new FilterForm();
+        filterForm.setSearchBy("product.name");
         relativePath = "/admin/rating";
         modelMap.put("filterForm", filterForm);
         modelMap.put("reviewPage", true);
