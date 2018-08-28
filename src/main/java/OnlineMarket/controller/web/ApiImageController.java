@@ -3,10 +3,14 @@ package OnlineMarket.controller.web;
 import java.io.IOException;
 
 import OnlineMarket.model.User;
+import OnlineMarket.result.api.ValidationErrorDTO;
 import OnlineMarket.service.UserService;
+import OnlineMarket.util.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -38,7 +42,7 @@ public class ApiImageController {
     @Autowired
     UserService userService;
 
-    @InitBinder("uploadFrom")
+    @InitBinder("uploadForm")
     protected void initBinderUploadFrom(WebDataBinder binder) {
         binder.setValidator(fileValidator);
     }
@@ -68,16 +72,23 @@ public class ApiImageController {
     }
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> upload(@Valid @ModelAttribute UploadForm uploadForm) {
+    public ResponseEntity<?> upload(@Valid @ModelAttribute("uploadForm") UploadForm uploadForm, BindingResult result) {
         try {
             User user = userService.getCurrentUser();
             if(user == null) throw new UploadTypeException("User not found");
             if(user.getRole().getName().equals("USER")){
                 uploadForm.setUploadType("user");
             }
+            if(result.hasErrors()) throw new CustomException("Error");
             return ResponseEntity.ok().body(imageService.save(uploadForm));
         } catch (IllegalStateException | IOException | UploadTypeException | CreateFolderException e) {
             return ResponseEntity.badRequest().body(new ResponseResult(true, e.getMessage()));
+        } catch (CustomException e) {
+            ResponseResult responseResult = new ResponseResult(true, new ValidationErrorDTO());
+            for(FieldError fieldError : result.getFieldErrors()){
+                responseResult.getValidationErrorDTO().addFieldError(fieldError.getField(), fieldError.getDefaultMessage());
+            }
+            return ResponseEntity.badRequest().body(responseResult);
         }
     }
 }

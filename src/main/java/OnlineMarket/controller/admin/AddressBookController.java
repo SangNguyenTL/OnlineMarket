@@ -108,13 +108,13 @@ public class AddressBookController extends MainController {
         modelMap.put("action", "add");
         modelMap.put("pathAction", relativePath + "/add");
         modelMap.put("provinceList", provinceService.list());
-        modelMap.put("address", new Address());
+        modelMap.put("addressForm", new Address());
 
         return "backend/address-add";
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String processAddPage(@Valid @ModelAttribute("address") Address address, BindingResult result, ModelMap modelMap, RedirectAttributes redirectAttributes) {
+    public String processAddPage(@Valid @ModelAttribute("addressForm") Address address, BindingResult result, ModelMap modelMap, RedirectAttributes redirectAttributes) {
 
         try {
             if (!result.hasErrors()) {
@@ -160,7 +160,7 @@ public class AddressBookController extends MainController {
             modelMap.put("action", "update");
             modelMap.put("pathAction", relativePath + "/update");
             modelMap.put("provinceList", provinceService.list());
-            modelMap.put("address", address);
+            modelMap.put("addressForm", address);
 
         } catch (CustomException cusEx) {
             redirectAttributes.addFlashAttribute("error", cusEx.getMessage());
@@ -174,7 +174,7 @@ public class AddressBookController extends MainController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String processUpdatePage(@Valid @ModelAttribute("address") Address address, BindingResult result, ModelMap modelMap, RedirectAttributes redirectAttributes) {
+    public String processUpdatePage(@Valid @ModelAttribute("addressForm") Address address, BindingResult result, ModelMap modelMap, RedirectAttributes redirectAttributes) {
 
         try {
 
@@ -191,7 +191,7 @@ public class AddressBookController extends MainController {
             modelMap.put("action", "update");
             modelMap.put("pathAction", relativePath + "/update");
             modelMap.put("provinceList", provinceService.list());
-            modelMap.put("address", address);
+            modelMap.put("addressForm", address);
 
         } catch (CustomException cusEx) {
             redirectAttributes.addFlashAttribute("error", cusEx.getMessage());

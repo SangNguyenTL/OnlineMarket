@@ -30,8 +30,6 @@ import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 
 import nz.net.ultraq.thymeleaf.LayoutDialect;
-import OnlineMarket.form.config.UploadConfig;
-import OnlineMarket.service.config.ConfigurationService;
 import OnlineMarket.thymeleaf.dialect.FilterFormDialect;
 
 @EnableWebMvc
@@ -43,9 +41,6 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 
 	@Autowired
 	ApplicationContext applicationContext;
-
-	@Autowired
-	ConfigurationService configurationService;
 
 	@Autowired
 	ProductFormatter productFormatter;
@@ -163,11 +158,6 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 	 */
 	@Bean(name = "multipartResolver")
 	public CommonsMultipartResolver multipartResolver() {
-		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-		UploadConfig upConfig = configurationService.getUpload();
-		multipartResolver.setMaxUploadSize(upConfig.getMaxSize() * 1024 * 1024);
-		multipartResolver.setMaxUploadSizePerFile(upConfig.getMaxFileSize() * 1024 * 1024);
-		multipartResolver.setMaxInMemorySize((upConfig.getMaxSize() + 5) * 1024 * 1024);
 		return new CommonsMultipartResolver();
 	}
 }

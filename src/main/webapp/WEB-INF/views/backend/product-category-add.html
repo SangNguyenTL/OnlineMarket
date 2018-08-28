@@ -30,7 +30,7 @@
 					<a th:href="@{${relativePath} + '/' + ${productCategory.id}+ '/attribute-group'}" class="m-b-xs btn btn-outline b-info text-info btn-sm btn-fw">View Attribute Group</a>
 					<a th:href="@{'/product-category/' + ${productCategory.slug}}" class="m-b-xs btn btn-outline b-primary text-primary btn-sm btn-fw">View Product category</a>
 				</div>
-				<div class="col-md-9 pull-md-3">
+				<div th:classappend="${#strings.equals('update', action)} ? 'pull-md-3'" class="col-md-9">
 
 					<div class="box">
 						<div class="box-header">

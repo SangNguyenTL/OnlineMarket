@@ -44,7 +44,8 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     public void save(ProductCategory entity) {
 
         entity.setSlug(slg.slugify(entity.getSlug()));
-        productCategoryDao.save(entity);
+        entity.setCreateDate(new Date());
+        productCategoryDao.persist(entity);
 
     }
 

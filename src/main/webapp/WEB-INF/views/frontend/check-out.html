@@ -33,7 +33,7 @@
         </ul>
         <!-- Breadcrumb End-->
         <h1 class="title" th:text="${pageTitle}">Product Comparison</h1>
-        <div th:if="${error.size() > 0}" class="container p-l-xs p-r-lg">
+        <div th:if="${error != null && error.size() > 0}" class="container p-l-xs p-r-lg">
             <div class="alert alert-warning alert-dismissible show" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>

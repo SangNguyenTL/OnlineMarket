@@ -74,6 +74,7 @@ public class AttributeValuesController extends MainController {
         breadcrumbs.add(new String[]{relativePath, "Attribute values"});
 
         filterForm = new FilterForm();
+        filterForm.setSearchBy("value");
 
         model.put("productCategoryPage", true);
         model.put("filterForm", filterForm);

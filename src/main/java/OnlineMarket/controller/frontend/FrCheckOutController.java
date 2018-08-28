@@ -76,7 +76,13 @@ public class FrCheckOutController extends MainController {
         if(currentUser == null){
             return "redirect:/register";
         }
+        if(modelMap.get("success") != null){
+            modelMap.put("orderForm", new OrderForm());
+            return "frontend/check-out";
+        }
+
         if(cart == null) cart = "";
+
         ObjectMapper objectMapper = new ObjectMapper();
         List<ProductDetail> productDetailList = new ArrayList<>();
         List<String> error = new ArrayList<>();
