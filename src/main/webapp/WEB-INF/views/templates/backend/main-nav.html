@@ -21,6 +21,8 @@
 <!--/*@thymesVar id="profilePage" type="java.lang.Boolean"*/-->
 <!--/*@thymesVar id="provincePage" type="java.lang.Boolean"*/-->
 <!--/*@thymesVar id="ratingPage" type="java.lang.Boolean"*/-->
+<!--/*@thymesVar id="orderPage" type="java.lang.Boolean"*/-->
+<!--/*@thymesVar id="orderListPage" type="java.lang.Boolean"*/-->
 <!--/*@thymesVar id="configPage" type="java.lang.Boolean"*/-->
 <!--/*@thymesVar id="settingPage" type="java.lang.Boolean"*/-->
 <!--/*@thymesVar id="addressPage" type="java.lang.Boolean"*/-->
@@ -139,19 +141,18 @@
                 </ul>
             </li>
 
-            <li th:class="${reviewPage} ? 'active'" >
+            <li th:class="${orderPage} ? 'active'" >
                 <a>
                    <span class="nav-caret">
                    <i class="fa fa-caret-down"></i>
                  </span>
                     <span class="nav-icon">
-                   <i class="material-icons">&#xe838;
-                   </i>
+                   <i class="material-icons">&#xe8b0;</i>
                  </span>
                     <span class="nav-text">Order</span>
                 </a>
                 <ul class="nav-sub nav-mega">
-                    <li th:classappend="${reviewListPage} ? 'active'"><a th:href="@{/admin/order}" ><span class="nav-text">Order list</span></a></li>
+                    <li th:classappend="${orderListPage} ? 'active'"><a th:href="@{/admin/order}" ><span class="nav-text">Order list</span></a></li>
                 </ul>
             </li>
 
@@ -335,6 +336,14 @@
                       <i class="material-icons">&#xe54b;</i>
                     </span>
                     <span class="nav-text">Address Book</span>
+                </a>
+            </li>
+            <li th:class="${orderPage} ? 'active'">
+                <a th:href="@{'/user/' + ${user.id}+ '/order'}" >
+                    <span class="nav-icon">
+                      <i class="material-icons">&#xe8b0;</i>
+                    </span>
+                    <span class="nav-text">Order</span>
                 </a>
             </li>
             <li th:class="${commentPage} ? 'active'">

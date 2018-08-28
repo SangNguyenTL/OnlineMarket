@@ -70,7 +70,7 @@ public class OrderDetail implements java.io.Serializable {
 		this.order = order;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "product_id", nullable = false, insertable = false, updatable = false)
 	public Product getProduct() {
 		return product;

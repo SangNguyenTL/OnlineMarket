@@ -47,14 +47,6 @@ public class FrProductController extends MainController {
 
     private String[] strings;
 
-    private PrettyTime prettyTime;
-
-    @Override
-    public void init() {
-        super.init();
-        prettyTime = new PrettyTime();
-    }
-
     @Override
     protected void addMeta(ModelMap modelMap) {
         super.addMeta(modelMap);
@@ -74,7 +66,6 @@ public class FrProductController extends MainController {
         model.put("pageTitle", title);
         model.put("product", productService.convertProductToFrProduct(product));
         model.put("relativePath", relativePath);
-        model.put("prettyTime", prettyTime);
 
         model.put("relatedProducts", productService.convertProductToFrProduct(productService.getRelatedProduct(product.getProductCategory(), product.getBrand(), product)));
 

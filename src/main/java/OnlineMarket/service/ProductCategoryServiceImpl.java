@@ -106,4 +106,9 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
         productCategoryDao.delete(productCategory);
 
     }
+
+    @Override
+    public long count(){
+        return productCategoryDao.count();
+    }
 }

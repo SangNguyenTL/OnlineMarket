@@ -32,7 +32,7 @@
                     <h1 class="title">Search</h1>
                     <h3 class="subtitle" th:text="*{search}"></h3>
                     <div class="row">
-                        <div class="col-sm-3 p-a-xs text-center">
+                        <div class="col-sm-4 p-a-xs text-center">
                             <input type="text" class="form-control" placeholder="Keywords" th:field="*{search}">
                         </div>
                         <div class="col-sm-3 p-a-xs text-center">
@@ -47,14 +47,22 @@
                                 <option th:each="brand : ${brandList}" th:value="${brand.id}" th:text="${brand.name}"></option>
                             </select>
                         </div>
-                        <div class="col-sm-3 p-a-xs text-center">
-                            <input type="submit" class="btn btn-primary" id="button-search" value="Search">
+                        <div class="col-sm-2 p-a-xs text-right">
+                            <select id="input-limit" class="form-control" th:field="*{size}">
+                                <option th:value="10">10 rows</option>
+                                <option th:value="20"
+                                        th:if="${result.totalPages * filterForm.size} > 10">20 rows
+                                </option>
+                                <option th:value="50"
+                                        th:if="${result.totalPages * filterForm.size} > 50">50 rows
+                                </option>
+                            </select>
                         </div>
                     </div>
                     <div class="divider"></div>
                     <div class="product-filter">
                         <div class="row">
-                            <div class="col-md-2 text-center p-a-xs">
+                            <div class="col-sm-6 col-md-3 text-center p-a-xs">
                                 <div class="btn-group">
                                     <button type="button" id="list-view" class="btn btn-default" data-toggle="tooltip"
                                             title="List"><i class="fa fa-th-list"></i></button>
@@ -77,28 +85,14 @@
                                     <option value="releaseDate">Model newest</option>
                                 </select>
                             </div>
-                            <div class="col-sm-6 col-md-2 text-center p-a-xs">
+                            <div class="col-sm-6 col-md-3 text-center p-a-xs">
                                 <select class="form-control" th:field="*{order}">
                                     <option value="asc">Ascending</option>
                                     <option value="desc">Decrease</option>
                                 </select>
                             </div>
-                            <div class="col-sm-6 col-md-2 text-center p-a-xs">
-                                <label class="control-label" for="input-limit">Show:</label>
-                            </div>
-                            <div class="col-sm-6 col-md-2 text-center p-a-xs">
-                                <select id="input-limit" class="form-control" th:field="*{size}">
-                                    <option th:value="10">10 rows</option>
-                                    <option th:value="20"
-                                            th:if="${result.totalPages * filterForm.size} > 10">20 rows
-                                    </option>
-                                    <option th:value="50"
-                                            th:if="${result.totalPages * filterForm.size} > 50">50 rows
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="col-sm-12 col-md-1 text-center p-a-xs">
-                                <button class="btn btn-default btn-sm" type="submit">Go!</button>
+                            <div class="col-sm-6 col-md-3 text-center p-a-xs">
+                                <input type="submit" class="btn btn-primary" id="button-search" value="Search">
                             </div>
                         </div>
                     </div>

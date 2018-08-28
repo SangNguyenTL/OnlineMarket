@@ -39,7 +39,7 @@ public class Product implements java.io.Serializable {
 	protected String description;
 	protected long price;
 	protected Integer quantity;
-	protected Integer numberOrder;
+	protected Integer numberOrder = 0;
 	protected Byte state;
 	protected Integer weight;
 	protected Date releaseDate;
@@ -145,7 +145,7 @@ public class Product implements java.io.Serializable {
 
     @Column(name = "number_order")
     public Integer getNumberOrder() {
-        return numberOrder;
+        return numberOrder == null ? 0 : numberOrder;
     }
 
     public void setNumberOrder(Integer numberOrder) {
@@ -319,7 +319,7 @@ public class Product implements java.io.Serializable {
 	}
 
 
-    @OneToOne(mappedBy = "product", cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "product", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     @JsonIgnore
     public ProductViewsStatistic getProductViewsStatistic() {
         return productViewsStatistic;

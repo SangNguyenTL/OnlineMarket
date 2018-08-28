@@ -6,6 +6,9 @@ import OnlineMarket.result.ResultObject;
 import OnlineMarket.util.exception.CustomException;
 import OnlineMarket.util.exception.user.*;
 
+import java.util.List;
+import java.util.Map;
+
 public interface UserService{
 
     User getByEmail(String email);
@@ -45,4 +48,8 @@ public interface UserService{
     User getByKey(Integer key);
 
     void save(User entity);
+
+    Map<String,Long> countUser();
+
+    List<User> listAdmin();
 }

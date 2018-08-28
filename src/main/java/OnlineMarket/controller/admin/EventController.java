@@ -1,6 +1,7 @@
 package OnlineMarket.controller.admin;
 
 
+import OnlineMarket.util.exception.CustomException;
 import OnlineMarket.util.group.AdvancedValidation;
 import OnlineMarket.util.exception.event.EventNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -165,7 +166,7 @@ public class EventController extends MainController {
                                      RedirectAttributes redirectAttributes) {
         try {
             eventService.delete(id);
-        } catch (EventNotFoundException e) {
+        } catch (EventNotFoundException| CustomException e) {
            redirectAttributes.addFlashAttribute("error", e.getMessage());
         }
 

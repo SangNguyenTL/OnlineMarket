@@ -4,6 +4,9 @@
 		layout:decorate="templates/backend">
 <head>
 </head>
+<!--/*@thymesVar id="countUser" type="java.util.Map<String,Long>"*/-->
+<!--/*@thymesVar id="general" type="OnlineMarket.form.config.GeneralConfig"*/-->
+
 <body>
 
   <div ui-view class="app-body" id="view" layout:fragment="container">
@@ -13,6 +16,63 @@
                   <h4 class="m-b-0 _300" th:text="'Welcome to '+${general.title}+' management system'">Welcome to Flatkit</h4>
                   <small class="text-muted">Gives you a visual view of  <strong>everything</strong></small>
               </div>
+          </div>
+      </div>
+      <div class="padding">
+          <div class="row">
+              <div class="col-xs-12 col-sm-3">
+                  <div class="box p-a">
+                      <div class="pull-left m-r">
+	            <span class="w-48 rounded warn">
+	              <i class="material-icons"></i>
+	            </span>
+                      </div>
+                      <div class="clear">
+                          <h4 class="m-a-0 text-lg _300"><a th:href="@{/admin/user}">[[${countUser.get('all')}]] <span class="text-sm">Users</span></a></h4>
+                          <small class="text-muted">[[${countUser.get('inactive')}]] new user.</small>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-xs-12 col-sm-3">
+                  <div class="box p-a">
+                      <div class="pull-left m-r">
+	            <span class="w-48 rounded accent">
+	              <i class="fa fa-tag"></i>
+	            </span>
+                      </div>
+                      <div class="clear">
+                          <h4 class="m-a-0 text-lg _300"><a th:href="@{/admin/product-category}"> <span class="text-sm">Product Category</span></a></h4>
+                          <small class="text-muted">[[${countProductCategory}]] items.</small>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-xs-12 col-sm-3">
+                  <div class="box p-a">
+                      <div class="pull-left m-r">
+	            <span class="w-48 rounded success">
+	              <i class="fa fa-tag"></i>
+	            </span>
+                      </div>
+                      <div class="clear">
+                          <h4 class="m-a-0 text-lg _300"><a th:href="@{/admin/brand}"> <span class="text-sm">Brand</span></a></h4>
+                          <small class="text-muted">[[${countBrand}]] items.</small>
+                      </div>
+                  </div>
+              </div>
+                  <div class="col-xs-12 col-sm-3">
+                      <div class="box p-a">
+                          <div class="pull-left m-r">
+	            <span class="w-48 rounded info">
+	              <i class="material-icons">&#xe8b0;
+                   </i>
+	            </span>
+                          </div>
+                          <div class="clear">
+                              <h4 class="m-a-0 text-lg _300"><a th:href="@{/admin/order}">[[${countOrder.get('all')}]] <span class="text-sm">Order</span></a></h4>
+                              <small class="text-muted">[[${countOrder.get('waiting')}]] waiting.</small>
+                          </div>
+                      </div>
+                  </div>
           </div>
       </div>
   </div>

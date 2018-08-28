@@ -1,8 +1,11 @@
 package OnlineMarket.model;
 
+import OnlineMarket.form.filter.OrderForm;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 import javax.persistence.*;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import static javax.persistence.GenerationType.IDENTITY;
@@ -11,22 +14,36 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Table(name = "tb_order", schema = "dbo", catalog = "SmartMarket")
 public class Order implements java.io.Serializable {
 
-	private static final long serialVersionUID = 1L;
-	private Integer id;
-	private User user;
-	private Address address;
-	private Long totalPaid = 0L;
-	private Long totalPaidReal = 0L;
-	private Integer totalProduct = 0;
-	private Long totalShipping = 0L;
-	private Byte status;
-	private Date invoiceDate;
-	private Date createDate;
-	private Date updateDate;
-	private List<OrderDetail> orderDetails = new ArrayList<>(0);
-	private List<Event> events = new ArrayList<>(0);
+	protected static final long serialVersionUID = 1L;
+    protected Integer id;
+    protected User user;
+    protected Address address;
+    protected Long totalPaid = 0L;
+    protected Long totalPaidReal = 0L;
+    protected Integer totalProduct = 0;
+    protected Long totalShipping = 0L;
+    protected Byte status;
+    protected Date invoiceDate;
+    protected Date createDate;
+    protected Date updateDate;
+    protected Set<OrderDetail> orderDetails = new HashSet<>(0);
+    protected Set<Event> events = new HashSet<>(0);
 
 	public Order() {
+	}
+
+    public Order(OrderForm orderForm) {
+        for (Method getMethod : orderForm.getClass().getSuperclass().getMethods()) {
+            if (getMethod.getName().startsWith("get")) {
+                try {
+                    Method setMethod = this.getClass().getMethod(getMethod.getName().replace("get", "set"), getMethod.getReturnType());
+                    setMethod.invoke(this, getMethod.invoke(orderForm, (Object[]) null));
+
+                } catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ignore) {
+
+                }
+            }
+        }
 	}
 
 	public Order(User user) {
@@ -35,7 +52,6 @@ public class Order implements java.io.Serializable {
 
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
-
 	@Column(name = "_id", unique = true, nullable = false)
 	public Integer getId() {
 		return this.id;
@@ -141,26 +157,40 @@ public class Order implements java.io.Serializable {
 		this.updateDate = updateDate;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "order")
-    @Valid
-	public List<OrderDetail> getOrderDetails() {
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL)
+	public Set<OrderDetail> getOrderDetails() {
 		return this.orderDetails;
 	}
 
-	public void setOrderDetails(List<OrderDetail> orderDetails) {
+	public void setOrderDetails(Set<OrderDetail> orderDetails) {
 		this.orderDetails = orderDetails;
 	}
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(name = "tb_event_order", schema = "dbo", catalog = "SmartMarket", joinColumns = {
 			@JoinColumn(name = "order_id", nullable = false, updatable = false) }, inverseJoinColumns = {
 			@JoinColumn(name = "event_id", nullable = false, updatable = false) })
-	public List<Event> getEvents() {
+	public Set<Event> getEvents() {
 		return this.events;
 	}
 
-	public void setEvents(List<Event> events) {
+	public void setEvents(Set<Event> events) {
 		this.events = events;
 	}
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return Objects.equals(id, order.id) &&
+                Objects.equals(user, order.user) &&
+                Objects.equals(totalPaidReal, order.totalPaidReal);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, user, totalPaidReal);
+    }
 }

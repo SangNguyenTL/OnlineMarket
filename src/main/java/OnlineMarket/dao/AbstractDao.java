@@ -40,43 +40,6 @@ public abstract class AbstractDao<PK extends Serializable, T> {
         return sessionFactory.getCurrentSession();
     }
 
-    private void addAll(Criteria criteria, Map<String, String> map){
-        for (Entry<String, String> entry : map.entrySet()) {
-            matcher = patternOrder.matcher(entry.getKey());
-            if(matcher.matches()){
-                String key = matcher.group(1), value = entry.getValue();
-                try {
-                    Field field = persistentClass.getDeclaredField(key);
-                    if(StringUtils.isNotBlank(key)){
-                        if(matcher.group(2) != null){
-                            key = key + "Alias";
-                            criteria.createAlias(matcher.group(1), key);
-                            key = key+matcher.group(2);
-                        }
-                        if(StringUtils.isNotBlank(value)){
-                            switch (field.getType().getSimpleName()){
-                                case "byte":
-                                case "Byte":
-                                    criteria.add(Restrictions.eq(key, Byte.parseByte(value)));
-                                    break;
-                                case "Integer":
-                                case "int":
-                                    criteria.add(Restrictions.eq(key, Integer.parseInt(value)));
-                                    break;
-                                case "String":
-                                    criteria.add(Restrictions.eq(key, value));
-                                    break;
-                                default:
-                            }
-                        }
-                    }
-                } catch (NumberFormatException|NoSuchFieldException ignore) {
-
-                }
-            }
-        }
-    }
-
     @SuppressWarnings("unchecked")
     public T getByKey(PK key) {
         return (T) getSession().get(persistentClass, key);
@@ -215,10 +178,10 @@ public abstract class AbstractDao<PK extends Serializable, T> {
                                 case "Set":
                                     ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
                                     Class<?> aClass = (Class<?>) parameterizedType.getActualTypeArguments()[0];
-                                    aClass.getDeclaredField(matcher.group(2));
+                                    aClass.getDeclaredField(matcher.group(2).substring(1));
                                     break;
                             }
-                            key = key + "Alias";
+                                key = key + "Alias";
                             criteria.createAlias(matcher.group(1), key);
                             key = key+matcher.group(2);
                         }
@@ -264,7 +227,6 @@ public abstract class AbstractDao<PK extends Serializable, T> {
                                     ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
                                     Class<?> aClass = (Class<?>) parameterizedType.getActualTypeArguments()[0];
                                     childField = aClass.getDeclaredField(matcher.group(2).substring(1));
-
                                     break;
                             }
                             key = key + "Alias";
@@ -302,5 +264,65 @@ public abstract class AbstractDao<PK extends Serializable, T> {
         result.setCurrentPage(filterForm.getCurrentPage());
 
         return result;
+    }
+
+    private void addAll(Criteria criteria, Map<String, String> map){
+        for (Entry<String, String> entry : map.entrySet()) {
+            matcher = patternOrder.matcher(entry.getKey());
+            if(matcher.matches()){
+                String key = matcher.group(1), value = entry.getValue();
+                try {
+                    Field field = persistentClass.getDeclaredField(key);
+                    String nameTypeValue = field.getType().getSimpleName();
+                    if(StringUtils.isNotBlank(key)){
+                        if(matcher.group(2) != null){
+                            switch (nameTypeValue){
+                                case "List":
+                                case "Set":
+                                    ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
+                                    Class<?> aClass = (Class<?>) parameterizedType.getActualTypeArguments()[0];
+                                    aClass.getDeclaredField(matcher.group(2).substring(1));
+                                    break;
+                                case "int":
+                                case "Integer":
+                                case "Long":
+                                case "String":
+                                case "long":
+                                case "byte":
+                                case "Byte":
+                                    break;
+                                default:
+                                    nameTypeValue = field.getType().getDeclaredField(matcher.group(2).substring(1)).getType().getSimpleName();
+                            }
+                            key = key + "Alias";
+                            criteria.createAlias(matcher.group(1), key);
+                            key = key+matcher.group(2);
+                        }
+
+                        if(StringUtils.isNotBlank(value)){
+                            switch (nameTypeValue){
+                                case "byte":
+                                case "Byte":
+                                    criteria.add(Restrictions.eq(key, Byte.parseByte(value)));
+                                    break;
+                                case "Integer":
+                                case "int":
+                                    criteria.add(Restrictions.eq(key, Integer.parseInt(value)));
+                                    break;
+                                case "long":
+                                case "Long":
+                                    criteria.add(Restrictions.eq(key, Long.parseLong(value)));
+                                    break;
+                                case "String":
+                                    criteria.add(Restrictions.eq(key, value));
+                                    break;
+                            }
+                        }
+                    }
+                } catch (NumberFormatException|NoSuchFieldException ignore) {
+
+                }
+            }
+        }
     }
 }

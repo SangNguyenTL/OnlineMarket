@@ -94,7 +94,7 @@ public class AddressServiceImpl implements AddressService  {
 	public void delete(Integer id) throws AddressHasOrderException, AddressNotFoundException {
 		Address address = addressDao.getByKey(id);
 		if(address == null) throw new AddressNotFoundException();
-		if(orderDao.getUniqueResultBy("address", address) != null) throw new AddressHasOrderException();
+		if(address.getOrders().size() > 0) throw new AddressHasOrderException();
 		delete(address);
 	}
 

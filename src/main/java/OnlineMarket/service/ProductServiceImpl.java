@@ -11,6 +11,7 @@ import OnlineMarket.result.api.Pagination;
 import OnlineMarket.result.api.ResultProduct;
 import OnlineMarket.util.Help;
 import OnlineMarket.util.Slugify;
+import OnlineMarket.util.exception.CustomException;
 import OnlineMarket.util.exception.product.ProductHasCommentException;
 import OnlineMarket.util.exception.product.ProductNotFoundException;
 import OnlineMarket.util.exception.productCategory.ProductCategoryNotFoundException;
@@ -69,7 +70,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void save(Product product, ProductCategory productCategory, User user) throws ProductCategoryNotFoundException {
+    public Product save(Product product, ProductCategory productCategory, User user) throws ProductCategoryNotFoundException {
         if (productCategory == null) throw new ProductCategoryNotFoundException();
         product.setProductCategory(productCategory);
         product.setCreateDate(new Date());
@@ -83,6 +84,7 @@ public class ProductServiceImpl implements ProductService {
         product.setProductAttributeValues(makeListProductAttributeValues(product, productAttributeValuesList));
         if(product.getProductAttributeValues().size() > 0)
         productDao.merge(product);
+        return product;
     }
 
     @Override
@@ -103,9 +105,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void delete(Integer id) throws ProductNotFoundException {
+    public void delete(Integer id) throws ProductNotFoundException, CustomException {
         Product product = productDao.getByKey(id);
         if(product == null) throw new ProductNotFoundException();
+        if(product.getOrderDetails().size() > 0) throw  new CustomException("The product has order");
         productDao.delete(product);
     }
 

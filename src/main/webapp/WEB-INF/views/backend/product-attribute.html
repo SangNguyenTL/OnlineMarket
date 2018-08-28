@@ -33,7 +33,7 @@
       				<td th:text="${productAttribute.attribute.name}"></td>
       				<td th:text="${productAttribute.value}"></td>
       				<td>
-      					<a th:href="@{${relativePath}+'/'+${productAttribute.attribute.attributeGroup.id}+'/update/'+${productAttribute.attribute.id}}" class="btn btn-outline b-info text-success btn-sm btn-fw">Update</a>
+      					<a th:href="@{${relativePath}+'/'+${productAttribute.attribute.attributeGroup.id}+'/update/'+${productAttribute.attribute.id}}" class="btn btn-outline b-info text-success btn-sm "><i class="fa fa-refresh"></i></a>
       				</td>
       			</tr>
       		</tbody>

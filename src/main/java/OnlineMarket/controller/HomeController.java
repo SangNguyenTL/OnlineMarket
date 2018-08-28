@@ -3,10 +3,13 @@ package OnlineMarket.controller;
 import javax.servlet.http.HttpServletRequest;
 
 import OnlineMarket.form.filter.FilterForm;
+import OnlineMarket.form.filter.FilterFormPrivate;
 import OnlineMarket.model.*;
 import OnlineMarket.result.ResultObject;
 import OnlineMarket.service.EventService;
 import OnlineMarket.util.exception.productCategory.ProductCategoryNotFoundException;
+import OnlineMarket.util.other.EventStatus;
+import OnlineMarket.util.other.ProductStatus;
 import OnlineMarket.view.FrontendProduct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,7 +39,7 @@ public class HomeController extends MainController {
 		Map<ProductCategory,ResultObject<FrontendProduct>> resultObjectList = new HashMap<>();
 		filterForm.setOrderBy("releaseDate");
 		filterForm.setOrder("desc");
-		filterForm.getGroupSearch().put("state", "0");
+		filterForm.getGroupSearch().put("state", ProductStatus.INSTOCK.getId().toString());
 		for(ProductCategory productCategory : productCategoryList){
 			try {
 				ResultObject<FrontendProduct> resultObject = productService.frontendProductResultObject(productService.listByProductCategory(productCategory,filterForm));
@@ -46,9 +49,8 @@ public class HomeController extends MainController {
 
 			}
 		}
-
-		filterForm.getGroupSearch().remove("state");
-		filterForm.getGroupSearch().put("status", "0");
+		filterForm = new FilterForm();
+		filterForm.getGroupSearch().put("status",EventStatus.ACTIVE.getId().toString());
 		filterForm.setSize(3);
 		filterForm.setOrderBy("createDate");
 

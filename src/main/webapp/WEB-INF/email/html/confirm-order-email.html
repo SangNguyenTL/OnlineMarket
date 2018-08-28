@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title th:text="${title}"></title>
+
+    <meta http-equiv="Content-Type" content="text/html charset=UTF-8" />
+
+    <style>
+        .invoice-box {
+            max-width: 800px;
+            margin: auto;
+            padding: 30px;
+            border: 1px solid #eee;
+            box-shadow: 0 0 10px rgba(0, 0, 0, .15);
+            font-size: 16px;
+            line-height: 24px;
+            font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+            color: #555;
+        }
+
+        .invoice-box table {
+            width: 100%;
+            line-height: inherit;
+            text-align: left;
+        }
+
+        .invoice-box table td {
+            padding: 5px;
+            vertical-align: top;
+        }
+
+        .invoice-box table tr td:nth-child(2) {
+            text-align: right;
+        }
+
+        .invoice-box table tr.top table td {
+            padding-bottom: 20px;
+        }
+
+        .invoice-box table tr.top table td.title {
+            font-size: 45px;
+            line-height: 45px;
+            color: #333;
+        }
+
+        .invoice-box table tr.information table td {
+            padding-bottom: 40px;
+        }
+
+        .invoice-box table tr.heading td {
+            background: #eee;
+            border-bottom: 1px solid #ddd;
+            font-weight: bold;
+        }
+
+        .invoice-box table tr.details td {
+            padding-bottom: 20px;
+        }
+
+        .invoice-box table tr.item td{
+            border-bottom: 1px solid #eee;
+        }
+
+        .invoice-box table tr.item.last td {
+            border-bottom: none;
+        }
+
+        .invoice-box table tr.total td:nth-child(2) {
+            border-top: 2px solid #eee;
+            font-weight: bold;
+        }
+
+        @media only screen and (max-width: 600px) {
+            .invoice-box table tr.top table td {
+                width: 100%;
+                display: block;
+                text-align: center;
+            }
+
+            .invoice-box table tr.information table td {
+                width: 100%;
+                display: block;
+                text-align: center;
+            }
+        }
+
+        .rtl table {
+            text-align: right;
+        }
+
+        .rtl table tr td:nth-child(2) {
+            text-align: left;
+        }
+
+        .text-center {
+            text-align: center; }
+
+        .text-left {
+            text-align: left; }
+
+        .text-right {
+            text-align: right; }
+
+        .w-128 {
+            width: 128px; }
+
+        .w {
+            width: 180px; }
+
+    </style>
+</head>
+
+<body>
+<div class="invoice-box">
+
+    <table cellpadding="0" cellspacing="0">
+        <tr class="top">
+            <td colspan="2">
+                <table>
+                    <tr>
+                        <td class="title">
+                            <img src="https://i.imgur.com/ngy8DUK.png" style="width:100%; max-width:300px;">
+                        </td>
+
+                        <td>
+                            Invoice #: [[${order.id}]]<br>
+                            Created: [[${#dates.format(order.createDate, 'dd-MM-yyyy')}]]<br>
+                            Due: [[${#dates.format(order.invoiceDate, 'dd-MM-yyyy')}]]
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr class="information">
+            <td colspan="2">
+                <table>
+                    <tr>
+                        <td>
+                            [[${general.title}]], Inc.<br>
+                            [[${contact.address}]]<br>
+                            Telephone:  [[${contact.phoneNumber}]]<br>
+                            Email:  [[${contact.email}]]
+                        </td>
+
+                        <td class="text-right">
+                            [[${order.address.firstName}]]<br>
+                            [[${order.address.lastName}]]<br>
+                            [[${order.address.address}]]<br>
+                            [[${order.address.city}]]<br>
+                            [[${order.address.province.name}]]<br>
+                            Phone: [[${order.address.phoneNumber}]]<br>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <th:block th:if="${order.events.size() > 0}">
+            <tr class="heading">
+                <td>
+                    Event name
+                </td>
+
+                <td class="text-right">
+                    Discord
+                </td>
+            </tr>
+
+            <tr th:each="event : ${order.events}" class="details">
+                <td>
+                    <a th:href="@{${signature}+'/event/'+${event.id}}">
+                        [[${event.name}]]
+                    </a>
+                </td>
+
+                <td class="text-right">
+                    <span th:if="${event.value}" th:text="${'-'+event.value}">12</span>
+                    <span th:if="${event.percentValue}" th:text="${'-'+event.percentValue+'%'}">12</span>
+                </td>
+            </tr>
+        </th:block>
+    </table>
+    <table cellpadding="0" cellspacing="0">
+        <thead>
+        <tr>
+            <th class="text-center">No.</th>
+            <th class="text-left" >DESCRIPTION</th>
+            <th class="text-center">Quantity</th>
+            <th class="w-128 text-right">UNIT PRICE</th>
+            <th class="w text-right">AFTER DISCOUNT</th>
+            <th class="w text-right">TOTAL</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="orderDetail : ${order.getOrderDetails()}">
+            <td class="text-center" th:text="${orderDetail.id.productId}">1</td>
+            <td class="text-left" th:text="${orderDetail.productName}">iPhone 5 32GB White & Silver (GSM) Unlocked</td>
+            <th class="text-center" th:text="${orderDetail.productQuantity}">1</th>
+            <td class="w-128 text-right" th:text="${#numbers.formatDecimal(orderDetail.product.price, 3, 'WHITESPACE', 0, 'NONE')+' ₫'}">$749.00</td>
+            <td class="w text-right" th:text="${#numbers.formatDecimal(orderDetail.productPrice, 3, 'WHITESPACE', 0, 'NONE')+' ₫'}">$749.00
+            <td class="w text-right" th:text="${#numbers.formatDecimal(orderDetail.productPrice * orderDetail.getProductQuantity(), 3, 'WHITESPACE', 0, 'NONE')+' ₫'}">$749.00
+        </tr>
+        <tr>
+            <td colspan="5" class="text-right"><b>Subtotal</b></td>
+            <td class="text-right" th:text="${#numbers.formatDecimal(order.totalPaidReal, 3, 'WHITESPACE', 0, 'NONE')+' ₫'}">$1607.00</td>
+        </tr>
+        <tr>
+            <td colspan="5" class="text-right no-border"><b>Shipping</b></td>
+            <td class="text-right" th:text="${#numbers.formatDecimal(order.totalShipping, 3, 'WHITESPACE', 0, 'NONE')+' ₫'}">$0.00</td>
+        </tr>
+        <tr>
+            <td colspan="5" class="text-right no-border"><b>Total</b></td>
+            <td class="text-right"><b th:text="${#numbers.formatDecimal(order.totalPaidReal + order.totalShipping, 3, 'WHITESPACE', 0, 'NONE')+' ₫'}">$1607.00</b></td>
+        </tr>
+        </tbody>
+    </table>
+    <table cellpadding="0" cellspacing="0">
+        <tr>
+            <td bgcolor="#eaeaea" style="padding: 40px 30px 40px 30px;">
+                <p>The above is your order form on our system. Your order will be delivered within 7 days from the order date, we will contact you when the goods arrive.</p>
+                <p>If you did not request a password reset, please ignore this email or contact support ( [[${ support_url }]] ) if you have questions.</p>
+
+                <p>Thanks</p>
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#777777" style="padding: 30px 30px 30px 30px;">
+                <p>[[${signature}]]</p>
+                <p>[[${location}]]</p>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

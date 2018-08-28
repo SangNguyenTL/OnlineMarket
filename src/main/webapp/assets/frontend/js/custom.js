@@ -528,8 +528,9 @@
         let cart = JSON.parse(window.localStorage.getItem("simpleCart_items")) || {};
         if(typeof cart === "object"){
             let cartCookies = $.cookie("cart");
-            if(typeof  cartCookies === "object" && cartCookies.length === 0 && !$.isEmptyObject(cart)){
+            if(window.location.search.match(/check-out=success/)){
                 window.localStorage.setItem("simpleCart_items", "{}");
+                $.cookie("cart", [], {path:"/"});
             }else{
                 cartCookies = [];
                 for(let key in cart){
@@ -580,4 +581,52 @@
                 }
             })
     }, (5 * 1000));
+
+    window.searchProduct = {
+        width: "100%",
+        placeholder: 'Search product...',
+        minimumInputLength: 2,
+        theme: 'bootstrap',
+        ajax: {
+            delay: 250,
+            url: PATH+'api/product/search',
+            dataType: 'json',
+            data: function (params) {
+                let query = {
+                    q: params.term,
+                    type: 'public',
+                    page: params.page || 1
+                };
+
+                // Query parameters will be ?search=[term]&type=public
+                return query;
+            },
+            processResults: function (data) {
+                data.results =  $.map(data.results, function (obj) {
+                    obj.text = obj.name;
+                    obj.id = window.location.origin+PATH+"product/"+obj.slug;
+                    return obj;
+                });
+                return data;
+            }
+        },
+        escapeMarkup: function(m) {
+            // Do not escape HTML in the select options text
+            return m;
+        },
+        templateResult: productTemplate,
+        templateSelection: productTemplate,
+        cache: true
+    };
+
+    function productTemplate(product){
+        if (product.loading) return product.text;
+        if(!product.slug) return product.text+"<i class='fa fa-search pull-right'></i>";
+        return "<a class='text-black' href='"+window.location.origin+PATH+"product/"+product.slug+"'>"+product.name+"</a>";
+    }
+
+    $(document).find("select.searchProduct").select2(window.searchProduct);
+    $(document).on('click', '#cart .dropdown-menu', function (e) {
+        e.stopPropagation();
+    });
 })(jQuery);

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:filter="http://thymeleafexamples"
+      layout:decorate="templates/backend">
+<!--/*@thymesVar id="result" type="OnlineMarket.result.ResultObject<OnlineMarket.model.Order>"*/-->
+<!--/*@thymesVar id="breadcrumbs" type="java.lang.String[]"*/-->
+<!--/*@thymesVar id="relativePath" type="java.lang.String"*/-->
+<!--/*@thymesVar id="pageTitle" type="java.lang.String"*/-->
+<!--/*@thymesVar id="success" type="java.lang.String"*/-->
+<!--/*@thymesVar id="error" type="java.lang.String"*/-->
+<!--/*@thymesVar id="order" type="OnlineMarket.model.Order"*/-->
+<!--/*@thymesVar id="general" type="OnlineMarket.form.config.GeneralConfig"*/-->
+<!--/*@thymesVar id="contact" type="OnlineMarket.form.config.ContactConfig"*/-->
+<!--/*@thymesVar id="logo" type="OnlineMarket.form.config.LogoConfig"*/-->
+<head>
+</head>
+<body>
+
+<div ui-view class="app-body" id="view" layout:fragment="container">
+    <div class="padding">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item" th:each="breadcrumb : ${breadcrumbs}"><a th:href="@{${breadcrumb[0]}}" th:text="${breadcrumb[1]}"></a></li>
+        </ol>
+        <div class="box">
+            <div class="box-header">
+                <h2 th:text="${pageTitle}"></h2>
+            </div>
+            <div class="alert alert-success m-x-lg" th:if="${success} != null">
+                <strong>Congratulation!</strong> Process completed.
+            </div>
+            <div class="alert alert-danger m-x-lg" th:if="${error} != null">
+                <strong>Obbs!</strong> [[${error}]]
+            </div>
+
+            <div class="padding">
+                <a href class="btn btn-sm btn-info pull-right hidden-print" onClick="window.print();">Print</a>
+                <p><img style="width: 50px" th:src="@{${logo.favicon}}" /></p>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <h4 class="text-md" th:text="${general.title}">Apple Inc.</h4>
+                        <p><a th:href="${#httpServletRequest.requestURI}" th:text="${#httpServletRequest.serverName}">www.apple.com</a></p>
+                        <p th:text="${contact.address}">1 Infinite Loop <br>
+                            95014 Cuperino, CA<br>
+                            United States
+                        </p>
+                        <p>
+                            Telephone:  [[${contact.phoneNumber}]]<br>
+                            Email:  [[${contact.email}]]
+                        </p>
+                    </div>
+                    <div class="col-xs-6 text-right">
+                        <p class="text-md m-t-lg" th:text="${'#'+order.id}"></p>
+                        <p th:text="${#dates.format( #dates.createNow(), 'dd-MM-yyyy')}">7th Jun 2015</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <strong class="text-muted">SHIP TO:</strong>
+                        <div class="box p-a">
+                            <h6 th:text="${order.address.firstName +' '+ order.address.lastName}">Jack Perez</h6>
+                            <p class="text-muted">
+                                [[${order.address.address}]]<br>
+                                [[${order.address.city}]]<br>
+                                [[${order.address.province.name}]]<br>
+                                Phone: [[${order.address.phoneNumber}]]<br>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-sm-6" th:if="${order.events.size() > 0}">
+                        <strong class="text-muted">EVENT(S):</strong>
+                        <div class="box p-a">
+                             <div class="list-group">
+                                <a th:each="event : ${order.events}" class="list-group-item" th:href="@{'/event/'+${event.id}}">
+                                    <span class="pull-right label warning" th:if="${event.value}" th:text="${'-'+event.value}">12</span>
+                                    <span class="pull-right label warning" th:if="${event.percentValue}" th:text="${'-'+event.percentValue+'%'}">12</span>
+                                    [[${event.name}]]
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p>Order date: <strong th:text="${#dates.format(order.createDate, 'dd-MM-yyyy')}">26th Mar 2013</strong><br>
+                    Order status: <select th:attr="data-id=${order.id}" class="form-control form-control-sm inline w-128 changeStateOrder" th:field="${order.status}">
+                        <option th:each="state : ${T(OnlineMarket.util.other.OrderStatus).values()}" th:text="${state.state}" th:value="${state.id}"></option>
+                    </select><br>
+                    Order ID: <strong th:text="${'#' + order.id}">#9399034</strong><br/>
+                    Complete date: [[${#dates.format(order.invoiceDate, 'dd-MM-yyyy')}]]
+                </p>
+                <div class="table-responsive">
+                    <table class="table table-striped white b-a">
+                        <thead>
+                        <tr>
+                            <th class="text-center">No.</th>
+                            <th class="text-left" >DESCRIPTION</th>
+                            <th class="text-center">Quantity</th>
+                            <th class="w-128 text-right">UNIT PRICE</th>
+                            <th class="w text-right">AFTER DISCOUNT</th>
+                            <th class="w text-right">TOTAL</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="orderDetail : ${order.getOrderDetails()}">
+                            <td class="text-center" th:text="${orderDetail.id.productId}">1</td>
+                            <td class="text-left" th:text="${orderDetail.productName}">iPhone 5 32GB White & Silver (GSM) Unlocked</td>
+                            <th class="text-center" th:text="${orderDetail.productQuantity}">Quantity</th>
+                            <td class="w-128 text-right" th:text="${#numbers.formatDecimal(orderDetail.product.price, 3, 'WHITESPACE', 0, 'NONE')+' ₫'}">$749.00</td>
+                            <td class="w text-right" th:text="${#numbers.formatDecimal(orderDetail.productPrice, 3, 'WHITESPACE', 0, 'NONE')+' ₫'}">$749.00
+                            <td class="w text-right" th:text="${#numbers.formatDecimal(orderDetail.productPrice * orderDetail.getProductQuantity(), 3, 'WHITESPACE', 0, 'NONE')+' ₫'}">$749.00
+                        </tr>
+                        <tr>
+                            <td colspan="5" class="text-right"><strong>Subtotal</strong></td>
+                            <td class="text-right" th:text="${#numbers.formatDecimal(order.totalPaidReal, 3, 'WHITESPACE', 0, 'NONE')+' ₫'}">$1607.00</td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" class="text-right no-border"><strong>Shipping</strong></td>
+                            <td class="text-right" th:text="${#numbers.formatDecimal(order.totalShipping, 3, 'WHITESPACE', 0, 'NONE')+' ₫'}">$0.00</td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" class="text-right no-border"><strong>Total</strong></td>
+                            <td class="text-right"><strong th:text="${#numbers.formatDecimal(order.totalPaidReal + order.totalShipping, 3, 'WHITESPACE', 0, 'NONE')+' ₫'}">$1607.00</strong></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

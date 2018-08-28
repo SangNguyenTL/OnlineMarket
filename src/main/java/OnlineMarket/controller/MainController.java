@@ -7,6 +7,7 @@ import OnlineMarket.form.filter.FilterForm;
 import OnlineMarket.model.ProductCategory;
 import OnlineMarket.service.*;
 import OnlineMarket.util.exception.CustomException;
+import org.ocpsoft.prettytime.PrettyTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.ui.ModelMap;
@@ -63,6 +64,8 @@ public abstract class MainController {
 
     protected List<ProductCategory> productCategoryList;
 
+    protected PrettyTime prettyTime;
+
     private boolean pathMatches(String [] patterns, String path){
         for(String pattern : patterns){
             if(Pattern.matches(pattern, path)) return true;
@@ -87,7 +90,7 @@ public abstract class MainController {
             model.put("menuPosition", configurationService.getMenuPositionConfig());
         }
 
-        if(pathMatches(new String[]{"/admin/config/contact", "(?!^/admin/?)(^.+)*"}, restOfTheUrl)){
+        if(pathMatches(new String[]{"/admin/config/contact", "/admin/order/update/\\d+", "(?!^/admin/?)(^.+)*"}, restOfTheUrl)){
             model.put("contact", configurationService.getContact());
         }
 
@@ -97,6 +100,10 @@ public abstract class MainController {
 
         if(pathMatches(new String[]{"/admin/config/upload"}, restOfTheUrl)){
             model.put("upload", configurationService.getUpload());
+        }
+
+        if(pathMatches(new String[]{"/admin/config/email-system"}, restOfTheUrl)){
+            model.put("email", configurationService.getEmail());
         }
 
         if(pathMatches(new String[]{"/(post|page|product|(post|product)-category|brand)(/[\\w\\d-]*)*", "/login", "/register", "/forgot-password", "/change-password", "/event", "/?" }, restOfTheUrl)){
@@ -121,6 +128,8 @@ public abstract class MainController {
 
         model.put("breadcrumbs", breadcrumbs);
         model.put("currentUser", currentUser);
+
+        model.put("prettyTime", prettyTime);
     }
 
     protected void addMeta(ModelMap modelMap){
@@ -148,6 +157,7 @@ public abstract class MainController {
     @PostConstruct
     public void init() {
         requestMappingHandlerAdapter.setIgnoreDefaultModelOnRedirect(true);
+        prettyTime = new PrettyTime();
     }
 
     protected void generateBreadcrumbs(){

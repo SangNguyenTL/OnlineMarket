@@ -91,6 +91,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 				.antMatchers(
 						"/admin/**",
 						"/api/rating/**",
+						"/api/order/**",
 						"/api/menu/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
 				.antMatchers(
 						"/api/image/**",

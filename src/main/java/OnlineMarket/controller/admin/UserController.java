@@ -27,8 +27,8 @@ public class UserController extends MainController {
     @Autowired
     RoleService roleService;
 
-    @ModelAttribute
-    public ModelMap modelAttribute(ModelMap model) {
+    @Override
+    public void addMeta(ModelMap model) {
 
         title = "User management page";
         relativePath = "/admin/user";
@@ -43,7 +43,7 @@ public class UserController extends MainController {
         model.put("pathAdd", relativePath+"/add");
         model.put("userPage", true);
 
-        return model;
+        model.put("countUser", userService.countUser());
     }
 
     @RequestMapping(value = "", method = {RequestMethod.GET , RequestMethod.POST})

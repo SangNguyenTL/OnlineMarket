@@ -16,4 +16,6 @@ public interface ProductCategoryService extends InterfaceService<Integer, Produc
 	ProductCategory getByEvent(Event event);
 
 	void delete(Integer id) throws ProductCategoryNotFoundException, ProductCategoryHasProductException, ProductCategoryHasEventException, ProductCategoryHasAttributeGroupException;
+
+    long count();
 }

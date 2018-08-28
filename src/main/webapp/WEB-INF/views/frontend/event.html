@@ -27,12 +27,31 @@
             <!--Middle Part Start-->
             <div id="content" class="box">
                 <div class="item">
-                    <img th:src="@{*{featureImage}}" class="h-v-5 w-full" />
+                    <img th:if="${event.featureImage}" th:src="@{${event.featureImage}}" class="h-v-5 w-full" />
+                    <img th:unless="${event.featureImage}" th:src="@{/assets/images/defaultImage.jpg}"
+                         alt="..." class="h-v-5 w-full">
                 </div>
                 <div class="p-a-md">
                     <h1 class="title" th:text="*{name}">About Us</h1>
                     <div class="content">
-                        <code th:if="${event.code != null && event.show}" class="center-block h2 p-a-md text-center w-lg w-xl" th:text="*{code}">xHfjuak0QNyt</code>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <p>Date from [[${#dates.format(event.dateFrom, 'dd-MM-yyyy hh:mm:ss')}]] to [[${#dates.format(event.dateTo, 'dd-MM-yyyy hh:mm:ss')}]]</p>
+                                <p>Range: [[${#numbers.formatDecimal(event.minPrice, 3, 'WHITESPACE', 0, 'NONE')}]] ~ [[${#numbers.formatDecimal(event.maxPrice, 3, 'WHITESPACE', 0, 'NONE')}]]₫</p>
+                                <p th:if="${event.value}">Sale: [[${#numbers.formatDecimal(event.value, 3, 'WHITESPACE', 0, 'NONE')}]]₫</p>
+                                <p th:if="${event.percentValue}">Sale: [[${event.percentValue}]]</p>
+                                <code th:if="${event.code != null && event.show}" class="center-block h2 p-a-md text-center w-lg w-xl" th:text="*{code}">xHfjuak0QNyt</code>
+                            </div>
+                            <div class="col-md-6 col-lg-6" th:if="${event.products.size() > 0}">
+                                <h5 class="text-uppercase">Products are applied</h5>
+                                <ul class="simple-ul">
+                                    <li th:each="product : ${event.products}">
+                                        <a th:href="@{'/product/'+${product.slug}}" th:text="${product.name}"></a>
+                                    </li>
+                                </ul>
+                                <div class="divider visible-sm visible-xs"></div>
+                            </div>
+                        </div>
                         <th:block th:utext="*{content}"> </th:block>
                     </div>
                     <p class="lead">

@@ -4,6 +4,7 @@ import OnlineMarket.form.filter.FilterForm;
 import OnlineMarket.model.Event;
 import OnlineMarket.model.User;
 import OnlineMarket.result.ResultObject;
+import OnlineMarket.util.exception.CustomException;
 import OnlineMarket.util.exception.event.EventNotFoundException;
 
 public interface EventService {
@@ -12,7 +13,7 @@ public interface EventService {
 
     void update(Event event, User user) throws EventNotFoundException;
 
-    void delete(Integer id) throws EventNotFoundException;
+    void delete(Integer id) throws EventNotFoundException, CustomException;
 
     Event getByDeclaration(String key, Object value);
 

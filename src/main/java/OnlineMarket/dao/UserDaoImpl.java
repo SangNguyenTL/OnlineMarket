@@ -13,6 +13,7 @@ import OnlineMarket.model.Event;
 import OnlineMarket.model.User;
 
 import java.util.Collection;
+import java.util.List;
 
 @Repository("userDao")
 public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
@@ -38,7 +39,16 @@ public class UserDaoImpl extends AbstractDao<Integer, User> implements UserDao {
 		return (User) criteria.uniqueResult();
 	}
 
-	@Override
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<User> listAdmin() {
+		Criteria criteria = createEntityCriteria();
+		criteria.createAlias("role", "roleAlias");
+		criteria.add(Restrictions.ne("roleAlias.name","USER"));
+		return criteria.list();
+    }
+
+    @Override
     public ResultObject<User> list(FilterForm filterForm) {
         Criteria criteria = createEntityCriteria();
         criteria.createAlias("role", "roleAlias");

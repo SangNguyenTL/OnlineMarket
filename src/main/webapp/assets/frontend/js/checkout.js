@@ -66,6 +66,8 @@
             addressInputSelect: this._element.find("#address"),
             productRow: this._element.find("tr[class*=product-]")
         };
+        this.eventList = [];
+        this.oldEventList = [];
 
         this.pending = false;
 
@@ -97,14 +99,10 @@
         this._element.on("click", ".refreshAddress", this.getAddressList);
         this._element.on("click", ".removeCode", this.removeCode);
         this._element.on("click", "#button-coupon", this.checkCode);
-    };
 
-    CheckOut.prototype.loadEvent = function(e){
-        let listEvent = this._element.find(".listEvent");
-        for(var i = 0; i < listEvent.length; i++){
-            let el = $(listEvent[i]), id = el.data("id");
-
-        }
+        $(document).on("ready",()=>{
+            this.generateCode();
+        });
     };
 
     CheckOut.prototype.OnAddressSelectChange = function (e) {
@@ -147,11 +145,11 @@
                     if(result.message) alert(message);
                     else if(result.validationErrorDTO.fieldErrors && result.validationErrorDTO.fieldErrors.length > 0){
                         $.each(result.validationErrorDTO.fieldErrors,(index, value)=>{
-                            let input = _this.childElement.find("[name='"+value.field+"']");
+                            let input = _this.childElement.addressForm.find("[name='"+value.field+"']");
                             if(input.length > 0){
                                 input.after("<ul class='parsley-errors-list'/>");
-                                let ul = $intput.closest(".form-group").find("ul");
-                                _this.childElement.find("[name='"+value.field+"']").addClass("parsley-error");
+                                let ul = input.closest(".form-group").find("ul");
+                                _this.childElement.addressForm.find("[name='"+value.field+"']").addClass("parsley-error");
                                 ul.append("<li>"+value.message+"</li>");
                             }
                         })
@@ -172,82 +170,6 @@
         }
         return false
     };
-
-    CheckOut.prototype.processCartRow = function (){
-        let _this = this;
-        this.cart = {};
-        this.totalCart = {
-            totalWeightAll : this.childElement.cartTable.find(".totalWeight"),
-            totalPaid : this.childElement.cartTable.find(".totalPaidReal"),
-            totalPaidShip : this.childElement.cartTable.find(".totalPaidShip"),
-            feeShip : this.childElement.cartTable.find(".feeShip"),
-            totalShip: this.childElement.cartTable.find(".totalShip"),
-            sale: this.childElement.cartTable.find(".sale"),
-            numbers:{
-                totalWeightAll: 0,
-                totalShip: 0,
-                totalPaid: 0,
-                totalPaidShip: 0,
-                sale: 0,
-                originalTotalPaid: 0
-            }
-        };
-        _this.totalCart.numbers.provinceFeeShip = Number.parseInt(_this.totalCart.feeShip.text().replace(/ /g, ''));
-        this.childElement.productRow = this._element.find("tr[class*=product-]");
-        this.childElement.productRow.each((i, v) => {
-            let el = $(v), id = el.attr("class").match(/product-(\d+)/)[1];
-
-            _this.cart[id] = {
-                id: id,
-                el: el,
-                unitPrice : el.find(".unitPrice.price-new"),
-                unitPriceOld : el.find(".unitPrice.price-old"),
-                totalPrice : el.find(".totalPrice.price-new"),
-                totalPriceOld : el.find(".totalPrice.price-old"),
-                unitWeight : el.next("tr").find(".unitWeight"),
-                totalWeight: el.next("tr").find(".totalWeightRow"),
-                quantity: el.find("input.productQuantity"),
-                eventList: el.find(".eventList"),
-                numbers: {}
-            };
-            _this.cart[id].numbers.quantity = Number.parseInt(_this.cart[id].quantity.val()) || 0;
-
-
-
-
-            for(let key in _this.cart[id]){
-                if(_this.cart[id].hasOwnProperty(key) && key.match(/(total|unit).+/) && Number.parseInt(_this.cart[id][key].text().replace(/ /g, "")))
-                    _this.cart[id].numbers[key] = Number.parseInt(_this.cart[id][key].text().replace(/ /g, ""))
-            }
-            for(let key in _this.cart[id]){
-                if(_this.cart[id].hasOwnProperty(key) && key.match(/total.+/)){
-                    let unit = key.replace(/total/, 'unit');
-                    _this.cart[id].numbers[key] = _this.cart[id].numbers[unit] * _this.cart[id].numbers.quantity;
-                    _this.cart[id][key].text(_this.cart[id].numbers[key].format(0, 3, ' '))
-                }
-            }
-            _this.totalCart.numbers.totalWeightAll = _this.totalCart.numbers.totalWeightAll + _this.cart[id].numbers.unitWeight * _this.cart[id].numbers.quantity;
-            _this.totalCart.totalWeightAll.text(_this.totalCart.numbers.totalWeightAll.format(0, 3, ' '));
-
-            let price = _this.cart[id].numbers.unitPriceOld || _this.cart[id].numbers.unitPrice;
-            _this.totalCart.numbers.originalTotalPaid =  _this.totalCart.numbers.originalTotalPaid + price * _this.cart[id].numbers.quantity;
-
-            _this.totalCart.numbers.totalPaid = _this.totalCart.numbers.totalPaid + _this.cart[id].numbers.unitPrice * _this.cart[id].numbers.quantity;
-            _this.totalCart.totalPaid.text(_this.totalCart.numbers.totalPaid.format(0, 3, ' '));
-            el.data(_this.cart[id]);
-        });
-
-        _this.totalCart.numbers.totalShip = Math.floor(_this.totalCart.numbers.totalWeightAll/1000 * _this.totalCart.numbers.provinceFeeShip);
-
-        _this.totalCart.totalShip.text(_this.totalCart.numbers.totalShip.format(0, 3, ' '));
-
-        if(_this.totalCart.sale.length > 0) _this.totalCart.numbers.sale = Number.parseInt(_this.totalCart.sale.text().replace(/ /g, ""));
-
-        _this.totalCart.numbers.totalPaidShip = _this.totalCart.numbers.totalPaid + _this.totalCart.numbers.totalShip - _this.totalCart.numbers.sale;
-        _this.totalCart.numbers.totalPaidShip = _this.totalCart.numbers.totalPaidShip > 0 ? _this.totalCart.numbers.totalPaidShip : 0;
-        _this.totalCart.totalPaidShip.text(_this.totalCart.numbers.totalPaidShip.format(0, 3, ' '));
-    };
-
 
     CheckOut.prototype.getAddressList = function (){
         let _this = this;
@@ -291,6 +213,81 @@
         return indexed_array;
     };
 
+    CheckOut.prototype.processCartRow = function (){
+        let _this = this;
+        this.cart = {};
+        this.totalCart = {
+            totalWeightAll : this.childElement.cartTable.find(".totalWeight"),
+            totalPaid : this.childElement.cartTable.find(".totalPaidReal"),
+            totalPaidShip : this.childElement.cartTable.find(".totalPaidShip"),
+            feeShip : this.childElement.cartTable.find(".feeShip"),
+            totalShip: this.childElement.cartTable.find(".totalShip"),
+            sale: this.childElement.cartTable.find(".sale"),
+            numbers:{
+                totalWeightAll: 0,
+                totalShip: 0,
+                totalPaid: 0,
+                totalPaidShip: 0,
+                sale: 0,
+                originalTotalPaid: 0
+            }
+        };
+        _this.totalCart.numbers.provinceFeeShip = Number.parseInt(_this.totalCart.feeShip.text().replace(/ /g, ''));
+        this.childElement.productRow = this._element.find("tr[class*=product-]");
+        this.childElement.productRow.each((i, v) => {
+            let el = $(v), id = el.attr("class").match(/product-(\d+)/)[1];
+
+            _this.cart[id] = {
+                id: id,
+                el: el,
+                unitPrice : el.find(".unitPrice.price-new"),
+                unitPriceOld : el.find(".unitPrice.price-old"),
+                totalPrice : el.find(".totalPrice.price-new"),
+                totalPriceOld : el.find(".totalPrice.price-old"),
+                unitWeight : el.next("tr").find(".unitWeight"),
+                totalWeight: el.next("tr").find(".totalWeightRow"),
+                quantity: el.find("input.productQuantity"),
+                eventList: el.find(".eventList"),
+                numbers: {}
+            };
+            _this.cart[id].numbers.quantity = Number.parseInt(_this.cart[id].quantity.val()) || 0;
+
+            for(let key in _this.cart[id]){
+                if(_this.cart[id].hasOwnProperty(key) && key.match(/(total|unit).+/) && Number.parseInt(_this.cart[id][key].text().replace(/\s/g, "")))
+                    _this.cart[id].numbers[key] = Number.parseInt(_this.cart[id][key].text().replace(/\s/g, ""))
+            }
+            _this.cart[id].numbers.unitPriceOld = _this.cart[id].numbers.unitPriceOld ? _this.cart[id].numbers.unitPriceOld : _this.cart[id].numbers.unitPrice;;
+            for(let key in _this.cart[id]){
+                if(_this.cart[id].hasOwnProperty(key) && key.match(/total.+/)){
+                    let unit = key.replace(/total/, 'unit');
+                    _this.cart[id].numbers[key] = _this.cart[id].numbers[unit] * _this.cart[id].numbers.quantity;
+                    _this.cart[id][key].text(_this.cart[id].numbers[key].format(0, 3, ' '))
+                }
+            }
+            _this.totalCart.numbers.totalWeightAll = _this.totalCart.numbers.totalWeightAll + _this.cart[id].numbers.unitWeight * _this.cart[id].numbers.quantity;
+            _this.totalCart.totalWeightAll.text(_this.totalCart.numbers.totalWeightAll.format(0, 3, ' '));
+
+            let price = _this.cart[id].numbers.unitPriceOld || _this.cart[id].numbers.unitPrice;
+            _this.totalCart.numbers.originalTotalPaid =  _this.totalCart.numbers.originalTotalPaid + price * _this.cart[id].numbers.quantity;
+
+            _this.totalCart.numbers.totalPaid = _this.totalCart.numbers.totalPaid + _this.cart[id].numbers.unitPrice * _this.cart[id].numbers.quantity;
+            _this.totalCart.totalPaid.text(_this.totalCart.numbers.totalPaid.format(0, 3, ' '));
+            el.data(_this.cart[id]);
+        });
+
+        _this.totalCart.numbers.totalShip = Math.floor(_this.totalCart.numbers.totalWeightAll/1000 * _this.totalCart.numbers.provinceFeeShip);
+
+        _this.totalCart.totalShip.text(_this.totalCart.numbers.totalShip.format(0, 3, ' '));
+
+        if(_this.totalCart.sale.length > 0) _this.totalCart.numbers.sale = Number.parseInt(_this.totalCart.sale.text().replace(/ /g, ""));
+
+        _this.totalCart.numbers.totalPaidShip = _this.totalCart.numbers.totalPaid + _this.totalCart.numbers.totalShip - _this.totalCart.numbers.sale;
+        _this.totalCart.numbers.totalPaidShip = _this.totalCart.numbers.totalPaidShip > 0 ? _this.totalCart.numbers.totalPaidShip : 0;
+        _this.totalCart.totalPaidShip.text(_this.totalCart.numbers.totalPaidShip.format(0, 3, ' '));
+    };
+
+
+
     CheckOut.prototype.updateProduct = function (e){
         let _this = this,
             target = $(e.target),
@@ -314,27 +311,20 @@
                 alert("This product not found or out of stock.");
                 _this.removeProduct(false, productId);
                 return;
-            }else if(result.list && result.list[0].quantity < quantity && quantity > 10){
-                alert("Your quantity is larger than this product quantity. That will be set it to the current value of product.");
-                productContainer.find("input.productQuantity").val(result.list[0].quantity);
-                quantity = result.list[0].quantity;
-            }else if(quantity > 10){
-                alert("You only buy up to 10 items each.");
-                quantity = 10;
-                productContainer.find("input.productQuantity").val(quantity);
+            }else if(10 < quantity){
+                if(result.list[0].quantity > 10){
+                    productContainer.find("input.productQuantity").val(10);
+                    quantity = 10;
+                    alert("You only buy up to 10 items each.");
+                }else{
+                    alert("Your quantity is larger than this product quantity. That will be set it to the current value of product.");
+                    quantity = result.list[0].quantity;
+                }
             }
-            simpleCart.find(productId) && simpleCart.find(productId).set("quantity", quantity);
+            productContainer.find("input.productQuantity").val(quantity);
+            simpleCart.find(productId).length > 0 && simpleCart.find(productId).set("quantity", quantity);
             simpleCart.update();
-            for(let i = 0; i < _this._element.find(".listEvent").length; i++){
-                let el = $(_this._element.find(".listEvent")[0]), event = el.data("event");
-                _this.removeEvent(event);
-            }
-            _this.processCartRow();
-            for(let i = 0; i < _this._element.find(".listEvent").length; i++){
-                let el = $(_this._element.find(".listEvent")[0]), event = el.data("event");
-                _this.addEvent(event);
-            }
-            _this.processCartRow();
+            _this.processEvent();
         }).always(()=>{
             _this.pending = false;
         });
@@ -352,27 +342,66 @@
         }
         if(!isNaN(productId))
             delete _this.cart[productId];
-        simpleCart.find(productId) && simpleCart.find(productId).remove();
+        simpleCart.find(productId).length > 0 && simpleCart.find(productId).remove();
         simpleCart.update();
         productContainer.next("tr").remove();
         productContainer.remove();
-        for(let i = 0; i < _this._element.find(".listEvent").length; i++){
-            let el = $(_this._element.find(".listEvent")[0]), event = el.data("event");
-            _this.removeEvent(event);
-        }
-        _this.processCartRow();
-        for(let i = 0; i < _this._element.find(".listEvent").length; i++){
-            let el = $(_this._element.find(".listEvent")[0]), event = el.data("event");
-            _this.addEvent(event);
-        }
-        _this.processCartRow();
+        this.processEvent();
         if(simpleCart.quantity() === 0){
             alert("Cart is empty.");
             window.location.href = "/";
         }
     };
 
-    CheckOut.prototype.checkCode = function (e){
+    CheckOut.prototype.promiseCode = function(i, v ){
+
+        let _this = this, productIds = [], container = $(v) ,el = container.find("input"), value = el.val();
+        _this.childElement.productRow.each((index, value) => {
+            productIds.push($(value).data("id"))
+        });
+
+        return $.post(PATH+"api/event/check-code",JSON.stringify({
+            code: value,
+            productIds : productIds
+        }), result => {
+            if(!result.error){
+                if(result.list && result.list.length > 0){
+                    for(let key in result.list){
+                        if(result.list.hasOwnProperty(key)){
+                            event = result.list[key];
+                            container.data("event", event);
+                            _this.eventList.push(event);
+                        }
+                    }
+                }
+            }else{
+                if(result.message) alert(result.message);
+                else if(result.validationErrorDTO.fieldErrors && result.validationErrorDTO.fieldErrors.length > 0){
+                    container.addClass("parsley-error");
+                    container.after("<ul class='parsley-errors-list'/>");
+                    $.each(result.validationErrorDTO.fieldErrors, (i,v) =>{
+                        container.next(".parsley-errors-list").append("<li>"+v.message+"</li>")
+                    })
+                }
+            }
+        }, "application/json")
+    };
+
+    CheckOut.prototype.generateCode = function(){
+        let _this = this, promise = false,
+            deferred = new $.Deferred();
+        _this.eventList = [];
+        _this._element.find(".listEvent").each((i,v)=>{
+            if(!promise) promise = deferred.promise();
+            promise = promise.then(function () {
+                return _this.promiseCode(i,v)
+            })
+        });
+        deferred.resolve();
+        return promise;
+    };
+
+    CheckOut.prototype.checkCode = function (){
 
         let _this = this, checkCode = false,
             productIds = [], el = _this._element.find("#input-coupon"), value = el.val(), containerInput = el.closest(".input-group"),
@@ -421,25 +450,28 @@
                     for(let key in result.list){
                         if(result.list.hasOwnProperty(key)){
                             let event = result.list[key];
-                            if(_this.addEvent(event)){
-                                let index = _this._element.find(".listEvent").length;
-                                let html =
-                                    "<div id='event-"+event.id+"' class='form-group listEvent'>" +
-                                    "<label class='form-control-label col-sm-6'><a href='"+PATH+"event/"+event.id+"'>"+event.name+"</a></label>"+
-                                    "<div class='col-sm-6'>" +
-                                    "<div class='input-group'>" +
-                                    "<input class='form-control' readonly='readonly' type='text' name='events["+index+"].code' value='"+event.code+"' />" +
-                                    "<span class='input-group-btn'>" +
-                                    "<a href='#' class='btn btn-danger removeCode'><i class='fa fa-close'></i></a>" +
-                                    "</span>"+
-                                    "</div>" +
-                                    "</div>"+
-                                    "</div>";
-                                container.after(html);
-                                $("#event-"+event.id).data('event', event);
-                                _this.processCartRow();
-                                alert("The code is valid, that is applied.")
+                            _this.eventList.push(event);
+                            let i = 0;
+                            for(i; i <_this._element.find(".listEvent").length; i++ ){
+                                let input = $(_this._element.find(".listEvent")[i]).find('input'), name = input.attr("name");
+                                name = name.replace(/\d+/, i);
+                                input.attr("name", name)
                             }
+                            let html =
+                                "<div id='event-"+event.id+"' class='form-group listEvent'>" +
+                                "<label class='form-control-label col-sm-6'><a href='"+PATH+"event/"+event.id+"'>"+event.name+"</a></label>"+
+                                "<div class='col-sm-6'>" +
+                                "<div class='input-group'>" +
+                                "<input class='form-control' readonly='readonly' type='text' name='eventList["+i+"].code' value='"+event.code+"' />" +
+                                "<span class='input-group-btn'>" +
+                                "<a href='#' class='btn btn-danger removeCode'><i class='fa fa-close'></i></a>" +
+                                "</span>"+
+                                "</div>" +
+                                "</div>"+
+                                "</div>";
+                            container.after(html);
+                            $("#event-"+event.id).data('event', event);
+                            _this.processEvent();
                         }
                     }
                 }
@@ -455,152 +487,139 @@
     CheckOut.prototype.removeCode = function(e) {
         e.preventDefault();
         let el = $(e.currentTarget), container = el.closest(".listEvent"), data = container.data('event'), id = data ? data.id : container.data("id");
-        if(!data){
-            let _this = this,
-                productIds = [], el = container.find("input"), value = el.val();
-            _this.childElement.productRow.each((index, value) => {
-                productIds.push($(value).data("id"))
-            });
-            if(_this.pending){
-                alert("Pending... please wait.");
-                return;
-            }
-            _this.pending = true;
-            $.post(PATH+"api/event/check-code",JSON.stringify({
-                code: value,
-                productIds : productIds
-            }), result => {
-                if(!result.error){
-                    if(result.list && result.list.length > 0){
-                        for(let key in result.list){
-                            if(result.list.hasOwnProperty(key)){
-                                data = result.list[key];
-                            }
-                        }
+
+        this.childElement.cartTable.find(".event-"+id).remove();
+        this.eventList = this.eventList.filter((event)=>{
+            return event.id !== data.id;
+        });
+        this.processEvent();
+        container.remove();
+        let listEvent = this._element.find('.listEvent');
+        for(let i = 0; i < listEvent.length; i++ ){
+            let input = $(listEvent[i]).find('input'), name = input.attr("name");
+            name = name.replace(/\d+/, i);
+            input.attr("name", name)
+        }
+        alert("Delete event is success!")
+
+    };
+
+    CheckOut.prototype.processEvent = function(){
+        this.removeAllEvent();
+        this.addAllEvent();
+    };
+
+    CheckOut.prototype.removeAllEvent = function(){
+        let _this = this, eventForOrder = [];
+        if(_this.oldEventList.length === 0) return;
+        for(let i = 0; i < _this.oldEventList.length; i++){
+            let event = _this.oldEventList[i];
+            if(typeof event.products === "object" && event.products.length === 0) eventForOrder.push(event);
+            else{
+                $.each(event.products, (i,v) => {
+                    let id = v.id;
+                    if(!_this.cart[id]) return;
+                    let unitPrice = _this.cart[id].numbers.unitPrice, totalPrice = _this.cart[id].numbers.totalPrice,
+                        quantity = _this.cart[id].numbers.quantity,
+                        originalPrice = v.price, originalTotalPrice = originalPrice * quantity;
+                    _this.cart[id].eventList.find(".event-"+event.id).remove();
+                    if(event.value){
+                        _this.cart[id].numbers.unitPrice = unitPrice = unitPrice + event.value;
+                        _this.cart[id].numbers.totalPrice = totalPrice = totalPrice + event.value * quantity;
                     }
-                }
-                _this.childElement.cartTable.find(".event-"+id).remove();
-                _this.processEvent(data, true);
-                container.remove();
-                let listEvent = this._element.find('.listEvent');
-                for(let i = 0; i < listEvent.length; i++ ){
-                    let input = $(listEvent[i]).find('input'), name = input.attr("name");
-                    name = name.replace(/\d+/, i);
-                    input.attr("name", name)
-                }
-                alert("Delete event is success!")
-            }, "application/json")
-                .always(()=>{
-                    _this.pending = false;
+                    else if(event.percentValue){
+                        _this.cart[id].numbers.unitPrice  = unitPrice = unitPrice + Math.floor(originalPrice/100 * event.percentValue);
+                        _this.cart[id].numbers.totalPrice = totalPrice = totalPrice + Math.floor(originalTotalPrice/100 * event.percentValue);
+                    }
+                    if(originalPrice === unitPrice){
+                        _this.cart[id].unitPriceOld.remove();
+                        _this.cart[id].unitPriceOld = _this.cart[id].el.find('.price-old.unitPrice');
+                        _this.cart[id].totalPriceOld.remove();
+                        _this.cart[id].totalPriceOld = _this.cart[id].el.find('.price-old.totalPrice');
+                    }
+
+                    _this.cart[id].unitPrice.html((unitPrice).format(0, 3, " "));
+                    _this.cart[id].totalPrice.html((totalPrice).format(0, 3, " "));
                 });
-        }else{
-            this.childElement.cartTable.find(".event-"+id).remove();
-            this.processEvent(data, true);
-            container.remove();
-            let listEvent = this._element.find('.listEvent');
-            for(let i = 0; i < listEvent.length; i++ ){
-                let input = $(listEvent[i]).find('input'), name = input.attr("name");
-                name = name.replace(/\d+/, i);
-                input.attr("name", name)
-            }
-            alert("Delete event is success!")
-        }
-
-    };
-
-    CheckOut.prototype.addEvent = function(event) {
-        let _this = this;
-
-        if(!event.products || event.products.length === 0){
-            if(_this.totalCart.numbers.totalPaid > event.maxPrice || _this.totalCart.numbers.totalPaid < event.minPrice){
-                alert("Order value is not in the price range of the event.", "warning");
-                return false;
-            }
-            if(_this.totalCart.sale.length === 0)
-                _this.childElement.cartTable.find(".totalPaidShip").closest("tr").before("<tr><td class='text-right' colspan='2'>Sale</td><td class='text-right sale' colspan='3'></td></tr>");
-            _this.totalCart.sale =  _this.childElement.cartTable.find(".sale");
-            let saleNum = _this.totalCart.numbers.sale || 0;
-            if(event.value) saleNum = saleNum + event.value;
-            else if(event.percentValue)
-                saleNum = saleNum + Math.floor(_this.totalCart.numbers.totalPaid/100 * event.percentValue);
-            _this.totalCart.numbers.sale = saleNum;
-            _this.totalCart.sale.text(saleNum.format(0, 3, ' '))
-        }else{
-            let count = 0;
-            $.each(event.products, (i,v) => {
-                let id = v.id;
-                if(!_this.cart[id]) return;
-                let originalPrice = v.price, quantity = _this.cart[id].numbers.quantity, unitPrice = _this.cart[id].numbers.unitPrice, totalPrice = _this.cart[id].numbers.totalPrice, originalTotalPrice = originalPrice * quantity;
-                _this.cart[id].eventList.append("<li class='event-"+event.id+"'><a href='"+PATH+"event/"+event.id+"'>"+event.name+"</a></li>");
-                if(_this.cart[id].unitPriceOld.length === 0){
-                    _this.cart[id].unitPrice.before("<p class='price-old unitPrice'>"+originalPrice.format(0, 3, " ")+"</p>");
-                    _this.cart[id].totalPrice.before("<p class='price-old totalPrice'>"+(originalPrice*quantity).format(0, 3, " ")+"</p>");
-                    _this.cart[id].totalPriceOld = _this.cart[id].el.find('.price-old.totalPrice');
-                    _this.cart[id].unitPriceOld = _this.cart[id].el.find('.price-old.unitPrice');
-                }
-                if(event.value){
-                    _this.cart[id].unitPrice.html((unitPrice - event.value).format(0, 3, " "));
-                    _this.cart[id].totalPrice.html((totalPrice - event.value * quantity).format(0, 3, " "));
-                }else if(event.percentValue){
-                    _this.cart[id].unitPrice.html((unitPrice - Math.floor(originalPrice/100 * event.percentValue)).format(0, 3, " "));
-                    _this.cart[id].totalPrice.html((totalPrice  - Math.floor(originalPrice/100 * event.percentValue) * quantity).format(0, 3, " "));
-                }
-                count++;
-            });
-            if(count ===0){
-                alert("There are no products that match '"+event.code+"'.", "warning");
-                _this._element.find("#event-"+event.id).remove();
-                return false;
             }
         }
-        return true;
-    };
-
-    CheckOut.prototype.removeEvent = function(event) {
-        let _this = this;
-        if(!event.products || event.products.length === 0){
-            if(_this.totalCart.sale.length === 0) return;
+        this.processCartRow();
+        for(let i = 0; i < eventForOrder.length; i++){
+            let event = eventForOrder[i];
             if(event.value) _this.totalCart.numbers.sale = _this.totalCart.numbers.sale - event.value;
             else if(event.percentValue) {
-                _this.totalCart.numbers.sale = _this.totalCart.numbers.sale - Math.floor(_this.totalCart.numbers.totalPaid/100 * event.percentValue);
+                _this.totalCart.numbers.sale = _this.totalCart.numbers.sale - Math.floor(_this.totalCart.numbers.originalTotalPaid/100 * event.percentValue);
             }
             if(_this.totalCart.numbers.sale > 0)
                 _this.totalCart.sale.text(_this.totalCart.numbers.sale.format(0, 3, ' '));
-            else _this.totalCart.sale.closest("tr").remove();
-        }else{
-            $.each(event.products, (i,v) => {
-                let id = v.id;
-                if(!_this.cart[id]) return;
-                let unitPrice = _this.cart[id].numbers.unitPrice, totalPrice = _this.cart[id].numbers.totalPrice,
-                    quantity =_this.cart[id].numbers.quantity,
-                    originalPrice = v.price, originalTotalPrice = originalPrice * quantity;
-                _this.cart[id].eventList.find(".event-"+event.id).remove();
-                if(event.value){
-                    _this.cart[id].numbers.unitPrice = unitPrice = unitPrice + event.value;
-                    _this.cart[id].numbers.totalPrice = totalPrice = totalPrice + event.value * quantity;
-                }
-                else if(event.percentValue){
-                    _this.cart[id].numbers.unitPrice  = unitPrice = unitPrice + Math.floor(originalPrice/100 * event.percentValue);
-                    _this.cart[id].numbers.totalPrice = totalPrice = totalPrice + Math.floor(originalTotalPrice/100 * event.percentValue);
-                }
-                if(originalPrice === unitPrice){
-                    _this.cart[id].unitPriceOld.remove();
-                    _this.cart[id].totalPriceOld.remove();
-                }
-
-                _this.cart[id].unitPrice.html((unitPrice).format(0, 3, " "));
-                _this.cart[id].totalPrice.html((totalPrice).format(0, 3, " "));
-
-            })
+            else {
+                _this.totalCart.sale.closest("tr").remove();
+                _this.totalCart.sale = _this.childElement.cartTable.find(".sale");
+            }
         }
+        this.processCartRow();
     };
 
-    CheckOut.prototype.processEvent = function(event, remove) {
-        if(!remove) this.addEvent(event);
-        else this.removeEvent(event);
+    CheckOut.prototype.addAllEvent = function() {
+        let _this = this, eventForOrder = [];
+        _this.oldEventList = [];
+        for(let i = 0; i < _this.eventList.length; i++){
+            let event = _this.eventList[i];
+            if(typeof event.products === "object" && event.products.length === 0) eventForOrder.push(event);
+            else {
+                let count = 0;
+                $.each(event.products, (i,v) => {
+                    let id = v.id;
+                    if(!_this.cart[id]) return;
+                    let originalPrice = v.price,
+                        quantity = _this.cart[id].numbers.quantity,
+                        unitPrice = _this.cart[id].numbers.unitPrice,
+                        totalPrice = _this.cart[id].numbers.totalPrice;
+                    if(_this.cart[id].eventList.find('#event-'+event.id).length === 0)
+                        _this.cart[id].eventList.append("<li class='event-"+event.id+"'><a href='"+PATH+"event/"+event.id+"'>"+event.name+"</a></li>");
+                    if(_this.cart[id].unitPriceOld.length === 0){
+                        _this.cart[id].unitPrice.before("<p class='price-old unitPrice'>"+originalPrice.format(0, 3, " ")+"</p>");
+                        _this.cart[id].totalPrice.before("<p class='price-old totalPrice'>"+(originalPrice*quantity).format(0, 3, " ")+"</p>");
+                        _this.cart[id].totalPriceOld = _this.cart[id].el.find('.price-old.totalPrice');
+                        _this.cart[id].unitPriceOld = _this.cart[id].el.find('.price-old.unitPrice');
+                    }
+                    if(event.value){
+                        _this.cart[id].unitPrice.html((unitPrice - event.value).format(0, 3, " "));
+                        _this.cart[id].totalPrice.html((totalPrice - event.value * quantity).format(0, 3, " "));
+                    }else if(event.percentValue){
+                        _this.cart[id].unitPrice.html((unitPrice - Math.floor(originalPrice/100 * event.percentValue)).format(0, 3, " "));
+                        _this.cart[id].totalPrice.html((totalPrice  - Math.floor(originalPrice/100 * event.percentValue) * quantity).format(0, 3, " "));
+                    }
+                    count++;
+                });
+                if(count ===0){
+                    alert("There are no products that match '"+event.code+"'.", "warning");
+                    _this._element.find("#event-"+event.id).remove();
+                }
+            }
+            _this.oldEventList.push(event);
+        }
+        this.processCartRow();
+        for(let i = 0; i < eventForOrder.length; i++){
+            let event = eventForOrder[i];
+            if(_this.totalCart.numbers.originalTotalPaid > event.maxPrice || _this.totalCart.numbers.originalTotalPaid < event.minPrice){
+                alert("Order value is not in the price range of the event.", "warning");
+            }else {
+                if(_this.totalCart.sale.length === 0)
+                    _this.childElement.cartTable.find(".totalPaidShip").closest("tr").before("<tr><td class='text-right' colspan='2'><strong>Sale:</strong></td><td class='text-right sale' colspan='3'></td></tr>");
+                _this.totalCart.sale =  _this.childElement.cartTable.find(".sale");
+                let saleNum = _this.totalCart.numbers.sale || 0;
+                if(event.value) saleNum = saleNum + event.value;
+                else if(event.percentValue)
+                    saleNum = saleNum + Math.floor(_this.totalCart.numbers.originalTotalPaid/100 * event.percentValue);
+                _this.totalCart.numbers.sale = saleNum;
+                _this.totalCart.sale.text(saleNum.format(0, 3, ' '))
+            }
+        }
+        this.processCartRow();
     };
 
-    $.fn[pluginName] = function (options) {
+    $.fn.checkOut = function (options) {
         this.each(function () {
             if (!$.data(this, pluginName)) {
                 $.data(this, pluginName, new CheckOut(this, options));
@@ -613,5 +632,5 @@
     return CheckOut;
 }));
 (function($){
-    $("#content").checkOut();
+    $(document).find("#content").checkOut();
 }(jQuery));

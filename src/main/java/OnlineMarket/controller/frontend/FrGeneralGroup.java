@@ -7,6 +7,7 @@ import OnlineMarket.model.ProductCategory;
 import OnlineMarket.service.BrandService;
 import OnlineMarket.service.ProductCategoryService;
 import OnlineMarket.service.ProductService;
+import OnlineMarket.util.other.ProductStatus;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
@@ -41,19 +42,19 @@ public class FrGeneralGroup extends MainController {
 
     protected Boolean brandPage;
 
-    @ModelAttribute
-    public ModelMap modelAttribute(ModelMap model) {
+    @Override
+    public void addMeta(ModelMap model) {
 
         filterForm = new FilterForm();
 
-        filterForm.getGroupSearch().put("state", "0");
+        filterForm.getGroupSearch().put("state", ProductStatus.INSTOCK.getId().toString());
         filterForm.setOrderBy("releaseDate");
         filterForm.setOrder("desc");
 
         brand = null;
         productCategory = null;
 
-        return model;
+        model.put("filterForm", filterForm);
     }
 
 

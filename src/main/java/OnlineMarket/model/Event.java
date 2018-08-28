@@ -54,6 +54,7 @@ public class Event implements java.io.Serializable {
 	private boolean show = true;
 	private String featureImage;
 	private List<Product> products = new ArrayList<>(0);
+	private Set<Order> orders = new HashSet<>(0);
 
 	public Event() {
 	}
@@ -234,8 +235,19 @@ public class Event implements java.io.Serializable {
 		return this.products;
 	}
 
-	public void setProducts(List<Product> products) {
-		this.products = products;
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "events")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	@JsonIgnore
+    public Set<Order> getOrders() {
+        return this.orders;
+    }
+
+	public void setOrders(Set<Order> orders) {
+		this.orders = orders;
 	}
 
 	@Column(name = "feature_image", length = 2088)

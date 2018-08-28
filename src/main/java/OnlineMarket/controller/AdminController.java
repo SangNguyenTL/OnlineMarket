@@ -1,5 +1,7 @@
 package OnlineMarket.controller;
 
+import OnlineMarket.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -10,9 +12,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/admin")
 public class AdminController extends MainController {
 
-	@ModelAttribute
-	public ModelMap modelAttribute(ModelMap model) {
-		return model;
+	@Autowired
+	OrderService orderService;
+
+	@Override
+	public void addMeta(ModelMap model) {
+        model.put("countUser", userService.countUser());
+        model.put("countBrand", brandService.count());
+        model.put("countOrder", orderService.count());
+        model.put("countProductCategory",productCategoryService.count());
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.GET)

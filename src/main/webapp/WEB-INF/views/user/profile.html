@@ -35,7 +35,7 @@
             <div class="row">
                 <div class="col-sm-6 push-sm-6">
                     <div class="p-y text-center text-sm-right">
-                        <a th:href="@{/user/order}" class="inline p-x text-center">
+                        <a th:href="@{'/user/'+${user.id}+'/order'}" class="inline p-x text-center">
                             <span class="h4 block m-a-0" th:text="${T(OnlineMarket.util.Help).format(user.orders.size())}">2k</span>
                             <small class="text-xs text-muted">Orders</small>
                         </a>

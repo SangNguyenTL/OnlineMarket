@@ -2,7 +2,10 @@ package OnlineMarket.service;
 
 import java.util.Date;
 
+import OnlineMarket.dao.OrderDao;
+import OnlineMarket.model.Order;
 import OnlineMarket.model.User;
+import OnlineMarket.util.exception.CustomException;
 import OnlineMarket.util.exception.event.EventNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,9 @@ public class EventServiceImpl implements EventService{
 
 	@Autowired
 	EventDao eventDao;
+
+	@Autowired
+	OrderDao orderDao;
 
 	@Override
 	public void save(Event event, User user) {
@@ -38,9 +44,11 @@ public class EventServiceImpl implements EventService{
 	}
 
 	@Override
-	public void delete(Integer id) throws EventNotFoundException {
+	public void delete(Integer id) throws EventNotFoundException, CustomException {
 		Event event = eventDao.getByKey(id);
 		if(event == null) throw new EventNotFoundException();
+		Order order = orderDao.getByEvent(event);
+		if(order != null) throw new CustomException("The event has order.");
 		eventDao.delete(event);
 	}
 

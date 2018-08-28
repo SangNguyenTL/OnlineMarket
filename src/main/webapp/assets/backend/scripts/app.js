@@ -83,16 +83,17 @@
             accent: getColor( app.setting.theme.accent ),
             warn: getColor( app.setting.theme.warn )
         };
-    };
+    }
 
     function getColor(name){
         return app.color[ name ] ? app.color[ name ] : palette.find(name);
-    };
+    }
 
     function init(){
         $('[ui-jp]').uiJp();
         $('body').uiInclude();
-        $('[data-toggle="popover"]').popover()
+        $('[data-toggle="popover"]').popover();
+        $('[data-toggle="tooltip"]').tooltip();
     }
 
     $(document).on('pjaxStart', function() {
@@ -250,6 +251,44 @@
                     else{
                         alert("Success!");
                         container.html("<span class='text-success'>Activated</span>")
+                    }
+            },
+            error: function () {
+                alert("Unknown error", "danger");
+            },
+            complete: function () {
+                window.pending = false;
+            }
+
+        })
+    });
+
+    $(document).on('change', "select.changeStateOrder", function(e) {
+        let element = $(e.target), id = element.data("id"),
+            val = element.val();
+        if(!id) return;
+        if(window.pending){
+            alert("Processing...", "warning");
+            return;
+        }
+        $.ajax({
+            type: 'GET',
+            url: PATH + 'api/order/change-status',
+            data: {
+                id : id,
+                status: val
+            },
+            beforeSend: function () {
+                window.pending = true;
+            },
+            dataType: 'json',
+            success: function (data, textStatus) {
+                if(textStatus)
+                    if(data.error)
+                        alert(data.message, "warning");
+                    else{
+                        alert("Success!");
+                        alert("Change order status success")
                     }
             },
             error: function () {

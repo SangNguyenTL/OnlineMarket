@@ -12,15 +12,14 @@ import OnlineMarket.controller.MainController;
 @RequestMapping("/admin/media")
 public class MediaController extends MainController{
 
-	@ModelAttribute
-	public ModelMap modelAttribute(ModelMap model) {
+	@Override
+	public void addMeta(ModelMap model) {
 		relativePath = "/admin/media";
+		generateBreadcrumbs();
 		breadcrumbs.add(new String[]{ relativePath, "Meida"});
-
-		return model;
 	}
 
-		@RequestMapping(value = { "" }, method = RequestMethod.GET)
+	@RequestMapping(value = { "" }, method = RequestMethod.GET)
 	public String mainPage(ModelMap model) {
 		model.put("pageTitle", "Multimedia");
 		return "backend/media";

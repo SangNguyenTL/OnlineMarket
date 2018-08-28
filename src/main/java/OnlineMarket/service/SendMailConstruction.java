@@ -1,5 +1,8 @@
 package OnlineMarket.service;
 
+import OnlineMarket.form.config.GeneralConfig;
+import OnlineMarket.model.Notification;
+import OnlineMarket.model.Order;
 import eu.bitwalker.useragentutils.UserAgent;
 import OnlineMarket.form.config.ContactConfig;
 import OnlineMarket.form.config.EmailSystemConfig;
@@ -88,6 +91,58 @@ public class SendMailConstruction {
         final String html =  emailTemplateEngine.process("html/verification-email", ctx);
 
         constructEmail("Verification Account", messageHelper, user, html);
+
+        javaMailSender.send(message);
+    }
+
+    public void sendApprovedOrderTotUser(final Order order, final User user,HttpServletRequest request) throws MessagingException {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper messageHelper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
+
+        final ContactConfig contactConfig = configurationService.getContact();
+        final GeneralConfig generalConfig = configurationService.getGeneral();
+
+
+        String url = processUrl(request);
+
+
+        final Context ctx = new Context();
+        ctx.setVariable("order", order);
+        ctx.setVariable("general", generalConfig);
+        ctx.setVariable("title", "Order #"+order.getId()+" was approved.");
+        ctx.setVariable("contact", contactConfig);
+        ctx.setVariable("systemName", configurationService.getGeneral().getTitle());
+        ctx.setVariable("support_url",  contactConfig.getEmail());
+        ctx.setVariable("location", contactConfig.getAddress());
+        ctx.setVariable("signature", url);
+
+        final String html =  emailTemplateEngine.process("html/confirm-order-email", ctx);
+
+        constructEmail("Order #"+order.getId()+" was approved.", messageHelper, user, html);
+
+        javaMailSender.send(message);
+    }
+
+    public void sendDeleteOrderToUser(Notification notification, HttpServletRequest request) throws MessagingException {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper messageHelper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
+
+        ContactConfig contactConfig = configurationService.getContact();
+
+        String url = processUrl(request);
+
+
+        final Context ctx = new Context();
+        ctx.setVariable("name", notification.getUser().getFirstName()+" "+notification.getUser().getLastName());
+        ctx.setVariable("location", contactConfig.getAddress());
+        ctx.setVariable("signature", url);
+        ctx.setVariable("content", notification.getContent());
+        ctx.setVariable("systemName", configurationService.getGeneral().getTitle());
+        ctx.setVariable("support_url",  contactConfig.getEmail());
+
+        final String html =  emailTemplateEngine.process("html/content-email", ctx);
+
+        constructEmail("Your order wasn't approved", messageHelper, notification.getUser(), html);
 
         javaMailSender.send(message);
     }

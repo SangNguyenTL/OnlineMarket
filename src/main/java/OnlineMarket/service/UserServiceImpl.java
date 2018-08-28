@@ -252,4 +252,28 @@ public class UserServiceImpl implements UserService {
 	public void deletePasswordResetToken(PasswordResetToken passwordResetToken) {
 		passwordResetTokenDao.delete(passwordResetToken);
 	}
+
+	@Override
+	public Map<String,Long> countUser(){
+
+		Map<String,Long> map = new HashMap<>();
+		long active = userDao.countBy("state", State.ACTIVE.name());
+		long inactive = userDao.countBy("state", State.INACTIVE.name());
+		long lock = userDao.countBy("state", State.LOCKED.name());
+		long deleted = userDao.countBy("state", State.DELETED.name());
+		long all = userDao.count();
+
+		map.put("active",active);
+		map.put("inactive", inactive);
+		map.put("lock", lock);
+		map.put("deleted", deleted);
+		map.put("all",all);
+
+		return map;
+	}
+
+    @Override
+    public List<User> listAdmin() {
+        return userDao.listAdmin();
+    }
 }

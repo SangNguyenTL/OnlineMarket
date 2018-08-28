@@ -4,21 +4,21 @@ import java.util.*;
 
 public class FilterForm {
 	
-	private Map<String, String> groupSearch = new TreeMap<>();
+	protected Map<String, String> groupSearch = new TreeMap<>();
 
-	private List<String> excludeProperties = new ArrayList<>();
+    protected List<String> excludeProperties = new ArrayList<>();
 
-	private String search = "";
-	
-	private String searchBy = "";
-	
-	private String order = "asc";
-	
-	private String orderBy = "id";
-	
-	private Integer size = 10;
-	
-	private int currentPage = 1;
+    protected String search = "";
+
+    protected String searchBy = "";
+
+    protected String order = "asc";
+
+    protected String orderBy = "id";
+
+    protected Integer size = 10;
+
+    protected int currentPage = 1;
 
 	public int getCurrentPage() {
 		return currentPage;
@@ -65,6 +65,7 @@ public class FilterForm {
 	}
 
 	public void setSize(Integer size) {
+		size = size != null && size <= 50 ? size : 10;
 		this.size = size;
 	}
 

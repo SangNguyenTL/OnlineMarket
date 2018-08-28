@@ -40,7 +40,7 @@
 									<label class="col-sm-3 form-control-label">Slug</label>
 									<div class="col-sm-9">
 										<input th:errorclass="parsley-error" class="form-control" type="text" th:field="*{slug}" required data-parsley-length="[3, 64]" data-parsley-id="2" data-parsley-target="name" 
-										th:attr="data-parsley-unique-slug=@{/api/product-category/check-slug}" />
+										/>
 										<ul class="parsley-errors-list filled" id="parsley-id-2" th:if="${#fields.hasErrors('slug')}"><li th:errors="*{slug}"> </li></ul>
 									</div>
 								</div>

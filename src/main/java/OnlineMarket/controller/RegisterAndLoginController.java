@@ -12,6 +12,7 @@ import OnlineMarket.service.SendMailConstruction;
 import OnlineMarket.util.exception.CustomException;
 import OnlineMarket.util.exception.PasswordResetTokenExistingException;
 import OnlineMarket.util.exception.user.UserNotFoundException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.mail.MailSendException;
@@ -29,6 +30,7 @@ import org.thymeleaf.exceptions.TemplateProcessingException;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.groups.Default;
 import java.util.Calendar;
@@ -51,7 +53,7 @@ public class RegisterAndLoginController extends MainController{
     ApplicationEventPublisher eventPublisher;
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String loginPage(ModelMap model, HttpSession session) {
+    public String loginPage(ModelMap model, HttpSession session, HttpServletRequest request) {
         breadcrumbs.add(new String[]{"/login", "Login"});
 
         if (currentUser != null)
@@ -62,8 +64,9 @@ public class RegisterAndLoginController extends MainController{
             String redirect;
             if(savedRequest!= null)
                 redirect =  savedRequest.getRedirectUrl();
-            else
-                redirect = "/";
+            else if(StringUtils.isNotBlank(request.getHeader("referer")))
+                redirect = request.getHeader("referer");
+            else redirect = "/";
             model.put("redirect", redirect);
         }
 
@@ -72,10 +75,20 @@ public class RegisterAndLoginController extends MainController{
     }
 
     @RequestMapping(value = { "/register" }, method = RequestMethod.GET)
-    public String registerPage(ModelMap model) {
+    public String registerPage(ModelMap model, HttpSession session, HttpServletRequest request, HttpServletResponse response) {
 
-        if (currentUser != null)
+        if (currentUser != null){
             return "redirect:/";
+
+        }
+        if(session != null){
+            SavedRequest savedRequest = (SavedRequest) session.getAttribute("SPRING_SECURITY_SAVED_REQUEST");
+            if(savedRequest!= null && savedRequest.getRedirectUrl().contains("/check-out") ){
+                session.setAttribute("SPRING_SECURITY_SAVED_REQUEST", savedRequest.getRedirectUrl());
+            }
+            else if(StringUtils.isNotBlank(request.getHeader("referer")) && request.getHeader("referer").contains("/check-out"))
+                response.setHeader("referer",request.getHeader("referer" ));
+        }
 
         breadcrumbs.add(new String[]{"/register", "Registration"});
         model.put("pageTitle", "Registration");

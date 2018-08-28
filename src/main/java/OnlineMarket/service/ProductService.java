@@ -5,6 +5,7 @@ import OnlineMarket.form.filter.SearchSelect;
 import OnlineMarket.model.*;
 import OnlineMarket.result.ResultObject;
 import OnlineMarket.result.api.ResultProduct;
+import OnlineMarket.util.exception.CustomException;
 import OnlineMarket.util.exception.product.ProductHasCommentException;
 import OnlineMarket.util.exception.product.ProductNotFoundException;
 import OnlineMarket.util.exception.productCategory.ProductCategoryNotFoundException;
@@ -21,11 +22,11 @@ public interface ProductService {
 
     FrontendProduct getFrontendProductByDeclaration(String key, Object value);
 
-    void save(Product product, ProductCategory productCategory, User user) throws ProductCategoryNotFoundException;
+    Product save(Product product, ProductCategory productCategory, User user) throws ProductCategoryNotFoundException;
 
     void update(Product product, ProductCategory productCategory, User user) throws ProductCategoryNotFoundException, ProductNotFoundException;
 
-    void delete(Integer id) throws ProductNotFoundException;
+    void delete(Integer id) throws ProductNotFoundException, CustomException;
 
     ResultObject<Product> listByProductCategory(ProductCategory productCategory, FilterForm filterForm) throws ProductCategoryNotFoundException;
 

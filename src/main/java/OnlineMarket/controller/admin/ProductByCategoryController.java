@@ -4,6 +4,7 @@ import javax.validation.groups.Default;
 
 import OnlineMarket.form.product.ProductForm;
 import OnlineMarket.model.Product;
+import OnlineMarket.util.exception.CustomException;
 import OnlineMarket.util.group.AdvancedValidation;
 import OnlineMarket.util.exception.product.ProductHasCommentException;
 import OnlineMarket.util.exception.product.ProductNotFoundException;
@@ -63,6 +64,7 @@ public class ProductByCategoryController extends MainController {
 		model.put("relativePath", relativePath);
 		model.put("pathAdd", relativePath + "/add");
 		model.put("pageType", "product");
+		model.put("brandList", brandService.list());
 
 		return model;
 	}
@@ -126,9 +128,9 @@ public class ProductByCategoryController extends MainController {
 		try{
 
 			if(!result.hasErrors()){
-				productService.save(product, productCategory, currentUser);
+				Product product1 = productService.save(product, productCategory, currentUser);
 				redirectAttributes.addFlashAttribute("success", true);
-				return "redirect:" + relativePath+"/update/"+product.getId();
+				return "redirect:" + relativePath+"/update/"+product1.getId();
 			}else{
 				modelMap.put("subPageTitle", "Add");
 				modelMap.put("description", "Add product for " + productCategory.getName());
@@ -210,7 +212,7 @@ public class ProductByCategoryController extends MainController {
 		try {
 			productService.delete(productId);
 			redirectAttributes.addFlashAttribute("success", true);
-		} catch (ProductNotFoundException e) {
+		} catch (ProductNotFoundException|CustomException e) {
 			redirectAttributes.addFlashAttribute("error", e.getMessage());
 		}
 

@@ -25,4 +25,5 @@ public interface BrandService {
 
     List<Brand> list();
 
+    long count();
 }

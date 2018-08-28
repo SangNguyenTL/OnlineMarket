@@ -1,7 +1,9 @@
 package OnlineMarket.service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import OnlineMarket.dao.EventDao;
 import OnlineMarket.dao.ProductDao;
@@ -79,5 +81,8 @@ public class BrandServiceImpl implements BrandService{
 		return brandDao.list();
 	}
 
-
+	@Override
+	public long count(){
+		return brandDao.count();
+	}
 }
