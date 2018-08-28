@@ -85,6 +85,7 @@
                         <option th:each="state : ${T(OnlineMarket.util.other.OrderStatus).values()}" th:text="${state.state}" th:value="${state.id}"></option>
                     </select><br>
                     Order ID: <strong th:text="${'#' + order.id}">#9399034</strong><br/>
+                    Delivery date: [[${#dates.format(order.updateDate, 'dd-MM-yyyy')}]]<br/>
                     Complete date: [[${#dates.format(order.invoiceDate, 'dd-MM-yyyy')}]]
                 </p>
                 <div class="table-responsive">

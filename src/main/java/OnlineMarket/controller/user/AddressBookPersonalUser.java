@@ -81,14 +81,14 @@ public class AddressBookPersonalUser extends UserControllerInterface {
         modelMap.put("action", "add");
         modelMap.put("pathAction", relativePath + "/add");
         modelMap.put("provinceList", provinceService.list());
-        modelMap.put("address", new Address());
+        modelMap.put("addressForm", new Address());
 
         return "user/address-add";
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String processAddAddressPage(
-            @Valid @ModelAttribute("address") Address address, BindingResult result,
+            @Valid @ModelAttribute("addressForm") Address address, BindingResult result,
             HttpServletRequest request,
             ModelMap modelMap, RedirectAttributes redirectAttributes) throws NoHandlerFoundException {
 
@@ -134,7 +134,7 @@ public class AddressBookPersonalUser extends UserControllerInterface {
             modelMap.put("action", "update");
             modelMap.put("pathAction", relativePath + "/update");
             modelMap.put("provinceList", provinceService.list());
-            modelMap.put("address", address);
+            modelMap.put("addressForm", address);
 
         } catch (AddressNotFoundException|CustomException addressNotFoundException) {
             redirectAttributes.addFlashAttribute("error", addressNotFoundException.getMessage());
@@ -147,7 +147,7 @@ public class AddressBookPersonalUser extends UserControllerInterface {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public String processUpdatePage(
             @PathVariable("userId") Integer userId,
-            @Valid @ModelAttribute("address") Address address, BindingResult result,
+            @Valid @ModelAttribute("addressForm") Address address, BindingResult result,
             HttpServletRequest request,
             ModelMap modelMap, RedirectAttributes redirectAttributes){
 

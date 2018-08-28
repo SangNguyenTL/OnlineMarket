@@ -71,7 +71,7 @@
                         <strong class="text-muted">EVENT(S):</strong>
                         <div class="box p-a">
                              <div class="list-group">
-                                <a th:each="event : ${order.events}" class="list-group-item" th:href="@{'/event/'+event.id}">
+                                <a th:each="event : ${order.events}" class="list-group-item" th:href="@{'/event/'+${event.id}}">
                                     <span class="pull-right label warning" th:if="${event.value}" th:text="${'-'+event.value}">12</span>
                                     <span class="pull-right label warning" th:if="${event.percentValue}" th:text="${'-'+event.percentValue+'%'}">12</span>
                                     [[${event.name}]]
@@ -86,6 +86,7 @@
                           th:text="${T(OnlineMarket.util.other.OrderStatus).WAITING.state}"> </span><span class="label info" th:if="${order.status == T(OnlineMarket.util.other.OrderStatus).DELIVERING.id}"
                           th:text="${T(OnlineMarket.util.other.OrderStatus).DELIVERING.state}"> </span><br>
                     Order ID: <strong th:text="${'#' + order.id}">#9399034</strong><br/>
+                    Delivery date: [[${#dates.format(order.updateDate, 'dd-MM-yyyy')}]]<br/>
                     Complete date: [[${#dates.format(order.invoiceDate, 'dd-MM-yyyy')}]]
                 </p>
                 <div class="table-responsive">

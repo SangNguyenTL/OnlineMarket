@@ -20,7 +20,7 @@ public class UserOrderController extends UserControllerInterface {
 
     @Override
     public ModelMap modelMap(ModelMap modelMap) {
-        modelMap.put("pageTitle", user.getDisplayName() + "| User Order");
+        modelMap.put("pageTitle", user.getDisplayName() + " | User Order");
         relativePath = userProfilePath+"/order";
         FilterForm filterForm = new FilterForm();
         filterForm.setSearchBy("id");

@@ -63,7 +63,6 @@ public class UserSettingController extends UserControllerInterface {
 
         if(!result.hasErrors()){
             redirectAttributes.addFlashAttribute("successSecurity", true);
-            redirectAttributes.addFlashAttribute("settingSecurity", true);
             try {
                 user.setPassword(changePassword.getPassword());
                 userService.update(user, flagReset);

@@ -60,9 +60,10 @@
                     <thead>
                     <tr>
                         <filter:th order="asc" orderBy="id" filter:uri="@{${relativePath}}" name="#">#</filter:th>
-                        <filter:th order="asc" orderBy="totalPaidReal" filter:uri="@{${relativePath}}" name="Total Real Paid">Invoice Date</filter:th>
-                        <filter:th order="asc" orderBy="invoiceDate" filter:uri="@{${relativePath}}" name="Update Date">Update Date</filter:th>
+                        <filter:th order="asc" orderBy="totalPaidReal" filter:uri="@{${relativePath}}" name="Total Real Paid">Total Real Paid</filter:th>
                         <filter:th order="asc" orderBy="createDate" filter:uri="@{${relativePath}}" name="Create Date">Create Date</filter:th>
+                        <filter:th order="asc" orderBy="updateDate" filter:uri="@{${relativePath}}" name="Update Date">Update Date</filter:th>
+                        <filter:th order="asc" orderBy="invoiceDate" filter:uri="@{${relativePath}}" name="Complete Date">Invoice Date</filter:th>
                         <filter:th order="asc" orderBy="status" filter:uri="@{${relativePath}}" name="Status">Status</filter:th>
                         <th>Action</th>
                     </tr>
@@ -70,10 +71,10 @@
                     <tbody>
                     <tr th:each="order : ${result.list}">
                         <td th:text="${order.id}"></td>
-                        <td><a th:href="@{'/user/'+${order.user.id}}" class="text-info" th:text="${order.user.firstName}"></a> </td>
-                        <td th:text="${#numbers.formatDecimal(order.totalPaidReal, 3,'WHITESPACE', 0, 'NONE')}"></td>
-                        <td ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(order.invoiceDate, 'dd-MM-yyyy HH:mm:ss')}+'\', format: \'DD-MM-YYYY HH:mm:ss\'}'" th:text="${#dates.format(order.invoiceDate, 'dd-MM-yyyy')}"></td>
-                        <td ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(order.createDate, 'dd-MM-yyyy HH:mm:ss')}+'\', format: \'DD-MM-YYYY HH:mm:ss\'}'" th:text="${#dates.format(order.createDate, 'dd-MM-yyyy')}"></td>
+                        <td th:text="${#numbers.formatDecimal(order.totalPaidReal, 3,'WHITESPACE', 0, 'NONE')+'₫'}"></td>
+                        <td ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(order.createDate, 'dd-MM-yyyy HH:mm:ss')}+'\', format: \'DD-MM-YYYY HH:mm:ss\'}'" th:text="${#dates.format(order.createDate, 'dd-MM-yyyy HH:mm:ss')}"></td>
+                        <td ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(order.updateDate, 'dd-MM-yyyy HH:mm:ss')}+'\', format: \'DD-MM-YYYY HH:mm:ss\'}'" th:text="${#dates.format(order.updateDate, 'dd-MM-yyyy HH:mm:ss')}"></td>
+                        <td ui-jp="humanTime" th:attr="ui-options='{date: \''+${#dates.format(order.invoiceDate, 'dd-MM-yyyy HH:mm:ss')}+'\', format: \'DD-MM-YYYY HH:mm:ss\'}'" th:text="${#dates.format(order.invoiceDate, 'dd-MM-yyyy HH:mm:ss')}"></td>
                         <td>
                             <span class="text-success" th:if="${order.status ==  T(OnlineMarket.util.other.OrderStatus).COMPLETE.id}"
                                   th:text="${T(OnlineMarket.util.other.OrderStatus).COMPLETE.state}"> </span>

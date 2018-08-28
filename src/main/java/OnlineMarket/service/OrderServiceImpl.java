@@ -136,11 +136,13 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public Order changeStatus(Integer id, Byte status) throws CustomException {
-        if(status < 0 || status > 3) throw new CustomException("The status is invalid");
+        if(status < 0 || status > 2) throw new CustomException("The status is invalid");
         Order order = orderDao.getByKey(id);
         if(order == null) throw new CustomException("Order not found.");
         Byte currentStatus = order.getStatus();
-        if(status < currentStatus || status > currentStatus+2) throw new CustomException("The status must be advanced, not retrograde.");
+        if(status < currentStatus || status >= currentStatus+2 || status == currentStatus) throw new CustomException("The status must be advanced, not retrograde.");
+        if(Objects.equals(status, OrderStatus.DELIVERING.getId())) order.setUpdateDate(new Date());
+        if(Objects.equals(status, OrderStatus.COMPLETE.getId())) order.setInvoiceDate(new Date());
         order.setStatus(status);
         orderDao.merge(order);
 	    return order;

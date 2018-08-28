@@ -287,7 +287,6 @@
                     if(data.error)
                         alert(data.message, "warning");
                     else{
-                        alert("Success!");
                         alert("Change order status success")
                     }
             },

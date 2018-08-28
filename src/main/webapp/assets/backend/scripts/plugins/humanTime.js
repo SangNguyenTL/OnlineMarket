@@ -13,8 +13,8 @@
     function HumanTime(element, options) {
         if (!window.jQuery || !window.moment) return;
 
-        var date = new Date(), defaults = {
-            date : date.toDateString(),
+        var defaults = {
+            date : false,
             format: undefined
         },
             _this = this;

@@ -5,6 +5,7 @@
 <head>
 </head>
 <body>
+<!--/*@thymesVar id="addressForm" type="OnlineMarket.model.Address"*/-->
 
 <div ui-view class="app-body" id="view" layout:fragment="container">
     <div class="padding">
@@ -27,7 +28,7 @@
 
                     <div class="box-body">
 
-                        <form ui-jp="parsley" role="form" th:object="${address}" th:action="@{${pathAction}}" method="POST">
+                        <form ui-jp="parsley" role="form" th:object="${addressForm}" th:action="@{${pathAction}}" method="POST">
                             <input th:if="${action} == 'update'" type="hidden" th:field="*{id}" />
                             <div class="form-group row">
                                 <label class="col-sm-3 form-control-label">First Name</label>
@@ -54,7 +55,7 @@
                                 <label class="col-sm-3 form-control-label">City</label>
                                 <div class="col-sm-9">
                                     <input th:errorclass="parsley-error" class="form-control" type="text" th:field="*{city}" required data-parsley-length="[3, 32]" data-parsley-id="5"/>
-                                    <ul class="parsley-errors-list filled" id="parsley-id-5" th:if="${#fields.hasErrors('city')}"><li th:errors="*{city}"> </li></ul>
+                                    <ul class="parsley-errors-list filled"  th:if="${#fields.hasErrors('city')}"><li th:errors="*{city}"> </li></ul>
                                 </div>
                             </div>
                             <div class="form-group row">

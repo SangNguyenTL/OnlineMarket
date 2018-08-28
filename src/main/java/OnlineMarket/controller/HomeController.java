@@ -52,7 +52,8 @@ public class HomeController extends MainController {
 		filterForm = new FilterForm();
 		filterForm.getGroupSearch().put("status",EventStatus.ACTIVE.getId().toString());
 		filterForm.setSize(3);
-		filterForm.setOrderBy("createDate");
+		filterForm.setOrderBy("updateDate");
+		filterForm.setOrder("desc");
 
 		model.put("eventList", eventService.list(filterForm).getList());
 		model.put("resultObjectList", resultObjectList);
