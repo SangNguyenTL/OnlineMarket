@@ -11,5 +11,5 @@ public interface UserDao extends InterfaceDao<Integer, User> {
 
     User getByEvent(Event event);
 
-    List listAdmin();
+    List<User> listAdmin();
 }

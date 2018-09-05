@@ -129,7 +129,7 @@
 
         let pickElement = $("[data-target=#modal-image-gallery]");
 
-        if(pickElement.length === 1){
+        if(pickElement.length > 0){
             let galleryData = {},
                 actionModalElement = $("[data-toggle=modal]");
             actionModalElement.on("click", function(){

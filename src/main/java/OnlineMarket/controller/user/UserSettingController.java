@@ -22,9 +22,7 @@ import javax.validation.groups.Default;
 public class UserSettingController extends UserControllerInterface {
 
     @RequestMapping(value = {""}, method = RequestMethod.GET)
-    public String settingPageHasUserId(ModelMap modelMap){
-
-
+    public String settingPageHasUserId(){
         return "user/setting";
     }
 
@@ -35,6 +33,7 @@ public class UserSettingController extends UserControllerInterface {
 
         if(!result.hasErrors()){
             redirectAttributes.addFlashAttribute("successProfile", true);
+            redirectAttributes.addFlashAttribute("settingProfile", true);
             try {
                 userService.update(user, false);
             } catch (CustomException e) {
@@ -63,9 +62,9 @@ public class UserSettingController extends UserControllerInterface {
 
         if(!result.hasErrors()){
             redirectAttributes.addFlashAttribute("successSecurity", true);
+            redirectAttributes.addFlashAttribute("settingSecurity", true);
             try {
-                user.setPassword(changePassword.getPassword());
-                userService.update(user, flagReset);
+                userService.changePass(user, changePassword.getPassword());
             } catch (CustomException e) {
                 throw new NoHandlerFoundException(request.getMethod(), request.getRequestURL().toString(), null);
             }

@@ -13,7 +13,7 @@ public class ResponseResult {
 
 	private ValidationErrorDTO validationErrorDTO;
 
-    private List<Object> list;
+    private List<?> list;
 
     public ResponseResult() {
         list = new ArrayList<>();
@@ -36,7 +36,7 @@ public class ResponseResult {
 		this.validationErrorDTO = validationErrorDTO;
 	}
 
-	public ResponseResult(boolean error, List  list) {
+	public ResponseResult(boolean error, List<?>  list) {
         super();
 		this.error = error;
 		this.list = list;
@@ -66,11 +66,11 @@ public class ResponseResult {
 		this.validationErrorDTO = validationErrorDTO;
 	}
 
-    public List<Object>  getList() {
+    public List<?>  getList() {
         return list;
     }
 
-    public void setList(List<Object>  list) {
+    public void setList(List<?>  list) {
         this.list = list;
     }
 }

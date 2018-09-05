@@ -14,6 +14,7 @@ import java.util.List;
 public class OrderDaoImpl extends AbstractDao<Integer, Order> implements OrderDao{
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public Order getByEvent(Event event) {
 		Criteria criteria = createEntityCriteria();
 		criteria.createAlias("events", "eventsAlias");

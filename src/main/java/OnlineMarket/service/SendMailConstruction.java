@@ -50,7 +50,7 @@ public class SendMailConstruction {
 
         String url = processUrl(request);
 
-        String urlResetToken = url + "change-password?id=" +
+        String urlResetToken = url + "/change-password?id=" +
                 user.getId() + "&token=" + token;
 
         final Context ctx = new Context();
@@ -77,13 +77,13 @@ public class SendMailConstruction {
 
         String url = processUrl(request);
 
-        String urlResetToken = url + "registration-confirm?token=" + token;
+        String urlResetToken = url + "/registration-confirm?token=" + token;
 
         final Context ctx = new Context();
         ctx.setVariable("name", user.getFirstName()+" "+user.getLastName());
         ctx.setVariable("location", contactConfig.getAddress());
         ctx.setVariable("signature", url);
-        ctx.setVariable("login_url", url+"login");
+        ctx.setVariable("login_url", url+"/login");
         ctx.setVariable("systemName", configurationService.getGeneral().getTitle());
         ctx.setVariable("action_url", urlResetToken);
         ctx.setVariable("support_url",  contactConfig.getEmail());

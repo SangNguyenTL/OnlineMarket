@@ -52,4 +52,6 @@ public interface UserService{
     Map<String,Long> countUser();
 
     List<User> listAdmin();
+
+    void changePass(User user, String password) throws CustomException;
 }

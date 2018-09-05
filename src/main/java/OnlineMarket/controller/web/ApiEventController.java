@@ -69,7 +69,7 @@ public class ApiEventController {
                     throw new CustomException("Code is invalid");
                 }
                 eventList.add(event);
-                responseResult.getList().addAll(eventList);
+                responseResult.setList(eventList);
             }catch (CustomException e){
                 error = true;
                 responseResult.getValidationErrorDTO().addFieldError("code", e.getMessage());

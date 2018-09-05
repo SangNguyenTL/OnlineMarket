@@ -12,6 +12,8 @@ import java.util.List;
 
 public class OrderForm extends Order {
 
+    protected static final long serialVersionUID = 1L;
+
     private List<Event> eventList = new ArrayList<>(0);
 
     private List<OrderDetail> orderDetailList = new ArrayList<>(0);

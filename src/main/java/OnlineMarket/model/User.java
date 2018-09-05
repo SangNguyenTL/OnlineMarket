@@ -1,4 +1,6 @@
 package OnlineMarket.model;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 import javax.persistence.*;
 
@@ -328,4 +330,18 @@ public class User implements java.io.Serializable {
 		return firstName+" "+lastName;
 	}
 
+    public void merge(User entity) {
+		for (Method getMethod : entity.getClass().getMethods()) {
+			if (getMethod.getName().startsWith("get")) {
+				try {
+					Method setMethod = this.getClass().getMethod(getMethod.getName().replace("get", "set"), getMethod.getReturnType());
+					Object object = getMethod.invoke(entity, (Object[]) null);
+					if(object != null)
+						setMethod.invoke(this, object);
+				} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ignore) {
+
+				}
+			}
+		}
+    }
 }

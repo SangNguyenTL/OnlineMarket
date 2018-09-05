@@ -80,21 +80,21 @@ public class UserServiceImpl implements UserService {
 	public void update(User entity, boolean flagReset) throws CustomException{
 		User user = userDao.getByKey(entity.getId());
 		if(user == null) throw new CustomException("User not found");
-		if(StringUtils.isNotBlank(entity.getPassword())){
-			entity.setPassword(passwordEncoder.encode(entity.getPassword()));
-		}else entity.setPassword(entity.getPassword());
-		if(!StringUtils.equals(user.getEmail(), entity.getEmail())) flagReset = true;
 
-		entity.setCreateDate(user.getCreateDate());
+		if(!StringUtils.equals(user.getPassword(), entity.getPassword())){
+			entity.setPassword(passwordEncoder.encode(entity.getPassword()));
+		}
+
 		entity.setUpdateDate(new Date());
 
 		Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 
-		if(!authorities.contains(new SimpleGrantedAuthority("ROLE_SUPER_ADMIN"))){
-			entity.setRole(entity.getRole());
-		}
+		if(!authorities.contains(new SimpleGrantedAuthority("ROLE_SUPER_ADMIN")))
+			entity.setRole(null);
 
-		userDao.merge(entity);
+		user.merge(entity);
+
+		userDao.merge(user);
 		if(flagReset)
 		removeSession(entity);
 	}
@@ -275,5 +275,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> listAdmin() {
         return userDao.listAdmin();
+    }
+
+    @Override
+    public void changePass(User user, String password) throws CustomException {
+        if(user == null) throw new CustomException("User not found");
+        user.setPassword(passwordEncoder.encode(password));
     }
 }
