@@ -8,7 +8,7 @@
 	<properties>
 		<java-version>1.7</java-version>
 		<org.springframework-version>4.2.6.RELEASE</org.springframework-version>
-		<org.springsecurity-version>4.1.0.RELEASE</org.springsecurity-version>
+		<org.springsecurity-version>4.1.5.RELEASE</org.springsecurity-version>
 		<org.hibernate-version>4.3.6.Final</org.hibernate-version>
 		<org.sqlserver-version>6.2.0.jre7</org.sqlserver-version>
 		<javax.validation-version>1.1.0.Final</javax.validation-version>
@@ -19,7 +19,7 @@
 		<commons-fileupload.version>1.3.2</commons-fileupload.version>
 		<commons-io.version>2.4</commons-io.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jackson.version>2.4.0</jackson.version>
+		<jackson.version>2.8.11.1</jackson.version>
 		<jaxb-api.version>2.2.11</jaxb-api.version>
 		<commons-lang3.version>3.0</commons-lang3.version>
 		<war.pakage.name>OnlineMarket</war.pakage.name>
