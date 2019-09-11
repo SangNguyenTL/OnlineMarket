@@ -21,12 +21,10 @@ public class AttributeGroupDaoImpl extends AbstractDao<Integer, AttributeGroup> 
 		return (AttributeGroup) criteria.uniqueResult();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public ResultObject<AttributeGroup> listByProductCategory(ProductCategory productCategory, FilterForm filterForm) {
 
 		Criteria criteria = createEntityCriteria();
-		ResultObject<AttributeGroup> result = new ResultObject<>();
 
 		criteria.add(Restrictions.eq("productCategory", productCategory));
 

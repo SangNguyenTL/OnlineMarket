@@ -1,12 +1,12 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.st3</groupId>
 	<artifactId>OnlineMarket</artifactId>
-	<version>0.0.1</version>
+	<version>1.0.0</version>
 	<packaging>war</packaging>
 	<properties>
-		<java-version>1.7</java-version>
+		<java-version>1.8</java-version>
 		<org.springframework-version>4.2.6.RELEASE</org.springframework-version>
 		<org.springsecurity-version>4.1.5.RELEASE</org.springsecurity-version>
 		<org.hibernate-version>4.3.6.Final</org.hibernate-version>
@@ -19,7 +19,7 @@
 		<commons-fileupload.version>1.3.2</commons-fileupload.version>
 		<commons-io.version>2.4</commons-io.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jackson.version>2.8.11.1</jackson.version>
+		<jackson.version>2.9.9</jackson.version>
 		<jaxb-api.version>2.2.11</jaxb-api.version>
 		<commons-lang3.version>3.0</commons-lang3.version>
 		<war.pakage.name>OnlineMarket</war.pakage.name>
@@ -232,11 +232,11 @@
 			<version>1.11.3</version>
 		</dependency>
 
-        <dependency>
-            <groupId>eu.bitwalker</groupId>
-            <artifactId>UserAgentUtils</artifactId>
-            <version>1.21</version>
-        </dependency>
+		<dependency>
+			<groupId>eu.bitwalker</groupId>
+			<artifactId>UserAgentUtils</artifactId>
+			<version>1.21</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.ocpsoft.prettytime</groupId>
@@ -252,8 +252,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.2</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 					<compilerArgument>-Xlint:all</compilerArgument>
 					<showWarnings>false</showWarnings>
 					<showDeprecation>true</showDeprecation>

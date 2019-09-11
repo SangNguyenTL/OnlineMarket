@@ -1,5 +1,9 @@
 package OnlineMarket.controller.frontend;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+
 import OnlineMarket.controller.MainController;
 import OnlineMarket.form.filter.FilterForm;
 import OnlineMarket.model.Brand;
@@ -8,10 +12,6 @@ import OnlineMarket.service.BrandService;
 import OnlineMarket.service.ProductCategoryService;
 import OnlineMarket.service.ProductService;
 import OnlineMarket.util.other.ProductStatus;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
 public class FrGeneralGroup extends MainController {
 

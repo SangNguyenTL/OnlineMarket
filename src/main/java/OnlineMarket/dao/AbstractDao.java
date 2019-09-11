@@ -128,7 +128,6 @@ public abstract class AbstractDao<PK extends Serializable, T> {
         return (List<T>) criteria.list();
     }
 
-    @SuppressWarnings("unchecked")
     public ResultObject<T> listByInList(String key, List<Object> listValue, FilterForm filterForm) {
         Criteria criteria = createEntityCriteria();
         criteria.add(Restrictions.in(key, listValue));
@@ -145,7 +144,6 @@ public abstract class AbstractDao<PK extends Serializable, T> {
                 .setMaxResults(maxResults != null ? maxResults : 10).list();
     }
 
-    @SuppressWarnings("unchecked")
     public ResultObject<T> list(FilterForm filterForm) {
 
         Criteria criteria = createEntityCriteria();
@@ -171,7 +169,6 @@ public abstract class AbstractDao<PK extends Serializable, T> {
                 String key = matcher.group(1);
                 try {
                     Field field = persistentClass.getDeclaredField(key);
-                    String nameTypeValue = field.getType().getSimpleName();
                     if(StringUtils.isNotBlank(key)){
                         if(matcher.group(2) != null){
                             switch (field.getType().getSimpleName()){
@@ -181,34 +178,14 @@ public abstract class AbstractDao<PK extends Serializable, T> {
                                     Class<?> aClass = (Class<?>) parameterizedType.getActualTypeArguments()[0];
                                     aClass.getDeclaredField(matcher.group(2).substring(1));
                                     break;
-                                default:
-                                    nameTypeValue = field.getType().getDeclaredField(matcher.group(2).substring(1)).getType().getSimpleName();
                             }
                                 key = key + "Alias";
                             criteria.createAlias(matcher.group(1), key);
                             key = key+matcher.group(2);
                         }
-                        if(StringUtils.isNotBlank(filterForm.getSearch())){
-                            switch (nameTypeValue){
-                                case "byte":
-                                case "Byte":
-                                    criteria.add(Restrictions.eq(key, Byte.parseByte(filterForm.getSearch())));
-                                    break;
-                                case "Integer":
-                                case "int":
-                                    criteria.add(Restrictions.eq(key, Integer.parseInt(filterForm.getSearch())));
-                                    break;
-                                case "long":
-                                case "Long":
-                                    criteria.add(Restrictions.eq(key, Long.parseLong(filterForm.getSearch())));
-                                    break;
-                                case "String":
-                                    criteria.add(Restrictions.ilike(key, "%" + filterForm.getSearch() + "%"));
-                                    break;
-                            }
-                        }
+                        criteria.add(Restrictions.ilike(key, "%" + filterForm.getSearch() + "%"));
                     }
-                } catch (NumberFormatException|NoSuchFieldException ignore) {
+                } catch (NoSuchFieldException ignore) {
                 }
             }
         }

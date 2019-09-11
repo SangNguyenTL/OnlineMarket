@@ -43,7 +43,6 @@ public class Event implements java.io.Serializable {
 	private Byte percentValue;
 	private Long value;
 	private String code;
-	private String beforeCode;
 	private Date createDate;
 	private Date updateDate;
 	private Date dateFrom;
@@ -264,10 +263,6 @@ public class Event implements java.io.Serializable {
     @JsonIgnore
     public String getBeforeCode() {
         return code;
-    }
-
-    public void setBeforeCode(String beforeCode) {
-        this.beforeCode = beforeCode;
     }
 
     @Override

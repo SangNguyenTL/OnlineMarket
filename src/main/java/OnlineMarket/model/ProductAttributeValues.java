@@ -8,8 +8,6 @@ import java.util.Objects;
 @IdClass(ProductAttributeValuesId.class)
 public class ProductAttributeValues {
 
-    private static final long serialVersionUID = 1L;
-
     private Integer attributeValuesId;
     private Integer productId;
     private AttributeValues attributeValues;

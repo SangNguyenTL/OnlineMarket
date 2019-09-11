@@ -1,9 +1,9 @@
 package OnlineMarket.dao;
 
-import OnlineMarket.model.ProductViewsStatistic;
-import org.hibernate.Criteria;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import OnlineMarket.model.ProductViewsStatistic;
 
 @Repository("productViewsStatisticDao")
 @Transactional

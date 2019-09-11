@@ -1,28 +1,35 @@
 package OnlineMarket.service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import OnlineMarket.dao.AttributeValuesDao;
-import OnlineMarket.dao.CommentDao;
+import OnlineMarket.dao.ProductDao;
+import OnlineMarket.form.filter.FilterForm;
 import OnlineMarket.form.filter.SearchSelect;
 import OnlineMarket.form.product.ProductForm;
-import OnlineMarket.model.*;
+import OnlineMarket.model.AttributeValues;
+import OnlineMarket.model.Brand;
+import OnlineMarket.model.Event;
+import OnlineMarket.model.Product;
+import OnlineMarket.model.ProductAttributeValues;
+import OnlineMarket.model.ProductCategory;
+import OnlineMarket.model.User;
+import OnlineMarket.result.ResultObject;
 import OnlineMarket.result.api.Pagination;
 import OnlineMarket.result.api.ResultProduct;
 import OnlineMarket.util.Help;
 import OnlineMarket.util.Slugify;
 import OnlineMarket.util.exception.CustomException;
-import OnlineMarket.util.exception.product.ProductHasCommentException;
 import OnlineMarket.util.exception.product.ProductNotFoundException;
 import OnlineMarket.util.exception.productCategory.ProductCategoryNotFoundException;
 import OnlineMarket.view.FrontendProduct;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import OnlineMarket.dao.ProductDao;
-import OnlineMarket.form.filter.FilterForm;
-import OnlineMarket.result.ResultObject;
 
 @Service("productService")
 @Transactional

@@ -54,7 +54,7 @@ public class PaginationElementTagProcessor extends AbstractElementTagProcessor{
 		
 		if(filterForm == null) filterForm = new FilterForm();
 
-        ResultObject<?> resultObject = (ResultObject) context.getVariable("result");
+        ResultObject<?> resultObject = (ResultObject<?>) context.getVariable("result");
 
 		if(resultObject == null) resultObject = new ResultObject<>();
 
@@ -148,7 +148,7 @@ public class PaginationElementTagProcessor extends AbstractElementTagProcessor{
 	    		if (StringUtils.equals(field.getName(), "groupSearch") && value instanceof TreeMap) {
 
 					@SuppressWarnings("unchecked")
-					TreeMap<String, String> values = (TreeMap) value;
+					TreeMap<String, String> values = (TreeMap<String, String>) value;
 					for (Map.Entry<String, String> valueE : values.entrySet()) {
 						if(publicState && (valueE.getKey().equals("state") || valueE.getKey().equals("status") || valueE.getKey().equals("postType"))) continue;
 						if (StringUtils.isNotBlank(valueE.getValue())) {

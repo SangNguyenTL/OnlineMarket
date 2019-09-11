@@ -1,12 +1,11 @@
 package OnlineMarket.view;
 
-import OnlineMarket.model.*;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+
+import OnlineMarket.model.AttributeValues;
+import OnlineMarket.model.Product;
+import OnlineMarket.model.ProductAttributeValues;
 
 public class FrontendProduct extends Product {
 

@@ -1,23 +1,21 @@
 package OnlineMarket.service;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import OnlineMarket.dao.EventDao;
-import OnlineMarket.dao.ProductDao;
-import OnlineMarket.util.Slugify;
-import OnlineMarket.util.exception.brand.BrandHasProductException;
-import OnlineMarket.util.exception.brand.BrandNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import OnlineMarket.dao.BrandDao;
+import OnlineMarket.dao.EventDao;
+import OnlineMarket.dao.ProductDao;
 import OnlineMarket.form.filter.FilterForm;
 import OnlineMarket.model.Brand;
 import OnlineMarket.result.ResultObject;
+import OnlineMarket.util.Slugify;
+import OnlineMarket.util.exception.brand.BrandHasProductException;
+import OnlineMarket.util.exception.brand.BrandNotFoundException;
 
 @Service("brandService")
 @Transactional

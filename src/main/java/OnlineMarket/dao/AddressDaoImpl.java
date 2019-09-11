@@ -34,7 +34,6 @@ public class AddressDaoImpl extends AbstractDao<Integer, Address> implements Add
 	public ResultObject<Address> listByUser(User user, FilterForm filterForm) {
 
 		Criteria criteria = createEntityCriteria();
-		ResultObject<Address> result = new ResultObject<>();
 		criteria.add(Restrictions.eq("user", user));
 
 		return childFilterFrom(criteria, filterForm);

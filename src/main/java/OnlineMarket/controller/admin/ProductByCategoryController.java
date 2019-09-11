@@ -2,13 +2,6 @@ package OnlineMarket.controller.admin;
 
 import javax.validation.groups.Default;
 
-import OnlineMarket.form.product.ProductForm;
-import OnlineMarket.model.Product;
-import OnlineMarket.util.exception.CustomException;
-import OnlineMarket.util.group.AdvancedValidation;
-import OnlineMarket.util.exception.product.ProductHasCommentException;
-import OnlineMarket.util.exception.product.ProductNotFoundException;
-import OnlineMarket.util.exception.productCategory.ProductCategoryNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -23,9 +16,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import OnlineMarket.controller.MainController;
 import OnlineMarket.form.filter.FilterForm;
+import OnlineMarket.form.product.ProductForm;
+import OnlineMarket.model.Product;
 import OnlineMarket.model.ProductCategory;
 import OnlineMarket.service.AttributeGroupService;
 import OnlineMarket.service.ProductService;
+import OnlineMarket.util.exception.CustomException;
+import OnlineMarket.util.exception.product.ProductNotFoundException;
+import OnlineMarket.util.exception.productCategory.ProductCategoryNotFoundException;
+import OnlineMarket.util.group.AdvancedValidation;
 
 @Controller
 @RequestMapping("/admin/product-category/{productCategoryId:^\\d+}/product")

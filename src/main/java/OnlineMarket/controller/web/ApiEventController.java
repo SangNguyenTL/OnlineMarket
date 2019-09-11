@@ -1,7 +1,24 @@
 package OnlineMarket.controller.web;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+import javax.validation.Valid;
+
+import org.apache.commons.lang3.ArrayUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import OnlineMarket.form.filter.CheckCode;
-import OnlineMarket.listener.OnOrderEvent;
 import OnlineMarket.model.Event;
 import OnlineMarket.model.Product;
 import OnlineMarket.result.api.ResponseResult;
@@ -11,18 +28,6 @@ import OnlineMarket.service.OrderService;
 import OnlineMarket.service.UserService;
 import OnlineMarket.util.exception.CustomException;
 import OnlineMarket.util.other.EventStatus;
-import org.apache.commons.lang3.ArrayUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/event")

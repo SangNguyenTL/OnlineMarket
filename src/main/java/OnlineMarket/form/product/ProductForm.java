@@ -1,14 +1,13 @@
 package OnlineMarket.form.product;
 
-import OnlineMarket.model.*;
-import OnlineMarket.util.group.AdvancedValidation;
-import OnlineMarket.validation.UniqueProductSlug;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+
+import OnlineMarket.model.AttributeValues;
+import OnlineMarket.model.Product;
+import OnlineMarket.model.ProductAttributeValues;
+import OnlineMarket.util.group.AdvancedValidation;
+import OnlineMarket.validation.UniqueProductSlug;
 
 @UniqueProductSlug(groups = {AdvancedValidation.CheckSlug.class})
 public class ProductForm extends Product {

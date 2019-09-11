@@ -5,7 +5,6 @@ import org.springframework.context.ApplicationEvent;
 
 import javax.servlet.http.HttpServletRequest;
 
-@SuppressWarnings("serial")
 public class OnReviewApprovedEvent extends ApplicationEvent {
 
     private static final long serialVersionUID = 1L;

@@ -1,11 +1,5 @@
 package OnlineMarket.controller.frontend;
 
-import OnlineMarket.controller.MainController;
-import OnlineMarket.form.filter.FilterForm;
-import OnlineMarket.model.PostCategory;
-import OnlineMarket.service.PostCategoryService;
-import OnlineMarket.service.PostService;
-import org.ocpsoft.prettytime.PrettyTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -14,6 +8,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.NoHandlerFoundException;
+
+import OnlineMarket.controller.MainController;
+import OnlineMarket.form.filter.FilterForm;
+import OnlineMarket.model.PostCategory;
+import OnlineMarket.service.PostCategoryService;
+import OnlineMarket.service.PostService;
 
 @Controller
 @RequestMapping("/post-category")

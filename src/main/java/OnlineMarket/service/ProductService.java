@@ -1,18 +1,21 @@
 package OnlineMarket.service;
 
+import java.util.List;
+import java.util.Set;
+
 import OnlineMarket.form.filter.FilterForm;
 import OnlineMarket.form.filter.SearchSelect;
-import OnlineMarket.model.*;
+import OnlineMarket.model.Brand;
+import OnlineMarket.model.Event;
+import OnlineMarket.model.Product;
+import OnlineMarket.model.ProductCategory;
+import OnlineMarket.model.User;
 import OnlineMarket.result.ResultObject;
 import OnlineMarket.result.api.ResultProduct;
 import OnlineMarket.util.exception.CustomException;
-import OnlineMarket.util.exception.product.ProductHasCommentException;
 import OnlineMarket.util.exception.product.ProductNotFoundException;
 import OnlineMarket.util.exception.productCategory.ProductCategoryNotFoundException;
 import OnlineMarket.view.FrontendProduct;
-
-import java.util.List;
-import java.util.Set;
 
 public interface ProductService {
 
